@@ -43,9 +43,16 @@ textarea{resize:vertical;min-height:60px;}
 header{background:#fff;border-bottom:0.5px solid rgba(0,0,0,0.1);padding:12px 1rem;display:flex;justify-content:space-between;align-items:center;}
 .logo{font-size:16px;font-weight:600;color:#185FA5;letter-spacing:-0.3px;}
 .nav{display:flex;gap:6px;padding:12px 0 10px;border-bottom:0.5px solid rgba(0,0,0,0.1);margin-bottom:16px;flex-wrap:wrap;}
-.nb{font-size:13px;padding:6px 11px;border-radius:8px;cursor:pointer;border:none;background:transparent;color:#666;}
+.nb{font-size:13px;padding:6px 11px;border-radius:8px;cursor:pointer;border:none;background:transparent;color:#666;display:inline-block;white-space:nowrap;}
 .nb.act{background:#f0f0ee;color:#1a1a1a;font-weight:500;}
 .nb:hover{background:#f0f0ee;}
+.nav::-webkit-scrollbar{display:none;}
+/* Mobile nav — hide all nav buttons, show role-based dashboard instead */
+@media(max-width:768px){
+  .nav{display:none!important;}
+  .rban{font-size:12px;}
+  body.role-supervisor .nav,body.role-worker .nav{display:none!important;}
+}
 /* Big new docket button for workers and supervisors */
 body.role-worker #n1,body.role-supervisor #n1{
   display:block;width:calc(100% - 0px);background:#2D2D2D;color:#EF9F27;
@@ -54,6 +61,44 @@ body.role-worker #n1,body.role-supervisor #n1{
   margin:12px 0 8px;
 }
 body.role-worker #n1:hover,body.role-supervisor #n1:hover{background:#1a1a1a;}
+
+/* ── Mobile bottom tab nav ── */
+#bottom-nav{display:none;}
+@media(max-width:768px){
+  #bottom-nav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:600;background:#fff;border-top:0.5px solid rgba(0,0,0,0.12);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -1px 8px rgba(0,0,0,0.05);}
+  #bottom-nav.hidden{display:none!important;}
+  #bottom-nav .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 2px 6px;font-size:9px;color:#999;background:none;border:none;cursor:pointer;letter-spacing:0.02em;}
+  #bottom-nav .bn-item i{font-size:18px;}
+  #bottom-nav .bn-item.on{color:#185FA5;font-weight:600;}
+  body.has-bottomnav .app{padding-bottom:62px;}
+  body.nd-fullpage #bottom-nav{display:none!important;}
+  /* Mobile admin: hide dense desktop panels, show compact block */
+  #fin-panel,#signed-panel{display:none!important;}
+  #admin-mobile-nav{display:none!important;}
+  .recent-table{display:none!important;}
+  .recent-list{display:block!important;}
+  /* trim extra admin stat tiles on mobile to match Dockets · Pending · Hours */
+  .mc.hide-mobile{display:none!important;}
+}
+@media(min-width:769px){
+  .recent-list{display:none;}
+  .admin-mobile{display:none;}
+}
+/* recent docket list (mobile) */
+.recent-list{display:none;}
+.rdl{display:flex;align-items:center;gap:9px;padding:10px 12px;border-top:0.5px solid rgba(0,0,0,0.07);cursor:pointer;background:#fff;}
+.rdl:first-child{border-top:none;}
+.rdl:active{background:#fafaf8;}
+.rdl .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.rdl-main{flex:1;min-width:0;}
+.rdl-t{font-size:13px;font-weight:500;color:#2D2D2D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rdl-s{font-size:11px;color:#aaa;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rdl-b{font-size:10px;padding:2px 7px;border-radius:8px;flex-shrink:0;white-space:nowrap;}
+/* admin mobile financial mini tiles */
+.fin-mini{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+.fin-mini .mc{padding:10px 8px;text-align:center;}
+.fin-mini .mc .mv{font-size:15px;}
+.fin-mini .mc .ml{font-size:10px;}
 .tw{overflow-x:auto;}
 .ndock-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
 .ndock-tile{background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font-size:13px;font-weight:500;color:#2D2D2D;border:none;}
@@ -175,7 +220,7 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
   </header>
   <div class="app">
     <div id="rban" class="rban hidden"></div>
-    <div class="nav">
+    <div class="nav" style="overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap;scrollbar-width:none;">
       <button class="nb act" id="n0" onclick="showTab('dash',this)">🏠 Dashboard</button>
       <button class="nb" id="n1" onclick="showTab('nd',this)">+ New docket</button>
       <button class="nb" id="n-contacts-sub" onclick="showTab('contacts-sub',this)">👥 Contacts</button>
@@ -229,21 +274,58 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
         <div id="sup-unassigned-list"></div>
         <!-- Recent dockets -->
         <p class="st" style="margin-top:10px;">Recent dockets</p>
-        <div class="card" style="padding:0;"><div class="tw"><table>
+        <div class="card recent-table" style="padding:0;"><div class="tw"><table>
           <thead><tr><th>#</th><th>Project</th><th>Date</th><th>Submitted by</th><th>Hrs</th><th>Signed</th></tr></thead>
           <tbody id="sup-rd"></tbody>
         </table></div></div>
+        <div class="card recent-list" style="padding:0;"><div id="sup-rd-list"></div></div>
       </div>
 
       <!-- ── ADMIN / SUB ADMIN DASHBOARD ── -->
       <div id="dash-admin" class="hidden">
+        <!-- Mobile quick nav for admin (hidden on desktop) -->
+        <div id="admin-mobile-nav" style="display:none;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <button onclick="showTab('ad',document.getElementById('n3'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
+            <i class="ti ti-files" style="font-size:20px;color:#185FA5;" aria-hidden="true"></i>All dockets
+          </button>
+          <button onclick="showTab('proj',document.getElementById('n4'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
+            <i class="ti ti-building" style="font-size:20px;color:#185FA5;" aria-hidden="true"></i>Projects
+          </button>
+          <button onclick="showTab('subs',document.getElementById('n5'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
+            <i class="ti ti-users" style="font-size:20px;color:#185FA5;" aria-hidden="true"></i>Subcontractors
+          </button>
+          <button onclick="showTab('settings',document.getElementById('n8'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
+            <i class="ti ti-settings" style="font-size:20px;color:#888;" aria-hidden="true"></i>Settings
+          </button>
+        </div>
         <!-- Summary tiles (all roles) -->
         <div class="mg" style="margin-bottom:10px;">
-          <div class="mc"><div class="mv" id="mp">0</div><div class="ml">Projects</div></div>
+          <div class="mc hide-mobile"><div class="mv" id="mp">0</div><div class="ml">Projects</div></div>
           <div class="mc"><div class="mv" id="md2">0</div><div class="ml">Dockets</div></div>
           <div class="mc"><div class="mv" id="mh">0h</div><div class="ml">Hours</div></div>
-          <div class="mc hidden" id="msc"><div class="mv" id="ms">0</div><div class="ml">Subcontractors</div></div>
+          <div class="mc hidden hide-mobile" id="msc"><div class="mv" id="ms">0</div><div class="ml">Subcontractors</div></div>
           <div class="mc hidden" id="mpend-card"><div class="mv" id="mpend" style="color:#856404;">0</div><div class="ml" style="color:#856404;">Pending sig</div></div>
+        </div>
+
+        <!-- ── ADMIN MOBILE COMPACT (mobile only) ── -->
+        <div class="admin-mobile">
+          <!-- Financial mini tiles (HC admin only) -->
+          <div class="fin-mini" id="admin-fin-mini">
+            <div class="mc" style="border-left:3px solid #185FA5;"><div class="mv" id="am-sub-cost" style="color:#185FA5;">$0</div><div class="ml">Sub cost</div></div>
+            <div class="mc" style="border-left:3px solid #1D9E75;"><div class="mv" id="am-chargeable" style="color:#1D9E75;">$0</div><div class="ml">Chargeable</div></div>
+            <div class="mc" style="border-left:3px solid #EF9F27;background:#FFFBF5;"><div class="mv" id="am-margin" style="color:#EF9F27;">$0</div><div class="ml" style="color:#854F0B;">Margin</div></div>
+          </div>
+          <!-- Awaiting client docket banner -->
+          <div id="am-banner" class="hidden" style="background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <div>
+              <p id="am-banner-text" style="font-size:13px;font-weight:500;color:#633806;margin:0;">Signed — awaiting client docket</p>
+              <p style="font-size:11px;color:#854F0B;margin:0;">Ready to raise client dockets</p>
+            </div>
+            <button onclick="showTab('ad',document.getElementById('n3'))" style="background:#EF9F27;color:#412402;border:none;border-radius:6px;font-size:11px;padding:5px 12px;cursor:pointer;font-weight:500;white-space:nowrap;">Review</button>
+          </div>
+          <!-- Recent dockets list -->
+          <p class="st" style="margin-top:4px;">Recent dockets</p>
+          <div class="card recent-list" style="padding:0;display:block;"><div id="admin-rd-list"></div></div>
         </div>
 
       <!-- Admin financial breakdown panel -->
@@ -345,12 +427,29 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
         </div>
       </div>
 
-      <p class="st">Recent dockets</p>
-      <div class="card" style="padding:0;"><div class="tw"><table>
+      <p class="st recent-table">Recent dockets</p>
+      <div class="card recent-table" style="padding:0;"><div class="tw"><table>
         <thead><tr><th>#</th><th>Project</th><th>Date</th><th>Subcontractor</th><th>Start</th><th>Finish</th><th>Hrs</th><th>Req by</th><th>Sub cost</th><th>Client cost</th><th>Billing</th><th>Signature</th></tr></thead>
         <tbody id="rd"></tbody>
       </table></div></div>
       </div><!-- end dash-admin -->
+
+      <!-- ── WORKER DASHBOARD ── -->
+      <div id="dash-worker" class="hidden">
+        <button onclick="showTab('nd',document.getElementById('n1'))" style="width:100%;background:#2D2D2D;color:#EF9F27;border:none;border-radius:10px;padding:16px;font-size:15px;font-weight:700;letter-spacing:0.05em;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;margin-bottom:8px;">
+          <i class="ti ti-plus" style="font-size:22px;" aria-hidden="true"></i> New docket
+        </button>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+          <button onclick="showTab('drafts',document.getElementById('n-drafts'))" class="ndock-tile">
+            <i class="ti ti-pencil" aria-hidden="true"></i>Drafts <span id="wk-draft-badge" class="hidden" style="background:#2D2D2D;color:#EF9F27;border-radius:10px;font-size:10px;padding:1px 6px;">0</span>
+          </button>
+          <button onclick="showTab('md',document.getElementById('n2'))" class="ndock-tile">
+            <i class="ti ti-files" aria-hidden="true"></i>My dockets
+          </button>
+        </div>
+        <p class="st" style="margin-top:6px;">Recent dockets</p>
+        <div class="card" style="padding:0;"><div id="wk-rd-list" class="recent-list" style="display:block;"></div></div>
+      </div>
     </div><!-- end t-dash -->
 
     <!-- NEW DOCKET -->
@@ -1204,6 +1303,7 @@ function setupUI(){
     document.getElementById('signed-panel').classList.remove('hidden');
     document.getElementById('dash-admin').classList.remove('hidden');
     document.getElementById('dash-supervisor').classList.add('hidden');
+    setTimeout(()=>showCorrectDashboard(),100);
   } else if(r==='hc_supervisor'){
     document.body.className='role-supervisor';
     ub.textContent='HC Supervisor';ub.className='badge bs';
@@ -1267,7 +1367,8 @@ function setupUI(){
         const el=document.getElementById(id);if(el)el.classList.remove('hidden');
       });
       rb.classList.remove('hidden');
-      showTab('nd',document.getElementById('n1'));
+      showTab('dash',null);
+      showCorrectDashboard();
       return;
     }
     const subRoleLabel=CU.subRole==='supervisor'?'Sub Supervisor':'Sub Admin';
@@ -1328,6 +1429,7 @@ function setDD(){const d=document.getElementById('dd');if(d)d.value=new Date().t
 
 // ─── TABS ─────────────────────────────────────────────────────────────
 function showTab(tab,btn){
+  window._curTab=tab;
   ['dash','nd','md','ad','proj','subs','clients','settings','rates','drafts','users','contacts-sub','my-workers'].forEach(t=>{const el=document.getElementById('t-'+t);if(el)el.classList.add('hidden');});
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('act'));
   const tgt=document.getElementById('t-'+tab);if(tgt)tgt.classList.remove('hidden');
@@ -1386,6 +1488,7 @@ function showTab(tab,btn){
   if(tab==='users'){renUsersList();renWorkersTable();}
   if(tab==='contacts-sub'){renContactsSub();}
   if(tab==='my-workers'){renSubWorkers();}
+  if(typeof renBottomNav==='function')renBottomNav();
 }
 function togF(id){document.getElementById(id).classList.toggle('hidden');}
 
@@ -4738,12 +4841,94 @@ function exitNdFullpage(){
 
 function showCorrectDashboard(){
   if(!CU)return;
+  const isWorker=CU.role==='worker';
   const isSuper=CU.role==='hc_supervisor'||(CU.role==='sub'&&CU.subRole==='supervisor');
-  document.getElementById('dash-supervisor').classList.toggle('hidden',!isSuper);
-  document.getElementById('dash-admin').classList.toggle('hidden',isSuper);
-  if(isSuper){
-    renSupervisorDash();
+  document.getElementById('dash-worker').classList.toggle('hidden',!isWorker);
+  document.getElementById('dash-supervisor').classList.toggle('hidden',isWorker||!isSuper);
+  document.getElementById('dash-admin').classList.toggle('hidden',isWorker||isSuper);
+  if(isWorker)renWorkerDash();
+  else if(isSuper)renSupervisorDash();
+  else renAdminMobile();
+  renBottomNav();
+}
+
+// ─── MOBILE BOTTOM NAV ────────────────────────────────────────────────
+function renBottomNav(){
+  const nav=document.getElementById('bottom-nav');
+  if(!nav)return;
+  if(!CU){nav.classList.add('hidden');document.body.classList.remove('has-bottomnav');return;}
+  const r=CU.role;
+  let items;
+  if(r==='worker'){
+    items=[['dash','Home','ti-home'],['md','Dockets','ti-files'],['drafts','Drafts','ti-pencil']];
+  } else if(r==='admin'){
+    items=[['dash','Home','ti-home'],['ad','Dockets','ti-files'],['rates','Reports','ti-chart-bar'],['settings','Admin','ti-settings']];
+  } else if(r==='sub'){
+    items=[['dash','Home','ti-home'],['md','Dockets','ti-files'],['my-workers','Team','ti-users'],['drafts','Drafts','ti-pencil']];
+  } else { // hc_supervisor + legacy site roles
+    items=[['dash','Home','ti-home'],['md','Dockets','ti-files'],['drafts','Drafts','ti-pencil']];
   }
+  const cur=window._curTab||'dash';
+  nav.innerHTML=items.map(([tab,label,icon])=>
+    `<button class="bn-item${cur===tab?' on':''}" onclick="navBottom('${tab}')"><i class="ti ${icon}" aria-hidden="true"></i>${label}</button>`).join('');
+  nav.classList.remove('hidden');
+  document.body.classList.add('has-bottomnav');
+}
+function navBottom(tab){showTab(tab,null);}
+
+// ─── SHARED RECENT-DOCKET LIST (mobile cards) ─────────────────────────
+function renRecentList(elId,list,opts){
+  const el=document.getElementById(elId);if(!el)return;
+  opts=opts||{};
+  const src=(list||[]).slice().reverse().slice(0,6);
+  if(!src.length){el.innerHTML='<div style="text-align:center;color:#aaa;padding:18px;font-size:12px;">No dockets yet</div>';return;}
+  el.innerHTML=src.map(d=>{
+    let dot='#EF9F27',badge='<span class="rdl-b" style="background:#FAEEDA;color:#633806;">Pending</span>';
+    if(d.sig){dot='#1D9E75';badge='<span class="rdl-b" style="background:#E1F5EE;color:#085041;">Signed</span>';}
+    else if(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms'){dot='#185FA5';badge='<span class="rdl-b" style="background:#E6F1FB;color:#0C447C;">Sent</span>';}
+    if(opts.money&&d.bill==='bc'){dot='#5B21B6';badge='<span class="rdl-b" style="background:#EDE9FE;color:#3C3489;">Backcharge</span>';}
+    let sub=fd(d.date)+' · '+esc(d.sub)+' · '+(d.hours||0)+'h';
+    if(opts.money){const c=calcC(d);if(c!=null)sub=fd(d.date)+' · '+esc(d.sub)+' · '+fc(c);}
+    return `<div class="rdl" onclick="vD('${d.id}')">
+      <span class="dot" style="background:${dot};"></span>
+      <div class="rdl-main"><div class="rdl-t">${esc(d.pname||d.pcode)} — ${esc(d.sub)}</div><div class="rdl-s">${sub}</div></div>
+      ${badge}</div>`;
+  }).join('');
+}
+
+// ─── WORKER DASHBOARD ─────────────────────────────────────────────────
+function renWorkerDash(){
+  if(!CU)return;
+  const drafts=ldL('dlb_drafts_'+CU.u)||{};
+  const dc=Object.keys(drafts).length;
+  const b=document.getElementById('wk-draft-badge');
+  if(b){b.textContent=dc;b.classList.toggle('hidden',dc===0);}
+  renRecentList('wk-rd-list',myD(),{money:false});
+}
+
+// ─── ADMIN MOBILE COMPACT ─────────────────────────────────────────────
+function renAdminMobile(){
+  if(!CU)return;
+  updM();
+  const isHC=CU.role==='admin';
+  const fm=document.getElementById('admin-fin-mini');
+  if(fm)fm.style.display=isHC?'grid':'none';
+  if(isHC){
+    const g=id=>document.getElementById(id)?document.getElementById(id).textContent:'';
+    const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+    set('am-sub-cost',g('fin-sub-cost'));
+    set('am-chargeable',g('fin-chargeable'));
+    set('am-margin',g('fin-margin'));
+    const pc=parseInt(g('sp-pending-client'))||0;
+    const banner=document.getElementById('am-banner');
+    if(banner){
+      if(pc>0){banner.classList.remove('hidden');set('am-banner-text',pc+' signed — awaiting client docket');}
+      else banner.classList.add('hidden');
+    }
+  } else {
+    const banner=document.getElementById('am-banner');if(banner)banner.classList.add('hidden');
+  }
+  renRecentList('admin-rd-list',(CU.role==='admin'?dockets:myD()),{money:isHC});
 }
 
 function renSupervisorDash(){
@@ -4786,6 +4971,7 @@ function renSupervisorDash(){
     listEl.innerHTML='';
   }
   // Recent dockets table
+  renRecentList('sup-rd-list',mine,{money:false});
   const tb=document.getElementById('sup-rd');if(!tb)return;
   const src=mine.slice().reverse().slice(0,8);
   if(!src.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:#aaa;padding:16px;">No dockets yet</td></tr>';return;}
@@ -4991,5 +5177,6 @@ window.addEventListener('load',()=>{
   if(window.location.hash.startsWith('#sign:')){checkSignPage();}
 });
 </script>
+<nav id="bottom-nav" class="hidden" aria-label="Primary"></nav>
 </body>
 </html>
