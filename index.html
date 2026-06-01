@@ -166,40 +166,77 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 }
 #nd-back-btn{display:none;align-items:center;gap:8px;padding:12px 16px;background:#2D2D2D;color:#fff;font-size:14px;font-weight:500;cursor:pointer;border:none;width:100%;}
 /* ── Login screen — larger inputs & button ── */
-#ls .card{padding:1.75rem 1.5rem;}
-#ls label{font-size:13px;color:#555;margin-bottom:6px;}
-#ls input{font-size:16px;padding:18px 16px;border-radius:10px;border:0.5px solid rgba(0,0,0,0.18);}
-#ls input#lp{padding-right:46px;}
-#ls .signin{width:100%;background:#2D2D2D;color:#EF9F27;border:none;font-size:16px;font-weight:700;letter-spacing:0.05em;padding:18px;border-radius:10px;margin-top:8px;}
-#ls .signin:hover{background:#1a1a1a;}
+#ls .card{padding:2.25rem 1.75rem;width:100%;max-width:430px;}
+#ls label{font-size:14px;color:#555;margin-bottom:7px;font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;}
+#ls input{font-size:17px;padding:20px 16px;border-radius:11px;border:0.5px solid rgba(0,0,0,0.18);font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;}
+#ls input#lp{padding-right:48px;}
+#ls .signin{width:100%;background:#EF9F27!important;color:#000!important;border:none!important;font-size:18px;font-weight:700;letter-spacing:0.05em;padding:20px;border-radius:11px;margin-top:10px;font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;}
+#ls .signin:hover{background:#d98e1f!important;}
+#ls .forgot{display:block;width:100%;text-align:center;background:none;border:none;color:#185FA5;font-size:14px;margin-top:16px;cursor:pointer;font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;}
+#ls .forgot:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
-<div id="ls" style="max-width:400px;margin:3rem auto;padding:0 1rem;">
+<div id="ls" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem 1rem;">
   <div class="card">
-    <div style="text-align:center;margin-bottom:20px;">
-      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" style="height:80px;object-fit:contain;" alt="Day Labour Book logo">
-      <p style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:20px;font-weight:800;margin-top:8px;color:#2D2D2D;letter-spacing:0.1em;text-transform:uppercase;">Day Labour Book</p>
-      <p style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-style:italic;font-weight:300;color:#EF9F27;margin-top:2px;letter-spacing:0.03em;">Built by Alerce</p>
+    <div style="text-align:center;margin-bottom:26px;">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" style="height:104px;object-fit:contain;" alt="Day Labour Book logo">
+      <p style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:25px;font-weight:800;margin-top:12px;color:#2D2D2D;letter-spacing:0.1em;text-transform:uppercase;">Day Labour Book</p>
+      <p style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:13px;font-style:italic;font-weight:300;color:#EF9F27;margin-top:4px;letter-spacing:0.03em;">Built by Alerce</p>
     </div>
-    <div style="margin-bottom:16px;"><label>Username</label><input type="text" id="lu" placeholder="Enter username"></div>
-    <div style="margin-bottom:16px;">
+    <div style="margin-bottom:18px;"><label>Username</label><input type="text" id="lu" placeholder="Enter username"></div>
+    <div style="margin-bottom:18px;">
       <label>Password</label>
       <div style="position:relative;">
         <input type="password" id="lp" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()">
-        <button type="button" onclick="togglePw('lp','lp-eye')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#aaa;padding:0;line-height:1;" id="lp-eye-btn" aria-label="Show password">
-          <i class="ti ti-eye" id="lp-eye" style="font-size:18px;" aria-hidden="true"></i>
+        <button type="button" onclick="togglePw('lp','lp-eye')" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#aaa;padding:0;line-height:1;" id="lp-eye-btn" aria-label="Show password">
+          <i class="ti ti-eye" id="lp-eye" style="font-size:20px;" aria-hidden="true"></i>
         </button>
       </div>
     </div>
     <div id="le" class="err hidden">Incorrect username or password.</div>
     <button class="btn btn-p signin" onclick="doLogin()">Sign in</button>
-    <div style="margin-top:14px;background:#f5f5f3;border-radius:8px;padding:10px 12px;">
+    <button class="forgot" type="button" onclick="forgotPw()">Forgot password?</button>
+    <div id="reset-panel" class="hidden" style="margin-top:14px;background:#f7f9fc;border:0.5px solid rgba(0,0,0,0.08);border-radius:11px;padding:16px;text-align:left;">
+      <p style="font-size:15px;font-weight:600;color:#2D2D2D;margin:0 0 14px;">Reset password</p>
+
+      <!-- Step 1: username -->
+      <div id="reset-step1">
+        <p style="font-size:12px;color:#888;margin:0 0 14px;">Enter your username to continue.</p>
+        <div style="margin-bottom:14px;"><label>Username</label><input type="text" id="reset-user" placeholder="Your username" onkeydown="if(event.key==='Enter')continueReset()"></div>
+        <button class="btn btn-p signin" onclick="continueReset()" style="margin-top:0;">Continue</button>
+      </div>
+
+      <!-- Step 2: answer security question + new password -->
+      <div id="reset-step2" class="hidden">
+        <div style="margin-bottom:14px;">
+          <label>Security question</label>
+          <p id="reset-q" style="font-size:14px;color:#2D2D2D;margin:2px 0 10px;font-weight:500;"></p>
+          <input type="text" id="reset-ans" placeholder="Your answer">
+        </div>
+        <div style="margin-bottom:14px;">
+          <label>New password</label>
+          <div style="position:relative;">
+            <input type="password" id="reset-pw1" placeholder="New password">
+            <button type="button" onclick="togglePw('reset-pw1','reset-eye')" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#aaa;padding:0;line-height:1;" aria-label="Show password"><i class="ti ti-eye" id="reset-eye" style="font-size:20px;" aria-hidden="true"></i></button>
+          </div>
+        </div>
+        <div style="margin-bottom:14px;"><label>Confirm new password</label><input type="password" id="reset-pw2" placeholder="Re-enter new password" onkeydown="if(event.key==='Enter')doReset()"></div>
+        <button class="btn btn-p signin" onclick="doReset()" style="margin-top:0;">Reset password</button>
+      </div>
+
+      <div id="reset-msg" class="hidden" style="font-size:13px;border-radius:8px;padding:10px 12px;margin-top:12px;"></div>
+      <button class="forgot" type="button" onclick="forgotPw()" style="margin-top:10px;">Cancel</button>
+    </div>
+
+    <!-- DEMO ONLY — remove this block for the production/final version -->
+    <div style="margin-top:18px;background:#f5f5f3;border-radius:8px;padding:10px 12px;">
       <p style="font-size:11px;color:#888;font-weight:500;margin-bottom:4px;">Demo logins</p>
       <p style="font-size:11px;color:#aaa;line-height:2;">Admin: admin / admin123&nbsp;&nbsp;|&nbsp;&nbsp;User: user / user123&nbsp;&nbsp;|&nbsp;&nbsp;Sub: sub1 / sub123</p>
     </div>
+    <!-- END DEMO ONLY -->
   </div>
 </div>
 
@@ -222,6 +259,7 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
       <span id="ub" class="badge"></span>
       <span id="un" style="font-size:12px;color:#666;"></span>
+      <button class="btn btn-s" onclick="openRecovery()" title="Set your password recovery question">🔒 Recovery</button>
       <button class="btn btn-s" onclick="doLogout()">Sign out</button>
     </div>
   </header>
@@ -1279,7 +1317,7 @@ function svC(){svL('v4_cli',clients);}
 
 // ─── AUTH ─────────────────────────────────────────────────────────────
 function fU(u,p){
-  if(u===ADM.u&&p===ADM.p)return{...ADM};
+  if(u===ADM.u&&p===(ldL('dlb_admin_pw')||ADM.p))return{...ADM};
   const s=subs.find(x=>x.u===u&&x.p===p);
   if(s)return{u:s.u,role:'sub',subRole:s.subRole||'admin',name:s.name,trade:s.trade,rate:s.rate,otRate:s.otRate};
   const w=workers.find(x=>x.u===u&&x.p===p);
@@ -1412,6 +1450,7 @@ function setupUI(){
 }
 function doLogout(){
   CU=null;sigHas=false;bill='ch';sigMethod='onsite';
+  closeRecovery();
   document.body.className='';
   document.getElementById('ma').classList.add('hidden');
   document.getElementById('ls').classList.remove('hidden');
@@ -3180,6 +3219,114 @@ function togglePw(inputId, iconId){
     inp.type='password';
     if(icon){icon.className='ti ti-eye';icon.style.color='#aaa';}
   }
+}
+
+// ─── PASSWORD RECOVERY (security question) ────────────────────────────
+function getRecovery(u){const m=ldL('dlb_recovery')||{};return m[u]||null;}
+
+function openRecovery(){
+  if(!CU)return;
+  const m=document.getElementById('recovery-modal');if(!m)return;
+  const rec=getRecovery(CU.u);
+  const qSel=document.getElementById('rec-q');
+  const aInp=document.getElementById('rec-a');
+  if(rec&&qSel){qSel.value=rec.q;}
+  if(aInp)aInp.value='';
+  const rm=document.getElementById('rec-msg');if(rm)rm.classList.add('hidden');
+  m.classList.remove('hidden');
+}
+function closeRecovery(){const m=document.getElementById('recovery-modal');if(m)m.classList.add('hidden');}
+function saveRecovery(){
+  if(!CU)return;
+  const q=document.getElementById('rec-q').value;
+  const a=document.getElementById('rec-a').value.trim();
+  const rm=document.getElementById('rec-msg');
+  const show=(t,ok)=>{rm.textContent=t;rm.style.background=ok?'#E1F5EE':'#FCEBEB';rm.style.color=ok?'#085041':'#9b2c2c';rm.classList.remove('hidden');};
+  if(!a){show('Please enter an answer.',false);return;}
+  const m=ldL('dlb_recovery')||{};
+  m[CU.u]={q:q,a:a.toLowerCase()};
+  svL('dlb_recovery',m);
+  show('Recovery question saved.',true);
+  setTimeout(closeRecovery,1100);
+}
+
+// ─── FORGOT / RESET PASSWORD ──────────────────────────────────────────
+function forgotPw(){
+  const p=document.getElementById('reset-panel');
+  if(!p)return;
+  p.classList.toggle('hidden');
+  // reset to step 1
+  document.getElementById('reset-step1').classList.remove('hidden');
+  document.getElementById('reset-step2').classList.add('hidden');
+  const msg=document.getElementById('reset-msg');if(msg)msg.classList.add('hidden');
+  if(!p.classList.contains('hidden')){
+    const ru=document.getElementById('reset-user');
+    if(ru&&!ru.value)ru.value=document.getElementById('lu').value.trim();
+  }
+}
+
+function accountExists(u){
+  subs=ldL('v4_subs')||(typeof DSUBS!=='undefined'?DSUBS:[])||[];
+  workers=ldL('v4_workers')||(typeof DWORKERS!=='undefined'?DWORKERS:[])||[];
+  users=ldL('dlb_users')||(typeof DUSERS!=='undefined'?DUSERS:[])||[];
+  if(subs.find(x=>x.u===u))return true;
+  if(workers.find(x=>x.u===u))return true;
+  if(users.find(x=>x.u===u))return true;
+  if(u===ADM.u)return true;
+  return false;
+}
+
+function continueReset(){
+  const u=document.getElementById('reset-user').value.trim();
+  const msg=document.getElementById('reset-msg');
+  const show=(text,ok)=>{msg.textContent=text;msg.style.background=ok?'#E1F5EE':'#FCEBEB';msg.style.color=ok?'#085041':'#9b2c2c';msg.classList.remove('hidden');};
+  if(!u){show('Please enter your username.',false);return;}
+  if(!accountExists(u)){show('No account found with that username. Check the spelling or contact your administrator.',false);return;}
+  const rec=getRecovery(u);
+  if(!rec){show('No recovery question is set for this account. Please ask your administrator to reset your password.',false);return;}
+  document.getElementById('reset-q').textContent=rec.q;
+  document.getElementById('reset-ans').value='';
+  document.getElementById('reset-pw1').value='';
+  document.getElementById('reset-pw2').value='';
+  msg.classList.add('hidden');
+  document.getElementById('reset-step1').classList.add('hidden');
+  document.getElementById('reset-step2').classList.remove('hidden');
+}
+
+function doReset(){
+  const u=document.getElementById('reset-user').value.trim();
+  const ans=document.getElementById('reset-ans').value.trim();
+  const p1=document.getElementById('reset-pw1').value;
+  const p2=document.getElementById('reset-pw2').value;
+  const msg=document.getElementById('reset-msg');
+  const show=(text,ok)=>{msg.textContent=text;msg.style.background=ok?'#E1F5EE':'#FCEBEB';msg.style.color=ok?'#085041':'#9b2c2c';msg.classList.remove('hidden');};
+  const rec=getRecovery(u);
+  if(!rec){show('No recovery question is set for this account.',false);return;}
+  if(!ans){show('Please answer the security question.',false);return;}
+  if(ans.toLowerCase()!==rec.a){show('That answer is incorrect.',false);return;}
+  if(!p1||!p2){show('Please enter and confirm your new password.',false);return;}
+  if(p1.length<4){show('Password must be at least 4 characters.',false);return;}
+  if(p1!==p2){show('The two passwords do not match.',false);return;}
+  // Load latest account data and apply the new password
+  subs=ldL('v4_subs')||(typeof DSUBS!=='undefined'?DSUBS:[])||[];
+  workers=ldL('v4_workers')||(typeof DWORKERS!=='undefined'?DWORKERS:[])||[];
+  users=ldL('dlb_users')||(typeof DUSERS!=='undefined'?DUSERS:[])||[];
+  let kind=null,target=null;
+  const s=subs.find(x=>x.u===u);if(s){target=s;kind='sub';}
+  if(!target){const w=workers.find(x=>x.u===u);if(w){target=w;kind='worker';}}
+  if(!target){const us=users.find(x=>x.u===u);if(us){target=us;kind='user';}}
+  if(!target&&u===ADM.u){kind='admin';}
+  if(!kind){show('No account found with that username.',false);return;}
+  if(kind==='sub'){target.p=p1;svS();}
+  else if(kind==='worker'){target.p=p1;svW();}
+  else if(kind==='user'){target.p=p1;svUsers();}
+  else if(kind==='admin'){svL('dlb_admin_pw',p1);}
+  show('Password updated. You can now sign in with your new password.',true);
+  document.getElementById('lu').value=u;
+  document.getElementById('reset-ans').value='';
+  document.getElementById('reset-pw1').value='';
+  document.getElementById('reset-pw2').value='';
+  setTimeout(()=>{const pnl=document.getElementById('reset-panel');if(pnl)pnl.classList.add('hidden');const lp=document.getElementById('lp');if(lp)lp.focus();},1700);
 }
 
 
@@ -5184,6 +5331,34 @@ window.addEventListener('load',()=>{
   if(window.location.hash.startsWith('#sign:')){checkSignPage();}
 });
 </script>
+<!-- Password recovery setup modal -->
+<div id="recovery-modal" class="hidden" style="position:fixed;inset:0;z-index:700;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;padding:1rem;">
+  <div style="background:#fff;border-radius:14px;max-width:420px;width:100%;padding:1.5rem;box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+    <p style="font-size:17px;font-weight:600;color:#2D2D2D;margin:0 0 4px;">Password recovery</p>
+    <p style="font-size:12px;color:#888;margin:0 0 16px;">Set a security question and answer. You'll need this to reset your password if you forget it.</p>
+    <div style="margin-bottom:14px;">
+      <label style="font-size:13px;color:#555;display:block;margin-bottom:6px;">Security question</label>
+      <select id="rec-q" style="font-size:15px;padding:12px;border-radius:10px;">
+        <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+        <option value="What city were you born in?">What city were you born in?</option>
+        <option value="What was the make of your first car?">What was the make of your first car?</option>
+        <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+        <option value="What was the name of your primary school?">What was the name of your primary school?</option>
+        <option value="What is your favourite sports team?">What is your favourite sports team?</option>
+      </select>
+    </div>
+    <div style="margin-bottom:8px;">
+      <label style="font-size:13px;color:#555;display:block;margin-bottom:6px;">Your answer</label>
+      <input type="text" id="rec-a" placeholder="Answer" style="font-size:15px;padding:12px;border-radius:10px;">
+    </div>
+    <div id="rec-msg" class="hidden" style="font-size:13px;border-radius:8px;padding:10px 12px;margin-top:10px;"></div>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <button class="btn" onclick="closeRecovery()" style="flex:1;padding:12px;">Cancel</button>
+      <button class="btn btn-p" onclick="saveRecovery()" style="flex:1;padding:12px;background:#EF9F27;color:#000;border:none;font-weight:600;">Save</button>
+    </div>
+  </div>
+</div>
+
 <nav id="bottom-nav" class="hidden" aria-label="Primary"></nav>
 </body>
 </html>
