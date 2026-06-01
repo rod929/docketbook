@@ -625,6 +625,11 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
       </div>
     </div>
     <div id="nds" class="ok hidden"></div>
+      <div id="nd-no-project" class="hidden card" style="background:#FAEEDA;border-left:3px solid #EF9F27;text-align:center;padding:24px 18px;">
+        <p style="font-size:16px;font-weight:600;color:#633806;margin:0 0 6px;">No job allocated yet</p>
+        <p style="font-size:13px;color:#854F0B;margin:0;">You haven't been allocated to a project yet. Please ask your site administrator to assign you to a job before creating a docket.</p>
+      </div>
+      <div id="nd-form-body">
       <div class="card">
         <div class="fg">
           <div><label>Project *</label><select id="dp" onchange="updClientFromProject()"><option value="">— Select project —</option></select></div>
@@ -808,6 +813,7 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
           <button class="btn btn-d" onclick="resetDF();showTab('dash',document.getElementById('n0'))">✕ Cancel</button>
         </div>
       </div>
+      </div><!-- end nd-form-body -->
     </div>
 
     <!-- MY DOCKETS -->
@@ -1295,7 +1301,7 @@ const DSUBS=[{u:'sub1',p:'sub123',name:'Demo Sub Co',trade:'General Labour',rate
 const DWORKERS=[];
 const DCLI=[{id:'c1',name:'Decode Group',abn:'',addr:'',contacts:[{id:'cc1',name:'James Bright',email:'james@decode.com.au',mobile:'0412000001'},{id:'cc2',name:'Sara Hunt',email:'sara@decode.com.au',mobile:'0412000002'}]},{id:'c2',name:'Bloc Developments',abn:'',addr:'',contacts:[{id:'cc3',name:'Michael Chen',email:'mchen@bloc.com.au',mobile:'0412000003'}]}];
 
-let CU=null,projects=[],dockets=[],subs=[],clients=[],dctr=1;
+let CU=null,projects=[],dockets=[],subs=[],clients=[],dctr=1,users=[];
 let sigOn=false,sigHas=false,curDock=null,bill='ch',sigMethod='onsite';
 
 function svL(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
@@ -1308,6 +1314,10 @@ function load(){
   subs=ldL('v4_subs')||DSUBS;
   clients=ldL('v4_cli')||DCLI;
   workers=ldL('v4_workers')||DWORKERS;
+  // Load site users so they can authenticate at the login screen
+  const DUSERS_SEED=[{u:'hcsup1',p:'super123',name:'Mark Brown',role:'hc_supervisor',email:'mark@alerce.net.au',projectAccess:[],permissions:{}}];
+  users=ldL('dlb_users')||DUSERS_SEED;
+  if(!users.find(x=>x.u==='hcsup1')){users.push(DUSERS_SEED[0]);svL('dlb_users',users);}
 }
 function svW(){svL('v4_workers',workers);}
 function svP(){svL('v4_proj',projects);}
@@ -1335,6 +1345,7 @@ function doLogin(){
   document.getElementById('ls').classList.add('hidden');
   document.getElementById('ma').classList.remove('hidden');
   setupUI();initApp();
+  maybePromptRecovery();
 }
 function setupUI(){
   const r=CU.role;
@@ -1925,10 +1936,16 @@ function renPS(workerFilter){
   const cur=sel.value;
   sel.innerHTML='<option value="">— Select project —</option>';
   let projs=projects;
+  let workerNoProjects=false;
   if(workerFilter&&CU&&CU.role==='worker'){
     const wData=workers.find(x=>x.u===CU.u);
-    const ap=wData?.projectAccess||[];
-    projs=projects.filter(p=>ap.includes(p.code));
+    if(wData&&wData.allProjects){
+      projs=projects;            // all-jobs override: show every project
+    } else {
+      const ap=wData?.projectAccess||[];
+      projs=projects.filter(p=>ap.includes(p.code));
+      if(projs.length===0)workerNoProjects=true;
+    }
   }
   // Sub Supervisor: only assigned projects
   if(CU&&CU.role==='sub'&&CU.subRole==='supervisor'){
@@ -1937,6 +1954,13 @@ function renPS(workerFilter){
   }
   projs.forEach(p=>{const o=document.createElement('option');o.value=p.code;o.textContent=p.name+' ('+p.code+')';sel.appendChild(o);});
   if(cur)sel.value=cur;
+  // Worker with no assigned project: block docket creation with a clear message
+  const notice=document.getElementById('nd-no-project');
+  if(notice){
+    notice.classList.toggle('hidden',!workerNoProjects);
+  }
+  const ndForm=document.getElementById('nd-form-body');
+  if(ndForm)ndForm.style.display=workerNoProjects?'none':'';
 }
 function renFD(){
   const fp=document.getElementById('fp');
@@ -1967,7 +1991,7 @@ function renST(){
     const ratesSummary=subProjRates.length
       ?subProjRates.map(r=>{const p=projects.find(x=>x.code===r.projCode);return(p?p.name:r.projCode)+': $'+parseFloat(r.std).toFixed(2)+'/hr';}).join(' | ')
       :'<span style="color:#aaa;font-size:11px;">No project rates set</span>';
-    return`<tr><td style="font-weight:500;">${esc(s.name)}</td><td><code style="font-size:11px;background:#f5f5f3;padding:2px 5px;border-radius:4px;">${esc(s.u)}</code></td><td><span class="badge bsub">${esc(s.trade||'—')}</span></td><td>${sd.length}</td><td>${hrs.toFixed(1)}h</td><td style="font-weight:500;">${cost>0?'$'+cost.toFixed(2):'—'}</td><td style="white-space:nowrap;"><button class="btn btn-s" onclick="editS('${s.u}')" style="margin-right:4px;">Edit</button><button class="btn btn-s btn-d" onclick="delS('${s.u}')">Remove</button></td></tr>
+    return`<tr><td style="font-weight:500;">${esc(s.name)}</td><td><code style="font-size:11px;background:#f5f5f3;padding:2px 5px;border-radius:4px;">${esc(s.u)}</code></td><td><span class="badge bsub">${esc(s.trade||'—')}</span></td><td>${sd.length}</td><td>${hrs.toFixed(1)}h</td><td style="font-weight:500;">${cost>0?'$'+cost.toFixed(2):'—'}</td><td style="white-space:nowrap;"><button class="btn btn-s" onclick="editS('${s.u}')" style="margin-right:4px;">Edit</button><button class="btn btn-s" onclick="adminResetPassword('${s.u}')" style="margin-right:4px;" title="Reset password">Reset PW</button><button class="btn btn-s btn-d" onclick="delS('${s.u}')">Remove</button></td></tr>
     <tr style="background:#fafaf8;"><td colspan="7" style="padding:6px 10px;font-size:11px;color:#666;border-bottom:0.5px solid rgba(0,0,0,0.06);">
       <strong style="color:#888;margin-right:6px;">Rates:</strong>${ratesSummary}
       <a href="#" onclick="showTab('rates',document.getElementById('n8'));switchRateTab('sub');document.getElementById('rates-filter-sub').value='${s.u}';renRatesTable();return false;" style="margin-left:10px;font-size:11px;color:#185FA5;">Manage rates →</a>
@@ -3224,6 +3248,29 @@ function togglePw(inputId, iconId){
 // ─── PASSWORD RECOVERY (security question) ────────────────────────────
 function getRecovery(u){const m=ldL('dlb_recovery')||{};return m[u]||null;}
 
+// Admin one-click reset: set a temp password, clear stale recovery so the
+// user is re-prompted to set a fresh question next time they sign in.
+function adminResetPassword(u){
+  subs=ldL('v4_subs')||(typeof DSUBS!=='undefined'?DSUBS:[])||[];
+  workers=ldL('v4_workers')||(typeof DWORKERS!=='undefined'?DWORKERS:[])||[];
+  users=ldL('dlb_users')||(typeof DUSERS!=='undefined'?DUSERS:[])||[];
+  let target=null,kind=null;
+  const s=subs.find(x=>x.u===u);if(s){target=s;kind='sub';}
+  if(!target){const w=workers.find(x=>x.u===u);if(w){target=w;kind='worker';}}
+  if(!target){const us=users.find(x=>x.u===u);if(us){target=us;kind='user';}}
+  if(!target){alert('Account not found.');return;}
+  const name=target.name||u;
+  if(!confirm('Reset the password for '+name+' ('+u+')?\n\nA temporary password will be generated. They should sign in with it and change it straight away.'))return;
+  // Generate a simple, readable temporary password
+  const temp='Temp'+Math.floor(1000+Math.random()*9000);
+  target.p=temp;
+  if(kind==='sub')svS();else if(kind==='worker')svW();else svUsers();
+  // Clear their recovery question + prompt flag so they set a fresh one
+  const rec=ldL('dlb_recovery')||{};if(rec[u]){delete rec[u];svL('dlb_recovery',rec);}
+  const pm=ldL('dlb_recovery_prompted')||{};if(pm[u]){delete pm[u];svL('dlb_recovery_prompted',pm);}
+  alert('Temporary password for '+name+':\n\n    '+temp+'\n\nGive this to them privately. They\'ll be asked to set a new recovery question next time they sign in.');
+}
+
 function openRecovery(){
   if(!CU)return;
   const m=document.getElementById('recovery-modal');if(!m)return;
@@ -3235,7 +3282,19 @@ function openRecovery(){
   const rm=document.getElementById('rec-msg');if(rm)rm.classList.add('hidden');
   m.classList.remove('hidden');
 }
-function closeRecovery(){const m=document.getElementById('recovery-modal');if(m)m.classList.add('hidden');}
+function closeRecovery(){const m=document.getElementById('recovery-modal');if(m)m.classList.add('hidden');const n=document.getElementById('rec-firsttime');if(n)n.classList.add('hidden');}
+
+// Prompt once, on first sign-in, if the user hasn't set a recovery question
+function maybePromptRecovery(){
+  if(!CU)return;
+  if(getRecovery(CU.u))return;                 // already set up — never nag
+  // No question set yet: prompt on every login until they set one.
+  setTimeout(()=>{
+    const note=document.getElementById('rec-firsttime');
+    if(note)note.classList.remove('hidden');
+    openRecovery();
+  },700);
+}
 function saveRecovery(){
   if(!CU)return;
   const q=document.getElementById('rec-q').value;
@@ -3303,7 +3362,7 @@ function doReset(){
   const rec=getRecovery(u);
   if(!rec){show('No recovery question is set for this account.',false);return;}
   if(!ans){show('Please answer the security question.',false);return;}
-  if(ans.toLowerCase()!==rec.a){show('That answer is incorrect.',false);return;}
+  if(ans.toLowerCase()!==rec.a){show('That answer is incorrect. If you can\'t remember it, contact your administrator to reset your password.',false);return;}
   if(!p1||!p2){show('Please enter and confirm your new password.',false);return;}
   if(p1.length<4){show('Password must be at least 4 characters.',false);return;}
   if(p1!==p2){show('The two passwords do not match.',false);return;}
@@ -4002,7 +4061,6 @@ function getClientRate(projCode){
 
 
 // ─── USERS ────────────────────────────────────────────────────────────
-let users=[];
 
 function loadUsers(){
   const DUSERS=[
@@ -4021,8 +4079,8 @@ function svUsers(){svL('dlb_users',users);}
 const _origFU=fU;
 
 function fU(u,p){
-  // Check built-in admin
-  if(u===ADM.u&&p===ADM.p)return{...ADM};
+  // Check built-in admin (honor reset password if set)
+  if(u===ADM.u&&p===(ldL('dlb_admin_pw')||ADM.p))return{...ADM};
   // Check dynamic users
   const usr=users.find(x=>x.u===u&&x.p===p);
   if(usr)return{u:usr.u,role:usr.role||'user',name:usr.name,email:usr.email||'',projectAccess:usr.projectAccess||[],permissions:usr.permissions||{}};
@@ -4070,6 +4128,7 @@ function renUsersList(){
         </div>
         <div style="display:flex;gap:6px;">
           <button class="btn btn-s" onclick="editUser('${usr.u}')">Edit</button>
+          <button class="btn btn-s" onclick="adminResetPassword('${usr.u}')" title="Reset this user's password">Reset PW</button>
           <button class="btn btn-s btn-d" onclick="deleteUser('${usr.u}')">Remove</button>
         </div>
       </div>
@@ -4647,11 +4706,19 @@ function renWorkersTable(){
       <td><code style="font-size:11px;background:#f5f5f3;padding:2px 5px;border-radius:4px;">${esc(w.u)}</code></td>
       <td>${w.trade?`<span class="badge bsub">${esc(w.trade)}</span>`:'—'}</td>
       <td style="min-width:280px;">
-        ${projRows||'<span style="color:#aaa;font-size:11px;">No projects</span>'}
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;padding:5px 0;margin-bottom:4px;border-bottom:0.5px solid rgba(0,0,0,0.08);">
+          <input type="checkbox" ${w.allProjects?'checked':''} onchange="toggleWorkerAllProjects('${w.u}',this.checked)">
+          <span style="font-weight:500;color:#185FA5;">All jobs</span>
+          <span style="font-size:10px;color:#888;">— no site-specific access needed</span>
+        </label>
+        ${w.allProjects
+          ?'<p style="font-size:11px;color:#1D9E75;margin:6px 0 0;">✓ This worker can create dockets on any job.</p>'
+          :(projRows||'<span style="color:#aaa;font-size:11px;">No projects</span>')}
       </td>
       <td>${wdockets}</td>
       <td style="white-space:nowrap;">
         <button class="btn btn-s" onclick="editWorker('${w.u}')" style="margin-right:4px;">Edit</button>
+        <button class="btn btn-s" onclick="adminResetPassword('${w.u}')" style="margin-right:4px;" title="Reset password">Reset PW</button>
         <button class="btn btn-s btn-d" onclick="delWorker('${w.u}')">Remove</button>
       </td>
     </tr>`;
@@ -4666,18 +4733,33 @@ function toggleWorkerProject(workerU, projCode, hasAccess){
   svW();
 }
 
+function toggleWorkerAllProjects(workerU, isAll){
+  const w=workers.find(x=>x.u===workerU);if(!w)return;
+  w.allProjects=isAll;
+  svW();renWorkersTable();
+}
+
 function addWorker(){
-  const name=document.getElementById('w-name').value.trim();
-  const u=document.getElementById('w-user').value.trim().toLowerCase();
-  const p=document.getElementById('w-pass').value.trim();
-  const trade=document.getElementById('w-trade').value.trim();
   const err=document.getElementById('w-err');
-  if(!name||!u||!p){err.textContent='Name, username and password required.';err.classList.remove('hidden');return;}
-  if(u==='admin'||subs.find(s=>s.u===u)||workers.find(w=>w.u===u)||users.find(x=>x.u===u)){err.textContent='Username already taken.';err.classList.remove('hidden');return;}
-  // Alerce workers have no parentSub
-  workers.push({name,u,p,trade,parentSub:null,projectAccess:[]});
-  svW();err.classList.add('hidden');togF('awf');renWorkersTable();
-  ['w-name','w-user','w-pass','w-trade'].forEach(id=>document.getElementById(id).value='');
+  try{
+    // Guarantee account arrays are loaded and are arrays
+    if(!Array.isArray(workers))workers=ldL('v4_workers')||[];
+    if(!Array.isArray(subs))subs=ldL('v4_subs')||[];
+    if(!Array.isArray(users))users=ldL('dlb_users')||[];
+    const name=document.getElementById('w-name').value.trim();
+    const u=document.getElementById('w-user').value.trim().toLowerCase();
+    const p=document.getElementById('w-pass').value.trim();
+    const trade=document.getElementById('w-trade').value.trim();
+    if(!name||!u||!p){err.textContent='Name, username and password required.';err.classList.remove('hidden');return;}
+    if(u==='admin'||subs.find(s=>s.u===u)||workers.find(w=>w.u===u)||users.find(x=>x.u===u)){err.textContent='Username already taken.';err.classList.remove('hidden');return;}
+    // Alerce workers have no parentSub
+    workers.push({name,u,p,trade,parentSub:null,projectAccess:[]});
+    svW();err.classList.add('hidden');togF('awf');renWorkersTable();
+    ['w-name','w-user','w-pass','w-trade'].forEach(id=>document.getElementById(id).value='');
+  }catch(e){
+    if(err){err.textContent='Could not save worker: '+(e.message||e);err.classList.remove('hidden');}
+    console.error('addWorker failed:',e);
+  }
 }
 
 function delWorker(u){
@@ -5336,6 +5418,7 @@ window.addEventListener('load',()=>{
   <div style="background:#fff;border-radius:14px;max-width:420px;width:100%;padding:1.5rem;box-shadow:0 10px 40px rgba(0,0,0,0.2);">
     <p style="font-size:17px;font-weight:600;color:#2D2D2D;margin:0 0 4px;">Password recovery</p>
     <p style="font-size:12px;color:#888;margin:0 0 16px;">Set a security question and answer. You'll need this to reset your password if you forget it.</p>
+    <div id="rec-firsttime" class="hidden" style="background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:0 8px 8px 0;padding:10px 12px;margin:0 0 16px;font-size:12px;color:#633806;">Please set this up so you can reset your own password if you forget it. Until you do, you'll see this each time you sign in. You can still skip for now.</div>
     <div style="margin-bottom:14px;">
       <label style="font-size:13px;color:#555;display:block;margin-bottom:6px;">Security question</label>
       <select id="rec-q" style="font-size:15px;padding:12px;border-radius:10px;">
