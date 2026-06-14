@@ -18,6 +18,60 @@ label{font-size:12px;color:#666;display:block;margin-bottom:4px;}
 input,select,textarea{width:100%;font-size:13px;padding:8px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;color:#1a1a1a;outline:none;}
 input:focus,select:focus,textarea:focus{border-color:#185FA5;box-shadow:0 0 0 2px rgba(24,95,165,0.15);}
 textarea{resize:vertical;min-height:60px;}
+/* ── New Docket form: larger inputs for easy mobile tapping ── */
+#t-nd input,#t-nd select,#t-nd textarea{font-size:17px;padding:18px 16px;border-radius:10px;}
+#t-nd label{font-size:15px;margin-bottom:8px;color:#444;font-weight:500;}
+#t-nd select{height:auto;min-height:60px;}
+#t-nd textarea{min-height:120px;}
+/* When the Review & Sign panel is open, hide the app chrome for a clean full-screen docket */
+body.review-open header{display:none!important;}
+body.review-open .rban{display:none!important;}
+body.review-open .nav{display:none!important;}
+body.review-open #bottom-nav{display:none!important;}
+body.review-open #wk-fab-wrap{display:none!important;}
+body.review-open #sup-fab-wrap{display:none!important;}
+
+/* ── Review & Sign: larger, easier to read on phones ── */
+#review-panel #review-summary > div{padding:11px 0!important;}
+#review-panel #review-summary span:first-child{font-size:15px!important;}
+#review-panel #review-summary span:last-child{font-size:16px!important;}
+#review-panel .card{padding:18px 18px!important;}
+#review-panel .card > p:first-child{font-size:15px!important;}
+/* Section eyebrow labels (Description / Photos / Materials etc.) */
+#review-panel .card p[style*="uppercase"]{font-size:13px!important;}
+#review-panel #review-desc,
+#review-panel #review-notes{font-size:16px!important;line-height:1.5!important;}
+#review-panel #review-materials > div{font-size:15px!important;padding:7px 0!important;}
+/* Signature method tabs */
+#review-panel #rtab-onsite,#review-panel #rtab-email,#review-panel #rtab-sms{font-size:15px!important;padding:12px 18px!important;}
+#review-panel #review-sig-label{font-size:16px!important;}
+/* Inputs, selects and textareas inside the review page */
+#review-panel input,#review-panel textarea,#review-panel select{font-size:17px!important;padding:15px 14px!important;border-radius:10px!important;}
+#review-panel label{font-size:15px!important;}
+/* Signer + billing + email cards text */
+#review-panel #review-signer-default{font-size:15px!important;padding:13px 14px!important;}
+#review-panel #review-billing-card p:first-child{font-size:17px!important;}
+#review-panel .rbill-btn{font-size:16px!important;padding:16px 12px!important;}
+#review-panel #review-billing-card label,
+#review-panel #review-billing-card span{font-size:15px!important;}
+/* The "email the signed PDF" card */
+#review-panel .card label{font-size:15px!important;}
+/* Status banner at the top */
+#review-panel #review-status-banner p:first-child{font-size:15px!important;}
+#review-panel #review-status-banner p:last-child{font-size:13px!important;}
+/* Docket number + company name in the sticky header */
+#review-panel #review-docket-num{font-size:19px!important;}
+#review-panel #review-co-name{font-size:17px!important;}
+/* Action buttons (Submit / Back) */
+#review-panel button[onclick="submitFromReview()"]{font-size:17px!important;padding:16px 28px!important;}
+#review-panel button[onclick="hideReview()"]{font-size:16px!important;padding:14px 20px!important;}
+/* Taller signature pad so it's easy to sign with a finger */
+#review-panel #review-sigc{height:240px!important;}
+
+.rbill-btn{padding:14px 10px;border-radius:10px;border:2px solid rgba(0,0,0,0.12);background:#fff;color:#1a1a1a;font-size:14px;font-weight:500;cursor:pointer;text-align:center;}
+.rbill-btn:hover{border-color:#1D9E75;}
+.rbill-btn.active{border-color:#1D9E75;background:#1D9E75;color:#fff;}
+#t-nd .field-error{border:2px solid #E24B4A!important;background:#FCEBEB;}
 .btn{font-size:13px;padding:7px 14px;border-radius:8px;cursor:pointer;border:0.5px solid rgba(0,0,0,0.2);background:transparent;color:#1a1a1a;}
 .btn:hover{background:#f0f0ee;}
 .btn-p{background:#185FA5;color:#fff;border-color:#185FA5;}
@@ -32,6 +86,7 @@ textarea{resize:vertical;min-height:60px;}
 .bs{background:#E1F5EE;color:#085041;}
 .bw{background:#FAEEDA;color:#633806;}
 .bsub{background:#EEEDFE;color:#3C3489;}
+.bg{background:#EDE7F9;color:#4C2A86;}
 .bc{background:#E1F5EE;color:#085041;}
 .bo{background:#FAEEDA;color:#633806;}
 .bpend{background:#FFF3CD;color:#856404;}
@@ -74,7 +129,7 @@ body.role-worker #n1:hover,body.role-supervisor #n1:hover{background:#1a1a1a;}
   body.nd-fullpage #bottom-nav{display:none!important;}
   /* Mobile admin: hide dense desktop panels, show compact block */
   #fin-panel,#signed-panel{display:none!important;}
-  #admin-mobile-nav{display:none!important;}
+  #admin-mobile-nav{display:grid!important;grid-template-columns:1fr 1fr 1fr;gap:8px;}
   .recent-table{display:none!important;}
   .recent-list{display:block!important;}
   /* trim extra admin stat tiles on mobile to match Dockets · Pending · Hours */
@@ -124,6 +179,10 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 .rban.adm{background:#E6F1FB;color:#0C447C;}
 .rban.usr{background:#E1F5EE;color:#085041;}
 .rban.sub{background:#EEEDFE;color:#3C3489;}
+/* Worker banner — mockup dark header look */
+body.role-worker .rban,body.role-supervisor .rban{background:#2D2D2D;color:#fff;padding:18px 18px;border-radius:14px;font-size:16px;}
+body.role-worker .rban strong,body.role-supervisor .rban strong{color:#EF9F27;font-size:20px;letter-spacing:0.02em;}
+body.role-worker .rban select,body.role-supervisor .rban select{background:#fff;color:#2D2D2D;border:none;font-size:15px;padding:8px 14px;border-radius:10px;}
 .tg{display:flex;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;overflow:hidden;width:fit-content;}
 .to{padding:7px 14px;font-size:13px;cursor:pointer;border:none;background:transparent;color:#666;}
 .tc{background:#E1F5EE;color:#085041;font-weight:500;}
@@ -139,6 +198,9 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 .sig-method-box{border:0.5px solid rgba(0,0,0,0.12);border-radius:10px;padding:12px 14px;margin-top:8px;background:#fafaf8;}
 .sig-tab{display:inline-block;padding:6px 14px;font-size:12px;border-radius:6px;cursor:pointer;border:0.5px solid rgba(0,0,0,0.15);margin-right:6px;margin-bottom:8px;}
 .sig-tab.active{background:#185FA5;color:#fff;border-color:#185FA5;}
+/* Review page signature-method buttons — orange */
+#rtab-onsite,#rtab-email,#rtab-sms{background:#EF9F27;color:#412402;border:none;font-weight:600;padding:10px 16px;font-size:13px;border-radius:8px;}
+#rtab-onsite.active,#rtab-email.active,#rtab-sms.active{background:#2D2D2D;color:#EF9F27;}
 .contact-row{display:flex;gap:8px;align-items:center;padding:8px 10px;border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;margin-bottom:6px;background:#fafaf8;}
 .contact-row:hover{background:#f0f0ee;}
 .send-result{border-radius:8px;padding:10px 14px;font-size:13px;margin-top:8px;}
@@ -164,7 +226,87 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
   /* Back button */
   body.nd-fullpage #nd-back-btn{display:flex!important;}
 }
-#nd-back-btn{display:none;align-items:center;gap:8px;padding:12px 16px;background:#2D2D2D;color:#fff;font-size:14px;font-weight:500;cursor:pointer;border:none;width:100%;}
+#nd-back-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 18px;background:#EF9F27;color:#412402;font-size:15px;font-weight:600;cursor:pointer;border:none;width:calc(100% - 24px);margin:12px;border-radius:10px;}
+#nd-back-btn:hover{background:#d98e1f;}
+/* Workers use dashboard tiles + bottom nav, so hide the top nav row for them */
+body.role-worker .nav{display:none;}
+/* Worker now shows the bottom tab nav (footer) like the supervisor */
+/* ── Declutter the top of the worker view on mobile ── */
+@media(max-width:768px){
+  /* Header: keep the centre brand, simplify the rest */
+  body.role-worker header,body.role-supervisor header{padding:8px 12px;gap:6px;}
+  /* Header: show the company logo AND the small app brand */
+  body.role-worker #company-logo-wrap,body.role-supervisor #company-logo-wrap{display:flex!important;gap:6px;}
+  body.role-worker #header-centre-brand,body.role-supervisor #header-centre-brand{display:flex!important;}
+  body.role-worker #header-company-logo,body.role-supervisor #header-company-logo{height:28px;}
+  body.role-worker #header-co-name-text,body.role-supervisor #header-co-name-text{font-size:12px;}
+  body.role-worker header,body.role-supervisor header{padding:8px 10px;}
+  /* Make the right-side controls compact: drop the role badge + name text, keep small buttons */
+  body.role-worker header #ub,body.role-supervisor header #ub,
+  body.role-worker header #un,body.role-supervisor header #un{display:none!important;}
+  body.role-worker header .btn-s,body.role-supervisor header .btn-s{font-size:11px;padding:6px 8px;}
+  /* Dark banner: comfortable size, hide the verbose company chip */
+  body.role-worker .rban,body.role-supervisor .rban{padding:16px 16px;margin-bottom:12px;font-size:15px;}
+}
+/* Worker fixed bottom New docket button (thumb-reachable) */
+#wk-fab-wrap{display:none;}
+body.role-worker:not(.nd-fullpage) #wk-fab-wrap{
+  display:block;position:fixed;left:0;right:0;bottom:58px;z-index:620;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,var(--color-background-primary,#f5f5f3) 70%,rgba(245,245,243,0));
+}
+#wk-fab{
+  width:100%;background:#2D2D2D;color:#EF9F27;border:none;border-radius:16px;
+  padding:28px 16px;font-size:26px;font-weight:700;letter-spacing:0.05em;
+  display:flex;align-items:center;justify-content:center;gap:14px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(0,0,0,0.18);
+}
+#wk-fab i{font-size:36px;}
+#wk-fab:hover{background:#1a1a1a;}
+/* Supervisor fixed bottom New docket button — mirrors the worker FAB */
+#sup-fab-wrap{display:none;}
+body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
+  display:block;position:fixed;left:0;right:0;bottom:58px;z-index:620;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,var(--color-background-primary,#f5f5f3) 70%,rgba(245,245,243,0));
+}
+#sup-fab{
+  width:100%;background:#2D2D2D;color:#EF9F27;border:none;border-radius:16px;
+  padding:28px 16px;font-size:26px;font-weight:700;letter-spacing:0.05em;
+  display:flex;align-items:center;justify-content:center;gap:14px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(0,0,0,0.18);
+}
+#sup-fab i{font-size:36px;}
+#sup-fab:hover{background:#1a1a1a;}
+/* ── Worker dashboard: natural flow, New docket button fixed at bottom ── */
+@media(max-width:768px){
+  body.role-worker #dash-worker{padding-bottom:172px;}
+  body.role-supervisor #dash-supervisor{padding-bottom:172px;}
+  #wk-fab-wrap{position:fixed;}
+  #sup-fab-wrap{position:fixed;}
+}
+/* desktop keeps normal flow */
+@media(min-width:769px){
+  body.role-worker #dash-worker{padding-bottom:192px;}
+  body.role-supervisor #dash-supervisor{padding-bottom:192px;}
+}
+/* ── Worker dashboard — mockup styling (more colour, bigger type) ── */
+#dash-worker .wk-stats,#dash-supervisor .wk-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+#dash-worker .wk-sc,#dash-supervisor .wk-sc{border-radius:12px;padding:16px 6px;text-align:center;border:0.5px solid rgba(0,0,0,0.06);}
+#dash-worker .wk-sc .wk-sv,#dash-supervisor .wk-sc .wk-sv{font-size:26px;font-weight:700;line-height:1;}
+#dash-worker .wk-sc .wk-sl,#dash-supervisor .wk-sc .wk-sl{font-size:11px;color:#888;margin-top:5px;font-weight:500;letter-spacing:0.02em;}
+#dash-worker .wk-sc-drafts,#dash-supervisor .wk-sc-drafts{background:#FFFBF5;}
+#dash-worker .wk-sc-drafts .wk-sv,#dash-supervisor .wk-sc-drafts .wk-sv{color:#EF9F27;}
+#dash-worker .wk-sc-sent,#dash-supervisor .wk-sc-sent{background:#E6F1FB;}
+#dash-worker .wk-sc-sent .wk-sv,#dash-supervisor .wk-sc-sent .wk-sv{color:#185FA5;}
+#dash-worker .wk-sc-signed,#dash-supervisor .wk-sc-signed{background:#E1F5EE;}
+#dash-worker .wk-sc-signed .wk-sv,#dash-supervisor .wk-sc-signed .wk-sv{color:#1D9E75;}
+#dash-worker .ndock-tile,#dash-supervisor .ndock-tile{background:#FAEEDA;border:none;border-radius:12px;padding:18px 8px;font-size:15px;font-weight:600;color:#633806;gap:8px;}
+#dash-worker .ndock-tile:hover,#dash-supervisor .ndock-tile:hover{background:#f5e3c8;}
+#dash-worker .ndock-tile i,#dash-supervisor .ndock-tile i{font-size:24px;color:#EF9F27;}
+#dash-worker .st,#dash-supervisor .st{font-size:16px;font-weight:700;color:#2D2D2D;letter-spacing:0.02em;text-transform:none;}
+#dash-worker .rdl-t,#dash-supervisor .rdl-t{font-size:14px;}
+#dash-worker .rdl-s,#dash-supervisor .rdl-s{font-size:12px;}
 /* ── Login screen — larger inputs & button ── */
 #ls .card{padding:2.25rem 1.75rem;width:100%;max-width:430px;}
 #ls label{font-size:14px;color:#555;margin-bottom:7px;font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;}
@@ -249,17 +391,16 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
         <div style="font-size:14px;font-weight:600;color:#2D2D2D;" id="header-co-name-text">Alerce</div>
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:10px;justify-content:center;">
-      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:38px;object-fit:contain;" id="dlb-centre-logo">
-      <div style="line-height:1.25;text-align:left;">
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:16px;font-weight:800;color:#2D2D2D;letter-spacing:0.06em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:10px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce</div>
+    <div style="display:flex;align-items:center;gap:7px;justify-content:center;" id="header-centre-brand">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:22px;object-fit:contain;" id="dlb-centre-logo">
+      <div style="line-height:1.2;text-align:left;">
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce</div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
       <span id="ub" class="badge"></span>
       <span id="un" style="font-size:12px;color:#666;"></span>
-      <button class="btn btn-s" onclick="openRecovery()" title="Set your password recovery question">🔒 Recovery</button>
       <button class="btn btn-s" onclick="doLogout()">Sign out</button>
     </div>
   </header>
@@ -287,12 +428,14 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 
       <!-- ── SUPERVISOR DASHBOARD ── -->
       <div id="dash-supervisor" class="hidden">
-        <!-- Action tiles -->
-        <div style="margin-bottom:10px;">
-          <button onclick="showTab('nd',document.getElementById('n1'))" style="width:100%;background:#2D2D2D;color:#EF9F27;border:none;border-radius:10px;padding:16px;font-size:15px;font-weight:700;letter-spacing:0.05em;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;margin-bottom:8px;">
-            <i class="ti ti-plus" style="font-size:22px;" aria-hidden="true"></i> New docket
-          </button>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div id="sup-fixed-top">
+          <!-- Mini stats — aligned like worker: Drafts / Signed / Sent -->
+          <div class="wk-stats">
+            <div class="wk-sc wk-sc-drafts"><div class="wk-sv" id="sup-stat-drafts">0</div><div class="wk-sl">Drafts</div></div>
+            <div class="wk-sc wk-sc-signed"><div class="wk-sv" id="sup-stat-signed">0</div><div class="wk-sl">Signed</div></div>
+            <div class="wk-sc wk-sc-sent"><div class="wk-sv" id="sup-stat-sent">0</div><div class="wk-sl">Sent</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
             <button onclick="showTab('drafts',document.getElementById('n-drafts'))" class="ndock-tile">
               <i class="ti ti-pencil" aria-hidden="true"></i>Drafts <span id="sup-draft-badge" class="hidden" style="background:#2D2D2D;color:#EF9F27;border-radius:10px;font-size:10px;padding:1px 6px;">0</span>
             </button>
@@ -301,29 +444,28 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
             </button>
           </div>
         </div>
-        <!-- Stats (no financials) -->
-        <div class="mg" style="margin-bottom:10px;">
-          <div class="mc"><div class="mv" id="sup-dockets">0</div><div class="ml">Dockets</div></div>
-          <div class="mc"><div class="mv" id="sup-pending" style="color:#856404;">0</div><div class="ml" style="color:#856404;">Pending sig</div></div>
-          <div class="mc"><div class="mv" id="sup-hours">0h</div><div class="ml">Hours</div></div>
-        </div>
-        <!-- Unassigned billing alert -->
-        <div id="sup-billing-alert" class="hidden" style="background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
-          <div>
-            <p id="sup-billing-alert-text" style="font-size:13px;font-weight:500;color:#633806;margin:0;">Signed dockets — billing unassigned</p>
-            <p style="font-size:11px;color:#854F0B;margin:0;">Needs chargeable / own cost / backcharge</p>
+        <div id="sup-scroll-area">
+          <!-- Pending billing folder (cross-company signed dockets awaiting billing) -->
+          <div id="sup-pending-billing-wrap" class="hidden">
+            <p class="st" style="margin-top:0;color:#854F0B;">⏳ Pending billing</p>
+            <div class="card" style="padding:0;border:0.5px solid #F2D9A8;background:#FFFBF5;margin-bottom:14px;"><div id="sup-pending-billing-list"></div></div>
           </div>
-          <button onclick="showTab('ad',document.getElementById('n3'))" style="background:#EF9F27;color:#412402;border:none;border-radius:6px;font-size:11px;padding:5px 12px;cursor:pointer;font-weight:500;white-space:nowrap;">Review</button>
+          <!-- My projects (allocated by admin) -->
+          <p class="st" style="margin-top:0;">My projects</p>
+          <div class="card" style="padding:0;"><div id="sup-proj-list"></div></div>
+          <!-- Project dockets (all dockets on allocated projects) -->
+          <p class="st" style="margin-top:14px;">Project dockets</p>
+          <div class="card" style="padding:0;"><div id="sup-proj-dockets-list" class="recent-list" style="display:block;"></div></div>
+          <!-- Recent dockets (this supervisor's own) -->
+          <p class="st" style="margin-top:14px;">Recent dockets</p>
+          <div class="card" style="padding:0;margin-bottom:8px;"><div id="sup-rd-list" class="recent-list" style="display:block;"></div></div>
         </div>
-        <!-- Unassigned docket list -->
-        <div id="sup-unassigned-list"></div>
-        <!-- Recent dockets -->
-        <p class="st" style="margin-top:10px;">Recent dockets</p>
-        <div class="card recent-table" style="padding:0;"><div class="tw"><table>
-          <thead><tr><th>#</th><th>Project</th><th>Date</th><th>Submitted by</th><th>Hrs</th><th>Signed</th></tr></thead>
-          <tbody id="sup-rd"></tbody>
-        </table></div></div>
-        <div class="card recent-list" style="padding:0;"><div id="sup-rd-list"></div></div>
+        <!-- Fixed bottom New docket button (same as worker) -->
+        <div id="sup-fab-wrap">
+          <button onclick="showTab('nd',document.getElementById('n1'))" id="sup-fab">
+            <i class="ti ti-plus" style="font-size:36px;" aria-hidden="true"></i> New docket
+          </button>
+        </div>
       </div>
 
       <!-- ── ADMIN / SUB ADMIN DASHBOARD ── -->
@@ -341,6 +483,15 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
           </button>
           <button onclick="showTab('settings',document.getElementById('n8'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
             <i class="ti ti-settings" style="font-size:20px;color:#888;" aria-hidden="true"></i>Settings
+          </button>
+          <button onclick="showTab('users',document.getElementById('n9'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
+            <i class="ti ti-user" style="font-size:20px;color:#185FA5;" aria-hidden="true"></i>Users
+          </button>
+          <button onclick="showTab('clients',document.getElementById('n6'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
+            <i class="ti ti-address-book" style="font-size:20px;color:#185FA5;" aria-hidden="true"></i>Clients
+          </button>
+          <button onclick="showTab('rates',document.getElementById('n8'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
+            <i class="ti ti-cash" style="font-size:20px;color:#1D9E75;" aria-hidden="true"></i>Rates
           </button>
         </div>
         <!-- Summary tiles (all roles) -->
@@ -367,6 +518,16 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
               <p style="font-size:11px;color:#854F0B;margin:0;">Ready to raise client dockets</p>
             </div>
             <button onclick="showTab('ad',document.getElementById('n3'))" style="background:#EF9F27;color:#412402;border:none;border-radius:6px;font-size:11px;padding:5px 12px;cursor:pointer;font-weight:500;white-space:nowrap;">Review</button>
+          </div>
+          <!-- Pending billing folder (cross-company dockets signed by supervisors) -->
+          <div id="admin-pending-billing-wrap" class="hidden">
+            <p class="st" style="margin-top:4px;color:#854F0B;">⏳ Pending billing</p>
+            <div class="card" style="padding:0;border:0.5px solid #F2D9A8;background:#FFFBF5;margin-bottom:10px;"><div id="admin-pending-billing-list"></div></div>
+          </div>
+          <!-- Awaiting final approval folder (PM / Contracts Admin sign-off) -->
+          <div id="admin-approval-wrap" class="hidden">
+            <p class="st" style="margin-top:4px;color:#185FA5;">✓ Awaiting final approval</p>
+            <div class="card" style="padding:0;border:0.5px solid #C9DDF1;background:#FBFCFE;margin-bottom:10px;"><div id="admin-approval-list"></div></div>
           </div>
           <!-- Recent dockets list -->
           <p class="st" style="margin-top:4px;">Recent dockets</p>
@@ -481,39 +642,49 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 
       <!-- ── WORKER DASHBOARD ── -->
       <div id="dash-worker" class="hidden">
-        <button onclick="showTab('nd',document.getElementById('n1'))" style="width:100%;background:#2D2D2D;color:#EF9F27;border:none;border-radius:10px;padding:16px;font-size:15px;font-weight:700;letter-spacing:0.05em;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;margin-bottom:8px;">
-          <i class="ti ti-plus" style="font-size:22px;" aria-hidden="true"></i> New docket
-        </button>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
-          <button onclick="showTab('drafts',document.getElementById('n-drafts'))" class="ndock-tile">
-            <i class="ti ti-pencil" aria-hidden="true"></i>Drafts <span id="wk-draft-badge" class="hidden" style="background:#2D2D2D;color:#EF9F27;border-radius:10px;font-size:10px;padding:1px 6px;">0</span>
-          </button>
-          <button onclick="showTab('md',document.getElementById('n2'))" class="ndock-tile">
-            <i class="ti ti-files" aria-hidden="true"></i>My dockets
+        <div id="wk-fixed-top">
+          <!-- Mini stats -->
+          <div class="wk-stats">
+            <div class="wk-sc wk-sc-drafts"><div class="wk-sv" id="wk-stat-drafts">0</div><div class="wk-sl" id="wk-lbl-drafts">Drafts</div></div>
+            <div class="wk-sc wk-sc-signed"><div class="wk-sv" id="wk-stat-signed">0</div><div class="wk-sl" id="wk-lbl-signed">Signed</div></div>
+            <div class="wk-sc wk-sc-sent"><div class="wk-sv" id="wk-stat-sent">0</div><div class="wk-sl" id="wk-lbl-sent">Sent</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+            <button onclick="showTab('drafts',document.getElementById('n-drafts'))" class="ndock-tile">
+              <i class="ti ti-pencil" aria-hidden="true"></i><span id="wk-tile-drafts">Drafts</span> <span id="wk-draft-badge" class="hidden" style="background:#2D2D2D;color:#EF9F27;border-radius:10px;font-size:10px;padding:1px 6px;">0</span>
+            </button>
+            <button onclick="showTab('md',document.getElementById('n2'))" class="ndock-tile">
+              <i class="ti ti-files" aria-hidden="true"></i><span id="wk-tile-md">My dockets</span>
+            </button>
+          </div>
+        </div>
+        <div id="wk-scroll-area">
+          <p class="st" id="wk-lbl-projects" style="margin-top:0;">My projects</p>
+          <div class="card" style="padding:0;"><div id="wk-proj-list"></div></div>
+          <p class="st" id="wk-lbl-recent" style="margin-top:14px;">Recent dockets</p>
+          <div class="card" style="padding:0;margin-bottom:8px;"><div id="wk-rd-list" class="recent-list" style="display:block;"></div></div>
+        </div>
+        <!-- Fixed bottom New docket button -->
+        <div id="wk-fab-wrap">
+          <button onclick="showTab('nd',document.getElementById('n1'))" id="wk-fab">
+            <i class="ti ti-plus" style="font-size:36px;" aria-hidden="true"></i> <span id="wk-fab-label">New docket</span>
           </button>
         </div>
-        <p class="st" style="margin-top:6px;">Recent dockets</p>
-        <div class="card" style="padding:0;"><div id="wk-rd-list" class="recent-list" style="display:block;"></div></div>
       </div>
     </div><!-- end t-dash -->
 
     <!-- NEW DOCKET -->
     <div id="t-nd" class="hidden" style="position:relative;">
       <button id="nd-back-btn" onclick="exitNdFullpage()">
-        <i class="ti ti-arrow-left" style="font-size:18px;" aria-hidden="true"></i> Back
+        <i class="ti ti-arrow-left" style="font-size:18px;" aria-hidden="true"></i> Back to dashboard
       </button>
       <!-- REVIEW & SIGN PANEL -->
       <div id="review-panel" class="hidden" style="position:absolute;top:0;left:0;width:100%;min-height:100%;background:#f5f5f3;z-index:600;overflow-y:auto;">
         <!-- Review header -->
-        <div style="background:#f0f0ee;border-bottom:0.5px solid rgba(0,0,0,0.08);padding:14px 18px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;position:sticky;top:0;z-index:10;">
+        <div style="background:#f0f0ee;border-bottom:0.5px solid rgba(0,0,0,0.08);padding:14px 18px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:10px;position:sticky;top:0;z-index:10;">
           <div style="display:flex;align-items:center;gap:10px;">
-            <img id="review-co-logo" src="" alt="" style="height:36px;object-fit:contain;display:none;">
-            <div id="review-co-name" style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:14px;font-weight:800;color:#2D2D2D;letter-spacing:-0.2px;"></div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
-            <img id="review-dlb-logo" src="" alt="Day Labour Book" style="height:36px;object-fit:contain;">
-            <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:9px;font-weight:800;color:#2D2D2D;letter-spacing:0.08em;text-transform:uppercase;">Day Labour Book</div>
-            <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:9px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce</div>
+            <img id="review-co-logo" src="" alt="" style="height:48px;max-width:140px;object-fit:contain;display:none;">
+            <div id="review-co-name" style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:15px;font-weight:800;color:#2D2D2D;letter-spacing:-0.2px;"></div>
           </div>
           <div style="text-align:right;">
             <div style="font-size:10px;color:#999;text-transform:uppercase;letter-spacing:0.04em;">Docket</div>
@@ -564,10 +735,23 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
             </div>
             <!-- On site -->
             <div id="rsm-onsite">
-              <canvas id="review-sigc" width="100%" height="110" style="width:100%;border:1.5px solid #e0e0de;border-radius:8px;background:#fff;touch-action:none;display:block;"></canvas>
+              <canvas id="review-sigc" width="100%" height="220" style="width:100%;height:220px;border:2px solid #185FA5;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas>
               <div style="display:flex;gap:8px;margin-top:8px;">
                 <button class="btn btn-s" onclick="clearReviewSig()">Clear signature</button>
                 <span id="review-sig-name" style="font-size:12px;color:#aaa;align-self:center;"></span>
+              </div>
+              <div style="margin-top:12px;">
+                <div id="review-signer-default" style="font-size:13px;color:#2D2D2D;background:#f5f5f3;border-radius:8px;padding:10px 12px;margin-bottom:8px;">
+                  Signed by: <strong id="review-signer-default-name">—</strong>
+                </div>
+                <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#444;cursor:pointer;margin:0;">
+                  <input type="checkbox" id="review-signer-other" onchange="toggleSignerOther(this.checked)" style="width:16px;height:16px;margin:0;">
+                  Someone else is signing
+                </label>
+                <div id="review-signer-other-wrap" class="hidden" style="margin-top:8px;">
+                  <label style="font-size:13px;color:#444;font-weight:500;">Name of person signing</label>
+                  <input type="text" id="review-signer-name" placeholder="e.g. John Smith (Site Supervisor)">
+                </div>
               </div>
             </div>
             <!-- Email -->
@@ -580,6 +764,40 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
               <label style="font-size:12px;">Mobile number</label>
               <input type="tel" id="review-send-sms" placeholder="+61 4XX XXX XXX">
             </div>
+          </div>
+          <!-- Billing prompt (shown after signature) -->
+          <div id="review-billing-card" class="card hidden" style="margin-bottom:12px;padding:14px 16px;background:#F0FAF6;border:1px solid #B6E2D2;">
+            <p style="font-size:14px;font-weight:600;color:#0F6E56;margin:0 0 4px;">Billing</p>
+            <p style="font-size:12px;color:#0F6E56;margin:0 0 12px;">How should this docket be billed?</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <button type="button" id="rbill-ch" onclick="setReviewBill('ch')" class="rbill-btn">$ Chargeable</button>
+              <button type="button" id="rbill-ow" onclick="setReviewBill('ow')" class="rbill-btn">🏢 Company cost</button>
+              <button type="button" id="rbill-bc" onclick="setReviewBill('bc')" class="rbill-btn">↩ Backcharge to subcontractor</button>
+              <button type="button" id="rbill-tbc" onclick="setReviewBill('tbc')" class="rbill-btn">❓ TBC</button>
+            </div>
+            <div id="rbill-bc-target" class="hidden" style="margin-top:10px;">
+              <label style="font-size:13px;color:#0F6E56;">Backcharge to which subcontractor?</label>
+              <input type="text" id="rbill-bc-name" placeholder="e.g. ABC Concreting">
+            </div>
+            <div id="rbill-desc-wrap" class="hidden" style="margin-top:10px;">
+              <label style="font-size:13px;color:#0F6E56;" id="rbill-desc-label">Quick description</label>
+              <textarea id="rbill-desc" placeholder="Brief note on the billing..." style="min-height:60px;"></textarea>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:12px;padding:14px 16px;background:#FFFBF5;border:1px solid #F2D9A8;">
+            <p style="font-size:14px;font-weight:600;color:#633806;margin:0 0 4px;">Email the signed PDF docket</p>
+            <p style="font-size:12px;color:#854F0B;margin:0 0 12px;">Tick who should receive a copy when you submit.</p>
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;color:#633806;cursor:pointer;margin:0 0 10px;">
+              <input type="checkbox" id="review-email-supervisor" onchange="document.getElementById('review-supervisor-email-wrap').classList.toggle('hidden',!this.checked)" style="width:18px;height:18px;margin:0;">
+              Email to client / supervisor
+            </label>
+            <div id="review-supervisor-email-wrap" class="hidden" style="margin:0 0 12px 28px;">
+              <input type="email" id="review-supervisor-email" placeholder="supervisor@company.com">
+            </div>
+            <label id="review-email-ca-label" style="display:flex;align-items:center;gap:10px;font-size:14px;color:#633806;cursor:pointer;margin:0;">
+              <input type="checkbox" id="review-email-ca" style="width:18px;height:18px;margin:0;">
+              <span>Email to contracts administrator <span id="review-ca-addr" style="font-size:12px;color:#854F0B;"></span></span>
+            </label>
           </div>
           <!-- Action buttons -->
           <div id="review-err" class="err hidden" style="margin-bottom:8px;"></div>
@@ -599,11 +817,11 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
           </div>
         </div>
         <!-- Centre: DLB hardcoded logo -->
-        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-          <img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==' alt="Day Labour Book" style="height:44px;object-fit:contain;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==' alt="Day Labour Book" style="height:26px;object-fit:contain;">
           <div>
-            <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.1em;text-transform:uppercase;text-align:center;">Day Labour Book</div>
-            <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:10px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;text-align:center;">Built by Alerce</div>
+            <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:9px;font-weight:800;color:#2D2D2D;letter-spacing:0.08em;text-transform:uppercase;text-align:center;">Day Labour Book</div>
+            <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;text-align:center;">Built by Alerce</div>
           </div>
         </div>
         <!-- Right: docket number -->
@@ -631,19 +849,62 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
       </div>
       <div id="nd-form-body">
       <div class="card">
+        <div id="free-docket-wrap" class="hidden" style="grid-column:1/-1;margin-bottom:4px;">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:#FFFBF5;border:0.5px solid #F2D9A8;border-radius:10px;padding:11px 14px;margin:0;">
+            <input type="checkbox" id="free-docket" onchange="toggleFreeDocket(this.checked)" style="width:18px;height:18px;margin:0;flex-shrink:0;">
+            <span style="font-size:13px;color:#633806;font-weight:500;">Free docket — no project <span style="font-size:11px;color:#854F0B;font-weight:400;">(record without allocating a job)</span></span>
+          </label>
+        </div>
         <div class="fg">
-          <div><label>Project *</label><select id="dp" onchange="updClientFromProject()"><option value="">— Select project —</option></select></div>
+          <div id="dp-wrap"><label>Project *</label><select id="dp" onchange="updClientFromProject()"><option value="">— Select project —</option></select></div>
           <div><label>Date *</label><input type="date" id="dd"></div>
           <div id="dsb-wrap"><label>Your company name *</label><input type="text" id="dsb" placeholder="e.g. Smith Concreting"></div>
-          <div><label>Start time *</label><input type="time" id="d-start" onchange="calcHours()"></div>
-          <div><label>Finish time *</label><input type="time" id="d-finish" onchange="calcHours()"></div>
+          <div><label>Start time *</label><input type="text" inputmode="numeric" id="d-start" placeholder="e.g. 7:30 or 0730" autocomplete="off" onblur="normalizeTime(this)" onchange="calcHours()"></div>
+          <div><label>Finish time *</label><input type="text" inputmode="numeric" id="d-finish" placeholder="e.g. 4:00 PM or 1600" autocomplete="off" onblur="normalizeTime(this)" onchange="calcHours()"></div>
           <div><label>Break (mins) <span style="font-size:11px;color:#aaa;font-weight:400;">optional</span></label><input type="number" id="d-break" placeholder="e.g. 30" min="0" step="5" onchange="calcHours()"></div>
           <div><label>Hours worked</label><input type="text" id="dh" placeholder="Auto-calculated" readonly style="background:#f5f5f3;color:#185FA5;font-weight:500;"></div>
+          <div>
+            <label>Requested by</label>
+            <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;">
+              <select id="d-reqby" style="flex:1;min-width:140px;"><option value="">— Select staff member —</option></select>
+              <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
+                <input type="text" id="d-reqby-new" placeholder="Add staff member" style="width:160px;">
+                <button class="btn" type="button" onclick="addReqByStaff()" style="white-space:nowrap;background:#EF9F27;color:#412402;border:none;font-weight:600;padding:8px 14px;">+ Add</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label>Method</label>
+            <select id="d-reqhow">
+              <option value="">— Select method —</option>
+              <option value="Site Instruction">Site Instruction</option>
+              <option value="Email">Email</option>
+              <option value="Verbal">Verbal</option>
+            </select>
+          </div>
           <div class="s2 hidden" id="bill-type-pending-note">
             <div style="background:#FFF3CD;border:0.5px solid #FAC775;border-radius:var(--border-radius-md);padding:10px 14px;font-size:12px;color:#633806;">
               <strong style="font-weight:500;">⏳ Billing type</strong> — will be assigned by Alerce management after remote sign-off.
             </div>
           </div>
+
+          <!-- WORKERS ON SITE -->
+          <div class="s2" id="workers-section">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:8px;">
+              <label style="margin:0;">Workers on site</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin:0;font-size:13px;color:#666;font-weight:400;">
+                <input type="checkbox" id="workers-same-hours" onchange="toggleSameHours(this.checked)" style="width:16px;height:16px;margin:0;">
+                Same hours for all
+              </label>
+            </div>
+            <div style="background:#fafaf8;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px;">
+              <div style="font-size:12px;color:#888;margin-bottom:10px;">The worker filling out this docket is listed first. Add anyone else who worked on the same task.</div>
+              <div id="workers-list"></div>
+              <button type="button" class="btn" onclick="addWorkerRow()" style="font-size:14px;background:#EF9F27;color:#412402;border:none;font-weight:600;padding:10px 16px;margin-top:4px;">+ Add another worker</button>
+              <div id="workers-total" style="text-align:right;font-size:13px;color:#185FA5;font-weight:600;margin-top:8px;"></div>
+            </div>
+          </div>
+
           <div class="s2"><label>Description of work *</label><textarea id="desc" placeholder="Describe the work completed today..."></textarea></div>
           <div class="s2"><label>Notes (optional)</label><textarea id="dnotes" placeholder="Any additional notes..." style="min-height:40px;"></textarea></div>
 
@@ -651,7 +912,7 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
         <div class="s2">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
             <label style="margin:0;">Materials <span style="font-size:11px;color:#aaa;font-weight:400;">optional</span></label>
-            <button type="button" class="btn btn-s btn-p" onclick="addMaterialRow()" style="font-size:11px;">+ Add item</button>
+            <button type="button" class="btn" onclick="addMaterialRow()" style="font-size:13px;background:#EF9F27;color:#412402;border:none;font-weight:600;padding:8px 14px;">+ Add item</button>
           </div>
           <div id="materials-list"></div>
           <div id="materials-total" class="hidden" style="text-align:right;font-size:12px;color:#185FA5;font-weight:500;margin-top:4px;"></div>
@@ -684,25 +945,6 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
             <div id="accom-total" style="text-align:right;font-size:12px;color:#185FA5;font-weight:500;margin-top:8px;"></div>
           </div>
         </div>
-        <div>
-          <label>Requested by</label>
-          <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;">
-            <select id="d-reqby" style="flex:1;min-width:140px;"><option value="">— Select staff member —</option></select>
-            <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
-              <input type="text" id="d-reqby-new" placeholder="Add staff member" style="width:160px;">
-              <button class="btn btn-s btn-p" type="button" onclick="addReqByStaff()" style="white-space:nowrap;">+ Add</button>
-            </div>
-          </div>
-        </div>
-        <div>
-          <label>Method</label>
-          <select id="d-reqhow">
-            <option value="">— Select method —</option>
-            <option value="Site Instruction">Site Instruction</option>
-            <option value="Email">Email</option>
-            <option value="Verbal">Verbal</option>
-          </select>
-        </div>
         <div class="s2">
           <label>Photos <span style="font-size:11px;color:#aaa;font-weight:400;">optional</span></label>
           <div style="display:flex;gap:8px;margin-bottom:6px;">
@@ -720,94 +962,78 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
         </div>
 
         <!-- CLIENT SIGNATURE SECTION -->
-        <div style="margin-top:18px;border-top:0.5px solid rgba(0,0,0,0.1);padding-top:16px;">
-          <p style="font-size:13px;font-weight:500;margin-bottom:10px;">👤 Client / supervisor sign-off</p>
+        <div style="margin-top:18px;background:#E6F1FB;border:1px solid #B9D6F2;border-radius:12px;padding:16px;">
+          <p style="font-size:15px;font-weight:600;margin-bottom:12px;color:#0C447C;">👤 Client / supervisor sign-off</p>
 
           <div class="fg" style="margin-bottom:12px;">
             <div>
-              <label>Client</label>
+              <label style="color:#0C447C;">Client</label>
               <select id="d-client" onchange="loadClientContacts()"><option value="">— Select client —</option></select>
             </div>
             <div>
-              <label>Contact / supervisor</label>
+              <label style="color:#0C447C;">Contact / supervisor</label>
               <select id="d-contact"><option value="">— Select contact —</option></select>
             </div>
           </div>
 
-          <label style="margin-bottom:6px;display:block;">Signature method</label>
-          <div>
-            <span class="sig-tab active" id="stab-onsite" onclick="setSigMethod('onsite')">✍️ Sign on site</span>
-            <span class="sig-tab" id="stab-email" onclick="setSigMethod('email')">📧 Send via email</span>
-            <span class="sig-tab" id="stab-sms" onclick="setSigMethod('sms')">💬 Send via SMS</span>
-          </div>
-
-          <!-- ON SITE SIGNING -->
-          <div id="sm-onsite" class="sig-method-box">
-            <div id="sig-lang-warn" class="hidden" style="background:#FFF3CD;border:0.5px solid #FAC775;border-radius:8px;padding:8px 12px;margin-bottom:8px;font-size:12px;color:#633806;">
-              ⚠️ Please switch back to <strong>English</strong> before getting client signature.
-              <button type="button" class="btn btn-s" style="margin-left:8px;font-size:11px;padding:3px 8px;" onclick="changeLang('en')">Switch to English</button>
+          <!-- Signature is captured on the Review & Sign page. These elements stay hidden
+               here (referenced by shared JS) so signing only happens on the review step. -->
+          <div id="form-sig-hidden" style="display:none;">
+            <label style="margin-bottom:6px;display:block;">Signature method</label>
+            <div>
+              <span class="sig-tab active" id="stab-onsite" onclick="setSigMethod('onsite')">✍️ Sign on site</span>
+              <span class="sig-tab" id="stab-email" onclick="setSigMethod('email')">📧 Send via email</span>
+              <span class="sig-tab" id="stab-sms" onclick="setSigMethod('sms')">💬 Send via SMS</span>
             </div>
-            <label style="margin-bottom:4px;">Draw signature below</label>
-            <div class="sw"><canvas class="sc" id="sigc" width="800" height="110"></canvas></div>
-            <div style="display:flex;gap:8px;margin-top:6px;">
-              <button class="btn btn-s" onclick="clrSig()">Clear</button>
-              <span id="ss" style="font-size:12px;color:#aaa;align-self:center;">No signature yet</span>
+            <div id="sm-onsite" class="sig-method-box">
+              <div id="sig-lang-warn" class="hidden"></div>
+              <div class="sw"><canvas class="sc" id="sigc" width="800" height="110"></canvas></div>
+              <div style="display:flex;gap:8px;margin-top:6px;">
+                <button class="btn btn-s" onclick="clrSig()">Clear</button>
+                <span id="ss" style="font-size:12px;color:#aaa;align-self:center;">No signature yet</span>
+              </div>
             </div>
-            <!-- Billing type — locked until signature drawn -->
-            <div id="bill-type-wrap" style="margin-top:16px;border-top:0.5px solid rgba(0,0,0,0.08);padding-top:14px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                <span style="font-size:12px;font-weight:500;color:#1a1a1a;">Billing type</span>
-                <span id="bill-lock-msg" style="font-size:11px;color:#aaa;">🔒 Sign above to unlock</span>
-              </div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                <button id="bill-btn-ch" onclick="setBill('ch')" disabled
-                  style="flex:1;min-width:110px;padding:10px 8px;border-radius:8px;border:2px solid rgba(0,0,0,0.1);background:#fff;color:#aaa;font-size:13px;cursor:not-allowed;opacity:0.45;">
-                  $ Chargeable
-                </button>
-                <button id="bill-btn-ow" onclick="setBill('ow')" disabled
-                  style="flex:1;min-width:110px;padding:10px 8px;border-radius:8px;border:2px solid rgba(0,0,0,0.1);background:#fff;color:#aaa;font-size:13px;cursor:not-allowed;opacity:0.45;">
-                  🏢 Own cost
-                </button>
-                <button id="bill-btn-bc" onclick="setBill('bc')" disabled
-                  style="flex:1;min-width:110px;padding:10px 8px;border-radius:8px;border:2px solid rgba(0,0,0,0.1);background:#fff;color:#aaa;font-size:13px;cursor:not-allowed;opacity:0.45;">
-                  ↩ Backcharge
-                </button>
-              </div>
-              <p id="bh" style="font-size:11px;color:#0F6E56;margin-top:6px;display:none;"></p>
-              <div id="bc-wrap" class="hidden" style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap;">
-                <div style="flex:1;min-width:180px;">
-                  <label>Backcharge to *</label>
-                  <select id="bc-sub" onchange="toggleBcOther()">
-                    <option value="">— Select subcontractor —</option>
-                    <option value="other">Other (specify below)</option>
-                  </select>
-                </div>
-                <div id="bc-other-wrap" class="hidden" style="flex:1;min-width:180px;">
-                  <label>Specify name</label>
-                  <input type="text" id="bc-other" placeholder="e.g. ABC Concreting">
-                </div>
-              </div>
-              <span id="cp" style="font-size:12px;color:#666;display:block;margin-top:6px;"></span>
+            <div id="sm-email" class="sig-method-box hidden">
+              <div><label>Recipient email</label><input type="email" id="send-email" placeholder="auto-filled from contact or enter manually"></div>
+              <div style="margin-top:8px;"><label>Optional message</label><textarea id="email-msg" placeholder=""></textarea></div>
+            </div>
+            <div id="sm-sms" class="sig-method-box hidden">
+              <div><label>Mobile number</label><input type="tel" id="send-sms" placeholder="auto-filled from contact or enter manually"></div>
             </div>
           </div>
 
-          <!-- EMAIL -->
-          <div id="sm-email" class="sig-method-box hidden">
-            <p style="font-size:12px;color:#666;margin-bottom:10px;">A signing link will be generated when you submit. You can copy it or send it via your email client.</p>
-            <div><label>Recipient email</label><input type="email" id="send-email" placeholder="auto-filled from contact or enter manually"></div>
-            <div style="margin-top:8px;"><label>Optional message</label><textarea id="email-msg" style="min-height:45px;" placeholder="e.g. Hi John, please find attached today's docket for your signature."></textarea></div>
-          </div>
-
-          <!-- SMS -->
-          <div id="sm-sms" class="sig-method-box hidden">
-            <p style="font-size:12px;color:#666;margin-bottom:10px;">A signing link will be generated when you submit. Copy it to your SMS app to send.</p>
-            <div><label>Mobile number</label><input type="tel" id="send-sms" placeholder="auto-filled from contact or enter manually"></div>
+          <!-- Billing type (subcontractors) -->
+          <div id="bill-type-wrap" style="margin-top:16px;border-top:0.5px solid rgba(0,0,0,0.08);padding-top:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <span style="font-size:12px;font-weight:500;color:#1a1a1a;">Billing type</span>
+              <span id="bill-lock-msg" style="font-size:11px;color:#aaa;"></span>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button id="bill-btn-ch" onclick="setBill('ch')" style="flex:1;min-width:110px;padding:10px 8px;border-radius:8px;border:2px solid rgba(0,0,0,0.1);background:#fff;color:#1a1a1a;font-size:13px;cursor:pointer;">$ Chargeable</button>
+              <button id="bill-btn-ow" onclick="setBill('ow')" style="flex:1;min-width:110px;padding:10px 8px;border-radius:8px;border:2px solid rgba(0,0,0,0.1);background:#fff;color:#1a1a1a;font-size:13px;cursor:pointer;">🏢 Own cost</button>
+              <button id="bill-btn-bc" onclick="setBill('bc')" style="flex:1;min-width:110px;padding:10px 8px;border-radius:8px;border:2px solid rgba(0,0,0,0.1);background:#fff;color:#1a1a1a;font-size:13px;cursor:pointer;">↩ Backcharge</button>
+            </div>
+            <p id="bh" style="font-size:11px;color:#0F6E56;margin-top:6px;display:none;"></p>
+            <div id="bc-wrap" class="hidden" style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap;">
+              <div style="flex:1;min-width:180px;">
+                <label>Backcharge to *</label>
+                <select id="bc-sub" onchange="toggleBcOther()">
+                  <option value="">— Select subcontractor —</option>
+                  <option value="other">Other (specify below)</option>
+                </select>
+              </div>
+              <div id="bc-other-wrap" class="hidden" style="flex:1;min-width:180px;">
+                <label>Specify name</label>
+                <input type="text" id="bc-other" placeholder="e.g. ABC Concreting">
+              </div>
+            </div>
+            <span id="cp" style="font-size:12px;color:#666;display:block;margin-top:6px;"></span>
           </div>
         </div>
 
         <div id="de" class="err hidden" style="margin-top:10px;"></div>
         <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
-          <button class="btn btn-p" onclick="showReview()" style="background:#2D2D2D;border-color:#2D2D2D;color:#EF9F27;font-weight:600;">Review &amp; Sign →</button>
+          <button class="btn btn-p" onclick="showReview()" style="background:#2D2D2D;border-color:#2D2D2D;color:#EF9F27;font-weight:600;font-size:15px;padding:14px 24px;">Review &amp; Sign →</button>
           <button class="btn" onclick="resetDF()">Clear form</button>
           <button class="btn" style="color:#854F0B;border-color:#EF9F27;" onclick="saveDraft()">💾 Save</button>
           <button class="btn btn-d" onclick="resetDF();showTab('dash',document.getElementById('n0'))">✕ Cancel</button>
@@ -818,7 +1044,7 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 
     <!-- MY DOCKETS -->
     <div id="t-md" class="hidden">
-      <div class="rb"><p class="st" style="margin:0;">My dockets</p><div style="display:flex;gap:6px;"><button class="btn btn-s" onclick="expCSV(false)">↓ CSV</button><button class="btn btn-s btn-p" onclick="expPDF(false)">↓ PDF</button></div></div>
+      <div class="rb"><p class="st" style="margin:0;">My dockets</p><div style="display:flex;gap:6px;"><button class="btn btn-s" onclick="showTab('dash',document.getElementById('n0'))" style="background:#EF9F27;color:#412402;border:none;font-weight:600;">← Dashboard</button><button class="btn btn-s" onclick="expCSV(false)">↓ CSV</button><button class="btn btn-s btn-p" onclick="expPDF(false)">↓ PDF</button></div></div>
       <div class="card" style="padding:0;"><div class="tw"><table>
         <thead><tr><th>#</th><th>Project</th><th>Date</th><th>Hrs</th><th>Cost</th><th>Billing</th><th>Client contact</th><th>Signature</th><th></th></tr></thead>
         <tbody id="mdb"></tbody>
@@ -961,6 +1187,7 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
               <div><label>Phone</label><input type="text" id="set-phone" placeholder="e.g. (02) 9123 4567"></div>
               <div><label>Email</label><input type="email" id="set-email" placeholder="e.g. admin@company.com.au"></div>
               <div><label>Website</label><input type="text" id="set-web" placeholder="e.g. www.company.com.au"></div>
+              <div class="s2"><label>Contracts administrator email <span style="font-size:11px;color:#aaa;font-weight:400;">— receives a copy of signed dockets when ticked</span></label><input type="email" id="set-contracts-admin" placeholder="e.g. contracts@company.com.au"></div>
             </div>
           </div>
         </div>
@@ -1053,7 +1280,7 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 
     <!-- DRAFTS -->
     <div id="t-drafts" class="hidden">
-      <div class="rb"><p class="st" style="margin:0;">Drafts</p></div>
+      <div class="rb" style="align-items:center;"><p class="st" style="margin:0;">Drafts</p><button class="btn btn-s" onclick="showTab('dash',document.getElementById('n0'))" style="background:#EF9F27;color:#412402;border:none;font-weight:600;">← Back to dashboard</button></div>
       <div id="drafts-empty" class="note" style="text-align:center;padding:20px;color:#aaa;">No saved drafts.</div>
       <div id="drafts-list"></div>
     </div>
@@ -1121,11 +1348,19 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
             </div>
           </div>
           <div><label>Role</label>
-            <select id="u-role">
+            <select id="u-role" onchange="onUserRoleChange()">
               <option value="hc_supervisor">HC Supervisor — dashboard + assigned project dockets, signed by client</option>
+              <option value="admin">Administrator — admin dashboard &amp; sections</option>
               <option value="user">Site user — standard access</option>
               <option value="manager">Manager — full project access</option>
             </select>
+          </div>
+          <div id="u-tier-wrap" class="hidden"><label>Administrator level</label>
+            <select id="u-tier">
+              <option value="std">Administrator — view, create own, allocate workers (no final sign-off)</option>
+              <option value="pmca" id="u-tier-pmca-opt">PM / Contracts Admin — final docket sign-off + allocate workers/admins</option>
+            </select>
+            <p id="u-tier-note" style="font-size:11px;color:#888;margin:4px 0 0;">Only the Main Administrator can grant the PM / Contracts Admin level.</p>
           </div>
           <div class="s2"><label>Email (optional)</label><input type="email" id="u-email" placeholder="james@alerce.com.au"></div>
         </div>
@@ -1295,25 +1530,47 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 
 <script>
 // ─── DATA ────────────────────────────────────────────────────────────
-const ADM={u:'admin',p:'admin123',role:'admin',name:'Admin'};
+const ADM={u:'admin',p:'admin123',role:'admin',name:'Admin',adminTier:'owner'};
 const STF={u:'user',p:'user123',role:'user',name:'Site User'};
 const DSUBS=[{u:'sub1',p:'sub123',name:'Demo Sub Co',trade:'General Labour',rate:85,otRate:127.50}];
-const DWORKERS=[];
+const DWORKERS=[{u:'jsmith',p:'work123',name:'John Smith',trade:'Labourer',parentSub:null,projectAccess:[],allProjects:true}];
 const DCLI=[{id:'c1',name:'Decode Group',abn:'',addr:'',contacts:[{id:'cc1',name:'James Bright',email:'james@decode.com.au',mobile:'0412000001'},{id:'cc2',name:'Sara Hunt',email:'sara@decode.com.au',mobile:'0412000002'}]},{id:'c2',name:'Bloc Developments',abn:'',addr:'',contacts:[{id:'cc3',name:'Michael Chen',email:'mchen@bloc.com.au',mobile:'0412000003'}]}];
 
 let CU=null,projects=[],dockets=[],subs=[],clients=[],dctr=1,users=[];
 let sigOn=false,sigHas=false,curDock=null,bill='ch',sigMethod='onsite';
 
-function svL(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+let _storageWarned=false;
+function svL(k,v){
+  try{
+    localStorage.setItem(k,JSON.stringify(v));
+    return true;
+  }catch(e){
+    console.error('Storage write failed for',k,e);
+    if(!_storageWarned){
+      _storageWarned=true;
+      alert('⚠️ This app can\'t save data in your browser.\n\nYour changes (workers, dockets, settings) will not be kept.\n\nThis usually happens when:\n• the page is opened directly as a file (file://) instead of from a web address, or\n• private/incognito mode is blocking storage.\n\nPlease open the app from its web address (https://…) in a normal browser window.');
+    }
+    return false;
+  }
+}
 function ldL(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
 let workers=[];
 function load(){
   projects=ldL('v4_proj')||[];
+  if(!Array.isArray(projects))projects=[];
+  // Ensure a dummy trial project always exists for testing the docket flow
+  if(!projects.find(p=>p.code==='TRIAL')){
+    projects.push({name:'Trial Project (Testing)',code:'TRIAL',desc:'Dummy project for testing the docket / review & sign flow',clientId:'c1'});
+    svL('v4_proj',projects);
+  }
   dockets=ldL('v4_dock')||[];
   dctr=ldL('v4_ctr')||1;
   subs=ldL('v4_subs')||DSUBS;
   clients=ldL('v4_cli')||DCLI;
   workers=ldL('v4_workers')||DWORKERS;
+  if(!Array.isArray(workers))workers=[];
+  // Ensure demo worker John Smith always exists
+  if(!workers.find(w=>w.u==='jsmith')){workers.push({u:'jsmith',p:'work123',name:'John Smith',trade:'Labourer',parentSub:null,projectAccess:[],allProjects:true});svL('v4_workers',workers);}
   // Load site users so they can authenticate at the login screen
   const DUSERS_SEED=[{u:'hcsup1',p:'super123',name:'Mark Brown',role:'hc_supervisor',email:'mark@alerce.net.au',projectAccess:[],permissions:{}}];
   users=ldL('dlb_users')||DUSERS_SEED;
@@ -1352,9 +1609,14 @@ function setupUI(){
   document.getElementById('un').textContent=CU.name;
   const ub=document.getElementById('ub'),rb=document.getElementById('rban');
   if(r==='admin'){
-    ub.textContent='Admin';ub.className='badge bi';
-    rb.className='rban adm';rb.innerHTML='<strong>Admin</strong> — full access: projects, subcontractors, clients, and all dockets.';
-    ['n3','n4','n5','n6','n7','n8','n9','msc','mpend-card'].forEach(id=>document.getElementById(id).classList.remove('hidden'));
+    const tier=adminTierOf(CU);
+    ub.textContent=adminTierLabel(tier);ub.className='badge bi';
+    const tierBlurb={owner:'Main Administrator — full access and allocates access for all staff.',pmca:'PM / Contracts Admin — final docket sign-off, plus allocate workers and admins.',std:'Administrator — view, create, and manage; allocate workers.'}[tier]||'';
+    rb.className='rban adm';rb.innerHTML='<strong>'+esc(adminTierLabel(tier))+'</strong> — '+tierBlurb;
+    ['n3','n4','n5','n6','n7','n8','msc','mpend-card'].forEach(id=>document.getElementById(id).classList.remove('hidden'));
+    // Users tab (access allocation) only for those who can allocate access (owner + PM/CA)
+    const n9=document.getElementById('n9');
+    if(n9)n9.classList.toggle('hidden',!canAllocateAccess(CU));
     document.getElementById('fin-panel').classList.remove('hidden');
     document.getElementById('signed-panel').classList.remove('hidden');
     document.getElementById('dash-admin').classList.remove('hidden');
@@ -1363,8 +1625,19 @@ function setupUI(){
   } else if(r==='hc_supervisor'){
     document.body.className='role-supervisor';
     ub.textContent='HC Supervisor';ub.className='badge bs';
-    rb.className='rban usr';
-    rb.innerHTML='<strong>'+esc(CU.name)+'</strong> — HC Supervisor';
+    rb.className='rban sub';
+    const logoHtmlS=appSettings.logo?'<img src="'+appSettings.logo+'" alt="" style="height:38px;max-width:120px;object-fit:contain;background:#fff;border-radius:8px;padding:4px 8px;flex-shrink:0;">':'';
+    const savedLangS=localStorage.getItem('dlb_lang_'+CU.u)||'en';
+    const langOptsS=['<option value="en"'+(savedLangS==='en'?' selected':'')+'>🇦🇺 English</option>',
+      '<option value="zh"'+(savedLangS==='zh'?' selected':'')+'>🇨🇳 中文</option>',
+      '<option value="es"'+(savedLangS==='es'?' selected':'')+'>🇪🇸 Español</option>'].join('');
+    rb.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:10px;">'
+      +'<div style="display:flex;align-items:center;gap:12px;min-width:0;">'+logoHtmlS
+      +'<span style="min-width:0;"><strong>'+esc(CU.name)+'</strong><span style="opacity:0.65;font-weight:400;"> · Supervisor</span></span></div>'
+      +'<select id="lang-switcher-s" style="font-size:12px;padding:4px 10px;border-radius:8px;border:none;background:#fff;color:#2D2D2D;cursor:pointer;flex-shrink:0;" onchange="changeLang(this.value)">'
+      +langOptsS
+      +'</select></div>';
+    setTimeout(()=>applyLang(savedLangS),80);
     // HC Supervisor sees: dashboard, all dockets for assigned projects
     document.getElementById('mpend-card').classList.remove('hidden');
     document.getElementById('n3').classList.remove('hidden');
@@ -1395,14 +1668,13 @@ function setupUI(){
       const langOptsW=['<option value="en"'+(savedLangW==='en'?' selected':'')+'>🇦🇺 English</option>',
         '<option value="zh"'+(savedLangW==='zh'?' selected':'')+'>🇨🇳 中文</option>',
         '<option value="es"'+(savedLangW==='es'?' selected':'')+'>🇪🇸 Español</option>'].join('');
-      rb.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:8px;">'
-        +'<span><strong>'+esc(CU.name)+'</strong>'+(CU.trade?' — '+esc(CU.trade):'')
-        +'<span style="font-size:11px;opacity:0.7;margin-left:8px;background:rgba(0,0,0,0.06);padding:2px 8px;border-radius:10px;">'+esc(parentCompany)+'</span></span>'
-        +'<div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">'
-        +'<span style="font-size:11px;opacity:0.8;">Language / 语言 / Idioma:</span>'
-        +'<select id="lang-switcher-w" style="font-size:12px;padding:3px 8px;border-radius:6px;border:0.5px solid rgba(61,52,137,0.3);background:#fff;color:#3C3489;cursor:pointer;" onchange="changeLang(this.value)">'
+      const logoHtmlW=appSettings.logo?'<img src="'+appSettings.logo+'" alt="" style="height:38px;max-width:120px;object-fit:contain;background:#fff;border-radius:8px;padding:4px 8px;flex-shrink:0;">':'';
+      rb.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:10px;">'
+        +'<div style="display:flex;align-items:center;gap:12px;min-width:0;">'+logoHtmlW
+        +'<span style="min-width:0;"><strong>'+esc(CU.name)+'</strong>'+(CU.trade?'<span style="opacity:0.65;font-weight:400;"> · '+esc(CU.trade)+'</span>':'')+'</span></div>'
+        +'<select id="lang-switcher-w" style="font-size:12px;padding:4px 10px;border-radius:8px;border:none;background:#fff;color:#2D2D2D;cursor:pointer;flex-shrink:0;" onchange="changeLang(this.value)">'
         +langOptsW
-        +'</select></div></div>';
+        +'</select></div>';
       const dsbEl=document.getElementById('dsb');
       if(dsbEl){dsbEl.value=parentCompany;dsbEl.readOnly=true;}
       bill='pending';
@@ -1493,6 +1765,13 @@ function showTab(tab,btn){
   if(btn)btn.classList.add('act');
   if(tab==='nd'){
     renPS(CU&&CU.role==='worker');renClientSelects();lockSubClient();loadReqByStaff();uploadedPhotos=[];
+    if(typeof initWorkersSection==='function')initWorkersSection();
+    // Free-docket option is admin-only; reset it each time the form opens
+    const fdWrap=document.getElementById('free-docket-wrap');
+    if(fdWrap)fdWrap.classList.toggle('hidden',!(CU&&CU.role==='admin'));
+    const fdChk=document.getElementById('free-docket');
+    if(fdChk){fdChk.checked=false;}
+    if(typeof toggleFreeDocket==='function')toggleFreeDocket(false);
     // Update preview docket number
     const ndNum=document.getElementById('nd-docket-num');
     if(ndNum)ndNum.textContent='#'+String(dctr).padStart(4,'0');
@@ -1535,7 +1814,7 @@ function showTab(tab,btn){
     const mdSubTh=document.getElementById('md-submitted-th');
     if(mdSubTh)mdSubTh.classList.toggle('hidden',!CU||(CU.role!=='sub'));
   }
-  if(tab==='dash'){updM();renRD();}
+  if(tab==='dash'){updM();renRD();if(typeof showCorrectDashboard==='function')showCorrectDashboard();}
   if(tab==='subs')renST();
   if(tab==='proj'){renPT();renClientSelects();}
   if(tab==='clients')renClientList();
@@ -1552,6 +1831,13 @@ function togF(id){document.getElementById(id).classList.toggle('hidden');}
 // ─── HELPERS ─────────────────────────────────────────────────────────
 function getRate(u){const s=subs.find(x=>x.u===u);return s&&s.rate?parseFloat(s.rate):0;}
 function calcC(d){
+  // Mirrored up-chain dockets (created from a sub docket) are charged at the CLIENT rate
+  if(d.refSubDocketId){
+    const cr=getClientRate(d.pcode);
+    if(cr.length&&cr[0].std>0)return Math.round(d.hours*cr[0].std*100)/100;
+    // fall back to the rate stored on the docket when it was created
+    if(d.rate>0)return Math.round(d.hours*d.rate*100)/100;
+  }
   // Always use live rates from the rates table, not stored on docket
   const pr=getProjectRate(d.pcode,d.createdBy);
   if(pr.rate>0)return Math.round(d.hours*pr.rate*100)/100;
@@ -1652,20 +1938,54 @@ function toggleBcOther(){
   if(!sel||!wrap)return;
   wrap.classList.toggle('hidden', sel.value!=='other');
 }
+// Parse a typed time in many formats → {h,m} 24-hour, or null if invalid.
+// Accepts: "7:30", "07:30", "0730", "730", "7", "7:30 AM", "4pm", "16:00"
+function parseTime(raw){
+  if(!raw)return null;
+  let s=raw.trim().toLowerCase();
+  let ampm=null;
+  if(s.includes('am')||s.includes('a.m')){ampm='am';}
+  if(s.includes('pm')||s.includes('p.m')){ampm='pm';}
+  s=s.replace(/[^0-9:]/g,'');           // strip am/pm letters, spaces
+  if(!s)return null;
+  let h,m;
+  if(s.includes(':')){
+    const parts=s.split(':');
+    h=parseInt(parts[0],10);
+    m=parseInt(parts[1]||'0',10);
+  } else {
+    // pure digits: 1-2 digits = hour; 3 = h:mm; 4 = hh:mm
+    if(s.length<=2){h=parseInt(s,10);m=0;}
+    else if(s.length===3){h=parseInt(s.slice(0,1),10);m=parseInt(s.slice(1),10);}
+    else{h=parseInt(s.slice(0,2),10);m=parseInt(s.slice(2,4),10);}
+  }
+  if(isNaN(h)||isNaN(m))return null;
+  if(ampm==='pm'&&h<12)h+=12;
+  if(ampm==='am'&&h===12)h=0;
+  if(h>23||m>59||h<0||m<0)return null;
+  return {h,m};
+}
+// On blur, tidy the field to consistent HH:MM 24-hour display
+function normalizeTime(el){
+  const t=parseTime(el.value);
+  if(t){el.value=String(t.h).padStart(2,'0')+':'+String(t.m).padStart(2,'0');el.classList.remove('field-error');}
+  else if(el.value.trim()!==''){el.classList.add('field-error');}
+  calcHours();
+}
+
 function calcHours(){
-  const s=document.getElementById('d-start').value;
-  const f=document.getElementById('d-finish').value;
+  const s=parseTime(document.getElementById('d-start').value);
+  const f=parseTime(document.getElementById('d-finish').value);
   const brkVal=document.getElementById('d-break').value;
   const brk=brkVal!==''?parseInt(brkVal):0;
   const dh=document.getElementById('dh');
-  if(!s||!f){dh.value='';updCP();return;}
-  const [sh,sm]=s.split(':').map(Number);
-  const [fh,fm]=f.split(':').map(Number);
-  let mins=(fh*60+fm)-(sh*60+sm)-brk;
-  if(mins<=0){dh.value='';updCP();return;}
+  if(!s||!f){dh.value='';updCP();if(typeof syncWorkerHoursFromDocket==='function')syncWorkerHoursFromDocket();return;}
+  let mins=(f.h*60+f.m)-(s.h*60+s.m)-brk;
+  if(mins<=0){dh.value='';updCP();if(typeof syncWorkerHoursFromDocket==='function')syncWorkerHoursFromDocket();return;}
   const hrs=Math.round(mins/60*100)/100;
   dh.value=hrs;
   updCP();
+  if(typeof syncWorkerHoursFromDocket==='function')syncWorkerHoursFromDocket();
 }
 
 function updCP(){
@@ -1897,7 +2217,7 @@ function renMD(){
   const src=myD().reverse();
   if(!src.length){tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:#aaa;padding:20px;">No dockets yet</td></tr>';return;}
   const r=getRate(CU.u);
-  tb.innerHTML=src.map(d=>`<tr><td><span class="dn">#${d.id}</span></td><td><span class="badge bi">${esc(d.pcode)}</span></td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${fc(calcC(d))}</td><td>${bb(d.bill,d)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${sigBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
+  tb.innerHTML=src.map(d=>`<tr><td><span class="dn">#${d.id}</span></td><td><span class="badge bi">${esc(d.pcode)}</span></td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${CU&&CU.role==='admin'?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${sigBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
 }
 function renAD(){
   const tb=document.getElementById('adb');if(!tb)return;
@@ -1929,7 +2249,7 @@ function renAD(){
     if(asubEl)asubEl.textContent=submittedCount+'/'+chList.length;
   } else acs.style.display='none';
   if(!fl.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:#aaa;padding:20px;">No dockets found</td></tr>';return;}
-  tb.innerHTML=fl.map(d=>`<tr><td><input type='checkbox' class='docket-sel' value='${d.id}' onchange='updateBulkBar()' ${d.bill==='ch'?'':''}></td><td><span class="dn">#${d.id}</span></td><td><span class="badge bi">${esc(d.pcode)}</span></td><td>${fd(d.date)}</td><td>${esc(d.sub)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${d.hours}h</td><td>${fc(calcC(d))}</td><td>${bb(d.bill,d)}</td><td>${sigBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
+  tb.innerHTML=fl.map(d=>`<tr><td><input type='checkbox' class='docket-sel' value='${d.id}' onchange='updateBulkBar()' ${d.bill==='ch'?'':''}></td><td><span class="dn">#${d.id}</span>${d.refSubDocketId?`<br><span style="font-size:9px;color:#3C3489;cursor:pointer;" onclick="event.stopPropagation();vD('${d.refSubDocketId}')" title="View originating sub docket">↩ sub #${esc(d.refSubDocketId)}</span>`:''}</td><td><span class="badge bi">${esc(d.pcode)}</span></td><td>${fd(d.date)}</td><td>${esc(d.sub)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${d.hours}h</td><td>${fc(calcC(d))}</td><td>${bb(d.bill,d)}</td><td>${sigBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
 }
 function renPS(workerFilter){
   const sel=document.getElementById('dp');if(!sel)return;
@@ -2155,14 +2475,31 @@ function submitD(){
   const e=document.getElementById('de');
   if(!proj||!date||!sub||!desc){e.textContent='Please fill in all required fields (marked *).';e.classList.remove('hidden');return;}
   if(!document.getElementById('d-start').value||!document.getElementById('d-finish').value){e.textContent='Please enter a start and finish time.';e.classList.remove('hidden');return;}
-  if(!hrs||parseFloat(hrs)<=0){e.textContent='Finish time must be after start time.';e.classList.remove('hidden');return;}
+  if(!parseTime(document.getElementById('d-start').value)||!parseTime(document.getElementById('d-finish').value)){e.textContent='Please enter valid times (e.g. 7:30, 0730, or 4:00 PM).';e.classList.remove('hidden');return;}
+  calcHours();
+  if(!document.getElementById('dh').value||parseFloat(document.getElementById('dh').value)<=0){e.textContent='Finish time must be after start time.';e.classList.remove('hidden');return;}
   e.classList.add('hidden');
   const canvas=document.getElementById('sigc');
-  const sig=(sigMethod==='onsite'&&sigHas)?canvas.toDataURL('image/png'):null;
+  // Prefer the signature captured on the review page (passed via global) to avoid
+  // async canvas-draw timing issues; fall back to the inline canvas otherwise.
+  const sig=(sigMethod==='onsite'&&sigHas)
+    ?(window._reviewSigData||canvas.toDataURL('image/png'))
+    :null;
   const p=projects.find(x=>x.code===proj);
-  const projRate=getProjectRate(proj,CU.u);
-  const rate=projRate.rate||getRate(CU.u)||null;
-  const cost=rate?Math.round(parseFloat(hrs)*rate*100)/100:null;
+  // For a mirrored up-chain docket (created from a sub docket, chargeable),
+  // use the CLIENT charge rate; otherwise use the sub/worker project rate.
+  const _isMirror=!!window._refSubDocketId;
+  let rate, cost;
+  if(_isMirror){
+    const cr=getClientRate(proj);
+    const clientStd=cr.length?cr[0].std:null;
+    rate=clientStd||null;
+    cost=rate?Math.round(parseFloat(hrs)*rate*100)/100:null;
+  } else {
+    const projRate=getProjectRate(proj,CU.u);
+    rate=projRate.rate||getRate(CU.u)||null;
+    cost=rate?Math.round(parseFloat(hrs)*rate*100)/100:null;
+  }
   const signToken=(!sig)?uid():null;
   let sigStatus=null;
   if(!sig){
@@ -2172,8 +2509,10 @@ function submitD(){
   }
   const sendEmail=(sigMethod==='email')?document.getElementById('send-email').value.trim():null;
   const sendSms=(sigMethod==='sms')?document.getElementById('send-sms').value.trim():null;
-  const startTime=document.getElementById('d-start').value;
-  const finishTime=document.getElementById('d-finish').value;
+  const _st=parseTime(document.getElementById('d-start').value);
+  const _ft=parseTime(document.getElementById('d-finish').value);
+  const startTime=_st?String(_st.h).padStart(2,'0')+':'+String(_st.m).padStart(2,'0'):document.getElementById('d-start').value;
+  const finishTime=_ft?String(_ft.h).padStart(2,'0')+':'+String(_ft.m).padStart(2,'0'):document.getElementById('d-finish').value;
   const breakMins=parseInt(document.getElementById('d-break').value)||0;
   // Admin/user dockets are always chargeable - billing is only for subs
   if(CU&&CU.role!=='sub')bill='ch';
@@ -2188,8 +2527,19 @@ function submitD(){
   const refId=window._refSubDocketId||null;
   window._refSubDocketId=null;
   const signerRole=getSignerRole();
-  const d={id:String(dctr).padStart(4,'0'),pcode:proj,pname:p?p.name:proj,date,sub,reqBy,reqHow,photos,materials,accommodation,refSubDocketId:refId,signerRole,startTime,finishTime,breakMins,hours:parseFloat(hrs),rate,cost,bill,bcTarget,desc,notes,sig,sigStatus,signToken,sendEmail,sendSms,clientId,contactId,createdBy:CU.u,createdAt:new Date().toISOString()};
+  const signerName=window._reviewSignerName||null;
+  const workersOnSite=(typeof getWorkersOnSite==='function')?getWorkersOnSite():[];
+  const workerName=currentWorkerName();
+  const _isFree=!!window._freeDocket;
+  const d={id:String(dctr).padStart(4,'0'),pcode:_isFree?'':proj,pname:_isFree?'(No project)':(p?p.name:proj),freeDocket:_isFree,date,sub,reqBy,reqHow,photos,materials,accommodation,refSubDocketId:refId,signerRole,signerName,workerName,workersOnSite,startTime,finishTime,breakMins,hours:parseFloat(hrs),rate,cost,bill,bcTarget,desc,notes,sig,sigStatus,signToken,sendEmail,sendSms,clientId,contactId,createdBy:CU.u,createdAt:new Date().toISOString()};
   dockets.push(d);dctr++;svD();
+
+  // The docket is now submitted — remove the source draft if it came from one
+  if(window._openDraftId){
+    drafts=drafts.filter(x=>x.id!==window._openDraftId);
+    svDrafts();updDraftBadge();
+    window._openDraftId=null;
+  }
 
   // Build sign link (uses current page URL + token as hash)
   const signLink=window.location.href.split('#')[0]+'#sign:'+d.id+':'+d.signToken;
@@ -2213,7 +2563,102 @@ function submitD(){
   resetDF();updM();renRD();renAD();renMD();
 }
 
+// ── Sign a pending docket on screen, directly from the docket view ──
+let _vdSigHas=false;
+function initVdSign(){
+  const c=document.getElementById('vd-sign-canvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  c.width=c.offsetWidth||500;
+  c.height=c.offsetHeight||180;
+  ctx.clearRect(0,0,c.width,c.height);
+  _vdSigHas=false;
+  let drawing=false;
+  const pos=(e)=>{const r=c.getBoundingClientRect();const t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top};};
+  c.onmousedown=c.ontouchstart=(e)=>{drawing=true;const p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);e.preventDefault();};
+  c.onmousemove=c.ontouchmove=(e)=>{if(!drawing)return;const p=pos(e);ctx.lineTo(p.x,p.y);ctx.strokeStyle='#2D2D2D';ctx.lineWidth=2;ctx.lineCap='round';ctx.stroke();_vdSigHas=true;e.preventDefault();};
+  c.onmouseup=c.ontouchend=()=>{drawing=false;};
+}
+function clearVdSign(){
+  const c=document.getElementById('vd-sign-canvas');
+  if(!c)return;
+  c.getContext('2d').clearRect(0,0,c.width,c.height);
+  _vdSigHas=false;
+}
+function saveVdSign(id){
+  if(!_vdSigHas){alert('Please capture a signature first.');return;}
+  const c=document.getElementById('vd-sign-canvas');
+  const d=dockets.find(x=>x.id===id);
+  if(!d){alert('Docket not found.');return;}
+  d.sig=c.toDataURL('image/png');
+  d.sigStatus='signed';
+  d.signToken=null;
+  d.signedAt=new Date().toISOString();
+  // If a supervisor (or admin) is signing a docket that belongs to a DIFFERENT
+  // company, route it into the Pending-billing folder for them + company admin.
+  const myCompany=(appSettings.name||'').toLowerCase();
+  const docketCompany=(d.sub||'').toLowerCase();
+  const isSupervisorSigner=CU&&(CU.role==='hc_supervisor'||CU.role==='admin');
+  const crossCompany=isSupervisorSigner&&docketCompany&&docketCompany!==myCompany;
+  if(crossCompany){
+    d.signedBySupervisor=CU.u;
+    d.bill='pending';           // needs a chargeable / backcharge / own-cost decision
+  }
+  svL('v4_dock',dockets);
+  closeMod();
+  if(typeof renMD==='function')renMD();
+  if(typeof renAD==='function')renAD();
+  if(typeof updM==='function')updM();
+  if(typeof showCorrectDashboard==='function')showCorrectDashboard();
+  if(crossCompany){
+    setTimeout(()=>alert('Signed. Docket #'+d.id+' is now in your Pending billing folder — choose chargeable, backcharge or own cost there (also visible to company admin).'),250);
+  } else {
+    // Otherwise keep the existing same-company up-chain mirror offer
+    maybePromptUpchainMirror(d);
+  }
+}
+
+// If the just-signed docket is chargeable and no up-chain docket exists yet,
+// offer to generate the matching docket (same details) for signing up the chain.
+function maybePromptUpchainMirror(d){
+  if(!d||d.bill!=='ch')return;
+  if(dockets.find(x=>x.refSubDocketId===d.id))return; // already mirrored
+  setTimeout(()=>{
+    const go=confirm('Docket #'+d.id+' is signed and chargeable to the client.\n\n'
+      +'Create a matching docket (same details) from your company to send up the chain for signing?\n\n'
+      +'OK = create it now   ·   Cancel = not now');
+    if(go){
+      curDock=d;
+      createClientDocket();
+    }
+  },300);
+}
+
 function copyLink(link){navigator.clipboard.writeText(link).then(()=>alert('Signing link copied to clipboard!'));}
+
+// Admin-only: toggle the per-docket 10% materials purchasing charge, then re-render the view
+function toggleMaterialsFee(id,on){
+  const d=dockets.find(x=>x.id===id);
+  if(!d)return;
+  d.materialsFee=!!on;
+  svL('v4_dock',dockets);
+  vD(id); // re-render docket view to update the charged total
+}
+
+
+// Email the signing link for a pending docket to a recipient entered in the docket view
+function emailSignLink(id,token){
+  const inp=document.getElementById('send-link-email');
+  const email=(inp&&inp.value||'').trim();
+  if(!email||!email.includes('@')){alert('Please enter a valid email address.');return;}
+  const signLink=window.location.href.split('#')[0]+'#sign:'+id+':'+token;
+  // Remember the recipient on the docket
+  const d=dockets.find(x=>x.id===id);
+  if(d){d.sendEmail=email;svL('v4_dock',dockets);}
+  const subject=encodeURIComponent('Day Labour Docket #'+id+' — Sign-off required');
+  const body=encodeURIComponent('Please review and sign day labour docket #'+id+':\n\n'+signLink);
+  window.location.href='mailto:'+encodeURIComponent(email)+'?subject='+subject+'&body='+body;
+}
 
 function resetDF(){
   document.getElementById('dp').value='';document.getElementById('d-start').value='';document.getElementById('d-finish').value='';document.getElementById('d-break').value='';document.getElementById('dh').value='';
@@ -2233,6 +2678,11 @@ function resetDF(){
   const bcOtWrap=document.getElementById('bc-other-wrap');if(bcOtWrap)bcOtWrap.classList.add('hidden');
   document.getElementById('de').classList.add('hidden');document.getElementById('cp').textContent='';
   if(CU&&CU.role==='sub')document.getElementById('dsb').value=CU.name;else document.getElementById('dsb').value='';
+  // reset free-docket state
+  window._freeDocket=false;
+  const fdc=document.getElementById('free-docket');if(fdc)fdc.checked=false;
+  if(typeof toggleFreeDocket==='function')toggleFreeDocket(false);
+  if(typeof initWorkersSection==='function')initWorkersSection();
 }
 
 // ─── VIEW / MODAL ─────────────────────────────────────────────────────
@@ -2245,6 +2695,27 @@ function vD(id){
   const con=cli&&d.contactId?cli.contacts.find(c=>c.id===d.contactId):null;
   const billing=d.bill==='ch'?'Chargeable to client':'Own cost (internal)';
   document.getElementById('mb').innerHTML=`
+    <div id="vd-translate-bar" style="display:${(d.desc||d.notes)?'flex':'none'};align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;padding-bottom:10px;border-bottom:0.5px solid rgba(0,0,0,0.08);">
+      <span style="font-size:12px;color:#888;">Translate description &amp; notes:</span>
+      <select id="vd-lang" style="font-size:13px;padding:5px 8px;border-radius:6px;border:0.5px solid rgba(0,0,0,0.15);">
+        <option value="en">🇦🇺 English</option>
+        <option value="zh">🇨🇳 中文</option>
+        <option value="es">🇪🇸 Español</option>
+      </select>
+      <button class="btn btn-s" onclick="translateDocketView()">Translate</button>
+      <span id="vd-translate-hint" style="font-size:11px;color:#aaa;"></span>
+    </div>
+    ${(CU&&CU.role==='admin'&&d.sig&&d.approvalStatus)?(()=>{
+      const st=d.approvalStatus;
+      if(st==='approved'){
+        return`<div style="background:#E1F5EE;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#0F6E56;">✓ <strong>Approved</strong>${d.approvedByName?' by '+esc(d.approvedByName):''}${d.approvedAt?' · '+fd(d.approvedAt.slice(0,10)):''} — firm committed cost.</div>`;
+      } else if(st==='queried'){
+        return`<div style="background:#FBE6E6;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#A4271F;">⚠ <strong>Queried</strong>${d.queriedByName?' by '+esc(d.queriedByName):''} — ${esc(d.queryNote||'(no note)')}</div>`;
+      } else if(st==='awaiting'){
+        return`<div style="background:#FBFCFE;border:0.5px solid #C9DDF1;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#185FA5;">⏳ <strong>Awaiting final approval</strong> — billing assigned, pending PM / Contracts Admin sign-off.</div>`;
+      }
+      return'';
+    })():''}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;margin-bottom:14px;">
       <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Docket #</span><strong>#${d.id}</strong>${d.refSubDocketId?`<span class="badge bs" style="margin-left:6px;font-size:10px;">Client docket (ref #${d.refSubDocketId})</span>`:''}</div>
       <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Date</span>${fd(d.date)}</div>
@@ -2254,31 +2725,105 @@ function vD(id){
       <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Finish time</span>${d.finishTime||'—'}</div>
       <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Break</span>${d.breakMins!=null?d.breakMins+'min':'—'}</div>
       <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Hours worked</span><strong>${d.hours}h</strong></div>
-      ${CU&&CU.role!=='worker'?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Rate</span>${r?'$'+r+'/hr':'—'}</div>`:''}
-      ${CU&&CU.role!=='worker'?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Total cost</span><strong style="font-size:15px;">${cost!=null?'$'+cost.toFixed(2):'—'}</strong></div>`:''}
+      ${CU&&CU.role==='admin'?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Rate</span>${r?'$'+r+'/hr':'—'}</div>`:''}
+      ${CU&&CU.role==='admin'?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Total cost</span><strong style="font-size:15px;">${cost!=null?'$'+cost.toFixed(2):'—'}</strong></div>`:''}
       <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Billing</span>
         ${bb(d.bill,d)}
         ${dockets.find(x=>x.refSubDocketId===d.id)?`<div style="font-size:11px;color:#1D9E75;margin-top:3px;">✓ Client docket created (#${dockets.find(x=>x.refSubDocketId===d.id)?.id})</div>`:''}${d.bill==='bc'&&d.bcTarget?`<div style='font-size:11px;color:#5B21B6;margin-top:2px;'>${esc(d.bcTarget)}</div>`:''}
       </div>
       ${cli?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Client</span>${esc(cli.name)}</div>`:''}
       ${con?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Contact</span>${esc(con.name)}${con.email?'<div style="font-size:11px;color:#185FA5;">'+esc(con.email)+'</div>':''}${con.mobile?'<div style="font-size:11px;color:#666;">'+esc(con.mobile)+'</div>':''}</div>`:''}
-      <div style="grid-column:span 2"><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Description</span>${esc(d.desc)}</div>
+      <div style="grid-column:span 2"><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Description</span><span id="vd-desc-text">${esc(d.desc)}</span></div>
+      ${(()=>{ 
+        const ws=d.workersOnSite||[];
+        const primaryName=d.workerName||(ws[0]&&ws[0].name)||'';
+        if(!ws.length&&!primaryName)return'';
+        if(ws.length<=1){
+          // Single worker docket — just show who filled it out
+          return primaryName?`<div style="grid-column:span 2"><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Filled out by</span><strong>${esc(primaryName)}</strong>${ws[0]&&ws[0].trade?` <span style="color:#aaa;font-weight:400;font-size:12px;">· ${esc(ws[0].trade)}</span>`:''}</div>`:'';
+        }
+        const totalH=ws.reduce((s,w)=>s+(parseFloat(w.hours)||0),0);
+        const rows=ws.map((w,i)=>{
+          const nm=w.name&&w.name.trim()?esc(w.name):('Worker '+(i+1));
+          const flag=w.primary?' <span class="badge bs" style="font-size:10px;">filled out</span>':'';
+          return`<tr><td style="padding:4px 6px;">${nm}${flag}</td><td style="padding:4px 6px;color:#888;">${w.trade?esc(w.trade):'—'}</td><td style="padding:4px 6px;text-align:right;">${w.hours?w.hours+'h':'—'}</td></tr>`;
+        }).join('');
+        return`<div style="grid-column:span 2">
+          <span style="color:#888;font-size:11px;display:block;margin-bottom:6px;">Workers on site (${ws.length})</span>
+          <table style="width:100%;font-size:12px;border-collapse:collapse;">
+            <thead><tr><th style="text-align:left;color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);">Worker</th><th style="text-align:left;color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);">Trade</th><th style="text-align:right;color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);">Hours</th></tr></thead>
+            <tbody>${rows}</tbody>
+            <tfoot><tr><td colspan="2" style="padding:4px 6px;font-weight:500;text-align:right;border-top:0.5px solid rgba(0,0,0,0.1);">Total hours</td><td style="padding:4px 6px;text-align:right;font-weight:600;border-top:0.5px solid rgba(0,0,0,0.1);">${totalH.toFixed(2).replace(/\.00$/,'')}h</td></tr></tfoot>
+          </table></div>`;
+      })()}
+      ${(()=>{
+        // Admin-only per-worker labour breakdown (each worker's hours × shared rate)
+        if(!CU||CU.role!=='admin')return'';
+        const ws=d.workersOnSite||[];
+        if(ws.length<2)return''; // single-worker dockets already show Total cost above
+        const totalH=ws.reduce((s,w)=>s+(parseFloat(w.hours)||0),0);
+        if(!totalH)return'';
+        const charge=calcC(d);              // total labour charge (client rate for mirrors, else project rate)
+        if(charge==null)return'';
+        const effRate=charge/totalH;        // shared rate per hour
+        const rateLabel=d.refSubDocketId?'client rate':'rate';
+        const rows=ws.map((w,i)=>{
+          const nm=w.name&&w.name.trim()?esc(w.name):('Worker '+(i+1));
+          const h=parseFloat(w.hours)||0;
+          const line=Math.round(h*effRate*100)/100;
+          return`<tr><td style="padding:4px 6px;">${nm}</td><td style="padding:4px 6px;text-align:right;color:#888;">${h?h+'h':'—'}</td><td style="padding:4px 6px;text-align:right;">$${effRate.toFixed(2)}</td><td style="padding:4px 6px;text-align:right;color:#185FA5;font-weight:500;">$${line.toFixed(2)}</td></tr>`;
+        }).join('');
+        return`<div style="grid-column:span 2;background:#FBFCFE;border:0.5px solid #D6E5F5;border-radius:10px;padding:12px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+            <span style="color:#185FA5;font-size:11px;font-weight:600;letter-spacing:0.03em;">LABOUR BREAKDOWN</span>
+            <span style="font-size:10px;color:#185FA5;background:#E6F1FB;padding:1px 6px;border-radius:8px;">ADMIN</span>
+          </div>
+          <table style="width:100%;font-size:12px;border-collapse:collapse;">
+            <thead><tr><th style="text-align:left;color:#888;font-size:10px;padding:3px 6px;">Worker</th><th style="text-align:right;color:#888;font-size:10px;padding:3px 6px;">Hours</th><th style="text-align:right;color:#888;font-size:10px;padding:3px 6px;">${rateLabel}</th><th style="text-align:right;color:#888;font-size:10px;padding:3px 6px;">Labour</th></tr></thead>
+            <tbody>${rows}</tbody>
+            <tfoot><tr><td colspan="3" style="padding:5px 6px;font-weight:600;text-align:right;border-top:0.5px solid #D6E5F5;">Total labour (${totalH.toFixed(2).replace(/\.00$/,'')}h)</td><td style="padding:5px 6px;text-align:right;font-weight:700;color:#185FA5;border-top:0.5px solid #D6E5F5;">$${charge.toFixed(2)}</td></tr></tfoot>
+          </table>
+        </div>`;
+      })()}
       ${d.reqBy?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Requested by</span><strong>${esc(d.reqBy)}</strong></div>`:''}${d.reqHow?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Method</span><span class="badge bi">${esc(d.reqHow)}</span></div>`:''}
-      ${d.materials&&d.materials.length?`<div style="grid-column:span 2">
-        <span style="color:#888;font-size:11px;display:block;margin-bottom:6px;">Materials</span>
-        <table style="width:100%;font-size:12px;border-collapse:collapse;">
-          <thead><tr><th style="text-align:left;color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);">Description</th><th style="color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);">Qty</th><th style="color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);">Unit</th><th style="color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);">Rate</th><th style="color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);">Total</th></tr></thead>
-          <tbody>${d.materials.map(m=>`<tr><td style="padding:4px 6px;">${esc(m.desc)}</td><td style="padding:4px 6px;text-align:center;">${m.qty}</td><td style="padding:4px 6px;text-align:center;">${esc(m.unit||'—')}</td><td style="padding:4px 6px;text-align:right;">${m.rate?'$'+m.rate.toFixed(2):'—'}</td><td style="padding:4px 6px;text-align:right;color:#185FA5;font-weight:500;">${m.total?'$'+m.total.toFixed(2):'—'}</td></tr>`).join('')}</tbody>
-          <tfoot><tr><td colspan="4" style="padding:4px 6px;font-weight:500;text-align:right;border-top:0.5px solid rgba(0,0,0,0.1);">Total</td><td style="padding:4px 6px;text-align:right;color:#185FA5;font-weight:600;border-top:0.5px solid rgba(0,0,0,0.1);">$${d.materials.reduce((s,m)=>s+(m.total||0),0).toFixed(2)}</td></tr></tfoot>
-        </table></div>`:''}
+      ${d.materials&&d.materials.length?(()=>{
+        const isAdm=CU&&CU.role==='admin';
+        const matCost=d.materials.reduce((s,m)=>s+(m.total||0),0);
+        const feeOn=!!d.materialsFee;
+        const fee=feeOn?Math.round(matCost*0.10*100)/100:0;
+        const matCharged=matCost+fee;
+        const headTotal=isAdm?'<th style="color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);text-align:right;">Total</th>':'';
+        const rows=d.materials.map(m=>`<tr><td style="padding:4px 6px;">${esc(m.desc||'—')}</td><td style="padding:4px 6px;text-align:center;">${m.invoice?'📎':'—'}</td>${isAdm?`<td style="padding:4px 6px;text-align:right;color:#185FA5;font-weight:500;">${m.total?'$'+m.total.toFixed(2):'—'}</td>`:''}</tr>`).join('');
+        let foot='';
+        if(isAdm){
+          foot=`<tfoot>
+            <tr><td colspan="2" style="padding:4px 6px;text-align:right;color:#888;">Materials (at cost)</td><td style="padding:4px 6px;text-align:right;">$${matCost.toFixed(2)}</td></tr>
+            ${feeOn?`<tr><td colspan="2" style="padding:4px 6px;text-align:right;color:#888;">+ 10% purchasing charge</td><td style="padding:4px 6px;text-align:right;">$${fee.toFixed(2)}</td></tr>`:''}
+            <tr><td colspan="2" style="padding:4px 6px;font-weight:600;text-align:right;border-top:0.5px solid rgba(0,0,0,0.1);">Materials charged</td><td style="padding:4px 6px;text-align:right;color:#185FA5;font-weight:600;border-top:0.5px solid rgba(0,0,0,0.1);">$${matCharged.toFixed(2)}</td></tr>
+          </tfoot>`;
+        }
+        const feeToggle=isAdm?`<label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#633806;cursor:pointer;margin-top:8px;background:#FFFBF5;border:0.5px solid #F2D9A8;border-radius:8px;padding:8px 10px;">
+          <input type="checkbox" ${feeOn?'checked':''} onchange="toggleMaterialsFee('${d.id}',this.checked)" style="width:16px;height:16px;margin:0;">
+          Add 10% materials purchasing charge <span style="font-size:10px;color:#185FA5;background:#E6F1FB;padding:1px 6px;border-radius:8px;">ADMIN</span>
+        </label>`:'';
+        return`<div style="grid-column:span 2">
+          <span style="color:#888;font-size:11px;display:block;margin-bottom:6px;">Materials</span>
+          <table style="width:100%;font-size:12px;border-collapse:collapse;">
+            <thead><tr><th style="text-align:left;color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);">Description</th><th style="color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);">Invoice</th>${headTotal}</tr></thead>
+            <tbody>${rows}</tbody>
+            ${foot}
+          </table>${feeToggle}</div>`;
+      })():''}
       ${d.accommodation?`<div style="grid-column:span 2">
         <span style="color:#888;font-size:11px;display:block;margin-bottom:4px;">Accommodation</span>
         <div style="background:#f5f5f3;border-radius:6px;padding:8px 10px;font-size:12px;">
-          <strong>${esc(d.accommodation.type)}</strong> — ${d.accommodation.nights} night${d.accommodation.nights!==1?'s':''} × $${d.accommodation.rate.toFixed(2)} = <strong style="color:#185FA5;">$${d.accommodation.total.toFixed(2)}</strong>
+          ${CU&&CU.role==='admin'
+            ?`<strong>${esc(d.accommodation.type)}</strong> — ${d.accommodation.nights} night${d.accommodation.nights!==1?'s':''} × $${d.accommodation.rate.toFixed(2)} = <strong style="color:#185FA5;">$${d.accommodation.total.toFixed(2)}</strong>`
+            :`<strong>${esc(d.accommodation.type)}</strong> — ${d.accommodation.nights} night${d.accommodation.nights!==1?'s':''}`}
           ${d.accommodation.notes?`<div style="color:#888;margin-top:2px;">${esc(d.accommodation.notes)}</div>`:''}
         </div></div>`:''}
       ${d.photos&&d.photos.length?`<div style="grid-column:span 2"><span style="color:#888;font-size:11px;display:block;margin-bottom:6px;">Photos (${d.photos.length})</span><div style="display:flex;gap:6px;flex-wrap:wrap;">${d.photos.map(p=>`<img src="${p}" style="width:72px;height:72px;object-fit:cover;border-radius:6px;border:0.5px solid rgba(0,0,0,0.1);cursor:pointer;" onclick="window.open('${p}','_blank')">`).join('')}</div></div>`:''}
-      ${d.notes?`<div style="grid-column:span 2"><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Notes</span>${esc(d.notes)}</div>`:''}
+      ${d.notes?`<div style="grid-column:span 2"><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Notes</span><span id="vd-notes-text">${esc(d.notes)}</span></div>`:''}
     </div>
     <div style="border-top:0.5px solid rgba(0,0,0,0.1);padding-top:12px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
@@ -2286,7 +2831,7 @@ function vD(id){
         ${sigBadge(d)}
       </div>
       ${d.sig
-        ?`<img src="${d.sig}" style="width:100%;border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;max-height:110px;object-fit:contain;background:#f9f9f9;">`
+        ?`<img src="${d.sig}" style="width:100%;border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;max-height:110px;object-fit:contain;background:#f9f9f9;">${d.signerName?`<p style="font-size:12px;color:#2D2D2D;margin-top:6px;text-align:center;">Signed by <strong>${esc(d.signerName)}</strong></p>`:''}`
         :'<span style="color:#aaa;font-size:12px;">Not signed yet</span>'}
     </div>
     ${CU&&CU.role!=='sub'?`
@@ -2315,25 +2860,41 @@ function vD(id){
   const resendBtn=document.getElementById('btn-resend');
   if(!d.sig&&d.signToken){
     const signLink=window.location.href.split('#')[0]+'#sign:'+d.id+':'+d.signToken;
-    slb.innerHTML=`<div style="background:#E6F1FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#0C447C;">
-      <strong>Signing link:</strong><br>
-      <a href="${signLink}" target="_blank" style="color:#185FA5;word-break:break-all;">${signLink}</a>
-      <button class="btn btn-s" style="margin-top:6px;" onclick="copyLink('${signLink}')">📋 Copy link</button>
-      ${d.sendEmail?`<a class="btn btn-s btn-p" style="margin-top:6px;display:inline-block;text-decoration:none;" href="mailto:${esc(d.sendEmail)}?subject=Day+Labour+Docket+%23${d.id}+Sign-off+Required&body=Please+sign+day+labour+docket+%23${d.id}%3A+${encodeURIComponent(signLink)}">📧 Open email</a>`:''}
-      ${d.sendSms?`<a class="btn btn-s btn-grn" style="margin-top:6px;display:inline-block;text-decoration:none;" href="sms:${esc(d.sendSms)}?body=Please+sign+day+labour+docket+%23${d.id}%3A+${encodeURIComponent(signLink)}">💬 Open SMS</a>`:''}
+    const presetEmail=d.sendEmail||'';
+    slb.innerHTML=`<div style="background:#E6F1FB;border-radius:8px;padding:12px 14px;font-size:13px;color:#0C447C;">
+      <strong>Sign on screen now</strong>
+      <p style="margin:4px 0 8px;font-size:12px;">Get the client or supervisor to sign here directly.</p>
+      <canvas id="vd-sign-canvas" style="width:100%;height:180px;border:2px solid #185FA5;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+        <button class="btn btn-s" onclick="clearVdSign()">Clear</button>
+        <button class="btn btn-s btn-p" style="background:#1D9E75;border-color:#1D9E75;" onclick="saveVdSign('${d.id}')">✓ Save signature</button>
+      </div>
+      <div style="margin-top:12px;padding-top:10px;border-top:0.5px solid rgba(0,0,0,0.1);">
+        <strong>Or send for signature</strong>
+        <p style="margin:4px 0 8px;font-size:12px;">Email the signing link to the client or supervisor.</p>
+        <input type="email" id="send-link-email" value="${esc(presetEmail)}" placeholder="recipient@company.com" style="margin-bottom:8px;">
+        <button class="btn btn-s btn-p" style="width:100%;" onclick="emailSignLink('${d.id}','${d.signToken}')">📧 Email signing link</button>
+        <div style="margin-top:8px;">
+          <a href="${signLink}" target="_blank" style="color:#185FA5;word-break:break-all;font-size:11px;">${signLink}</a>
+          <button class="btn btn-s" style="margin-top:6px;display:block;" onclick="copyLink('${signLink}')">📋 Copy link</button>
+        </div>
+      </div>
     </div>`;
     slb.classList.remove('hidden');
-    resendBtn.classList.remove('hidden');
+    resendBtn.classList.add('hidden');
+    setTimeout(()=>initVdSign(),50);
   } else {
     slb.classList.add('hidden');
     resendBtn.classList.add('hidden');
   }
-  // Show create client docket button for chargeable dockets (admin/supervisor/manager only)
+  // Show create client docket button for chargeable dockets (admin/supervisor/manager/hc_supervisor)
   const cdBtn=document.getElementById('btn-create-client-docket');
   if(cdBtn){
-    const canCreate=CU&&(CU.role==='admin'||CU.role==='manager'||CU.role==='supervisor');
+    const canCreate=CU&&(CU.role==='admin'||CU.role==='manager'||CU.role==='supervisor'||CU.role==='hc_supervisor');
     const isChargeable=d.bill==='ch';
-    cdBtn.classList.toggle('hidden',!(canCreate&&isChargeable));
+    const alreadyMirrored=!!dockets.find(x=>x.refSubDocketId===d.id);
+    // Only offer once the docket is signed and not already mirrored
+    cdBtn.classList.toggle('hidden',!(canCreate&&isChargeable&&d.sig&&!alreadyMirrored));
   }
   // Show delete button for admin only
   const delBtn=document.getElementById('btn-delete-docket');
@@ -2413,7 +2974,6 @@ function showSignForm(d){
         <div><span style="color:#888;font-size:11px;display:block;">Project</span>${esc(d.pname)}</div>
         <div><span style="color:#888;font-size:11px;display:block;">Subcontractor</span>${esc(d.sub)}</div>
         <div><span style="color:#888;font-size:11px;display:block;">Hours worked</span><strong>${d.hours}h</strong></div>
-        <div><span style="color:#888;font-size:11px;display:block;">Total value</span><strong>${cost!=null?'$'+cost.toFixed(2):'—'}</strong></div>
         <div><span style="color:#888;font-size:11px;display:block;">Start time</span><strong>${d.startTime||'—'}</strong></div>
         <div><span style="color:#888;font-size:11px;display:block;">Finish time</span><strong>${d.finishTime||'—'}</strong></div>
         <div><span style="color:#888;font-size:11px;display:block;">Break</span>${d.breakMins!=null?d.breakMins+'min':'—'}</div>
@@ -2501,20 +3061,51 @@ function printD(){
     y=py+22;
   }
   doc.setDrawColor(220,220,220);doc.line(15,33,195,33);
+  const _isAdmPDF=CU&&CU.role==='admin';
   const fields=[
     ['Docket #','#'+d.id],['Date',fd(d.date)],
     ['Project',d.pname+' ('+d.pcode+')'],['Subcontractor',d.sub],
     ['Start time',d.startTime||'—'],['Finish time',d.finishTime||'—'],
-    ['Break',d.breakMins!=null?d.breakMins+'min':'—'],['Hours worked',d.hours+'h'],['Rate',r?'$'+r+'/hr':'Not set'],
-    ['Total cost',cost!=null?'$'+cost.toFixed(2):'N/A'],
-    ['Billing type',d.bill==='ch'?'Chargeable to client':(d.bill==='bc'?'Backcharge to subcontractor':'Own cost (internal)')],
+    ['Break',d.breakMins!=null?d.breakMins+'min':'—'],['Hours worked',d.hours+'h'],
   ];
+  if(_isAdmPDF){
+    fields.push(['Rate',r?'$'+r+'/hr':'Not set']);
+    fields.push(['Total cost',cost!=null?'$'+cost.toFixed(2):'N/A']);
+  }
+  fields.push(['Billing type',d.bill==='ch'?'Chargeable to client':(d.bill==='bc'?'Backcharge to subcontractor':'Own cost (internal)')]);
   if(d.bill==='bc'&&d.bcTarget)fields.push(['Backcharge to',d.bcTarget]);
   if(cli)fields.push(['Client',cli.name]);
   if(con)fields.push(['Client contact',con.name+(con.email?' — '+con.email:'')+(con.mobile?' — '+con.mobile:'')]);
   fields.push(['Description',d.desc]);
   if(d.reqBy)fields.push(['Requested by',d.reqBy]);
   if(d.reqHow)fields.push(['Method',d.reqHow]);
+  // Workers on site (informational, no money)
+  if(d.workersOnSite&&d.workersOnSite.length){
+    if(d.workersOnSite.length>1){
+      const wlist=d.workersOnSite.map((w,i)=>(w.name&&w.name.trim()?w.name:('Worker '+(i+1)))+(w.hours?' — '+w.hours+'h':'')).join('\n');
+      const totH=d.workersOnSite.reduce((s,w)=>s+(parseFloat(w.hours)||0),0);
+      fields.push(['Workers on site',wlist+'\nTotal: '+totH.toFixed(2).replace(/\.00$/,'')+'h']);
+    } else {
+      const pn=d.workerName||(d.workersOnSite[0]&&d.workersOnSite[0].name)||'';
+      if(pn)fields.push(['Filled out by',pn]);
+    }
+  } else if(d.workerName){
+    fields.push(['Filled out by',d.workerName]);
+  }
+  // Materials — descriptions + invoice marker for all; costs only for admin
+  if(d.materials&&d.materials.length){
+    const matLines=d.materials.map(m=>{
+      let line=(m.desc||'—')+(m.invoice?' (invoice attached)':'');
+      if(_isAdmPDF&&m.total)line+=' — $'+m.total.toFixed(2);
+      return line;
+    }).join('\n');
+    fields.push(['Materials',matLines]);
+    if(_isAdmPDF){
+      const matCost=d.materials.reduce((s,m)=>s+(m.total||0),0);
+      const fee=d.materialsFee?Math.round(matCost*0.10*100)/100:0;
+      fields.push(['Materials charged','$'+(matCost+fee).toFixed(2)+(d.materialsFee?' (incl. 10% purchasing)':'')]);
+    }
+  }
   if(d.notes)fields.push(['Notes',d.notes]);
   let y=42;  // may be overridden by company header block above
   fields.forEach(([l,v])=>{
@@ -2604,7 +3195,11 @@ const LANGS={
     saveDraft:'💾 Save',
     cancelDocket:'✕ Cancel',
     addItem:'+ Add item',
-    applicable:'Applicable'
+    applicable:'Applicable',
+    wkDrafts:'Drafts', wkSigned:'Signed', wkSent:'Sent',
+    wkMyProjects:'My projects', wkRecent:'Recent dockets', wkNewDocket:'New docket',
+    wkAnyJob:'✓ You can create dockets on any job.', wkNoDockets:'No dockets yet',
+    stPending:'Pending', stSigned:'Signed', stSent:'Sent', stBackcharge:'Backcharge'
   },
   zh:{
     dashboard:'主页', newDocket:'+ 新工单', myDockets:'我的工单',
@@ -2649,7 +3244,11 @@ const LANGS={
     saveDraft:'💾 保存',
     cancelDocket:'✕ 取消',
     addItem:'+ 添加项目',
-    applicable:'适用'
+    applicable:'适用',
+    wkDrafts:'草稿', wkSigned:'已签字', wkSent:'已发送',
+    wkMyProjects:'我的项目', wkRecent:'最近工单', wkNewDocket:'新工单',
+    wkAnyJob:'✓ 您可以在任何项目上创建工单。', wkNoDockets:'暂无工单',
+    stPending:'待处理', stSigned:'已签字', stSent:'已发送', stBackcharge:'转嫁费用'
   },
   es:{
     dashboard:'Inicio', newDocket:'+ Nueva orden', myDockets:'Mis órdenes',
@@ -2694,7 +3293,11 @@ const LANGS={
     saveDraft:'💾 Guardar',
     cancelDocket:'✕ Cancelar',
     addItem:'+ Agregar elemento',
-    applicable:'Aplicable'
+    applicable:'Aplicable',
+    wkDrafts:'Borradores', wkSigned:'Firmados', wkSent:'Enviados',
+    wkMyProjects:'Mis proyectos', wkRecent:'Partes recientes', wkNewDocket:'Nuevo parte',
+    wkAnyJob:'✓ Puede crear partes en cualquier obra.', wkNoDockets:'Aún no hay partes',
+    stPending:'Pendiente', stSigned:'Firmado', stSent:'Enviado', stBackcharge:'Recargo'
   }
 };
 
@@ -2705,7 +3308,7 @@ function changeLang(lang){
   localStorage.setItem('dlb_prev_lang_'+CU.u,_prevL);
   applyLang(lang);
   // Keep all lang selectors in sync
-  ['lang-switcher','lang-switcher-w','nd-lang-sel'].forEach(id=>{
+  ['lang-switcher','lang-switcher-w','lang-switcher-s','nd-lang-sel'].forEach(id=>{
     const el=document.getElementById(id);
     if(el)el.value=lang;
   });
@@ -2731,10 +3334,23 @@ function changeLang(lang){
       setTimeout(()=>{if(hint)hint.textContent='';},3000);
     }
   }
+  // Re-render the dashboard so dynamically-generated text (empty states,
+  // "any job" message, recent-docket lists) picks up the new language.
+  if(typeof showCorrectDashboard==='function')showCorrectDashboard();
 }
 
 function applyLang(lang){
   const t=LANGS[lang]||LANGS.en;
+  // Worker dashboard labels
+  const setTxt=(id,val)=>{const el=document.getElementById(id);if(el&&val)el.textContent=val;};
+  setTxt('wk-lbl-drafts',t.wkDrafts);
+  setTxt('wk-lbl-signed',t.wkSigned);
+  setTxt('wk-lbl-sent',t.wkSent);
+  setTxt('wk-tile-drafts',t.wkDrafts);
+  setTxt('wk-tile-md',t.myDockets);
+  setTxt('wk-lbl-projects',t.wkMyProjects);
+  setTxt('wk-lbl-recent',t.wkRecent);
+  setTxt('wk-fab-label',t.wkNewDocket);
   // Nav
   const n1=document.getElementById('n1');if(n1)n1.textContent=t.newDocket;
   const n2=document.getElementById('n2');if(n2)n2.textContent=t.myDockets;
@@ -2829,6 +3445,11 @@ function applyLang(lang){
   setPH('send-sms',t.phMobile);
   setPH('email-msg',t.phOptMsg);
   checkSigLangWarn();
+  // Refresh dashboard lists so status badges (Pending/Signed/Sent) reflect the language
+  if(CU&&CU.role==='worker'&&typeof renWorkerDash==='function'){
+    const dw=document.getElementById('dash-worker');
+    if(dw&&!dw.classList.contains('hidden'))renWorkerDash();
+  }
 }
 
 // ─── SETTINGS ─────────────────────────────────────────────────────────
@@ -2846,6 +3467,7 @@ function saveSettings(){
   appSettings.phone=document.getElementById('set-phone').value.trim();
   appSettings.email=document.getElementById('set-email').value.trim();
   appSettings.web=document.getElementById('set-web').value.trim();
+  appSettings.contractsAdmin=document.getElementById('set-contracts-admin').value.trim();
   svL(SET_KEY,appSettings);
   applySettingsToHeader();
   applySettingsToHeader();renSettingsPreview();
@@ -2858,6 +3480,7 @@ function loadSettingsForm(){
   document.getElementById('set-phone').value=appSettings.phone||'';
   document.getElementById('set-email').value=appSettings.email||'';
   document.getElementById('set-web').value=appSettings.web||'';
+  const ca=document.getElementById('set-contracts-admin');if(ca)ca.value=appSettings.contractsAdmin||'';
   updLogoPreview();
 }
 function handleLogoUpload(e){
@@ -3595,23 +4218,13 @@ function unlockBilling(){
 }
 
 function lockBillingBtns(){
-  const btns=['bill-btn-ch','bill-btn-ow','bill-btn-bc'];
-  btns.forEach(id=>{
-    const b=document.getElementById(id);
-    if(!b)return;
-    b.disabled=true;
-    b.style.cursor='not-allowed';
-    b.style.opacity='0.45';
-    b.style.border='2px solid rgba(0,0,0,0.1)';
-    b.style.background='#fff';
-    b.style.color='#aaa';
-    b.style.fontWeight='400';
-  });
+  // Signing now happens on the Review & Sign page, so billing is no longer
+  // gated behind a signature. Keep the buttons enabled; just default to pending.
   const msg=document.getElementById('bill-lock-msg');
-  if(msg)msg.style.display='';
+  if(msg)msg.style.display='none';
   const bh=document.getElementById('bh');
   if(bh)bh.style.display='none';
-  bill='pending';
+  if(bill!=='ch'&&bill!=='ow'&&bill!=='bc')bill='pending';
 }
 
 
@@ -3653,18 +4266,26 @@ function saveDraft(){
     id:'draft_'+Date.now(),
     proj,date,sub,hrs,desc,notes,startTime,finishTime,breakMins,
     reqBy,reqHow,clientId,contactId,bill,sig,photos,
+    workersOnSite:(typeof getWorkersOnSite==='function')?getWorkersOnSite():[],
     savedAt:new Date().toISOString()
   };
 
   drafts.unshift(draft);
+  // If this came from an existing draft, remove the old copy so we don't duplicate
+  if(window._openDraftId){
+    drafts=drafts.filter(x=>x.id!==window._openDraftId);
+    window._openDraftId=null;
+  }
   svDrafts();
   updDraftBadge();
 
-  const nds=document.getElementById('nds');
-  nds.innerHTML='📝 Draft saved — find it in the <strong>Drafts</strong> tab.';
-  nds.classList.remove('hidden');
-  setTimeout(()=>nds.classList.add('hidden'),4000);
   resetDF();
+  // Exit the fullscreen docket form and return to the dashboard
+  document.body.classList.remove('nd-fullpage');
+  showTab('dash',document.getElementById('n0'));
+  if(typeof showCorrectDashboard==='function')showCorrectDashboard();
+  // Brief confirmation on the dashboard
+  alert('📝 Draft saved — find it in your Drafts.');
 }
 
 function loadDraftIntoForm(draftId){
@@ -3707,10 +4328,13 @@ function loadDraftIntoForm(draftId){
   }
   calcHours();
 
-  // Delete draft and switch to form
-  drafts=drafts.filter(x=>x.id!==draftId);
-  svDrafts();updDraftBadge();
+  // Remember which draft is open so it can be removed once submitted (not on open)
+  window._openDraftId=draftId;
   showTab('nd',document.getElementById('n1'));
+  // showTab re-inits the workers section, so restore the draft's workers after
+  if(d.workersOnSite&&d.workersOnSite.length&&typeof setWorkersOnSite==='function'){
+    setTimeout(()=>{setWorkersOnSite(d.workersOnSite);updWorkersTotal();},60);
+  }
 }
 
 function deleteDraft(draftId){
@@ -4083,7 +4707,7 @@ function fU(u,p){
   if(u===ADM.u&&p===(ldL('dlb_admin_pw')||ADM.p))return{...ADM};
   // Check dynamic users
   const usr=users.find(x=>x.u===u&&x.p===p);
-  if(usr)return{u:usr.u,role:usr.role||'user',name:usr.name,email:usr.email||'',projectAccess:usr.projectAccess||[],permissions:usr.permissions||{}};
+  if(usr)return{u:usr.u,role:usr.role||'user',name:usr.name,email:usr.email||'',projectAccess:usr.projectAccess||[],permissions:usr.permissions||{},adminTier:usr.adminTier||null};
   // Check subs
   const s=subs.find(x=>x.u===u&&x.p===p);
   if(s)return{u:s.u,role:'sub',subRole:s.subRole||'admin',name:s.name,trade:s.trade,rate:s.rate,otRate:s.otRate};
@@ -4091,6 +4715,28 @@ function fU(u,p){
   if(w)return{u:w.u,role:'worker',name:w.name,trade:w.trade,parentSub:w.parentSub};
   return null;
 }
+
+// ─── ADMIN TIERS & PERMISSIONS ────────────────────────────────────────
+// Admin role splits into tiers via the adminTier flag:
+//   'owner' = Main Administrator (full access; allocates EVERYONE incl. PM/CA)
+//   'pmca'  = PM / Contracts Administrator (final docket sign-off; allocates
+//             workers + standard admins, but NOT other PM/CAs)
+//   'std'   = standard Administrator (no final sign-off, no access allocation)
+function adminTierOf(user){
+  user=user||CU;
+  if(!user||user.role!=='admin')return null;
+  return user.adminTier||'std';
+}
+function isOwner(user){return adminTierOf(user)==='owner';}
+// Final approval (sign-off) on labour dockets — owner + PM/CA
+function canApproveDockets(user){const t=adminTierOf(user);return t==='owner'||t==='pmca';}
+// Allocate access (workers + admins) — owner + PM/CA. Only OWNER can grant the
+// PM/CA tier itself (enforced in the Users UI).
+function canAllocateAccess(user){const t=adminTierOf(user);return t==='owner'||t==='pmca';}
+function adminTierLabel(t){
+  return {owner:'Main Administrator',pmca:'PM / Contracts Admin',std:'Administrator'}[t||'std']||'Administrator';
+}
+
 
 function addUser(){
   const name=document.getElementById('u-name').value.trim();
@@ -4101,9 +4747,31 @@ function addUser(){
   const err=document.getElementById('u-err');
   if(!name||!u||!p){err.textContent='Name, username and password required.';err.classList.remove('hidden');return;}
   if(u==='admin'||subs.find(s=>s.u===u)||users.find(x=>x.u===u)){err.textContent='Username already taken.';err.classList.remove('hidden');return;}
-  users.push({name,u,p,role,email,projectAccess:[],permissions:{}});
+  // Only the Owner can allocate admins at all; PM/CA tier is owner-only to grant
+  let adminTier=null;
+  if(role==='admin'){
+    if(!canAllocateAccess()){err.textContent='You do not have permission to add administrators.';err.classList.remove('hidden');return;}
+    adminTier=document.getElementById('u-tier').value||'std';
+    if(adminTier==='pmca'&&!isOwner()){err.textContent='Only the Main Administrator can grant the PM / Contracts Admin level.';err.classList.remove('hidden');return;}
+  }
+  users.push({name,u,p,role,email,projectAccess:[],permissions:{},adminTier});
   svUsers();err.classList.add('hidden');togF('auf');renUsersList();
   ['u-name','u-user','u-pass','u-email'].forEach(id=>document.getElementById(id).value='');
+}
+
+// Show the admin-tier selector when role=Administrator; gate PM/CA to the Owner
+function onUserRoleChange(){
+  const role=document.getElementById('u-role').value;
+  const wrap=document.getElementById('u-tier-wrap');
+  if(wrap)wrap.classList.toggle('hidden',role!=='admin');
+  // PM/CA option only enabled for the Owner
+  const pmcaOpt=document.getElementById('u-tier-pmca-opt');
+  const note=document.getElementById('u-tier-note');
+  if(pmcaOpt){
+    pmcaOpt.disabled=!isOwner();
+    if(note)note.style.display=isOwner()?'none':'block';
+    if(!isOwner()){const ts=document.getElementById('u-tier');if(ts&&ts.value==='pmca')ts.value='std';}
+  }
 }
 
 function deleteUser(u){
@@ -4112,11 +4780,13 @@ function deleteUser(u){
 }
 
 function renUsersList(){
+  if(typeof onUserRoleChange==='function')onUserRoleChange();
   const wrap=document.getElementById('users-list');if(!wrap)return;
   if(!users.length){wrap.innerHTML='<div class="card" style="text-align:center;color:#aaa;padding:20px;">No site users yet. Add your first user above.</div>';return;}
   wrap.innerHTML=users.map(usr=>{
-    const roleLabel={'user':'Site user','supervisor':'Supervisor','manager':'Manager','hc_supervisor':'HC Supervisor'}[usr.role]||usr.role;
-    const roleBadge={'user':'badge bi','supervisor':'badge bs','manager':'badge bc','hc_supervisor':'badge bs'}[usr.role]||'badge bi';
+    const isAdminUser=usr.role==='admin';
+    const roleLabel=isAdminUser?adminTierLabel(usr.adminTier):({'user':'Site user','supervisor':'Supervisor','manager':'Manager','hc_supervisor':'HC Supervisor'}[usr.role]||usr.role);
+    const roleBadge=isAdminUser?(usr.adminTier==='owner'?'badge bc':(usr.adminTier==='pmca'?'badge bg':'badge bi')):({'user':'badge bi','supervisor':'badge bs','manager':'badge bc','hc_supervisor':'badge bs'}[usr.role]||'badge bi');
     const assignedProjs=usr.projectAccess||[];
     return`<div class="card" style="margin-bottom:10px;">
       <div class="rb" style="margin-bottom:10px;">
@@ -4290,6 +4960,8 @@ function createClientDocket(){
     clientId:d.clientId,
     contactId:d.contactId,
     refSubDocketId:d.id,
+    workersOnSite:d.workersOnSite||[],
+    workerName:d.workerName||'',
     photos:[]
   };
 
@@ -4320,6 +4992,11 @@ function createClientDocket(){
     }
     setBill('ch');
     calcHours();
+    // Carry the same crew across to the mirrored docket
+    if(newDocket.workersOnSite&&newDocket.workersOnSite.length&&typeof setWorkersOnSite==='function'){
+      setWorkersOnSite(newDocket.workersOnSite);
+      updWorkersTotal();
+    }
 
     // Show a prominent info banner
     const nds=document.getElementById('nds');
@@ -4526,25 +5203,275 @@ async function translateFieldsToEnglish(fromLang){
 }
 
 
+// Best-effort translation of the open docket's description & notes (view-only)
+async function translateDocketView(){
+  const lang=document.getElementById('vd-lang').value;
+  const hint=document.getElementById('vd-translate-hint');
+  const descEl=document.getElementById('vd-desc-text');
+  const notesEl=document.getElementById('vd-notes-text');
+  if(!curDock)return;
+  // Keep the original text so we can translate from source each time
+  if(descEl&&descEl.dataset.orig===undefined)descEl.dataset.orig=curDock.desc||'';
+  if(notesEl&&notesEl.dataset.orig===undefined)notesEl.dataset.orig=curDock.notes||'';
+  if(lang==='en'){
+    if(descEl)descEl.textContent=descEl.dataset.orig||'';
+    if(notesEl)notesEl.textContent=notesEl.dataset.orig||'';
+    if(hint){hint.textContent='Showing original';hint.style.color='#888';setTimeout(()=>{if(hint)hint.textContent='';},2500);}
+    return;
+  }
+  const tl={'zh':'zh-CN','es':'es'}[lang]||lang;
+  if(hint){hint.textContent='Translating…';hint.style.color='#185FA5';}
+  async function tr(text){
+    if(!text)return text;
+    try{
+      const url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl='+tl+'&dt=t&q='+encodeURIComponent(text);
+      const res=await fetch(url);
+      const data=await res.json();
+      return data[0].map(s=>s[0]).join('');
+    }catch(e){return null;}
+  }
+  try{
+    const [dT,nT]=await Promise.all([
+      descEl?tr(descEl.dataset.orig):Promise.resolve(null),
+      notesEl?tr(notesEl.dataset.orig):Promise.resolve(null)
+    ]);
+    if(dT&&descEl)descEl.textContent=dT;
+    if(nT&&notesEl)notesEl.textContent=nT;
+    if((descEl&&dT===null)||(notesEl&&nT===null)){
+      if(hint){hint.textContent='⚠️ Translation unavailable — try again';hint.style.color='#E24B4A';}
+    } else if(hint){hint.textContent='✓ Translated (best-effort)';hint.style.color='#1D9E75';setTimeout(()=>{if(hint)hint.textContent='';},3000);}
+  }catch(e){
+    if(hint){hint.textContent='⚠️ Could not translate';hint.style.color='#E24B4A';}
+  }
+}
+
+// ─── WORKERS ON SITE (multiple workers per docket) ───────────────────
+// Each docket lists the worker who filled it out (first row, the logged-in
+// worker) plus any additional workers. Each row has a name and hours. Hours
+// default to the docket hours; "Same hours for all" copies the docket hours
+// to every row and locks the per-row hours boxes.
+let workerRows=[];
+
+// The display name + trade of the logged-in person filling out the docket
+function currentWorkerName(){
+  if(!CU)return'';
+  return CU.name||CU.u||'';
+}
+function currentWorkerTrade(){
+  if(!CU)return'';
+  return CU.trade||'';
+}
+
+// Build the first (primary) row for the logged-in worker, then any extras.
+function initWorkersSection(){
+  workerRows=[];
+  const list=document.getElementById('workers-list');
+  if(!list)return;
+  list.innerHTML='';
+  const sameEl=document.getElementById('workers-same-hours');
+  if(sameEl)sameEl.checked=false;
+  // Primary worker = the person logged in
+  addWorkerRow(currentWorkerName(),'',true);
+  syncWorkerHoursFromDocket();
+}
+
+// Add a worker row. isPrimary marks the logged-in worker (name read-only).
+function addWorkerRow(name='',hours='',isPrimary=false){
+  const id='wk_'+Date.now()+'_'+Math.random().toString(36).slice(2,5);
+  workerRows.push(id);
+  const list=document.getElementById('workers-list');
+  if(!list)return;
+  const idx=list.children.length; // 0-based position
+  const row=document.createElement('div');
+  row.id=id;
+  row.dataset.primary=isPrimary?'1':'0';
+  row.style.cssText='display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;padding:10px;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;margin-bottom:8px;background:#fff;';
+  const sameOn=document.getElementById('workers-same-hours')?.checked;
+  const placeholderName=isPrimary?'':('Worker '+(idx+1)+' (name optional)');
+  row.innerHTML=
+    '<div style="flex:2;min-width:150px;">'
+      +'<label style="font-size:12px;color:#888;font-weight:500;margin-bottom:4px;">'
+        +(isPrimary?'Filled out by':('Worker '+(idx+1)))+'</label>'
+      +'<input type="text" class="wk-name" value="'+esc(name)+'" placeholder="'+placeholderName+'"'
+        +(isPrimary?' readonly style="background:#f5f5f3;font-weight:500;"':'')+'>'
+    +'</div>'
+    +'<div style="flex:1;min-width:90px;">'
+      +'<label style="font-size:12px;color:#888;font-weight:500;margin-bottom:4px;">Hours</label>'
+      +'<input type="number" class="wk-hours" value="'+hours+'" min="0" step="0.25" placeholder="e.g. 7.5" oninput="updWorkersTotal()"'+(sameOn?' readonly style="background:#f5f5f3;"':'')+'>'
+    +'</div>'
+    +(isPrimary
+      ?'<div style="flex-shrink:0;font-size:11px;color:#1D9E75;padding-bottom:12px;">✓ You</div>'
+      :'<button type="button" class="btn btn-s btn-d" onclick="removeWorkerRow(\''+id+'\')" style="flex-shrink:0;padding:8px 12px;margin-bottom:1px;">✕</button>');
+  list.appendChild(row);
+  if(isPrimary){
+    const tradeNote=currentWorkerTrade();
+    if(tradeNote){
+      const n=row.querySelector('.wk-name');
+      if(n)n.title=tradeNote;
+    }
+  }
+  if(sameOn)applySameHours();
+  updWorkersTotal();
+  return id;
+}
+
+function removeWorkerRow(id){
+  const el=document.getElementById(id);
+  if(el)el.remove();
+  workerRows=workerRows.filter(x=>x!==id);
+  relabelWorkerRows();
+  updWorkersTotal();
+}
+
+// Keep the "Worker 2 / Worker 3" labels + placeholders correct after removals
+function relabelWorkerRows(){
+  const list=document.getElementById('workers-list');
+  if(!list)return;
+  Array.from(list.children).forEach((row,i)=>{
+    if(row.dataset.primary==='1')return;
+    const lbl=row.querySelector('label');
+    if(lbl)lbl.textContent='Worker '+(i+1);
+    const nm=row.querySelector('.wk-name');
+    if(nm&&!nm.value.trim())nm.placeholder='Worker '+(i+1)+' (name optional)';
+  });
+}
+
+// When "same hours" is ticked, copy the docket hours to every row and lock them
+function toggleSameHours(on){
+  const list=document.getElementById('workers-list');
+  if(!list)return;
+  if(on){applySameHours();}
+  Array.from(list.querySelectorAll('.wk-hours')).forEach(inp=>{
+    inp.readOnly=on;
+    inp.style.background=on?'#f5f5f3':'';
+  });
+  updWorkersTotal();
+}
+
+function applySameHours(){
+  const docHours=document.getElementById('dh')?.value||'';
+  const list=document.getElementById('workers-list');
+  if(!list)return;
+  Array.from(list.querySelectorAll('.wk-hours')).forEach(inp=>{inp.value=docHours;});
+}
+
+// Called when the docket hours change (calcHours) — keeps primary row + same-hours in sync
+function syncWorkerHoursFromDocket(){
+  const list=document.getElementById('workers-list');
+  if(!list)return;
+  const docHours=document.getElementById('dh')?.value||'';
+  const sameOn=document.getElementById('workers-same-hours')?.checked;
+  if(sameOn){applySameHours();updWorkersTotal();return;}
+  // Otherwise just default the primary row if it's still blank
+  const primary=list.querySelector('div[data-primary="1"] .wk-hours');
+  if(primary&&!primary.value)primary.value=docHours;
+  updWorkersTotal();
+}
+
+function updWorkersTotal(){
+  const list=document.getElementById('workers-list');
+  const el=document.getElementById('workers-total');
+  if(!list||!el)return;
+  const rows=Array.from(list.children);
+  const count=rows.length;
+  const totalHrs=rows.reduce((s,r)=>{const h=parseFloat(r.querySelector('.wk-hours')?.value)||0;return s+h;},0);
+  if(count>1){
+    el.textContent=count+' workers · '+totalHrs.toFixed(2).replace(/\.00$/,'')+'h total';
+  } else {
+    el.textContent='';
+  }
+}
+
+// Collect the workers list for saving on the docket.
+// Returns [{name, hours, primary}] — name may be '' (then shown as "Worker N").
+function getWorkersOnSite(){
+  const list=document.getElementById('workers-list');
+  if(!list)return[];
+  const out=[];
+  Array.from(list.children).forEach((row,i)=>{
+    const name=(row.querySelector('.wk-name')?.value||'').trim();
+    const hours=parseFloat(row.querySelector('.wk-hours')?.value)||0;
+    const primary=row.dataset.primary==='1';
+    out.push({name,hours,primary,trade:primary?currentWorkerTrade():''});
+  });
+  return out;
+}
+
+// Restore a workers list (e.g. when continuing a draft)
+function setWorkersOnSite(arr){
+  const list=document.getElementById('workers-list');
+  if(!list)return;
+  list.innerHTML='';
+  workerRows=[];
+  if(!arr||!arr.length){
+    addWorkerRow(currentWorkerName(),'',true);
+    return;
+  }
+  arr.forEach((w,i)=>addWorkerRow(w.name||'',w.hours||'',i===0?true:false));
+}
+
+// ─── FREE DOCKET (admin: record without allocating a project) ──────────
+// When ticked, the project selector is cleared + disabled and the docket is
+// flagged so it saves with no project. Client/contact still selectable.
+function toggleFreeDocket(on){
+  const dpWrap=document.getElementById('dp-wrap');
+  const dp=document.getElementById('dp');
+  if(dp){
+    if(on){dp.value='';dp.disabled=true;}
+    else{dp.disabled=false;}
+  }
+  if(dpWrap)dpWrap.style.opacity=on?'0.5':'1';
+  window._freeDocket=!!on;
+  // Refresh client field, which normally follows the project
+  if(typeof updClientFromProject==='function'&&!on)updClientFromProject();
+}
+
 // ─── MATERIALS ────────────────────────────────────────────────────────
 let materialRows=[];
 
-function addMaterialRow(desc='',qty='',unit='',rate=''){
+function addMaterialRow(desc='',total='',invoice=null){
   const id='mat_'+Date.now()+'_'+Math.random().toString(36).slice(2,5);
   materialRows.push(id);
   const list=document.getElementById('materials-list');
   if(!list)return;
   const row=document.createElement('div');
   row.id=id;
-  row.style.cssText='display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:6px;align-items:center;margin-bottom:6px;';
+  row.style.cssText='border:0.5px solid rgba(0,0,0,0.12);border-radius:10px;padding:12px;margin-bottom:10px;background:#fafaf8;';
   row.innerHTML=`
-    <input type="text" placeholder="Description (e.g. Concrete mix)" value="${esc(desc)}" class="mat-desc" oninput="updMaterialsTotal()">
-    <input type="number" placeholder="Qty" value="${qty}" min="0" step="0.5" class="mat-qty" oninput="updMaterialsTotal()">
-    <input type="text" placeholder="Unit (m³, kg)" value="${esc(unit)}" class="mat-unit">
-    <input type="number" placeholder="$ each" value="${rate}" min="0" step="0.01" class="mat-rate" oninput="updMaterialsTotal()">
-    <button type="button" class="btn btn-s btn-d" onclick="removeMaterialRow('${id}')" style="padding:4px 8px;">✕</button>`;
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span style="font-size:12px;color:#888;font-weight:500;">Material item</span>
+      <button type="button" class="btn btn-s btn-d" onclick="removeMaterialRow('${id}')" style="padding:4px 10px;">✕ Remove</button>
+    </div>
+    <label style="font-size:13px;color:#444;font-weight:500;">Description</label>
+    <textarea class="mat-desc" placeholder="Describe the materials supplied..." oninput="updMaterialsTotal()" style="min-height:80px;margin-bottom:10px;">${esc(desc)}</textarea>
+    <label style="font-size:13px;color:#444;font-weight:500;">Total ($)</label>
+    <input type="number" placeholder="e.g. 250.00" value="${total}" min="0" step="0.01" class="mat-total" oninput="updMaterialsTotal()" style="margin-bottom:10px;">
+    <label style="font-size:13px;color:#444;font-weight:500;">Supplier invoice <span style="font-size:11px;color:#aaa;font-weight:400;">optional</span></label>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <button type="button" class="btn" onclick="document.getElementById('${id}-file').click()" style="border:1px dashed rgba(0,0,0,0.2);background:#fff;color:#666;font-size:13px;padding:10px 14px;">
+        <i class="ti ti-paperclip" style="vertical-align:-2px;margin-right:5px;" aria-hidden="true"></i>Attach invoice
+      </button>
+      <span class="mat-invoice-name" style="font-size:12px;color:#1D9E75;"></span>
+      <input type="file" id="${id}-file" accept="image/*,application/pdf" class="mat-invoice" style="display:none;" onchange="handleMaterialInvoice('${id}',event)">
+    </div>`;
   list.appendChild(row);
+  // Restore an existing invoice marker (when reloading a draft)
+  if(invoice){
+    const nameEl=row.querySelector('.mat-invoice-name');
+    if(nameEl){nameEl.textContent='✓ Invoice attached';row.dataset.invoice=invoice;}
+  }
   updMaterialsTotal();
+}
+
+// Store an attached supplier invoice (as a data URL) on the material row
+function handleMaterialInvoice(id,event){
+  const file=event.target.files[0];
+  const row=document.getElementById(id);
+  if(!file||!row)return;
+  const nameEl=row.querySelector('.mat-invoice-name');
+  const reader=new FileReader();
+  reader.onload=()=>{row.dataset.invoice=reader.result;if(nameEl)nameEl.textContent='✓ '+file.name;};
+  reader.readAsDataURL(file);
 }
 
 function removeMaterialRow(id){
@@ -4559,10 +5486,9 @@ function getMaterials(){
   const items=[];
   rows.forEach(row=>{
     const desc=row.querySelector('.mat-desc')?.value.trim();
-    const qty=parseFloat(row.querySelector('.mat-qty')?.value)||0;
-    const unit=row.querySelector('.mat-unit')?.value.trim();
-    const rate=parseFloat(row.querySelector('.mat-rate')?.value)||0;
-    if(desc||qty||rate)items.push({desc,qty,unit,rate,total:Math.round(qty*rate*100)/100});
+    const total=parseFloat(row.querySelector('.mat-total')?.value)||0;
+    const invoice=row.dataset.invoice||null;
+    if(desc||total||invoice)items.push({desc,total,invoice});
   });
   return items;
 }
@@ -5071,6 +5997,7 @@ function toggleSubProjectAccess(subU, projCode, hasAccess){
 
 function exitNdFullpage(){
   document.body.classList.remove('nd-fullpage');
+  window._openDraftId=null;
   showTab('dash',document.getElementById('n0'));
 }
 
@@ -5117,29 +6044,71 @@ function renRecentList(elId,list,opts){
   const el=document.getElementById(elId);if(!el)return;
   opts=opts||{};
   const src=(list||[]).slice().reverse().slice(0,6);
-  if(!src.length){el.innerHTML='<div style="text-align:center;color:#aaa;padding:18px;font-size:12px;">No dockets yet</div>';return;}
+  const _tl=LANGS[(CU&&localStorage.getItem('dlb_lang_'+CU.u))||'en']||LANGS.en;
+  if(!src.length){el.innerHTML='<div style="text-align:center;color:#aaa;padding:18px;font-size:12px;">'+(_tl.wkNoDockets||'No dockets yet')+'</div>';return;}
   el.innerHTML=src.map(d=>{
-    let dot='#EF9F27',badge='<span class="rdl-b" style="background:#FAEEDA;color:#633806;">Pending</span>';
-    if(d.sig){dot='#1D9E75';badge='<span class="rdl-b" style="background:#E1F5EE;color:#085041;">Signed</span>';}
-    else if(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms'){dot='#185FA5';badge='<span class="rdl-b" style="background:#E6F1FB;color:#0C447C;">Sent</span>';}
-    if(opts.money&&d.bill==='bc'){dot='#5B21B6';badge='<span class="rdl-b" style="background:#EDE9FE;color:#3C3489;">Backcharge</span>';}
+    const _t=LANGS[(CU&&localStorage.getItem('dlb_lang_'+CU.u))||'en']||LANGS.en;
+    let dot='#EF9F27',badge='<span class="rdl-b" style="background:#FAEEDA;color:#633806;">'+_t.stPending+'</span>';
+    if(d.sig){dot='#1D9E75';badge='<span class="rdl-b" style="background:#E1F5EE;color:#085041;">'+_t.stSigned+'</span>';}
+    else if(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms'){dot='#185FA5';badge='<span class="rdl-b" style="background:#E6F1FB;color:#0C447C;">'+_t.stSent+'</span>';}
+    if(opts.money&&d.bill==='bc'){dot='#5B21B6';badge='<span class="rdl-b" style="background:#EDE9FE;color:#3C3489;">'+_t.stBackcharge+'</span>';}
     let sub=fd(d.date)+' · '+esc(d.sub)+' · '+(d.hours||0)+'h';
     if(opts.money){const c=calcC(d);if(c!=null)sub=fd(d.date)+' · '+esc(d.sub)+' · '+fc(c);}
+    // Linked reference to the originating sub-company docket (dashboard/list only)
+    let refBadge='';
+    if(d.refSubDocketId){
+      refBadge=`<span class="rdl-b" style="background:#EEEDFE;color:#3C3489;cursor:pointer;" onclick="event.stopPropagation();vD('${d.refSubDocketId}')" title="View originating sub docket">↩ from sub #${esc(d.refSubDocketId)}</span>`;
+    }
     return `<div class="rdl" onclick="vD('${d.id}')">
       <span class="dot" style="background:${dot};"></span>
       <div class="rdl-main"><div class="rdl-t">${esc(d.pname||d.pcode)} — ${esc(d.sub)}</div><div class="rdl-s">${sub}</div></div>
-      ${badge}</div>`;
+      <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end;">${badge}${refBadge}</div></div>`;
   }).join('');
 }
 
 // ─── WORKER DASHBOARD ─────────────────────────────────────────────────
 function renWorkerDash(){
   if(!CU)return;
-  const drafts=ldL('dlb_drafts_'+CU.u)||{};
-  const dc=Object.keys(drafts).length;
+  const drafts=ldL('dlb_drafts_'+CU.u)||[];
+  const dc=Array.isArray(drafts)?drafts.length:Object.keys(drafts).length;
   const b=document.getElementById('wk-draft-badge');
   if(b){b.textContent=dc;b.classList.toggle('hidden',dc===0);}
-  renRecentList('wk-rd-list',myD(),{money:false});
+  // Mini-dashboard stats
+  const mine=myD();
+  const sent=mine.filter(d=>!d.sig&&(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')).length;
+  const signed=mine.filter(d=>d.sig).length;
+  const sd=document.getElementById('wk-stat-drafts');if(sd)sd.textContent=dc;
+  const ss=document.getElementById('wk-stat-sent');if(ss)ss.textContent=sent;
+  const sg=document.getElementById('wk-stat-signed');if(sg)sg.textContent=signed;
+  renRecentList('wk-rd-list',mine,{money:false});
+  // My projects (read-only list of jobs allocated to this worker)
+  const pl=document.getElementById('wk-proj-list');
+  if(pl){
+    const wData=workers.find(x=>x.u===CU.u);
+    if(wData&&wData.allProjects){
+      const _lng=(typeof CU!=='undefined'&&CU)?(localStorage.getItem('dlb_lang_'+CU.u)||'en'):'en';
+      const _t=LANGS[_lng]||LANGS.en;
+      pl.innerHTML='<div style="padding:14px 12px;font-size:13px;color:#1D9E75;">'+(_t.wkAnyJob||'✓ You can create dockets on any job.')+'</div>';
+    } else {
+      const ap=wData?.projectAccess||[];
+      const myProjects=projects.filter(p=>ap.includes(p.code));
+      if(!myProjects.length){
+        pl.innerHTML='<div style="padding:16px 12px;text-align:center;color:#aaa;font-size:13px;">No jobs allocated yet. Ask your administrator to assign you to a project.</div>';
+      } else {
+        pl.innerHTML=myProjects.map(p=>{
+          const cli=p.clientId?clients.find(c=>c.id===p.clientId):null;
+          return `<div style="display:flex;align-items:center;gap:10px;padding:12px;border-top:0.5px solid rgba(0,0,0,0.07);">
+            <span style="width:8px;height:8px;border-radius:50%;background:#185FA5;flex-shrink:0;"></span>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:13px;font-weight:500;color:#2D2D2D;">${esc(p.name)}</div>
+              <div style="font-size:11px;color:#aaa;">${esc(p.code)}${cli?' · '+esc(cli.name):''}</div>
+            </div>
+          </div>`;
+        }).join('');
+        pl.querySelector('div').style.borderTop='none';
+      }
+    }
+  }
 }
 
 // ─── ADMIN MOBILE COMPACT ─────────────────────────────────────────────
@@ -5164,87 +6133,344 @@ function renAdminMobile(){
   } else {
     const banner=document.getElementById('am-banner');if(banner)banner.classList.add('hidden');
   }
+  // Pending billing folder — all cross-company dockets a supervisor signed that need billing
+  const adminPending=dockets.filter(d=>d.sig&&d.signedBySupervisor&&(!d.bill||d.bill==='pending'));
+  const apbWrap=document.getElementById('admin-pending-billing-wrap');
+  const apbList=document.getElementById('admin-pending-billing-list');
+  if(apbWrap&&apbList){
+    if(adminPending.length){
+      apbWrap.classList.remove('hidden');
+      // Committed-cost summary (cashflow early-warning) — admin sees $ estimates
+      const totalCommitted=adminPending.reduce((s,d)=>{const c=calcC(d);return s+(c||0);},0);
+      const oldest=adminPending.reduce((mx,d)=>{const a=docketAgeDays(d);return a>mx?a:mx;},0);
+      const summary=`<div style="padding:12px 14px;border-bottom:0.5px solid #F2D9A8;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;">
+          <span style="font-size:12px;color:#854F0B;font-weight:500;">Committed cost (signed, awaiting billing)</span>
+          <span style="font-size:20px;font-weight:700;color:#185FA5;">$${totalCommitted.toFixed(2)}</span>
+        </div>
+        <div style="font-size:11px;color:#854F0B;margin-top:3px;">${adminPending.length} docket${adminPending.length!==1?'s':''}${oldest>0?` · oldest signed ${oldest} day${oldest!==1?'s':''} ago`:''}</div>
+      </div>`;
+      apbList.innerHTML=summary+adminPending.map(d=>billingChooserRow(d)).join('');
+    } else {
+      apbWrap.classList.add('hidden');
+      apbList.innerHTML='';
+    }
+  }
+  // ── Awaiting final approval folder (PM/CA + Owner only) ──
+  const apvWrap=document.getElementById('admin-approval-wrap');
+  const apvList=document.getElementById('admin-approval-list');
+  if(apvWrap&&apvList){
+    const canApprove=canApproveDockets();
+    // Signed + billing assigned + not yet approved (awaiting or queried)
+    const awaiting=dockets.filter(d=>d.sig&&d.bill&&d.bill!=='pending'&&(d.approvalStatus==='awaiting'||d.approvalStatus==='queried'));
+    if(canApprove&&awaiting.length){
+      apvWrap.classList.remove('hidden');
+      const totalAwait=awaiting.reduce((s,d)=>s+(calcC(d)||0),0);
+      const qCount=awaiting.filter(d=>d.approvalStatus==='queried').length;
+      const summary=`<div style="padding:12px 14px;border-bottom:0.5px solid #C9DDF1;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;">
+          <span style="font-size:12px;color:#185FA5;font-weight:500;">Awaiting your final sign-off</span>
+          <span style="font-size:20px;font-weight:700;color:#185FA5;">$${totalAwait.toFixed(2)}</span>
+        </div>
+        <div style="font-size:11px;color:#5A6B7B;margin-top:3px;">${awaiting.length} docket${awaiting.length!==1?'s':''}${qCount?` · ${qCount} queried`:''}</div>
+      </div>`;
+      apvList.innerHTML=summary+awaiting.map(d=>approvalRow(d)).join('');
+    } else {
+      apvWrap.classList.add('hidden');
+      apvList.innerHTML='';
+    }
+  }
   renRecentList('admin-rd-list',(CU.role==='admin'?dockets:myD()),{money:isHC});
+}
+
+// A row in the Awaiting-approval folder with Approve / Query / Override actions
+function approvalRow(d){
+  const c=calcC(d);
+  const est=(c!=null)?`<span style="color:#185FA5;font-weight:600;">~$${c.toFixed(2)}</span>`:'';
+  const billLabel={ch:'Chargeable',bc:'Backcharge',ow:'Own cost'}[d.bill]||d.bill;
+  const queried=d.approvalStatus==='queried';
+  const queryBanner=queried?`<div style="background:#FBE6E6;border-radius:8px;padding:7px 10px;margin-bottom:8px;font-size:11px;color:#A4271F;">⚠ Queried: ${esc(d.queryNote||'(no note)')}</div>`:'';
+  return `<div style="padding:12px;border-top:0.5px solid rgba(201,221,241,0.7);">
+    ${queryBanner}
+    <div onclick="vD('${d.id}')" style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:8px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:${queried?'#A4271F':'#185FA5'};flex-shrink:0;"></span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:500;color:#2D2D2D;">${esc(d.pname||d.pcode||'(No project)')} — ${esc(d.sub||'')}</div>
+        <div style="font-size:11px;color:#aaa;">#${d.id} · ${fd(d.date)} · ${d.hours}h · ${billLabel} · ${est}</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <button onclick="approveDocket('${d.id}')" style="flex:2;min-width:110px;padding:9px 6px;border-radius:8px;border:none;background:#1D9E75;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">✓ Approve</button>
+      <button onclick="queryDocket('${d.id}')" style="flex:1;min-width:80px;padding:9px 6px;border-radius:8px;border:1.5px solid #E0A800;background:#fff;color:#8A6D00;font-size:12px;font-weight:600;cursor:pointer;">⚠ Query</button>
+      <button onclick="overrideBilling('${d.id}')" style="flex:1;min-width:80px;padding:9px 6px;border-radius:8px;border:1.5px solid #888;background:#fff;color:#555;font-size:12px;font-weight:600;cursor:pointer;">⇄ Billing</button>
+    </div>
+  </div>`;
+}
+
+// Days since a docket was signed (for cashflow ageing on pending items)
+function docketAgeDays(d){
+  const ts=d.signedAt||d.createdAt;
+  if(!ts)return 0;
+  const ms=Date.now()-new Date(ts).getTime();
+  return Math.max(0,Math.floor(ms/86400000));
 }
 
 function renSupervisorDash(){
   if(!CU)return;
   const mine=myD();
-  // Stats
-  document.getElementById('sup-dockets').textContent=mine.length;
-  const pending=mine.filter(d=>!d.sig).length;
-  document.getElementById('sup-pending').textContent=pending;
-  const hrs=mine.reduce((s,d)=>s+(d.hours||0),0);
-  document.getElementById('sup-hours').textContent=hrs.toFixed(1)+'h';
-  // Draft badge
-  const draftsKey='dlb_drafts_'+(CU.u);
-  const drafts=ldL(draftsKey)||{};
-  const draftCount=Object.keys(drafts).length;
+  // Draft count
+  const drafts=ldL('dlb_drafts_'+CU.u)||[];
+  const dc=Array.isArray(drafts)?drafts.length:Object.keys(drafts).length;
   const supBadge=document.getElementById('sup-draft-badge');
-  if(supBadge){supBadge.textContent=draftCount;supBadge.classList.toggle('hidden',draftCount===0);}
-  // Unassigned billing — signed dockets with no billing type
-  const unassigned=mine.filter(d=>d.sig&&(!d.bill||d.bill==='pending'));
-  const alertEl=document.getElementById('sup-billing-alert');
-  const alertText=document.getElementById('sup-billing-alert-text');
-  const listEl=document.getElementById('sup-unassigned-list');
-  if(unassigned.length>0){
-    alertEl.classList.remove('hidden');
-    alertText.textContent=unassigned.length+' signed docket'+(unassigned.length>1?'s':'')+' — billing unassigned';
-    listEl.innerHTML=unassigned.slice(0,3).map(d=>`
-      <div onclick="vD('${d.id}')" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:#FFFBF5;border:0.5px solid #FAC775;margin-bottom:6px;cursor:pointer;">
-        <div style="width:8px;height:8px;border-radius:50%;background:#EF9F27;flex-shrink:0;"></div>
-        <div style="flex:1;">
-          <p style="font-size:12px;font-weight:500;margin:0;">${esc(d.pname||d.pcode)} — ${esc(d.sub)}</p>
-          <p style="font-size:11px;color:#aaa;margin:0;">${fd(d.date)} · ${d.hours}h · Signed ✓</p>
-        </div>
-        <span style="font-size:10px;padding:2px 7px;border-radius:8px;background:#FAEEDA;color:#633806;">No billing</span>
-      </div>`).join('');
-    if(unassigned.length>3){
-      listEl.innerHTML+='<p style="font-size:11px;color:#aaa;text-align:center;margin:4px 0 8px;">+ '+(unassigned.length-3)+' more — click Review to see all</p>';
+  if(supBadge){supBadge.textContent=dc;supBadge.classList.toggle('hidden',dc===0);}
+  // Stats — Drafts / Signed / Sent (own dockets), aligned like worker
+  const own=dockets.filter(d=>d.createdBy===CU.u);
+  const sent=own.filter(d=>!d.sig&&(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')).length;
+  const signed=own.filter(d=>d.sig).length;
+  const sdEl=document.getElementById('sup-stat-drafts');if(sdEl)sdEl.textContent=dc;
+  const sgEl=document.getElementById('sup-stat-signed');if(sgEl)sgEl.textContent=signed;
+  const ssEl=document.getElementById('sup-stat-sent');if(ssEl)ssEl.textContent=sent;
+
+  // ── Pending billing folder ──
+  // Cross-company dockets this supervisor signed that still need a billing
+  // decision (chargeable / backcharge / own cost).
+  const pendingBilling=dockets.filter(d=>d.sig&&d.signedBySupervisor===CU.u&&(!d.bill||d.bill==='pending'));
+  const pbWrap=document.getElementById('sup-pending-billing-wrap');
+  const pbList=document.getElementById('sup-pending-billing-list');
+  if(pbWrap&&pbList){
+    if(pendingBilling.length){
+      pbWrap.classList.remove('hidden');
+      pbList.innerHTML=pendingBilling.map(d=>billingChooserRow(d)).join('');
+    } else {
+      pbWrap.classList.add('hidden');
+      pbList.innerHTML='';
     }
-  } else {
-    alertEl.classList.add('hidden');
-    listEl.innerHTML='';
   }
-  // Recent dockets table
-  renRecentList('sup-rd-list',mine,{money:false});
-  const tb=document.getElementById('sup-rd');if(!tb)return;
-  const src=mine.slice().reverse().slice(0,8);
-  if(!src.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:#aaa;padding:16px;">No dockets yet</td></tr>';return;}
-  tb.innerHTML=src.map(d=>`<tr>
-    <td><span class="dn">#${d.id}</span></td>
-    <td><span class="badge bi">${esc(d.pcode)}</span></td>
-    <td>${fd(d.date)}</td>
-    <td>${esc(d.sub)}</td>
-    <td>${d.hours}h</td>
-    <td>${sigBadge(d)}</td>
-  </tr>`).join('');
+
+  // ── My projects (allocated by admin) ──
+  const usr=getUserData();
+  const ap=usr?.projectAccess||[];
+  const myProjects=projects.filter(p=>ap.includes(p.code));
+  const pl=document.getElementById('sup-proj-list');
+  if(pl){
+    if(!myProjects.length){
+      pl.innerHTML='<div style="padding:16px 12px;text-align:center;color:#aaa;font-size:13px;">No projects allocated yet. Ask your administrator to assign you to a project.</div>';
+    } else {
+      pl.innerHTML=myProjects.map(p=>{
+        const cli=p.clientId?clients.find(c=>c.id===p.clientId):null;
+        const cnt=dockets.filter(d=>d.pcode===p.code).length;
+        return `<div style="display:flex;align-items:center;gap:10px;padding:12px;border-top:0.5px solid rgba(0,0,0,0.07);">
+          <span style="width:8px;height:8px;border-radius:50%;background:#185FA5;flex-shrink:0;"></span>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:13px;font-weight:500;color:#2D2D2D;">${esc(p.name)}</div>
+            <div style="font-size:11px;color:#aaa;">${esc(p.code)}${cli?' · '+esc(cli.name):''} · ${cnt} docket${cnt!==1?'s':''}</div>
+          </div>
+        </div>`;
+      }).join('');
+      const f=pl.querySelector('div');if(f)f.style.borderTop='none';
+    }
+  }
+
+  // ── Project dockets (all dockets on allocated projects) ──
+  const projDockets=dockets.filter(d=>ap.includes(d.pcode));
+  renRecentList('sup-proj-dockets-list',projDockets,{money:false});
+
+  // ── Recent dockets (this supervisor's own) ──
+  renRecentList('sup-rd-list',own,{money:false});
+}
+
+// A compact row for the pending-billing folder with inline chargeable/backcharge/own-cost buttons
+function billingChooserRow(d){
+  const who=esc(d.sub||'');
+  const age=(typeof docketAgeDays==='function')?docketAgeDays(d):0;
+  // Ageing badge — amber after 7 days, red after 14 (cashflow risk)
+  let ageBadge='';
+  if(age>=1){
+    const col=age>=14?{bg:'#FBE6E6',fg:'#A4271F'}:(age>=7?{bg:'#FAEEDA',fg:'#854F0B'}:{bg:'#EEF2F6',fg:'#5A6B7B'});
+    ageBadge=`<span style="font-size:10px;padding:2px 7px;border-radius:8px;background:${col.bg};color:${col.fg};white-space:nowrap;">${age}d</span>`;
+  }
+  // Admin (money allowed) sees an estimated value for cashflow; supervisor does not
+  let estLine='';
+  if(CU&&CU.role==='admin'){
+    const c=calcC(d);
+    if(c!=null)estLine=` · <span style="color:#185FA5;font-weight:600;">~$${c.toFixed(2)}</span>`;
+  }
+  return `<div style="padding:12px;border-top:0.5px solid rgba(242,217,168,0.6);">
+    <div onclick="vD('${d.id}')" style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:8px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#EF9F27;flex-shrink:0;"></span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:500;color:#2D2D2D;">${esc(d.pname||d.pcode||'(No project)')} — ${who}</div>
+        <div style="font-size:11px;color:#aaa;">#${d.id} · ${fd(d.date)} · ${d.hours}h · Signed ✓${estLine}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end;">
+        <span style="font-size:10px;padding:2px 8px;border-radius:8px;background:#FAEEDA;color:#633806;white-space:nowrap;">Needs billing</span>
+        ${ageBadge}
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <button onclick="setPendingBilling('${d.id}','ch')" style="flex:1;min-width:90px;padding:9px 6px;border-radius:8px;border:1.5px solid #1D9E75;background:#fff;color:#0F6E56;font-size:12px;font-weight:600;cursor:pointer;">$ Chargeable</button>
+      <button onclick="setPendingBilling('${d.id}','bc')" style="flex:1;min-width:90px;padding:9px 6px;border-radius:8px;border:1.5px solid #5B21B6;background:#fff;color:#5B21B6;font-size:12px;font-weight:600;cursor:pointer;">↩ Backcharge</button>
+      <button onclick="setPendingBilling('${d.id}','ow')" style="flex:1;min-width:90px;padding:9px 6px;border-radius:8px;border:1.5px solid #854F0B;background:#fff;color:#633806;font-size:12px;font-weight:600;cursor:pointer;">🏢 Own cost</button>
+    </div>
+  </div>`;
+}
+
+// Supervisor (or admin) assigns billing to a pending cross-company docket
+function setPendingBilling(id,type){
+  const d=dockets.find(x=>x.id===id);
+  if(!d)return;
+  if(type==='bc'){
+    const name=prompt('Backcharge to which subcontractor?','');
+    if(!name)return;
+    d.bcTarget=name;
+  }
+  d.bill=type;
+  // Once billing is assigned, the docket enters the approval gate (awaiting
+  // final sign-off by a PM/CA or Owner) — unless it's already been approved.
+  if(!d.approvalStatus||d.approvalStatus==='queried'){d.approvalStatus='awaiting';}
+  d.billAssignedAt=new Date().toISOString();
+  svL('v4_dock',dockets);
+  if(typeof showCorrectDashboard==='function')showCorrectDashboard();
+  if(typeof renAD==='function')renAD();
+  if(typeof updM==='function')updM();
+  // For chargeable, offer to generate the up-chain docket (same as before)
+  if(type==='ch'){
+    setTimeout(()=>{
+      if(dockets.find(x=>x.refSubDocketId===d.id))return;
+      const go=confirm('Marked chargeable. Create a matching docket from your company to send up the chain for signing?');
+      if(go){curDock=d;createClientDocket();}
+    },200);
+  }
+}
+
+// ─── APPROVAL GATE (PM / Contracts Admin final sign-off) ──────────────
+// Approve: docket becomes a firm committed cost (flows to invoicing).
+function approveDocket(id){
+  if(!canApproveDockets()){alert('You do not have permission to approve dockets.');return;}
+  const d=dockets.find(x=>x.id===id);
+  if(!d)return;
+  d.approvalStatus='approved';
+  d.approvedBy=CU.u;
+  d.approvedByName=CU.name;
+  d.approvedAt=new Date().toISOString();
+  d.queryNote='';
+  svL('v4_dock',dockets);
+  if(typeof showCorrectDashboard==='function')showCorrectDashboard();
+  if(typeof renAD==='function')renAD();
+}
+
+// Query: send the docket back with a note (out of scope, wrong rate, etc.)
+function queryDocket(id){
+  if(!canApproveDockets()){alert('You do not have permission to query dockets.');return;}
+  const d=dockets.find(x=>x.id===id);
+  if(!d)return;
+  const note=prompt('Query this docket — what needs to be resolved? (e.g. not in scope, wrong rate, hours dispute)','');
+  if(note===null)return; // cancelled
+  d.approvalStatus='queried';
+  d.queryNote=note.trim();
+  d.queriedBy=CU.u;
+  d.queriedByName=CU.name;
+  d.queriedAt=new Date().toISOString();
+  svL('v4_dock',dockets);
+  if(typeof showCorrectDashboard==='function')showCorrectDashboard();
+  if(typeof renAD==='function')renAD();
+}
+
+// Override the billing treatment during approval (PM/CA has the commercial view)
+function overrideBilling(id){
+  if(!canApproveDockets()){alert('You do not have permission to change billing.');return;}
+  const d=dockets.find(x=>x.id===id);
+  if(!d)return;
+  const choice=prompt('Override billing treatment — type: ch (chargeable), bc (backcharge), ow (own cost)',d.bill||'ch');
+  if(choice===null)return;
+  const c=choice.trim().toLowerCase();
+  if(!['ch','bc','ow'].includes(c)){alert('Please enter ch, bc or ow.');return;}
+  if(c==='bc'){const t=prompt('Backcharge to which subcontractor?',d.bcTarget||'');if(t===null)return;d.bcTarget=t;}
+  d.bill=c;
+  svL('v4_dock',dockets);
+  if(typeof showCorrectDashboard==='function')showCorrectDashboard();
+  if(typeof renAD==='function')renAD();
 }
 
 
 // ─── REVIEW & SIGN ────────────────────────────────────────────────────
 let reviewSigMethod='onsite';
+let reviewBill=null;
+function toggleSignerOther(checked){
+  const wrap=document.getElementById('review-signer-other-wrap');
+  if(wrap)wrap.classList.toggle('hidden',!checked);
+  if(checked){const n=document.getElementById('review-signer-name');if(n)n.focus();}
+}
+function setReviewBill(type){
+  reviewBill=type;
+  ['ch','ow','bc','tbc'].forEach(t=>{
+    const b=document.getElementById('rbill-'+t);
+    if(b)b.classList.toggle('active',t===type);
+  });
+  // Backcharge needs a target subcontractor
+  const bcWrap=document.getElementById('rbill-bc-target');
+  if(bcWrap)bcWrap.classList.toggle('hidden',type!=='bc');
+  // Description shown for the first three (not TBC)
+  const descWrap=document.getElementById('rbill-desc-wrap');
+  if(descWrap)descWrap.classList.toggle('hidden',type==='tbc');
+}
 let reviewSigHas=false;
 
 function showReview(){
-  // Validate form first
+  // Ensure the (readonly) company field is populated for workers/subs
+  const dsbEl=document.getElementById('dsb');
+  if(dsbEl&&!dsbEl.value.trim()&&CU){
+    if(CU.role==='sub'){dsbEl.value=CU.name;}
+    else if(CU.role==='worker'){
+      const wData=workers.find(x=>x.u===CU.u);
+      let pc=appSettings.name||'Alerce';
+      if(wData&&wData.parentSub){const ps=subs.find(s=>s.u===wData.parentSub);if(ps)pc=ps.name;}
+      dsbEl.value=pc;
+    }
+  }
+  // Validate form first, highlighting any empty required fields
   const proj=document.getElementById('dp').value;
   const date=document.getElementById('dd').value;
   const sub=document.getElementById('dsb').value.trim();
   const hrs=document.getElementById('dh').value;
   const desc=document.getElementById('desc').value.trim();
   const e=document.getElementById('de');
-  if(!proj||!date||!sub||!desc){e.textContent='Please fill in all required fields (marked *).';e.classList.remove('hidden');return;}
-  if(!document.getElementById('d-start').value||!document.getElementById('d-finish').value){e.textContent='Please enter a start and finish time.';e.classList.remove('hidden');return;}
-  if(!hrs||parseFloat(hrs)<=0){e.textContent='Finish time must be after start time.';e.classList.remove('hidden');return;}
+  // Clear any previous highlights
+  ['dp','dd','dsb','desc','d-start','d-finish'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('field-error');});
+  const missing=[];
+  if(!proj&&!window._freeDocket){missing.push('dp');}
+  if(!date){missing.push('dd');}
+  if(!sub){missing.push('dsb');}
+  if(!desc){missing.push('desc');}
+  if(missing.length){
+    missing.forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('field-error');});
+    const first=document.getElementById(missing[0]);
+    e.textContent='Please fill in the highlighted required field'+(missing.length>1?'s':'')+' (marked *).';
+    e.classList.remove('hidden');
+    if(first&&first.scrollIntoView)first.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  if(!document.getElementById('d-start').value||!document.getElementById('d-finish').value){
+    ['d-start','d-finish'].forEach(id=>{if(!document.getElementById(id).value)document.getElementById(id).classList.add('field-error');});
+    e.textContent='Please enter a start and finish time.';e.classList.remove('hidden');return;
+  }
+  if(!parseTime(document.getElementById('d-start').value)||!parseTime(document.getElementById('d-finish').value)){
+    if(!parseTime(document.getElementById('d-start').value))document.getElementById('d-start').classList.add('field-error');
+    if(!parseTime(document.getElementById('d-finish').value))document.getElementById('d-finish').classList.add('field-error');
+    e.textContent='Please enter valid times (e.g. 7:30, 0730, or 4:00 PM).';e.classList.remove('hidden');return;
+  }
+  calcHours();
+  if(!document.getElementById('dh').value||parseFloat(document.getElementById('dh').value)<=0){e.textContent='Finish time must be after start time.';e.classList.remove('hidden');return;}
   e.classList.add('hidden');
 
   // Build summary
   const p=projects.find(x=>x.code===proj);
   const cli=clients.find(c=>c.id===document.getElementById('d-client').value);
   const con=cli&&document.getElementById('d-contact').value?cli.contacts?.find(c=>c.id===document.getElementById('d-contact').value):null;
-  const startTime=document.getElementById('d-start').value;
-  const finishTime=document.getElementById('d-finish').value;
+  const _st=parseTime(document.getElementById('d-start').value);
+  const _ft=parseTime(document.getElementById('d-finish').value);
+  const startTime=_st?String(_st.h).padStart(2,'0')+':'+String(_st.m).padStart(2,'0'):document.getElementById('d-start').value;
+  const finishTime=_ft?String(_ft.h).padStart(2,'0')+':'+String(_ft.m).padStart(2,'0'):document.getElementById('d-finish').value;
   const breakMins=parseInt(document.getElementById('d-break').value)||0;
   const reqBy=document.getElementById('d-reqby').value||'';
   const reqHow=document.getElementById('d-reqhow').value||'';
@@ -5264,6 +6490,18 @@ function showReview(){
   const ndLogo=document.getElementById('nd-header-logo');
   if(dlbLogo&&ndLogo&&ndLogo.src)dlbLogo.src=ndLogo.src;
 
+  // Workers on site (from the live form)
+  const _ws=(typeof getWorkersOnSite==='function')?getWorkersOnSite():[];
+  let workersRow=null;
+  if(_ws.length>1){
+    const totalH=_ws.reduce((s,w)=>s+(parseFloat(w.hours)||0),0);
+    const names=_ws.map((w,i)=>w.name&&w.name.trim()?esc(w.name):('Worker '+(i+1))).join(', ');
+    workersRow={label:'Workers on site',value:_ws.length+' — '+names+'<br><span style="color:#888;font-size:12px;">'+totalH.toFixed(2).replace(/\.00$/,'')+'h total</span>'};
+  } else {
+    const pn=currentWorkerName();
+    if(pn)workersRow={label:'Filled out by',value:esc(pn)};
+  }
+
   // Summary grid
   const rows=[
     {label:'Project',value:(p?p.name:proj)+' <span class="badge bi">'+esc(proj)+'</span>'},
@@ -5271,6 +6509,7 @@ function showReview(){
     {label:'Company',value:esc(sub)},
     {label:'Start / Finish',value:startTime+' → '+finishTime+(breakMins?' ('+breakMins+'min break)':'')},
     {label:'Hours',value:'<strong>'+hrs+'h</strong>'},
+    workersRow,
     cli?{label:'Client',value:esc(cli.name)+(con?' — '+esc(con.name):'')}: null,
     reqBy?{label:'Requested by',value:esc(reqBy)+(reqHow?' via '+esc(reqHow):'')}:null,
   ].filter(Boolean);
@@ -5307,7 +6546,7 @@ function showReview(){
   if(mats.length>0){
     matWrap.classList.remove('hidden');
     matDiv.innerHTML=mats.map(m=>`<div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:0.5px solid rgba(0,0,0,0.05);">
-      <span>${esc(m.desc)}</span><span style="color:#aaa;">${m.qty?m.qty+' '+m.unit:''}</span>
+      <span>${esc(m.desc||'—')} ${m.invoice?'📎':''}</span><span style="color:#185FA5;font-weight:500;">${(CU&&CU.role==='admin'&&m.total)?'$'+m.total.toFixed(2):''}</span>
     </div>`).join('');
   } else {
     matWrap.classList.add('hidden');
@@ -5320,7 +6559,45 @@ function showReview(){
   // Reset sig
   reviewSigHas=false;
   reviewSigMethod='onsite';
+  reviewBill=null;
   setReviewSigMethod('onsite');
+  const billCard=document.getElementById('review-billing-card');
+  if(billCard)billCard.classList.add('hidden');
+  ['ch','ow','bc','tbc'].forEach(t=>{const b=document.getElementById('rbill-'+t);if(b)b.classList.remove('active');});
+  const bd=document.getElementById('rbill-desc');if(bd)bd.value='';
+  const bn=document.getElementById('rbill-bc-name');if(bn)bn.value='';
+  const sn=document.getElementById('review-signer-name');if(sn)sn.value='';
+  // Email tick boxes setup
+  const esup=document.getElementById('review-email-supervisor');if(esup)esup.checked=false;
+  const esupWrap=document.getElementById('review-supervisor-email-wrap');if(esupWrap)esupWrap.classList.add('hidden');
+  const supEmail=document.getElementById('review-supervisor-email');
+  if(supEmail){
+    // pre-fill from the selected contact's email if available
+    const _cli2=clients.find(c=>c.id===document.getElementById('d-client').value);
+    const _con2=_cli2&&document.getElementById('d-contact').value?_cli2.contacts?.find(c=>c.id===document.getElementById('d-contact').value):null;
+    supEmail.value=_con2&&_con2.email?_con2.email:'';
+  }
+  const eca=document.getElementById('review-email-ca');if(eca)eca.checked=false;
+  const caLabel=document.getElementById('review-email-ca-label');
+  const caAddr=document.getElementById('review-ca-addr');
+  if(appSettings.contractsAdmin){
+    if(caLabel)caLabel.style.display='flex';
+    if(caAddr)caAddr.textContent='('+appSettings.contractsAdmin+')';
+  } else {
+    if(caLabel)caLabel.style.display='none';
+  }
+  // Default signer = the supervisor/contact selected on the form
+  const _cli=clients.find(c=>c.id===document.getElementById('d-client').value);
+  const _con=_cli&&document.getElementById('d-contact').value?_cli.contacts?.find(c=>c.id===document.getElementById('d-contact').value):null;
+  const defName=_con?_con.name:'';
+  const defEl=document.getElementById('review-signer-default-name');
+  if(defEl)defEl.textContent=defName||'(no supervisor selected)';
+  const othChk=document.getElementById('review-signer-other');
+  if(othChk)othChk.checked=false;
+  const othWrap=document.getElementById('review-signer-other-wrap');
+  if(othWrap)othWrap.classList.add('hidden');
+  const bdw=document.getElementById('rbill-desc-wrap');if(bdw)bdw.classList.add('hidden');
+  const btw=document.getElementById('rbill-bc-target');if(btw)btw.classList.add('hidden');
   initReviewSig();
 
   // Mobile full page
@@ -5330,10 +6607,12 @@ function showReview(){
   const panel=document.getElementById('review-panel');
   panel.classList.remove('hidden');
   panel.scrollTop=0;
+  document.body.classList.add('review-open');
 }
 
 function hideReview(){
   document.getElementById('review-panel').classList.add('hidden');
+  document.body.classList.remove('review-open');
 }
 
 function setReviewSigMethod(m){
@@ -5349,13 +6628,19 @@ function initReviewSig(){
   if(!canvas)return;
   const ctx=canvas.getContext('2d');
   canvas.width=canvas.offsetWidth||600;
+  canvas.height=canvas.offsetHeight||220;
   ctx.clearRect(0,0,canvas.width,canvas.height);
   reviewSigHas=false;
   let drawing=false;
   const getPos=(e)=>{const r=canvas.getBoundingClientRect();if(e.touches){return{x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top};}return{x:e.clientX-r.left,y:e.clientY-r.top};};
   canvas.onmousedown=canvas.ontouchstart=(e)=>{drawing=true;const p=getPos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);e.preventDefault();};
   canvas.onmousemove=canvas.ontouchmove=(e)=>{if(!drawing)return;const p=getPos(e);ctx.lineTo(p.x,p.y);ctx.strokeStyle='#2D2D2D';ctx.lineWidth=2;ctx.lineCap='round';ctx.stroke();reviewSigHas=true;e.preventDefault();};
-  canvas.onmouseup=canvas.ontouchend=()=>{drawing=false;};
+  canvas.onmouseup=canvas.ontouchend=()=>{drawing=false;if(reviewSigHas)revealReviewBilling();};
+}
+
+function revealReviewBilling(){
+  const card=document.getElementById('review-billing-card');
+  if(card)card.classList.remove('hidden');
 }
 
 function clearReviewSig(){
@@ -5363,6 +6648,69 @@ function clearReviewSig(){
   const ctx=canvas.getContext('2d');
   ctx.clearRect(0,0,canvas.width,canvas.height);
   reviewSigHas=false;
+  const card=document.getElementById('review-billing-card');
+  if(card)card.classList.add('hidden');
+}
+
+// Build a plain-text summary of the docket currently in the form
+function buildDocketSummaryText(){
+  const g=id=>{const e=document.getElementById(id);return e?(e.value||e.textContent||'').trim():'';};
+  const proj=document.getElementById('dp');
+  const projTxt=proj&&proj.selectedIndex>=0?proj.options[proj.selectedIndex].text:'';
+  const lines=[
+    'DAY LABOUR DOCKET',
+    'Project: '+projTxt,
+    'Date: '+g('dd'),
+    'Company: '+g('dsb'),
+    'Start: '+g('d-start')+'  Finish: '+g('d-finish'),
+    'Hours: '+g('dh'),
+    'Description: '+g('desc')
+  ];
+  if(g('dnotes'))lines.push('Notes: '+g('dnotes'));
+  return lines.filter(Boolean).join('\n');
+}
+
+// After submit, email the signed PDF docket to the ticked recipients.
+function sendDocketEmails(){
+  const wantSup=document.getElementById('review-email-supervisor')?.checked;
+  const wantCA=document.getElementById('review-email-ca')?.checked;
+  if(!wantSup&&!wantCA)return;
+  const recipients=[];
+  if(wantSup){
+    const e=(document.getElementById('review-supervisor-email').value||'').trim();
+    if(e&&e.includes('@'))recipients.push(e);
+  }
+  if(wantCA&&appSettings.contractsAdmin){recipients.push(appSettings.contractsAdmin);}
+  if(!recipients.length)return;
+  // The docket just submitted is the most recent one
+  const d=dockets[dockets.length-1];
+  if(!d)return;
+  // Generate the proper signed PDF (printD renders curDock)
+  const prevCur=curDock;
+  curDock=d;
+  try{printD();}catch(e){}
+  curDock=prevCur;
+  const subject=encodeURIComponent('Day Labour Docket #'+d.id+' — '+d.pname);
+  const body=encodeURIComponent('Please find attached the signed day labour docket #'+d.id+'.\n\nProject: '+d.pname+'\nDate: '+fd(d.date)+'\nHours: '+d.hours+'h\n\n(The PDF has been downloaded — please attach it before sending.)');
+  setTimeout(()=>{
+    alert('The signed docket PDF has been downloaded.\n\nYour email app will open to '+recipients.join(', ')+' — attach the PDF before sending.');
+    window.location.href='mailto:'+recipients.map(encodeURIComponent).join(',')+'?subject='+subject+'&body='+body;
+  },400);
+}
+
+// Build a simple PDF of the docket straight from the form fields
+function buildDocketPdfFromForm(){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const summary=buildDocketSummaryText().split('\n');
+  let y=20;
+  doc.setFontSize(16);doc.text(summary[0],14,y);y+=10;
+  doc.setFontSize(11);
+  for(let i=1;i<summary.length;i++){
+    const wrapped=doc.splitTextToSize(summary[i],180);
+    doc.text(wrapped,14,y);y+=6*wrapped.length;
+  }
+  doc.save('docket.pdf');
 }
 
 function submitFromReview(){
@@ -5375,7 +6723,50 @@ function submitFromReview(){
   if(reviewSigMethod==='sms'&&!document.getElementById('review-send-sms').value.trim()){
     err.textContent='Please enter a mobile number.';err.classList.remove('hidden');return;
   }
+  // If signed on site, a billing choice is required
+  if(sig&&reviewSigHas){
+    let signerName='';
+    const otherChecked=document.getElementById('review-signer-other').checked;
+    if(otherChecked){
+      signerName=(document.getElementById('review-signer-name').value||'').trim();
+      if(!signerName){err.textContent='Please enter the name of the person signing.';err.classList.remove('hidden');return;}
+    } else {
+      const _cli=clients.find(c=>c.id===document.getElementById('d-client').value);
+      const _con=_cli&&document.getElementById('d-contact').value?_cli.contacts?.find(c=>c.id===document.getElementById('d-contact').value):null;
+      signerName=_con?_con.name:'';
+      if(!signerName){err.textContent='No supervisor selected — tick "Someone else is signing" and enter a name.';err.classList.remove('hidden');return;}
+    }
+    window._reviewSignerName=signerName;
+    if(!reviewBill){err.textContent='Please choose a billing option after signing.';err.classList.remove('hidden');return;}
+    if(reviewBill==='bc'&&!document.getElementById('rbill-bc-name').value.trim()){
+      err.textContent='Please enter the subcontractor to backcharge.';err.classList.remove('hidden');return;
+    }
+  } else {
+    window._reviewSignerName=null;
+  }
   err.classList.add('hidden');
+
+  // Apply the billing choice into the form's billing state used by submitD
+  if(reviewBill){
+    if(reviewBill==='tbc'){bill='pending';}
+    else{
+      bill=reviewBill;
+      const bcSub=document.getElementById('bc-sub');
+      const bcOther=document.getElementById('bc-other');
+      if(reviewBill==='bc'){
+        const name=document.getElementById('rbill-bc-name').value.trim();
+        if(bcSub){bcSub.value='other';}
+        if(bcOther){bcOther.value=name;}
+      }
+      // Carry the quick billing description into the docket notes
+      const bdesc=(document.getElementById('rbill-desc').value||'').trim();
+      if(bdesc){
+        const dn=document.getElementById('dnotes');
+        const label={ch:'Chargeable',ow:'Company cost',bc:'Backcharge'}[reviewBill]||'';
+        if(dn)dn.value=(dn.value?dn.value+'\n':'')+'['+label+'] '+bdesc;
+      }
+    }
+  }
 
   // Copy sig data to main form fields then submit
   // Override sigMethod + sigHas for submitD
@@ -5393,24 +6784,43 @@ function submitFromReview(){
     const fs=document.getElementById('send-sms');
     if(fs)fs.value=document.getElementById('review-send-sms').value;
   }
-  // Copy sig to main canvas if signed on site
+  // Copy the review signature onto the main canvas synchronously, then submit.
+  // (Drawing the image is async via onload, so we hand the signature data
+  //  directly to submitD via a global rather than relying on the canvas.)
   if(sig&&reviewSigHas){
-    const mainCanvas=document.getElementById('sigc');
-    const mainCtx=mainCanvas.getContext('2d');
-    const img=new Image();
-    img.onload=()=>{mainCtx.drawImage(img,0,0);submitD();};
-    img.src=sig;
+    window._reviewSigData=sig;
   } else {
-    submitD();
+    window._reviewSigData=null;
   }
+  submitD();
+
+  // Email the signed PDF to ticked recipients
+  sendDocketEmails();
 
   document.getElementById('review-panel').classList.add('hidden');
+  document.body.classList.remove('review-open');
+  document.body.classList.remove('nd-fullpage');
+  window._reviewSigData=null;
   sigMethod=origSigMethod;
   sigHas=origSigHas;
+  // Return to the main dashboard after submitting
+  showTab('dash',document.getElementById('n0'));
+  if(typeof showCorrectDashboard==='function')showCorrectDashboard();
 }
 
 window.addEventListener('load',()=>{
   if(window.location.hash.startsWith('#sign:')){checkSignPage();}
+});
+// Clear the red required-field highlight as soon as the user fills it in
+document.addEventListener('input',function(e){
+  if(e.target&&e.target.classList&&e.target.classList.contains('field-error')&&e.target.value.trim()){
+    e.target.classList.remove('field-error');
+  }
+});
+document.addEventListener('change',function(e){
+  if(e.target&&e.target.classList&&e.target.classList.contains('field-error')&&e.target.value.trim()){
+    e.target.classList.remove('field-error');
+  }
 });
 </script>
 <!-- Password recovery setup modal -->
