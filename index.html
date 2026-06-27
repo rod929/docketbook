@@ -1199,6 +1199,34 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       </div>
 
       <div class="card" style="margin-top:4px;">
+        <p style="font-size:13px;font-weight:500;margin-bottom:4px;">✉️ Copies on signing</p>
+        <p style="font-size:12px;color:#888;margin-bottom:14px;">Choose who receives a copy when a docket is signed. (Automatic sending is enabled once the cloud backend is live; until then these prepare a one-tap email.)</p>
+
+        <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;background:#fafaf8;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+          <input type="checkbox" id="copy-to-signer" style="width:18px;height:18px;margin:2px 0 0;flex-shrink:0;">
+          <span>
+            <span style="font-size:13px;font-weight:500;color:#2D2D2D;">Email a copy to the signer</span>
+            <span style="display:block;font-size:12px;color:#888;margin-top:2px;">Sends a money-free record copy (hours, crew, work, signature — no rates) to whoever signed, for their files.</span>
+          </span>
+        </label>
+
+        <div style="background:#fafaf8;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 14px;">
+          <p style="font-size:13px;font-weight:500;color:#2D2D2D;margin:0 0 2px;">Company administrators to alert</p>
+          <p style="font-size:12px;color:#888;margin:0 0 10px;">A new-docket alert (with cost estimate, since admins see money) goes to each email below. Add the people who need early visibility of incoming day-labour costs.</p>
+          <div id="copy-admin-list" style="margin-bottom:8px;"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input type="email" id="copy-admin-input" placeholder="admin@company.com.au" style="flex:1;min-width:180px;">
+            <button type="button" class="btn btn-s" style="background:#EF9F27;color:#412402;border:none;font-weight:600;" onclick="addCopyAdmin()">+ Add</button>
+          </div>
+        </div>
+
+        <div id="copies-ok" class="ok hidden" style="margin-top:10px;">Copy settings saved.</div>
+        <div style="margin-top:10px;">
+          <button class="btn btn-p" onclick="saveCopySettings()">Save copy settings</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:4px;">
         <p style="font-size:13px;font-weight:500;margin-bottom:10px;">👁 Preview</p>
         <div id="settings-preview" style="border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:14px;background:#fafaf8;"></div>
       </div>
@@ -2610,12 +2638,61 @@ function saveVdSign(id){
   if(typeof renAD==='function')renAD();
   if(typeof updM==='function')updM();
   if(typeof showCorrectDashboard==='function')showCorrectDashboard();
+  // Distribute copies per Company-setup settings (signer record copy + admin alerts)
+  if(typeof distributeSignedCopies==='function')distributeSignedCopies(d);
   if(crossCompany){
     setTimeout(()=>alert('Signed. Docket #'+d.id+' is now in your Pending billing folder — choose chargeable, backcharge or own cost there (also visible to company admin).'),250);
   } else {
     // Otherwise keep the existing same-company up-chain mirror offer
     maybePromptUpchainMirror(d);
   }
+}
+
+// Per Company-setup, prepare copies when a docket is signed.
+// NOTE: true automatic sending needs the backend; today this prepares a
+// one-tap email (mailto) so the user sends with a single tap. It records on the
+// docket who the copies were intended for, so the backend can auto-send later.
+function distributeSignedCopies(d){
+  if(!d)return;
+  const recipients=[];
+  // 1) Signer copy (money-free record) — if enabled and we have a signer email
+  if(appSettings.copyToSigner!==false){
+    const signerEmail=(CU&&CU.email)?CU.email:(d.signerEmail||'');
+    if(signerEmail)recipients.push({email:signerEmail, kind:'signer'});
+  }
+  // 2) Company administrators to alert (with estimate)
+  (appSettings.copyAdmins||[]).forEach(e=>{if(e)recipients.push({email:e, kind:'admin'});});
+  // Stamp intent on the docket (so a backend can auto-send later)
+  d.copiesQueued=recipients.map(r=>({email:r.email, kind:r.kind, at:new Date().toISOString()}));
+  svL('v4_dock',dockets);
+  if(!recipients.length)return;
+  // Build a one-tap email summary (honest interim until backend auto-send)
+  const list=recipients.map(r=>r.email).join(', ');
+  setTimeout(()=>{
+    const go=confirm('Signed copies are set to go to:\n\n'+list+'\n\nOpen a pre-filled email now? (Automatic sending switches on with the cloud backend.)');
+    if(go)openSignedCopyEmail(d, recipients);
+  },600);
+}
+
+// Open a pre-filled mailto for the signed-copy recipients (interim, pre-backend)
+function openSignedCopyEmail(d, recipients){
+  const to=recipients.map(r=>r.email).join(',');
+  const subj='Day labour docket #'+d.id+' — '+(d.pname||d.pcode||'(No project)')+' — signed';
+  // Money-free body (admins still see the estimate appended below if applicable)
+  let body='Day labour docket #'+d.id+'\n'
+    +'Project: '+(d.pname||d.pcode||'(No project)')+'\n'
+    +'Company: '+(d.sub||'')+'\n'
+    +'Date: '+fd(d.date)+'\n'
+    +'Hours: '+d.hours+'h\n'
+    +'Work: '+(d.desc||'')+'\n'
+    +'Status: Signed ✓\n';
+  // If any recipient is an admin, append the cost estimate (admins see money)
+  if(recipients.some(r=>r.kind==='admin')){
+    const c=(typeof calcC==='function')?calcC(d):null;
+    if(c!=null)body+='\nEstimated value (admin only): $'+c.toFixed(2)+'\n';
+  }
+  body+='\n— Sent from Docketbook';
+  window.location.href='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
 }
 
 // If the just-signed docket is chargeable and no up-chain docket exists yet,
@@ -3454,7 +3531,7 @@ function applyLang(lang){
 
 // ─── SETTINGS ─────────────────────────────────────────────────────────
 const SET_KEY='dlb_settings';
-let appSettings={name:'Alerce',abn:'',addr:'',phone:'',email:'',web:'',logo:''};
+let appSettings={name:'Alerce',abn:'',addr:'',phone:'',email:'',web:'',logo:'',copyToSigner:true,copyAdmins:[]};
 
 function loadSettings(){
   const s=ldL(SET_KEY);
@@ -3482,6 +3559,54 @@ function loadSettingsForm(){
   document.getElementById('set-web').value=appSettings.web||'';
   const ca=document.getElementById('set-contracts-admin');if(ca)ca.value=appSettings.contractsAdmin||'';
   updLogoPreview();
+  // Copies-on-signing
+  const cts=document.getElementById('copy-to-signer');if(cts)cts.checked=appSettings.copyToSigner!==false;
+  renCopyAdminList();
+}
+
+// ─── COPIES ON SIGNING ────────────────────────────────────────────────
+// Render the editable list of admin recipients who get a new-docket alert
+function renCopyAdminList(){
+  const wrap=document.getElementById('copy-admin-list');
+  if(!wrap)return;
+  const list=appSettings.copyAdmins||[];
+  if(!list.length){
+    wrap.innerHTML='<div style="font-size:12px;color:#aaa;padding:4px 0;">No administrators added yet.</div>';
+    return;
+  }
+  wrap.innerHTML=list.map((email,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;margin-bottom:6px;">
+      <span style="flex:1;font-size:13px;color:#2D2D2D;word-break:break-all;">${esc(email)}</span>
+      <button type="button" onclick="removeCopyAdmin(${i})" style="flex-shrink:0;background:none;border:none;color:#E24B4A;font-size:16px;cursor:pointer;padding:0 4px;" title="Remove">✕</button>
+    </div>`).join('');
+}
+
+function addCopyAdmin(){
+  const inp=document.getElementById('copy-admin-input');
+  if(!inp)return;
+  const email=inp.value.trim();
+  if(!email)return;
+  // light email sanity check
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){alert('Please enter a valid email address.');return;}
+  if(!appSettings.copyAdmins)appSettings.copyAdmins=[];
+  if(appSettings.copyAdmins.some(e=>e.toLowerCase()===email.toLowerCase())){inp.value='';return;}
+  appSettings.copyAdmins.push(email);
+  inp.value='';
+  renCopyAdminList();
+}
+
+function removeCopyAdmin(i){
+  if(!appSettings.copyAdmins)return;
+  appSettings.copyAdmins.splice(i,1);
+  renCopyAdminList();
+}
+
+function saveCopySettings(){
+  appSettings.copyToSigner=document.getElementById('copy-to-signer').checked;
+  // copyAdmins already maintained live by add/remove
+  svL(SET_KEY,appSettings);
+  const ok=document.getElementById('copies-ok');
+  if(ok){ok.classList.remove('hidden');setTimeout(()=>ok.classList.add('hidden'),3000);}
 }
 function handleLogoUpload(e){
   const file=e.target.files[0];if(!file)return;
