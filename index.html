@@ -1717,7 +1717,12 @@ function setupUI(){
     const tier=adminTierOf(CU);
     ub.textContent=adminTierLabel(tier);ub.className='badge bi';
     const tierBlurb={owner:'Main Administrator — full access and allocates access for all staff.',pmca:'PM / Contracts Admin — final docket sign-off, plus allocate workers and admins.',std:'Administrator — view, create, and manage; allocate workers.'}[tier]||'';
-    rb.className='rban adm';rb.innerHTML='<strong>'+esc(adminTierLabel(tier))+'</strong> — '+tierBlurb;
+    rb.className='rban adm';
+    rb.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;width:100%;">'
+      +'<span style="min-width:0;"><strong>'+esc(adminTierLabel(tier))+'</strong> — '+tierBlurb+'</span>'
+      +langSelectHTML('lang-switcher-a','font-size:12px;padding:4px 10px;border-radius:8px;border:0.5px solid rgba(0,0,0,0.15);background:#fff;color:#2D2D2D;cursor:pointer;flex-shrink:0;')
+      +'</div>';
+    setTimeout(()=>applyLang(localStorage.getItem('dlb_lang_'+CU.u)||'en'),80);
     ['n3','n4','n5','n6','n7','n8','msc','mpend-card'].forEach(id=>document.getElementById(id).classList.remove('hidden'));
     // Users tab (access allocation) only for those who can allocate access (owner + PM/CA)
     const n9=document.getElementById('n9');
@@ -1751,7 +1756,12 @@ function setupUI(){
   } else if(r==='user'||r==='supervisor'||r==='manager'){
     const roleLabels={'user':'Site user','supervisor':'Supervisor','manager':'Manager'};
     ub.textContent=roleLabels[r]||'User';ub.className='badge bs';
-    rb.className='rban usr';rb.innerHTML='<strong>'+esc(CU.name)+'</strong> — '+esc(roleLabels[r]||'Site user')+'. Access is determined by project allocation.';
+    rb.className='rban usr';
+    rb.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;width:100%;">'
+      +'<span style="min-width:0;"><strong>'+esc(CU.name)+'</strong> — '+esc(roleLabels[r]||'Site user')+'. Access is determined by project allocation.</span>'
+      +langSelectHTML('lang-switcher-u','font-size:12px;padding:4px 10px;border-radius:8px;border:0.5px solid rgba(0,0,0,0.15);background:#fff;color:#2D2D2D;cursor:pointer;flex-shrink:0;')
+      +'</div>';
+    setTimeout(()=>applyLang(localStorage.getItem('dlb_lang_'+CU.u)||'en'),80);
     document.getElementById('mpend-card').classList.remove('hidden');
     const usr=users.find(x=>x.u===CU.u);
     if(usr&&(usr.projectAccess||[]).length>0){
@@ -1889,9 +1899,11 @@ function showTab(tab,btn){
       else{ndLogo.src='';ndLogo.style.display='none';}
     }
     if(ndCoName)ndCoName.textContent=appSettings.name||'Alerce';
+    // Language selector on the New Docket form is available to EVERY role
+    // (was previously restricted to subcontractors only).
     const ndLangWrap=document.getElementById('nd-lang-wrap');
     const ndLangSel=document.getElementById('nd-lang-sel');
-    if(CU&&CU.role==='sub'){
+    if(CU){
       if(ndLangWrap)ndLangWrap.classList.remove('hidden');
       const sl=localStorage.getItem('dlb_lang_'+CU.u)||'en';
       if(ndLangSel)ndLangSel.value=sl;
@@ -3600,7 +3612,8 @@ const LANGS={
     wkDrafts:'Drafts', wkSigned:'Signed', wkSent:'Sent',
     wkMyProjects:'My projects', wkRecent:'Recent dockets', wkNewDocket:'New docket',
     wkAnyJob:'✓ You can create dockets on any job.', wkNoDockets:'No dockets yet',
-    stPending:'Pending', stSigned:'Signed', stSent:'Sent', stBackcharge:'Backcharge'
+    stPending:'Pending', stSigned:'Signed', stSent:'Sent', stBackcharge:'Backcharge',
+    navHome:'Home', navDockets:'Dockets', navDrafts:'Drafts', navReports:'Reports', navAdmin:'Admin', navTeam:'Team'
   },
   zh:{
     dashboard:'主页', newDocket:'+ 新工单', myDockets:'我的工单',
@@ -3649,7 +3662,8 @@ const LANGS={
     wkDrafts:'草稿', wkSigned:'已签字', wkSent:'已发送',
     wkMyProjects:'我的项目', wkRecent:'最近工单', wkNewDocket:'新工单',
     wkAnyJob:'✓ 您可以在任何项目上创建工单。', wkNoDockets:'暂无工单',
-    stPending:'待处理', stSigned:'已签字', stSent:'已发送', stBackcharge:'转嫁费用'
+    stPending:'待处理', stSigned:'已签字', stSent:'已发送', stBackcharge:'转嫁费用',
+    navHome:'主页', navDockets:'工单', navDrafts:'草稿', navReports:'报告', navAdmin:'管理', navTeam:'团队'
   },
   es:{
     dashboard:'Inicio', newDocket:'+ Nueva orden', myDockets:'Mis órdenes',
@@ -3698,9 +3712,20 @@ const LANGS={
     wkDrafts:'Borradores', wkSigned:'Firmados', wkSent:'Enviados',
     wkMyProjects:'Mis proyectos', wkRecent:'Partes recientes', wkNewDocket:'Nuevo parte',
     wkAnyJob:'✓ Puede crear partes en cualquier obra.', wkNoDockets:'Aún no hay partes',
-    stPending:'Pendiente', stSigned:'Firmado', stSent:'Enviado', stBackcharge:'Recargo'
+    stPending:'Pendiente', stSigned:'Firmado', stSent:'Enviado', stBackcharge:'Recargo',
+    navHome:'Inicio', navDockets:'Órdenes', navDrafts:'Borradores', navReports:'Informes', navAdmin:'Admin', navTeam:'Equipo'
   }
 };
+
+// Reusable language switcher markup so EVERY role's banner offers the same
+// English / 中文 / Español options (previously only worker + sub + supervisor
+// had one; admin and site users were missing it).
+function langSelectHTML(id,style){
+  const sl=(CU&&localStorage.getItem('dlb_lang_'+CU.u))||'en';
+  const opt=(v,label)=>'<option value="'+v+'"'+(sl===v?' selected':'')+'>'+label+'</option>';
+  return '<select id="'+id+'" style="'+(style||'font-size:12px;padding:4px 10px;border-radius:8px;border:none;background:#fff;color:#2D2D2D;cursor:pointer;flex-shrink:0;')+'" onchange="changeLang(this.value)">'
+    +opt('en','🇦🇺 English')+opt('zh','🇨🇳 中文')+opt('es','🇪🇸 Español')+'</select>';
+}
 
 function changeLang(lang){
   if(!CU)return;
@@ -3708,8 +3733,8 @@ function changeLang(lang){
   localStorage.setItem('dlb_lang_'+CU.u,lang);
   localStorage.setItem('dlb_prev_lang_'+CU.u,_prevL);
   applyLang(lang);
-  // Keep all lang selectors in sync
-  ['lang-switcher','lang-switcher-w','lang-switcher-s','nd-lang-sel'].forEach(id=>{
+  // Keep all lang selectors in sync (every role's banner + the new-docket form)
+  ['lang-switcher','lang-switcher-w','lang-switcher-s','lang-switcher-a','lang-switcher-u','nd-lang-sel'].forEach(id=>{
     const el=document.getElementById(id);
     if(el)el.value=lang;
   });
@@ -3735,9 +3760,14 @@ function changeLang(lang){
       setTimeout(()=>{if(hint)hint.textContent='';},3000);
     }
   }
-  // Re-render the dashboard so dynamically-generated text (empty states,
-  // "any job" message, recent-docket lists) picks up the new language.
-  if(typeof showCorrectDashboard==='function')showCorrectDashboard();
+  // Re-render dynamically-generated text everywhere (not just static labels):
+  // dashboards (empty states, "any job" message, recent-docket lists + status
+  // badges), the bottom-nav labels, and the open docket lists all pick up the
+  // new language. Wrapped defensively so a missing view never breaks the switch.
+  try{if(typeof showCorrectDashboard==='function')showCorrectDashboard();}catch(e){}
+  try{if(typeof renBottomNav==='function')renBottomNav();}catch(e){}
+  try{if(typeof renAD==='function')renAD();}catch(e){}
+  try{if(typeof renMD==='function')renMD();}catch(e){}
 }
 
 function applyLang(lang){
@@ -6470,15 +6500,16 @@ function renBottomNav(){
   if(!nav)return;
   if(!CU){nav.classList.add('hidden');document.body.classList.remove('has-bottomnav');return;}
   const r=CU.role;
+  const _t=LANGS[(CU&&localStorage.getItem('dlb_lang_'+CU.u))||'en']||LANGS.en;
   let items;
   if(r==='worker'){
-    items=[['dash','Home','ti-home'],['md','Dockets','ti-files'],['drafts','Drafts','ti-pencil']];
+    items=[['dash',_t.navHome,'ti-home'],['md',_t.navDockets,'ti-files'],['drafts',_t.navDrafts,'ti-pencil']];
   } else if(r==='admin'){
-    items=[['dash','Home','ti-home'],['ad','Dockets','ti-files'],['rates','Reports','ti-chart-bar'],['settings','Admin','ti-settings']];
+    items=[['dash',_t.navHome,'ti-home'],['ad',_t.navDockets,'ti-files'],['rates',_t.navReports,'ti-chart-bar'],['settings',_t.navAdmin,'ti-settings']];
   } else if(r==='sub'){
-    items=[['dash','Home','ti-home'],['md','Dockets','ti-files'],['my-workers','Team','ti-users'],['drafts','Drafts','ti-pencil']];
+    items=[['dash',_t.navHome,'ti-home'],['md',_t.navDockets,'ti-files'],['my-workers',_t.navTeam,'ti-users'],['drafts',_t.navDrafts,'ti-pencil']];
   } else { // hc_supervisor + legacy site roles
-    items=[['dash','Home','ti-home'],['md','Dockets','ti-files'],['drafts','Drafts','ti-pencil']];
+    items=[['dash',_t.navHome,'ti-home'],['md',_t.navDockets,'ti-files'],['drafts',_t.navDrafts,'ti-pencil']];
   }
   const cur=window._curTab||'dash';
   nav.innerHTML=items.map(([tab,label,icon])=>
