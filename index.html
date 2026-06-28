@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,800;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;font-size:14px;color:#1a1a1a;background:#f5f5f3;}
@@ -1610,6 +1611,82 @@ function svD(){svL('v4_dock',dockets);svL('v4_ctr',dctr);}
 function svS(){svL('v4_subs',subs);}
 function svC(){svL('v4_cli',clients);}
 
+// ─── TRIAL DEMO DATA (self-healing) ───────────────────────────────────────
+// Seeds a realistic trial set on load. Each entity is added ONLY if its unique
+// key (username / code / id) is missing, so it self-heals after a reset but
+// never overwrites real data the owner has entered. Per the role/money rules:
+// workers + the HC supervisor carry NO money access — the dollar figures below
+// are sub PAY rates (admin-only) and client CHARGE rates used for up-chain
+// mirrored dockets. Runs after all loaders in initApp(), so the arrays exist.
+function seedTrialData(){
+  // 3 trial subcontractor companies (each a sub-admin login)
+  const TSUBS=[
+    {u:'paintco',   p:'paint123',   name:'Coastline Painting',    trade:'Painting',   rate:78, otRate:117},
+    {u:'tileco',    p:'tile123',    name:'Apex Tiling',           trade:'Tiling',     rate:88, otRate:132},
+    {u:'plasterco', p:'plaster123', name:'Smooth Set Plastering', trade:'Plastering', rate:82, otRate:123},
+  ];
+  if(!Array.isArray(subs))subs=[];
+  let subsChanged=false;
+  TSUBS.forEach(s=>{if(!subs.find(x=>x.u===s.u)){subs.push({...s,subRole:'admin'});subsChanged=true;}});
+  if(subsChanged)svS();
+
+  // 2–3 trial workers per company (logins; role 'worker' — NO money access)
+  const TWORKERS=[
+    {u:'paintw1',   p:'work123', name:'Tom Reilly',   trade:'Painter',            parentSub:'paintco'},
+    {u:'paintw2',   p:'work123', name:'Luca Moretti', trade:'Painter',            parentSub:'paintco'},
+    {u:'tilew1',    p:'work123', name:'Dion Park',    trade:'Tiler',              parentSub:'tileco'},
+    {u:'tilew2',    p:'work123', name:'Sef Vella',    trade:'Tiler',              parentSub:'tileco'},
+    {u:'tilew3',    p:'work123', name:'Ari Cohen',    trade:"Tiler's labourer",   parentSub:'tileco'},
+    {u:'plasterw1', p:'work123', name:'Grant Hughes', trade:'Plasterer',          parentSub:'plasterco'},
+    {u:'plasterw2', p:'work123', name:'Bilal Khan',   trade:'Plasterer',          parentSub:'plasterco'},
+  ];
+  if(!Array.isArray(workers))workers=[];
+  let workersChanged=false;
+  TWORKERS.forEach(w=>{if(!workers.find(x=>x.u===w.u)){workers.push({...w,projectAccess:[],allProjects:true});workersChanged=true;}});
+  if(workersChanged)svW();
+
+  // 1 trial HC supervisor (signs dockets on site; sees no money)
+  if(!Array.isArray(users))users=[];
+  if(!users.find(x=>x.u==='hcsup2')){
+    users.push({u:'hcsup2',p:'super123',name:'Dana Mills',role:'hc_supervisor',email:'dana@harbourview.com.au',projectAccess:[],permissions:{}});
+    svL('dlb_users',users);
+  }
+
+  // Trial client + 2–3 projects linked to it
+  if(!Array.isArray(clients))clients=[];
+  if(!clients.find(c=>c.id==='ctrial')){
+    clients.push({id:'ctrial',name:'Harbourview Constructions',abn:'',addr:'',contacts:[{id:'ctc1',name:'Olivia Reed',email:'olivia@harbourview.com.au',mobile:'0413000010'}]});
+    svC();
+  }
+  const TPROJ=[
+    {name:'Harbourview Tower — Stage 1',code:'HV-T1',  desc:'Trial project',clientId:'ctrial'},
+    {name:'Marina Apartments',          code:'MAR-AP', desc:'Trial project',clientId:'ctrial'},
+    {name:'Eastside Fitout',            code:'EAST-FO',desc:'Trial project',clientId:'ctrial'},
+  ];
+  if(!Array.isArray(projects))projects=[];
+  let projChanged=false;
+  TPROJ.forEach(p=>{if(!projects.find(x=>x.code===p.code)){projects.push(p);projChanged=true;}});
+  if(projChanged)svP();
+
+  // Client CHARGE rates per trial project + trade (what the builder is billed;
+  // up-chain mirrored dockets bill at this client rate per the money rules)
+  const TCRATES=[
+    {projCode:'HV-T1',  trade:'Painting',  std:95, ot:142.50},
+    {projCode:'HV-T1',  trade:'Tiling',    std:110,ot:165},
+    {projCode:'HV-T1',  trade:'Plastering',std:100,ot:150},
+    {projCode:'MAR-AP', trade:'Painting',  std:92, ot:138},
+    {projCode:'MAR-AP', trade:'Tiling',    std:108,ot:162},
+    {projCode:'MAR-AP', trade:'Plastering',std:98, ot:147},
+    {projCode:'EAST-FO',trade:'Painting',  std:90, ot:135},
+    {projCode:'EAST-FO',trade:'Tiling',    std:105,ot:157.50},
+    {projCode:'EAST-FO',trade:'Plastering',std:96, ot:144},
+  ];
+  if(!Array.isArray(cRates))cRates=[];
+  let cratesChanged=false;
+  TCRATES.forEach(cr=>{if(!cRates.find(x=>x.projCode===cr.projCode&&x.trade===cr.trade)){cRates.push({...cr,updated:new Date().toISOString()});cratesChanged=true;}});
+  if(cratesChanged)svCRates();
+}
+
 // ─── AUTH ─────────────────────────────────────────────────────────────
 function fU(u,p){
   if(u===ADM.u&&p===(ldL('dlb_admin_pw')||ADM.p))return{...ADM};
@@ -1778,6 +1855,7 @@ function doLogout(){
 // ─── INIT ─────────────────────────────────────────────────────────────
 function initApp(){
   load();loadSettings();loadRates();loadCRates();loadUsers();loadDrafts();
+  seedTrialData();
   ensureSettingsClientExists();
   setDD();initSig();setBill('ch');setSigMethod('onsite');
   renPS();renClientSelects();updM();renRD();renPT();renAD();renMD();renST();renClientList();renFD();applySettingsToHeader();lockSubClient();loadReqByStaff();updDraftBadge();
@@ -3115,9 +3193,10 @@ function submitRemoteSig(dockId,token){
 }
 
 // ─── PDF ──────────────────────────────────────────────────────────────
-function printD(){
-  if(!curDock)return;
-  const d=curDock;
+// Simple text-only PDF — the fallback used when html2canvas is unavailable.
+// Money is gated by the showCosts flag (NOT CU directly) so callers control it.
+function dlbTextPdf(d,showCosts,filename){
+  if(!d)return;
   const r=getRate(d.createdBy);
   const cost=d.cost!=null?d.cost:(r?Math.round(d.hours*r*100)/100:null);
   const cli=d.clientId?clients.find(c=>c.id===d.clientId):null;
@@ -3138,7 +3217,7 @@ function printD(){
     y=py+22;
   }
   doc.setDrawColor(220,220,220);doc.line(15,33,195,33);
-  const _isAdmPDF=CU&&CU.role==='admin';
+  const _isAdmPDF=!!showCosts;
   const fields=[
     ['Docket #','#'+d.id],['Date',fd(d.date)],
     ['Project',d.pname+' ('+d.pcode+')'],['Subcontractor',d.sub],
@@ -3203,7 +3282,252 @@ function printD(){
   }
   doc.setDrawColor(220,220,220);doc.line(15,280,195,280);
   doc.setFontSize(7.5);doc.setTextColor(160,160,160);doc.text('Day Labour Book - '+new Date().toLocaleString()+'  |  Submitted by: '+d.createdBy,15,284);
-  doc.save('DayLabour-'+d.id+'.pdf');
+  doc.save(filename||('DayLabour-'+d.id+'.pdf'));
+}
+
+// ─── STYLED PDF (approved layouts) ────────────────────────────────────────
+// Two approved layouts wired in: docket_worker_copy (NO costs) and
+// docket_admin_copy (full costs). Rendered to an offscreen sheet then captured
+// with html2canvas → jsPDF. Money is gated by the showCosts flag only, so the
+// CLAUDE.md money rule (gate is strictly CU.role==='admin') is enforced by the
+// caller — printD() passes admin-only true; emailed copies always pass false.
+function dlbHrs(h){h=parseFloat(h)||0;return(h%1===0?String(h):h.toFixed(2).replace(/\.?0+$/,''))+'h';}
+function dlbStatusChip(d){
+  if(d.sig)return{txt:'✓ SIGNED',bg:'#1D9E75'};
+  if(d.sigStatus==='sent_email')return{txt:'📧 SENT',bg:'#185FA5'};
+  if(d.sigStatus==='sent_sms')return{txt:'💬 SENT',bg:'#185FA5'};
+  return{txt:'⏳ PENDING',bg:'#a07a3c'};
+}
+function dlbEnsureStyles(){
+  if(document.getElementById('dlb-print-css'))return;
+  const st=document.createElement('style');
+  st.id='dlb-print-css';
+  st.textContent=`
+  .dlb-doc{font-family:'Jost','Century Gothic',AppleGothic,Futura,sans-serif;color:#2D2D2D;background:#fff;}
+  .dlb-doc .sheet{background:#fff;border-radius:16px;overflow:hidden;border:1px solid #eee;}
+  .dlb-doc .head{background:#2D2D2D;color:#fff;padding:22px 30px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .dlb-doc .head .left .co-name{font-size:24px;font-weight:700;letter-spacing:0.02em;}
+  .dlb-doc .head .left .co-sub{font-size:11px;color:#bdbdbd;margin-top:3px;letter-spacing:0.04em;}
+  .dlb-doc .head .left img.colog{max-height:50px;max-width:200px;object-fit:contain;background:#fff;border-radius:6px;padding:4px 8px;}
+  .dlb-doc .head .brand{display:flex;align-items:center;gap:12px;}
+  .dlb-doc .head .brand .txt{text-align:right;}
+  .dlb-doc .head .brand .t{font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;letter-spacing:0.12em;text-transform:uppercase;color:#fff;}
+  .dlb-doc .head .brand .s{font-family:'Nunito',sans-serif;font-style:italic;font-weight:300;font-size:10px;color:#EF9F27;letter-spacing:0.03em;}
+  .dlb-doc .head .brand .url{font-family:'Jost',sans-serif;font-size:9px;color:#9a9a93;letter-spacing:0.04em;margin-top:3px;}
+  .dlb-doc .head .brand .mark{width:42px;height:48px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .dlb-doc .head .brand .mark svg{width:26px;height:30px;}
+  .dlb-doc .numstrip{display:flex;align-items:center;justify-content:space-between;padding:14px 30px;background:#FAEEDA;border-bottom:2px solid #EF9F27;}
+  .dlb-doc .numstrip .label{font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:#854F0B;font-weight:600;}
+  .dlb-doc .numstrip .num{font-size:26px;font-weight:700;color:#185FA5;letter-spacing:0.02em;}
+  .dlb-doc .numstrip .status{color:#fff;font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;letter-spacing:0.05em;}
+  .dlb-doc .body{padding:26px 30px;}
+  .dlb-doc .sec-title{font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#EF9F27;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #f0e6d4;}
+  .dlb-doc .sec{margin-bottom:26px;}
+  .dlb-doc .grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+  .dlb-doc .row{display:flex;padding:11px 0;border-bottom:1px solid #f1f1ee;}
+  .dlb-doc .row .k{flex:0 0 120px;font-size:12px;color:#9a9a93;font-weight:500;letter-spacing:0.02em;}
+  .dlb-doc .row .v{flex:1;font-size:14px;color:#2D2D2D;font-weight:500;}
+  .dlb-doc .row.full{grid-column:1 / -1;}
+  .dlb-doc .v .badge{display:inline-block;background:#E6F1FB;color:#185FA5;font-size:11px;font-weight:600;padding:2px 9px;border-radius:10px;margin-left:6px;letter-spacing:0.04em;}
+  .dlb-doc .v .chip-bill{display:inline-block;background:#E1F5EE;color:#085041;font-size:12px;font-weight:600;padding:4px 12px;border-radius:8px;}
+  .dlb-doc .tiles{display:flex;gap:12px;margin-bottom:26px;}
+  .dlb-doc .tile{flex:1;border-radius:12px;padding:16px 14px;text-align:center;}
+  .dlb-doc .tile .tv{font-size:24px;font-weight:700;line-height:1;}
+  .dlb-doc .tile .tl{font-size:11px;letter-spacing:0.06em;text-transform:uppercase;margin-top:6px;font-weight:500;}
+  .dlb-doc .tile.hours{background:#FAEEDA;} .dlb-doc .tile.hours .tv{color:#633806;} .dlb-doc .tile.hours .tl{color:#a07a3c;}
+  .dlb-doc .tile.rate{background:#E6F1FB;position:relative;} .dlb-doc .tile.rate .tv{color:#0C447C;} .dlb-doc .tile.rate .tl{color:#5a86b3;}
+  .dlb-doc .tile.rate .admin-flag{position:absolute;top:6px;right:8px;font-size:8px;background:#185FA5;color:#fff;padding:2px 6px;border-radius:8px;letter-spacing:0.05em;}
+  .dlb-doc .tile.cost{background:#E1F5EE;} .dlb-doc .tile.cost .tv{color:#085041;} .dlb-doc .tile.cost .tl{color:#4c9483;}
+  .dlb-doc .breakdown{text-align:right;font-size:12px;color:#9a9a93;margin:-16px 0 26px;}
+  .dlb-doc .breakdown strong{color:#185FA5;}
+  .dlb-doc .desc-box{background:#faf9f6;border:1px solid #f0efe9;border-radius:10px;padding:14px 16px;font-size:14px;line-height:1.55;color:#3a3a36;}
+  .dlb-doc table{width:100%;border-collapse:collapse;}
+  .dlb-doc thead th{font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#9a9a93;text-align:left;padding:8px 10px;border-bottom:1px solid #ecece8;font-weight:600;}
+  .dlb-doc tbody td{font-size:13px;padding:10px;border-bottom:1px solid #f4f4f1;color:#2D2D2D;}
+  .dlb-doc tbody td.r,.dlb-doc thead th.r,.dlb-doc tfoot td.r{text-align:right;}
+  .dlb-doc tfoot td{font-size:13px;padding:10px;font-weight:700;}
+  .dlb-doc tfoot td.r{color:#185FA5;}
+  .dlb-doc .wflag{font-size:10px;color:#185FA5;background:#E6F1FB;padding:1px 7px;border-radius:8px;margin-left:4px;}
+  .dlb-doc .inv-link{color:#1D9E75;font-size:12px;font-weight:600;}
+  .dlb-doc .photos{display:flex;gap:10px;flex-wrap:wrap;}
+  .dlb-doc .photo{width:150px;height:110px;border-radius:10px;border:1px solid #eee;object-fit:cover;background:#ddd;}
+  .dlb-doc .sign-pad{border:1.5px solid #cfd8e3;border-radius:10px;height:110px;background:#fbfcfe;display:flex;align-items:center;justify-content:center;}
+  .dlb-doc .sign-meta{margin-top:8px;font-size:12px;color:#777;}
+  .dlb-doc .sign-meta strong{color:#2D2D2D;}
+  .dlb-doc .foot{padding:14px 30px 22px;border-top:1px solid #eee;display:flex;justify-content:space-between;font-size:10px;color:#b3b3ac;letter-spacing:0.03em;}
+  .dlb-doc .foot .fb{font-family:'Nunito',sans-serif;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#cfcfc8;}`;
+  document.head.appendChild(st);
+}
+function dlbBuildSheet(d,showCosts){
+  const s=appSettings||{};
+  const r=getRate(d.createdBy);
+  const wsAll=(d.workersOnSite&&d.workersOnSite.length)?d.workersOnSite:[];
+  const ws=wsAll.length?wsAll:[{name:d.workerName||'',hours:d.hours,trade:'',primary:true}];
+  const totalH=ws.reduce((a,w)=>a+(parseFloat(w.hours)||0),0)||(parseFloat(d.hours)||0);
+  const labour=calcC(d);                                  // null if no rate known
+  const effRate=(labour!=null&&totalH)?labour/totalH:(r||0);
+  const cli=d.clientId?clients.find(c=>c.id===d.clientId):null;
+  const con=cli&&d.contactId?(cli.contacts||[]).find(c=>c.id===d.contactId):null;
+  const mats=d.materials||[];
+  const matCost=mats.reduce((a,m)=>a+(m.total||0),0);
+  const feeOn=!!d.materialsFee;
+  const fee=feeOn?Math.round(matCost*0.10*100)/100:0;
+  const matCharged=matCost+fee;
+  const accom=d.accommodation||null;
+  const grand=(labour||0)+matCharged+(accom?(accom.total||0):0);
+  const chip=dlbStatusChip(d);
+  // Header — uploaded logo on a white plate, else company name + ABN
+  const header=s.logo
+    ? `<div class="left"><img class="colog" src="${s.logo}" alt=""></div>`
+    : `<div class="left"><div class="co-name">${esc(s.name||'Day Labour Book')}</div><div class="co-sub">${[s.abn?'ABN '+esc(s.abn):'',esc(s.web||'')].filter(Boolean).join(' · ')}</div></div>`;
+  // Job details rows
+  const reqVal=[d.reqBy?esc(d.reqBy):'',d.reqHow?'via '+esc(d.reqHow):''].filter(Boolean).join(' · ');
+  const jobRows=[
+    ['Project',`${esc(d.pname||'')}${d.pcode&&!d.freeDocket?` <span class="badge">${esc(d.pcode)}</span>`:''}`],
+    ['Date',fd(d.date)],
+    ['Subcontractor',esc(d.sub||'')],
+    reqVal?['Requested by',reqVal]:null,
+    ['Start time',d.startTime||'—'],
+    ['Finish time',`${d.finishTime||'—'}${d.breakMins!=null?` <span style="color:#aaa;font-weight:400;">(${d.breakMins} min break)</span>`:''}`],
+  ].filter(Boolean).map(([k,v])=>`<div class="row"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+  // Workers table (admin adds Rate + Labour columns)
+  const wHead=showCosts
+    ? `<tr><th>Worker</th><th>Trade</th><th class="r" style="width:70px;">Hours</th><th class="r" style="width:90px;">Rate</th><th class="r" style="width:90px;">Labour</th></tr>`
+    : `<tr><th>Worker</th><th>Trade</th><th class="r" style="width:90px;">Hours</th></tr>`;
+  const wRows=ws.map((w,i)=>{
+    const nm=(w.name&&String(w.name).trim())?esc(w.name):('Worker '+(i+1));
+    const flag=(w.primary||(i===0&&!wsAll.length))?' <span class="wflag">FILLED OUT</span>':'';
+    const hv=parseFloat(w.hours)||0;
+    const hTxt=w.hours?dlbHrs(w.hours):'—';
+    if(showCosts){
+      const line=Math.round(hv*effRate*100)/100;
+      return `<tr><td>${nm}${flag}</td><td>${w.trade?esc(w.trade):'—'}</td><td class="r">${hTxt}</td><td class="r">${labour!=null?'$'+effRate.toFixed(2):'—'}</td><td class="r">${labour!=null?'$'+line.toFixed(2):'—'}</td></tr>`;
+    }
+    return `<tr><td>${nm}${flag}</td><td>${w.trade?esc(w.trade):'—'}</td><td class="r">${hTxt}</td></tr>`;
+  }).join('');
+  const wFoot=showCosts
+    ? `<tfoot><tr><td colspan="2" class="r">Totals</td><td class="r">${dlbHrs(totalH)}</td><td class="r">${labour!=null?'$'+effRate.toFixed(2)+'/hr':'—'}</td><td class="r">${labour!=null?'$'+labour.toFixed(2):'—'}</td></tr></tfoot>`
+    : `<tfoot><tr><td colspan="2" class="r">Total hours</td><td class="r">${dlbHrs(totalH)}</td></tr></tfoot>`;
+  const workersSec=`<div class="sec"><div class="sec-title">Workers On Site</div>
+    <table><thead>${wHead}</thead><tbody>${wRows}</tbody>${wFoot}</table></div>`;
+  // Tiles
+  let tiles,breakdown='';
+  if(showCosts){
+    tiles=`<div class="tiles">
+      <div class="tile hours"><div class="tv">${dlbHrs(totalH)}</div><div class="tl">Total Hours · ${ws.length} worker${ws.length!==1?'s':''}</div></div>
+      <div class="tile rate"><span class="admin-flag">ADMIN</span><div class="tv">${labour!=null?'$'+labour.toFixed(2):'—'}</div><div class="tl">Total Labour</div></div>
+      <div class="tile cost"><div class="tv">$${grand.toFixed(2)}</div><div class="tl">Total</div></div></div>`;
+    const parts=[`Labour ${labour!=null?'$'+labour.toFixed(2):'—'}`,`Materials $${matCharged.toFixed(2)}${feeOn?' (incl. 10% purchasing)':''}`];
+    if(accom)parts.push(`Accommodation $${(accom.total||0).toFixed(2)}`);
+    breakdown=`<div class="breakdown">${parts.join(' &nbsp;+&nbsp; ')} &nbsp;=&nbsp; <strong>$${grand.toFixed(2)}</strong></div>`;
+  } else {
+    tiles=`<div class="tiles"><div class="tile hours" style="flex:0 0 260px;margin:0 auto;"><div class="tv">${dlbHrs(totalH)}</div><div class="tl">Total Hours${ws.length>1?' ('+ws.length+' workers)':''}</div></div></div>`;
+  }
+  // Billing & client
+  const billLabel={ch:'Chargeable to client',bc:'Backcharge to subcontractor',ow:'Own cost (internal)',pending:'Pending billing'}[d.bill]||'Pending billing';
+  const billRows=[
+    ['Billing type',`<span class="chip-bill">${billLabel}</span>${d.bill==='bc'&&d.bcTarget?` <span style="color:#5B21B6;font-size:12px;">${esc(d.bcTarget)}</span>`:''}`],
+    cli?['Client',esc(cli.name)]:null,
+    con?['Client contact',[esc(con.name),con.email?esc(con.email):'',con.mobile?esc(con.mobile):''].filter(Boolean).join(' — '),true]:null,
+  ].filter(Boolean).map(([k,v,full])=>`<div class="row${full?' full':''}"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+  const billSec=`<div class="sec"><div class="sec-title">Billing &amp; Client</div><div class="grid">${billRows}</div></div>`;
+  // Materials
+  let matSec='';
+  if(mats.length){
+    const mHead=showCosts
+      ? `<tr><th>Description</th><th style="width:120px;">Supplier invoice</th><th class="r" style="width:110px;">Total</th></tr>`
+      : `<tr><th>Description</th><th style="width:140px;">Supplier invoice</th></tr>`;
+    const mRows=mats.map(m=>{
+      const inv=m.invoice?'<span class="inv-link">📎 invoice attached</span>':'—';
+      return showCosts
+        ? `<tr><td>${esc(m.desc||'—')}</td><td>${inv}</td><td class="r">${m.total?'$'+m.total.toFixed(2):'—'}</td></tr>`
+        : `<tr><td>${esc(m.desc||'—')}</td><td>${inv}</td></tr>`;
+    }).join('');
+    let mFoot='';
+    if(showCosts){
+      mFoot=`<tfoot>
+        <tr><td colspan="2" class="r" style="color:#9a9a93;font-weight:500;">Materials (at cost)</td><td class="r" style="color:#2D2D2D;">$${matCost.toFixed(2)}</td></tr>
+        ${feeOn?`<tr><td colspan="2" class="r" style="color:#9a9a93;font-weight:500;">+ 10% purchasing charge</td><td class="r" style="color:#2D2D2D;">$${fee.toFixed(2)}</td></tr>`:''}
+        <tr><td colspan="2" class="r">Materials charged</td><td class="r">$${matCharged.toFixed(2)}</td></tr></tfoot>`;
+    }
+    matSec=`<div class="sec"><div class="sec-title">Materials</div><table><thead>${mHead}</thead><tbody>${mRows}</tbody>${mFoot}</table></div>`;
+  }
+  // Accommodation (cost shown to admin only)
+  let accomSec='';
+  if(accom){
+    accomSec=`<div class="sec"><div class="sec-title">Accommodation</div><div class="desc-box"><strong>${esc(accom.type||'')}</strong> — ${accom.nights} night${accom.nights!==1?'s':''}${showCosts?` × $${(accom.rate||0).toFixed(2)} = <strong style="color:#185FA5;">$${(accom.total||0).toFixed(2)}</strong>`:''}${accom.notes?`<div style="color:#9a9a93;margin-top:4px;">${esc(accom.notes)}</div>`:''}</div></div>`;
+  }
+  // Photos
+  let photoSec='';
+  if(d.photos&&d.photos.length){
+    photoSec=`<div class="sec"><div class="sec-title">Photos</div><div class="photos">${d.photos.map(p=>`<img class="photo" src="${p}" alt="">`).join('')}</div></div>`;
+  }
+  // Sign-off
+  const signoff=d.sig
+    ? `<div class="sign-pad"><img src="${d.sig}" style="max-height:100px;max-width:90%;object-fit:contain;" alt=""></div>${(d.signerName||d.signedAt)?`<div class="sign-meta">Signed by <strong>${esc(d.signerName||'—')}</strong>${d.signedAt?' · '+new Date(d.signedAt).toLocaleString():''}</div>`:''}`
+    : `<div class="sign-pad"><span style="color:#bbb;font-size:14px;">Pending signature</span></div>`;
+  const now=new Date().toLocaleString();
+  return `<div class="sheet">
+    <div class="head">${header}
+      <div class="brand"><div class="txt"><div class="t">Day Labour Book</div><div class="s">Built by Alerce</div><div class="url">www.daylabourbook.com.au</div></div>
+        <div class="mark"><svg viewBox="0 0 52 60" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="4" width="4" height="52" rx="2" fill="#9a9a93"/><rect x="10" y="6" width="40" height="6" rx="3" fill="#fff"/><rect x="10" y="19" width="40" height="6" rx="3" fill="#fff" opacity="0.7"/><rect x="10" y="32" width="28" height="6" rx="3" fill="#fff" opacity="0.45"/><rect x="10" y="45" width="34" height="6" rx="3" fill="#fff" opacity="0.28"/></svg></div></div>
+    </div>
+    <div class="numstrip"><div><div class="label">Docket Number</div><div class="num">#${esc(d.id)}</div></div><div class="status" style="background:${chip.bg};">${chip.txt}</div></div>
+    <div class="body">
+      <div class="sec"><div class="sec-title">Job Details</div><div class="grid">${jobRows}</div></div>
+      ${workersSec}
+      ${tiles}${breakdown}
+      ${billSec}
+      <div class="sec"><div class="sec-title">Description of Works</div><div class="desc-box">${esc(d.desc||'')}</div></div>
+      ${matSec}
+      ${accomSec}
+      ${photoSec}
+      <div class="sec" style="margin-bottom:8px;"><div class="sec-title">Sign-off</div>${signoff}</div>
+    </div>
+    <div class="foot"><span>Submitted by ${esc(d.createdBy||'')} · Generated ${now}</span><span class="fb">Day Labour Book</span></div>
+  </div>`;
+}
+// Render the approved styled layout to a PDF. Falls back to the text PDF if
+// html2canvas isn't loaded or capture fails. Returns a Promise.
+function dlbDocketPdf(d,showCosts,filename){
+  return new Promise(resolve=>{
+    if(!d){resolve();return;}
+    if(typeof window.html2canvas!=='function'){try{dlbTextPdf(d,showCosts,filename);}catch(e){}resolve();return;}
+    dlbEnsureStyles();
+    const host=document.createElement('div');
+    host.style.cssText='position:fixed;left:-10000px;top:0;width:820px;background:#fff;z-index:-1;';
+    host.innerHTML=`<div class="dlb-doc" style="width:780px;margin:0 auto;">${dlbBuildSheet(d,showCosts)}</div>`;
+    document.body.appendChild(host);
+    const cleanup=()=>{try{document.body.removeChild(host);}catch(e){}};
+    const fallback=()=>{cleanup();try{dlbTextPdf(d,showCosts,filename);}catch(e){}resolve();};
+    try{
+      window.html2canvas(host.firstChild,{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(canvas=>{
+        try{
+          const {jsPDF}=window.jspdf;
+          const pdf=new jsPDF({unit:'mm',format:'a4'});
+          const img=canvas.toDataURL('image/png');
+          const pw=210,ph=297;
+          const ih=canvas.height*pw/canvas.width;
+          let pos=0,heightLeft=ih;
+          pdf.addImage(img,'PNG',0,pos,pw,ih);
+          heightLeft-=ph;
+          while(heightLeft>0){pos-=ph;pdf.addPage();pdf.addImage(img,'PNG',0,pos,pw,ih);heightLeft-=ph;}
+          pdf.save(filename||('DayLabour-'+d.id+'.pdf'));
+          cleanup();resolve();
+        }catch(e){fallback();}
+      }).catch(fallback);
+    }catch(e){fallback();}
+  });
+}
+
+// Public entry: download a styled PDF of the currently-open docket.
+// Role-gated money — admins get the costed invoicing layout (docket_admin_copy),
+// everyone else the money-free worker layout (docket_worker_copy). The gate is
+// strictly CU.role==='admin', per CLAUDE.md's non-negotiable money rules.
+function printD(){
+  if(!curDock)return;
+  const showCosts=!!(CU&&CU.role==='admin');
+  dlbDocketPdf(curDock,showCosts,'DayLabour-'+curDock.id+(showCosts?'-admin':'')+'.pdf');
 }
 
 function expCSV(all){
@@ -6810,17 +7134,17 @@ function sendDocketEmails(){
   // The docket just submitted is the most recent one
   const d=dockets[dockets.length-1];
   if(!d)return;
-  // Generate the proper signed PDF (printD renders curDock)
-  const prevCur=curDock;
-  curDock=d;
-  try{printD();}catch(e){}
-  curDock=prevCur;
+  // Emailed copies are ALWAYS money-free (CLAUDE.md money rules: the
+  // emailed / contracts-admin copy shows hours/work/materials descriptions and
+  // signatures only — NO rates, NO totals, NO material costs). So force the
+  // worker layout (showCosts=false) regardless of who is sending.
   const subject=encodeURIComponent('Day Labour Docket #'+d.id+' — '+d.pname);
   const body=encodeURIComponent('Please find attached the signed day labour docket #'+d.id+'.\n\nProject: '+d.pname+'\nDate: '+fd(d.date)+'\nHours: '+d.hours+'h\n\n(The PDF has been downloaded — please attach it before sending.)');
-  setTimeout(()=>{
+  const openMail=()=>{
     alert('The signed docket PDF has been downloaded.\n\nYour email app will open to '+recipients.join(', ')+' — attach the PDF before sending.');
     window.location.href='mailto:'+recipients.map(encodeURIComponent).join(',')+'?subject='+subject+'&body='+body;
-  },400);
+  };
+  dlbDocketPdf(d,false,'DayLabour-'+d.id+'.pdf').then(()=>setTimeout(openMail,300)).catch(()=>setTimeout(openMail,300));
 }
 
 // Build a simple PDF of the docket straight from the form fields
