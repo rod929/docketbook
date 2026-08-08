@@ -74,10 +74,13 @@ Legend:  [ ] todo   [~] in progress   [x] done   ⚠ = needs backend to fully wo
   (d.supervisorNote) and shown in the docket view + PDF. NOTE: a docket has one
   description (not multi-line items); true per-line notes would need the
   description restructured into line items — flagged for Rod.
-- [ ] **11. ⚠ Auto-email includes PDF attachment.** When signed by supervisor and
+- [x] **11. ⚠ Auto-email includes PDF attachment.** When signed by supervisor and
   submitted, the auto email should also carry the PDF. NOTE: mailto: cannot attach
   files — true attachment needs the backend. Build the logic/UI now; it attaches
   once the backend lands.
+  DONE (interim): the signed-copy email now generates + downloads the money-free
+  PDF and the body tells the sender to attach it, noting auto-attach arrives with
+  the backend. Same PDF the backend will attach automatically.
 - [x] **12. Sign-later prompt.** If the supervisor didn't sign on site and signs at
   a later date, auto-ask if it's chargeable / backcharge / etc. (logic exists for
   the pending-billing flow — wire it to the later-signing path).

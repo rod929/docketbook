@@ -2783,7 +2783,13 @@ function openSignedCopyEmail(d, recipients){
     const c=(typeof calcC==='function')?calcC(d):null;
     if(c!=null)body+='\nEstimated value (admin only): $'+c.toFixed(2)+'\n';
   }
+  // PDF attachment: mailto cannot attach files, so as an interim we generate the
+  // money-free PDF (a download) for the sender to attach manually. Once the
+  // Docketbook backend lands it will attach this same PDF automatically.
+  body+='\n📎 A PDF copy of this docket has been downloaded to your device — please attach it to this email before sending.'
+      +'\n   (Automatic PDF attachment turns on with the Docketbook backend.)\n';
   body+='\n— Sent from Docketbook';
+  try{if(typeof dlbDocketPdf==='function')dlbDocketPdf(d,false,'DayLabour-'+d.id+'.pdf');}catch(e){}
   window.location.href='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
 }
 
