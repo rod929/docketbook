@@ -22,8 +22,11 @@ Legend:  [ ] todo   [~] in progress   [x] done   ⚠ = needs backend to fully wo
   the registered company name (appSettings.name), not free-typed.
   DONE: setCompanyField() locks the field per role — worker→parent sub, sub→own
   company, admin/supervisor/site user→appSettings.name; never free-typed.
-- [ ] **3. Prefill staff member.** "Requested by" / staff member should be
+- [x] **3. Prefill staff member.** "Requested by" / staff member should be
   pre-filled (even for the trial data).
+  DONE: seed trial staff (Site Manager / Project Manager / Foreman) and
+  prefillReqBy() auto-selects a default (logged-in user if on the list, else the
+  first staff member) whenever the field is blank.
 - [ ] **4. Per-worker times.** When adding additional workers, allow each to have
   their own start/finish time, OR a "copy same hours as main worker" tick box.
   (A "same hours for all" tick already exists — extend to per-worker start/finish.)

@@ -1685,6 +1685,12 @@ function seedTrialData(){
   let cratesChanged=false;
   TCRATES.forEach(cr=>{if(!cRates.find(x=>x.projCode===cr.projCode&&x.trade===cr.trade)){cRates.push({...cr,updated:new Date().toISOString()});cratesChanged=true;}});
   if(cratesChanged)svCRates();
+
+  // Trial "Requested by" staff so the New Docket field can pre-fill. Only seeded
+  // when the key is entirely absent — an empty list the owner created is left be.
+  if(ldL('dlb_staff')===null){
+    svL('dlb_staff',['Site Manager','Project Manager','Foreman']);
+  }
 }
 
 // ─── AUTH ─────────────────────────────────────────────────────────────
@@ -1880,7 +1886,7 @@ function showTab(tab,btn){
   const tgt=document.getElementById('t-'+tab);if(tgt)tgt.classList.remove('hidden');
   if(btn)btn.classList.add('act');
   if(tab==='nd'){
-    renPS(CU&&CU.role==='worker');renClientSelects();lockSubClient();setCompanyField();loadReqByStaff();uploadedPhotos=[];
+    renPS(CU&&CU.role==='worker');renClientSelects();lockSubClient();setCompanyField();loadReqByStaff();prefillReqBy();uploadedPhotos=[];
     if(typeof initWorkersSection==='function')initWorkersSection();
     // Free-docket option is admin-only; reset it each time the form opens
     const fdWrap=document.getElementById('free-docket-wrap');
@@ -2845,6 +2851,7 @@ function resetDF(){
   const bcOtWrap=document.getElementById('bc-other-wrap');if(bcOtWrap)bcOtWrap.classList.add('hidden');
   document.getElementById('de').classList.add('hidden');document.getElementById('cp').textContent='';
   setCompanyField();
+  prefillReqBy();
   // reset free-docket state
   window._freeDocket=false;
   const fdc=document.getElementById('free-docket');if(fdc)fdc.checked=false;
@@ -4560,6 +4567,18 @@ function loadReqByStaff(){
   sel.innerHTML='<option value="">— Select staff member —</option>';
   staff.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sel.appendChild(o);});
   if(cur)sel.value=cur;
+}
+
+// Pre-fill the "Requested by" staff member when nothing is selected yet: prefer
+// the logged-in user's own name if it's on the staff list, otherwise the first
+// staff member. Only fills a blank field, so it never overrides an existing pick
+// or a value restored when viewing/editing a saved docket.
+function prefillReqBy(){
+  const sel=document.getElementById('d-reqby');if(!sel)return;
+  if(sel.value)return;
+  const staff=ldL('dlb_staff')||[];
+  if(!staff.length)return;
+  sel.value=(CU&&CU.name&&staff.includes(CU.name))?CU.name:staff[0];
 }
 
 function addReqByStaff(){
