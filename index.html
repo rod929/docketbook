@@ -706,6 +706,10 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
               <p style="font-size:11px;color:#aaa;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.04em;">Notes</p>
               <p id="review-notes" style="font-size:13px;color:#2D2D2D;margin:0;"></p>
             </div>
+            <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid rgba(0,0,0,0.07);">
+              <label for="review-supervisor-note" style="font-size:11px;color:#854F0B;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.04em;display:block;">Supervisor note <span style="text-transform:none;color:#aaa;font-weight:400;">(optional — clarify before signing)</span></label>
+              <textarea id="review-supervisor-note" placeholder="e.g. extra hour was clean-up the worker didn't note" style="width:100%;min-height:56px;font-size:13px;"></textarea>
+            </div>
           </div>
           <!-- Photos preview -->
           <div id="review-photos-wrap" class="card hidden" style="margin-bottom:12px;padding:14px 16px;">
@@ -2647,7 +2651,7 @@ function submitD(){
   const workersOnSite=(typeof getWorkersOnSite==='function')?getWorkersOnSite():[];
   const workerName=currentWorkerName();
   const _isFree=!!window._freeDocket;
-  const d={id:String(dctr).padStart(4,'0'),pcode:_isFree?'':proj,pname:_isFree?'(No project)':(p?p.name:proj),freeDocket:_isFree,date,sub,reqBy,reqHow,photos,materials,accommodation,refSubDocketId:refId,signerRole,signerName,workerName,workersOnSite,startTime,finishTime,breakMins,hours:parseFloat(hrs),rate,cost,bill,bcTarget,desc,notes,sig,sigStatus,signToken,sendEmail,sendSms,clientId,contactId,createdBy:CU.u,createdAt:new Date().toISOString()};
+  const d={id:String(dctr).padStart(4,'0'),pcode:_isFree?'':proj,pname:_isFree?'(No project)':(p?p.name:proj),freeDocket:_isFree,date,sub,reqBy,reqHow,photos,materials,accommodation,refSubDocketId:refId,signerRole,signerName,workerName,workersOnSite,startTime,finishTime,breakMins,hours:parseFloat(hrs),rate,cost,bill,bcTarget,desc,notes,supervisorNote:(window._reviewSupervisorNote||''),sig,sigStatus,signToken,sendEmail,sendSms,clientId,contactId,createdBy:CU.u,createdAt:new Date().toISOString()};
   dockets.push(d);dctr++;svD();
 
   // The docket is now submitted — remove the source draft if it came from one
@@ -2828,6 +2832,7 @@ function emailSignLink(id,token){
 function resetDF(){
   document.getElementById('dp').value='';document.getElementById('d-start').value='';document.getElementById('d-finish').value='';document.getElementById('d-break').value='';document.getElementById('dh').value='';
   document.getElementById('desc').value='';document.getElementById('dnotes').value='';
+  {const svn=document.getElementById('review-supervisor-note');if(svn)svn.value='';window._reviewSupervisorNote='';}
   document.getElementById('d-client').value='';document.getElementById('d-contact').innerHTML='<option value="">— Select contact —</option>';
   document.getElementById('send-email').value='';document.getElementById('send-sms').value='';
   setDD();clrSig();setSigMethod('onsite');
@@ -2900,7 +2905,8 @@ function vD(id){
       ${cli?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Client</span>${esc(cli.name)}</div>`:''}
       ${con?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Contact</span>${esc(con.name)}${con.email?'<div style="font-size:11px;color:#185FA5;">'+esc(con.email)+'</div>':''}${con.mobile?'<div style="font-size:11px;color:#666;">'+esc(con.mobile)+'</div>':''}</div>`:''}
       <div style="grid-column:span 2"><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Description</span><span id="vd-desc-text">${esc(d.desc)}</span></div>
-      ${(()=>{ 
+      ${d.supervisorNote?`<div style="grid-column:span 2"><span style="color:#854F0B;font-size:11px;display:block;margin-bottom:2px;">Supervisor note</span>${esc(d.supervisorNote)}</div>`:''}
+      ${(()=>{
         const ws=d.workersOnSite||[];
         const primaryName=d.workerName||(ws[0]&&ws[0].name)||'';
         if(!ws.length&&!primaryName)return'';
@@ -3474,6 +3480,8 @@ function dlbBuildSheet(d,showCosts){
   if(accom){
     accomSec=`<div class="sec"><div class="sec-title">Accommodation</div><div class="desc-box"><strong>${esc(accom.type||'')}</strong> — ${accom.nights} night${accom.nights!==1?'s':''}${showCosts?` × $${(accom.rate||0).toFixed(2)} = <strong style="color:#185FA5;">$${(accom.total||0).toFixed(2)}</strong>`:''}${accom.notes?`<div style="color:#9a9a93;margin-top:4px;">${esc(accom.notes)}</div>`:''}</div></div>`;
   }
+  // Supervisor note (clarification the signer added)
+  const svNoteSec=d.supervisorNote?`<div class="sec"><div class="sec-title">Supervisor Note</div><div class="desc-box">${esc(d.supervisorNote)}</div></div>`:'';
   // Photos
   let photoSec='';
   if(d.photos&&d.photos.length){
@@ -3495,6 +3503,7 @@ function dlbBuildSheet(d,showCosts){
       ${workersSec}
       ${tiles}${breakdown}
       <div class="sec"><div class="sec-title">Description of Works</div><div class="desc-box">${esc(d.desc||'')}</div></div>
+      ${svNoteSec}
       ${matSec}
       ${accomSec}
       ${billSec}
@@ -7306,6 +7315,7 @@ function buildDocketPdfFromForm(){
 
 function submitFromReview(){
   const err=document.getElementById('review-err');
+  window._reviewSupervisorNote=(document.getElementById('review-supervisor-note')?.value||'').trim();
   const canvas=document.getElementById('review-sigc');
   const sig=(reviewSigMethod==='onsite'&&reviewSigHas)?canvas.toDataURL('image/png'):null;
   if(reviewSigMethod==='email'&&!document.getElementById('review-send-email').value.trim()){

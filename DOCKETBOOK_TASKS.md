@@ -68,8 +68,12 @@ Legend:  [ ] todo   [~] in progress   [x] done   ⚠ = needs backend to fully wo
   hidden for admin/worker/supervisor alike, consistent with the others).
 
 ## 5. SUPERVISOR SIGNOFF
-- [ ] **10. Per-line-item notes.** Supervisor can add notes to each line item /
+- [x] **10. Per-line-item notes.** Supervisor can add notes to each line item /
   description he's signing (worker may not have given enough info).
+  DONE: a "Supervisor note" field on the Review & Sign page, saved on the docket
+  (d.supervisorNote) and shown in the docket view + PDF. NOTE: a docket has one
+  description (not multi-line items); true per-line notes would need the
+  description restructured into line items — flagged for Rod.
 - [ ] **11. ⚠ Auto-email includes PDF attachment.** When signed by supervisor and
   submitted, the auto email should also carry the PDF. NOTE: mailto: cannot attach
   files — true attachment needs the backend. Build the logic/UI now; it attaches
