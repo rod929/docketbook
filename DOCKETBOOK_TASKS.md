@@ -10,14 +10,18 @@ Legend:  [ ] todo   [~] in progress   [x] done   ⚠ = needs backend to fully wo
 ---
 
 ## 1. OVERALL
-- [ ] **1. Languages regression.** Spanish + Mandarin/Chinese language options must
+- [x] **1. Languages regression.** Spanish + Mandarin/Chinese language options must
   appear and work on EVERY part of the app (worker, supervisor, admin, new docket,
   dashboards, etc.). This was working before and has regressed — restore it
   everywhere, and make sure dynamically-generated text also translates.
+  DONE: switcher added to admin + site-user/supervisor/manager banners and the
+  New Docket form for all roles; nav/lists/status badges re-translate on switch.
 
 ## 2. NEW DOCKET
-- [ ] **2. Company name hard-coded.** The "your company" field should be fixed to
+- [x] **2. Company name hard-coded.** The "your company" field should be fixed to
   the registered company name (appSettings.name), not free-typed.
+  DONE: setCompanyField() locks the field per role — worker→parent sub, sub→own
+  company, admin/supervisor/site user→appSettings.name; never free-typed.
 - [ ] **3. Prefill staff member.** "Requested by" / staff member should be
   pre-filled (even for the trial data).
 - [ ] **4. Per-worker times.** When adding additional workers, allow each to have

@@ -1880,7 +1880,7 @@ function showTab(tab,btn){
   const tgt=document.getElementById('t-'+tab);if(tgt)tgt.classList.remove('hidden');
   if(btn)btn.classList.add('act');
   if(tab==='nd'){
-    renPS(CU&&CU.role==='worker');renClientSelects();lockSubClient();loadReqByStaff();uploadedPhotos=[];
+    renPS(CU&&CU.role==='worker');renClientSelects();lockSubClient();setCompanyField();loadReqByStaff();uploadedPhotos=[];
     if(typeof initWorkersSection==='function')initWorkersSection();
     // Free-docket option is admin-only; reset it each time the form opens
     const fdWrap=document.getElementById('free-docket-wrap');
@@ -2844,7 +2844,7 @@ function resetDF(){
   const bcOth=document.getElementById('bc-other');if(bcOth)bcOth.value='';
   const bcOtWrap=document.getElementById('bc-other-wrap');if(bcOtWrap)bcOtWrap.classList.add('hidden');
   document.getElementById('de').classList.add('hidden');document.getElementById('cp').textContent='';
-  if(CU&&CU.role==='sub')document.getElementById('dsb').value=CU.name;else document.getElementById('dsb').value='';
+  setCompanyField();
   // reset free-docket state
   window._freeDocket=false;
   const fdc=document.getElementById('free-docket');if(fdc)fdc.checked=false;
@@ -4525,6 +4525,28 @@ function lockSubClient(){
     loadClientContacts();
   }
   if(dClientNote)dClientNote.classList.remove('hidden');
+}
+
+// The "Your company name" field is never free-typed — it is fixed to the correct
+// company for the logged-in user and locked read-only:
+//   worker      → their parent subcontractor company (field hidden, as before)
+//   sub         → their own company (CU.name)
+//   admin / hc_supervisor / site user → the registered company (appSettings.name)
+function setCompanyField(){
+  const dsb=document.getElementById('dsb');
+  const wrap=document.getElementById('dsb-wrap');
+  if(!dsb)return;
+  if(CU&&CU.role==='worker'){
+    let name=appSettings.name||'Alerce';
+    const wData=workers.find(x=>x.u===CU.u);
+    if(wData&&wData.parentSub){const p=subs.find(s=>s.u===wData.parentSub);if(p)name=p.name;}
+    dsb.value=name;dsb.readOnly=true;
+    if(wrap)wrap.style.display='none';
+    return;
+  }
+  dsb.value=(CU&&CU.role==='sub')?CU.name:(appSettings.name||'Alerce');
+  dsb.readOnly=true;
+  if(wrap)wrap.style.display='';
 }
 
 
