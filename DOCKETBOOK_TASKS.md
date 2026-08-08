@@ -54,7 +54,10 @@ Legend:  [ ] todo   [~] in progress   [x] done   ⚠ = needs backend to fully wo
 - [ ] **8. Admin final sign-off** section — all dockets signed by a supervisor but
   awaiting final admin sign-off; on approval, alert whoever submitted the docket so
   they can invoice.
-- [ ] **9. Admin can create a docket** (same options as workers/supervisors).
+- [x] **9. Admin can create a docket** (same options as workers/supervisors).
+  DONE: added a prominent "New docket" button to the admin dashboard. The form
+  already supports admins (company locked to appSettings.name; billing chooser is
+  hidden for admin/worker/supervisor alike, consistent with the others).
 
 ## 5. SUPERVISOR SIGNOFF
 - [ ] **10. Per-line-item notes.** Supervisor can add notes to each line item /

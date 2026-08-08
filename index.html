@@ -471,6 +471,10 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 
       <!-- ── ADMIN / SUB ADMIN DASHBOARD ── -->
       <div id="dash-admin" class="hidden">
+        <!-- Admins create dockets with the same form as workers/supervisors -->
+        <button onclick="showTab('nd',document.getElementById('n1'))" style="width:100%;background:#EF9F27;color:#412402;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;">
+          <i class="ti ti-plus" style="font-size:20px;" aria-hidden="true"></i> New docket
+        </button>
         <!-- Mobile quick nav for admin (hidden on desktop) -->
         <div id="admin-mobile-nav" style="display:none;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
           <button onclick="showTab('ad',document.getElementById('n3'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
