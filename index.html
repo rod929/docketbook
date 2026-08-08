@@ -3199,6 +3199,15 @@ function submitRemoteSig(dockId,token){
   d.sigStatus='signed';
   d.signToken=null;
   d.signedAt=new Date().toISOString();
+  d.signedLater=true;
+  // Signed after the fact (not on site), so billing was never chosen. Keep the
+  // docket in the pending-billing flow and prompt whoever submitted it to pick
+  // chargeable / backcharge / own cost — same decision the on-site flow forces.
+  if(!d.bill||d.bill==='pending'){
+    d.bill='pending';
+    if(typeof addNotice==='function')addNotice(d.createdBy,{docketId:d.id,type:'billing',
+      msg:'📝 Docket #'+d.id+' ('+(d.pname||d.pcode||'(no project)')+') was signed — please set its billing: chargeable / backcharge / own cost.'});
+  }
   svD();
   document.getElementById('sign-content').innerHTML=`
     <div class="sign-card" style="text-align:center;padding:2rem;">
@@ -6702,7 +6711,7 @@ function renAdminMobile(){
     const banner=document.getElementById('am-banner');if(banner)banner.classList.add('hidden');
   }
   // Pending billing folder — all cross-company dockets a supervisor signed that need billing
-  const adminPending=dockets.filter(d=>d.sig&&d.signedBySupervisor&&(!d.bill||d.bill==='pending'));
+  const adminPending=dockets.filter(d=>d.sig&&(d.signedBySupervisor||d.signedLater)&&(!d.bill||d.bill==='pending'));
   const apbWrap=document.getElementById('admin-pending-billing-wrap');
   const apbList=document.getElementById('admin-pending-billing-list');
   if(apbWrap&&apbList){

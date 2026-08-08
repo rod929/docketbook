@@ -78,9 +78,12 @@ Legend:  [ ] todo   [~] in progress   [x] done   ⚠ = needs backend to fully wo
   submitted, the auto email should also carry the PDF. NOTE: mailto: cannot attach
   files — true attachment needs the backend. Build the logic/UI now; it attaches
   once the backend lands.
-- [ ] **12. Sign-later prompt.** If the supervisor didn't sign on site and signs at
+- [x] **12. Sign-later prompt.** If the supervisor didn't sign on site and signs at
   a later date, auto-ask if it's chargeable / backcharge / etc. (logic exists for
   the pending-billing flow — wire it to the later-signing path).
+  DONE: remote/later signing (submitRemoteSig) now flags d.signedLater, keeps the
+  docket pending-billing, notifies the submitter, and surfaces it in the admin
+  pending-billing folder's chargeable/backcharge/own-cost chooser.
 
 ## 6. PASSWORD
 - [ ] **13. ⚠ Forgot-password / recovery.** A complete password recovery setup.
