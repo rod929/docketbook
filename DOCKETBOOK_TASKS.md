@@ -47,8 +47,11 @@ Legend:  [ ] todo   [~] in progress   [x] done   ⚠ = needs backend to fully wo
   - All of the above on a single A4 page.
 
 ## 4. DASHBOARD (admin)
-- [ ] **6. Restyle admin dashboard** to match the other dashboards (same fonts,
+- [~] **6. Restyle admin dashboard** to match the other dashboards (same fonts,
   boxes, appearance). It's currently messy with too many sections — declutter.
+  PARTIAL: decluttered the mobile quick-nav (7 buttons → 4, dropping the ones
+  already in the bottom nav) and restyled them with the shared .ndock-tile look;
+  added a New docket button. A fuller visual pass needs Rod's eyes on a phone.
 - [x] **7. Subcontractor pending dockets** section — dockets signed by our
   supervisors but not yet sent by the subcontractor.
   DONE: this is the existing "Pending billing" folder (signed by our supervisor,

@@ -130,7 +130,7 @@ body.role-worker #n1:hover,body.role-supervisor #n1:hover{background:#1a1a1a;}
   body.nd-fullpage #bottom-nav{display:none!important;}
   /* Mobile admin: hide dense desktop panels, show compact block */
   #fin-panel,#signed-panel{display:none!important;}
-  #admin-mobile-nav{display:grid!important;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+  #admin-mobile-nav{display:grid!important;grid-template-columns:1fr 1fr;gap:8px;}
   .recent-table{display:none!important;}
   .recent-list{display:block!important;}
   /* trim extra admin stat tiles on mobile to match Dockets · Pending · Hours */
@@ -477,29 +477,13 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <button onclick="showTab('nd',document.getElementById('n1'))" style="width:100%;background:#EF9F27;color:#412402;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;">
           <i class="ti ti-plus" style="font-size:20px;" aria-hidden="true"></i> New docket
         </button>
-        <!-- Mobile quick nav for admin (hidden on desktop) -->
+        <!-- Mobile quick nav — only items NOT already in the bottom nav
+             (Dockets / Reports / Admin), styled to match the other dashboards. -->
         <div id="admin-mobile-nav" style="display:none;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-          <button onclick="showTab('ad',document.getElementById('n3'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
-            <i class="ti ti-files" style="font-size:20px;color:#185FA5;" aria-hidden="true"></i>All dockets
-          </button>
-          <button onclick="showTab('proj',document.getElementById('n4'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
-            <i class="ti ti-building" style="font-size:20px;color:#185FA5;" aria-hidden="true"></i>Projects
-          </button>
-          <button onclick="showTab('subs',document.getElementById('n5'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
-            <i class="ti ti-users" style="font-size:20px;color:#185FA5;" aria-hidden="true"></i>Subcontractors
-          </button>
-          <button onclick="showTab('settings',document.getElementById('n8'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
-            <i class="ti ti-settings" style="font-size:20px;color:#888;" aria-hidden="true"></i>Settings
-          </button>
-          <button onclick="showTab('users',document.getElementById('n9'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
-            <i class="ti ti-user" style="font-size:20px;color:#185FA5;" aria-hidden="true"></i>Users
-          </button>
-          <button onclick="showTab('clients',document.getElementById('n6'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
-            <i class="ti ti-address-book" style="font-size:20px;color:#185FA5;" aria-hidden="true"></i>Clients
-          </button>
-          <button onclick="showTab('rates',document.getElementById('n8'))" style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 8px;font-size:12px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#2D2D2D;">
-            <i class="ti ti-cash" style="font-size:20px;color:#1D9E75;" aria-hidden="true"></i>Rates
-          </button>
+          <button onclick="showTab('proj',document.getElementById('n4'))" class="ndock-tile"><i class="ti ti-building" aria-hidden="true"></i>Projects</button>
+          <button onclick="showTab('subs',document.getElementById('n5'))" class="ndock-tile"><i class="ti ti-users" aria-hidden="true"></i>Subcontractors</button>
+          <button onclick="showTab('clients',document.getElementById('n6'))" class="ndock-tile"><i class="ti ti-address-book" aria-hidden="true"></i>Clients</button>
+          <button onclick="showTab('users',document.getElementById('n9'))" class="ndock-tile"><i class="ti ti-user" aria-hidden="true"></i>Users</button>
         </div>
         <!-- Summary tiles (all roles) -->
         <div class="mg" style="margin-bottom:10px;">
