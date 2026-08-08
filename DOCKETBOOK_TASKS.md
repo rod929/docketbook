@@ -35,7 +35,9 @@ Legend:  [ ] todo   [~] in progress   [x] done   ⚠ = needs backend to fully wo
   saved per worker (workersOnSite[].start/finish).
 
 ## 3. DOCKET PDF  (everything must fit on ONE A4 page)
-- [ ] **5. PDF setout order:**
+- [x] **5. PDF setout order:** DONE — Job Details (adds Client, drops start/finish)
+  → Labour on Site (renamed, with per-worker Time column) → Description → Billing
+  & Client → Sign-off; PDF now scales to fit a single A4 page.
   1. Job details — keep, PLUS add Client, MINUS start/finish time.
   2. Workers on site section (rename it to something better) — include start/finish
      time here.

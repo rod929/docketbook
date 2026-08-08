@@ -3404,31 +3404,36 @@ function dlbBuildSheet(d,showCosts){
   const jobRows=[
     ['Project',`${esc(d.pname||'')}${d.pcode&&!d.freeDocket?` <span class="badge">${esc(d.pcode)}</span>`:''}`],
     ['Date',fd(d.date)],
+    ['Client',cli?esc(cli.name):'—'],
     ['Subcontractor',esc(d.sub||'')],
     reqVal?['Requested by',reqVal]:null,
-    ['Start time',d.startTime||'—'],
-    ['Finish time',`${d.finishTime||'—'}${d.breakMins!=null?` <span style="color:#aaa;font-weight:400;">(${d.breakMins} min break)</span>`:''}`],
   ].filter(Boolean).map(([k,v])=>`<div class="row"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
-  // Workers table (admin adds Rate + Labour columns)
+  // Labour table — each worker's own Start–Finish time now lives here (admin also
+  // gets Rate + Labour columns).
   const wHead=showCosts
-    ? `<tr><th>Worker</th><th>Trade</th><th class="r" style="width:70px;">Hours</th><th class="r" style="width:90px;">Rate</th><th class="r" style="width:90px;">Labour</th></tr>`
-    : `<tr><th>Worker</th><th>Trade</th><th class="r" style="width:90px;">Hours</th></tr>`;
+    ? `<tr><th>Worker</th><th>Trade</th><th style="width:104px;">Time</th><th class="r" style="width:56px;">Hours</th><th class="r" style="width:78px;">Rate</th><th class="r" style="width:82px;">Labour</th></tr>`
+    : `<tr><th>Worker</th><th>Trade</th><th style="width:130px;">Time</th><th class="r" style="width:80px;">Hours</th></tr>`;
   const wRows=ws.map((w,i)=>{
     const nm=(w.name&&String(w.name).trim())?esc(w.name):('Worker '+(i+1));
     const flag=(w.primary||(i===0&&!wsAll.length))?' <span class="wflag">FILLED OUT</span>':'';
     const hv=parseFloat(w.hours)||0;
     const hTxt=w.hours?dlbHrs(w.hours):'—';
+    // Primary worker falls back to the docket-level times for older dockets.
+    const wStart=w.start||((w.primary||i===0)?(d.startTime||''):'');
+    const wFinish=w.finish||((w.primary||i===0)?(d.finishTime||''):'');
+    const tTxt=(wStart||wFinish)?`${esc(wStart||'—')}–${esc(wFinish||'—')}`:'—';
     if(showCosts){
       const line=Math.round(hv*effRate*100)/100;
-      return `<tr><td>${nm}${flag}</td><td>${w.trade?esc(w.trade):'—'}</td><td class="r">${hTxt}</td><td class="r">${labour!=null?'$'+effRate.toFixed(2):'—'}</td><td class="r">${labour!=null?'$'+line.toFixed(2):'—'}</td></tr>`;
+      return `<tr><td>${nm}${flag}</td><td>${w.trade?esc(w.trade):'—'}</td><td>${tTxt}</td><td class="r">${hTxt}</td><td class="r">${labour!=null?'$'+effRate.toFixed(2):'—'}</td><td class="r">${labour!=null?'$'+line.toFixed(2):'—'}</td></tr>`;
     }
-    return `<tr><td>${nm}${flag}</td><td>${w.trade?esc(w.trade):'—'}</td><td class="r">${hTxt}</td></tr>`;
+    return `<tr><td>${nm}${flag}</td><td>${w.trade?esc(w.trade):'—'}</td><td>${tTxt}</td><td class="r">${hTxt}</td></tr>`;
   }).join('');
   const wFoot=showCosts
-    ? `<tfoot><tr><td colspan="2" class="r">Totals</td><td class="r">${dlbHrs(totalH)}</td><td class="r">${labour!=null?'$'+effRate.toFixed(2)+'/hr':'—'}</td><td class="r">${labour!=null?'$'+labour.toFixed(2):'—'}</td></tr></tfoot>`
-    : `<tfoot><tr><td colspan="2" class="r">Total hours</td><td class="r">${dlbHrs(totalH)}</td></tr></tfoot>`;
-  const workersSec=`<div class="sec"><div class="sec-title">Workers On Site</div>
-    <table><thead>${wHead}</thead><tbody>${wRows}</tbody>${wFoot}</table></div>`;
+    ? `<tfoot><tr><td colspan="3" class="r">Totals</td><td class="r">${dlbHrs(totalH)}</td><td class="r">${labour!=null?'$'+effRate.toFixed(2)+'/hr':'—'}</td><td class="r">${labour!=null?'$'+labour.toFixed(2):'—'}</td></tr></tfoot>`
+    : `<tfoot><tr><td colspan="3" class="r">Total hours</td><td class="r">${dlbHrs(totalH)}</td></tr></tfoot>`;
+  const breakNote=(d.breakMins!=null&&d.breakMins!=='')?`<div style="font-size:11px;color:#9a9a93;margin-top:6px;">Break: ${esc(String(d.breakMins))} min (deducted from hours)</div>`:'';
+  const workersSec=`<div class="sec"><div class="sec-title">Labour on Site</div>
+    <table><thead>${wHead}</thead><tbody>${wRows}</tbody>${wFoot}</table>${breakNote}</div>`;
   // Tiles
   let tiles,breakdown='';
   if(showCosts){
@@ -3449,6 +3454,7 @@ function dlbBuildSheet(d,showCosts){
     cli?['Client',esc(cli.name)]:null,
     con?['Client contact',[esc(con.name),con.email?esc(con.email):'',con.mobile?esc(con.mobile):''].filter(Boolean).join(' — '),true]:null,
   ].filter(Boolean).map(([k,v,full])=>`<div class="row${full?' full':''}"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+  // (Client also appears under Job Details; kept here with the billing context.)
   const billSec=`<div class="sec"><div class="sec-title">Billing &amp; Client</div><div class="grid">${billRows}</div></div>`;
   // Materials
   let matSec='';
@@ -3496,10 +3502,10 @@ function dlbBuildSheet(d,showCosts){
       <div class="sec"><div class="sec-title">Job Details</div><div class="grid">${jobRows}</div></div>
       ${workersSec}
       ${tiles}${breakdown}
-      ${billSec}
       <div class="sec"><div class="sec-title">Description of Works</div><div class="desc-box">${esc(d.desc||'')}</div></div>
       ${matSec}
       ${accomSec}
+      ${billSec}
       ${photoSec}
       <div class="sec" style="margin-bottom:8px;"><div class="sec-title">Sign-off</div>${signoff}</div>
     </div>
@@ -3526,11 +3532,12 @@ function dlbDocketPdf(d,showCosts,filename){
           const pdf=new jsPDF({unit:'mm',format:'a4'});
           const img=canvas.toDataURL('image/png');
           const pw=210,ph=297;
-          const ih=canvas.height*pw/canvas.width;
-          let pos=0,heightLeft=ih;
-          pdf.addImage(img,'PNG',0,pos,pw,ih);
-          heightLeft-=ph;
-          while(heightLeft>0){pos-=ph;pdf.addPage();pdf.addImage(img,'PNG',0,pos,pw,ih);heightLeft-=ph;}
+          // Fit the whole sheet onto ONE A4 page: scale to page width, and if that
+          // would overflow the page height, scale to height instead (centred).
+          let iw=pw,ih=canvas.height*pw/canvas.width;
+          if(ih>ph){ih=ph;iw=canvas.width*ph/canvas.height;}
+          const x=(pw-iw)/2;
+          pdf.addImage(img,'PNG',x,0,iw,ih);
           pdf.save(filename||('DayLabour-'+d.id+'.pdf'));
           cleanup();resolve();
         }catch(e){fallback();}
