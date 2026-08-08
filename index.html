@@ -1645,11 +1645,17 @@ function seedTrialData(){
   TWORKERS.forEach(w=>{if(!workers.find(x=>x.u===w.u)){workers.push({...w,projectAccess:[],allProjects:true});workersChanged=true;}});
   if(workersChanged)svW();
 
-  // 1 trial HC supervisor (signs dockets on site; sees no money)
+  // 1 trial HC supervisor (signs dockets on site; sees no money), allocated to
+  // the trial projects so their dashboard has projects/dockets to show.
   if(!Array.isArray(users))users=[];
   if(!users.find(x=>x.u==='hcsup2')){
-    users.push({u:'hcsup2',p:'super123',name:'Dana Mills',role:'hc_supervisor',email:'dana@harbourview.com.au',projectAccess:[],permissions:{}});
+    users.push({u:'hcsup2',p:'super123',name:'Dana Mills',role:'hc_supervisor',email:'dana@harbourview.com.au',projectAccess:['HV-T1','MAR-AP','EAST-FO'],permissions:{}});
     svL('dlb_users',users);
+  } else {
+    const _sup=users.find(x=>x.u==='hcsup2');
+    if(_sup&&(!Array.isArray(_sup.projectAccess)||!_sup.projectAccess.length)){
+      _sup.projectAccess=['HV-T1','MAR-AP','EAST-FO'];svL('dlb_users',users);
+    }
   }
 
   // Trial client + 2–3 projects linked to it
