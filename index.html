@@ -308,6 +308,44 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 #dash-worker .st,#dash-supervisor .st{font-size:16px;font-weight:700;color:#2D2D2D;letter-spacing:0.02em;text-transform:none;}
 #dash-worker .rdl-t,#dash-supervisor .rdl-t{font-size:14px;}
 #dash-worker .rdl-s,#dash-supervisor .rdl-s{font-size:12px;}
+/* ── Supervisor dashboard v2 (urgency-ordered, mockup v2) ── */
+.sv-hero{position:relative;display:flex;align-items:center;gap:12px;border-radius:16px;padding:18px 16px;margin-bottom:14px;cursor:pointer;overflow:hidden;animation:svHeroFlash 1.3s ease-in-out infinite;}
+.sv-hero-red{background:linear-gradient(135deg,#F0685E,#E24B4A);box-shadow:0 4px 16px rgba(226,75,74,0.45);}
+.sv-hero-orange{background:linear-gradient(135deg,#EF9F27,#E5891A);box-shadow:0 4px 16px rgba(239,159,39,0.45);}
+@keyframes svHeroFlash{0%,100%{filter:brightness(1);}50%{filter:brightness(1.14);}}
+.sv-hero-content{flex:1;color:#fff;position:relative;z-index:2;min-width:0;}
+.sv-hero-top{display:flex;align-items:center;gap:10px;margin-bottom:3px;}
+.sv-hero-ic{font-size:19px;}
+.sv-hero-num{font-size:28px;font-weight:800;line-height:1;color:#fff;}
+.sv-hero-lab{font-size:14px;font-weight:700;line-height:1.25;color:#fff;}
+.sv-hero-sub{font-size:11px;color:rgba(255,255,255,0.9);margin-top:2px;}
+.sv-hero-arrow{color:#fff;font-size:22px;font-weight:700;position:relative;z-index:2;}
+.sv-hero-pulse{position:absolute;top:50%;right:-20px;width:120px;height:120px;transform:translateY(-50%);border-radius:50%;background:rgba(255,255,255,0.13);z-index:1;}
+.sv-live-dot{position:absolute;top:12px;right:14px;width:10px;height:10px;border-radius:50%;background:#fff;z-index:3;animation:svBlink 1.1s ease-in-out infinite;}
+@keyframes svBlink{0%{opacity:1;box-shadow:0 0 0 0 rgba(255,255,255,0.85);}70%{opacity:0.35;box-shadow:0 0 0 8px rgba(255,255,255,0);}100%{opacity:1;box-shadow:0 0 0 0 rgba(255,255,255,0);}}
+.sv-two-box{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.sv-sbox{border-radius:14px;padding:16px 14px;border:1px solid;cursor:pointer;position:relative;}
+.sv-sbox .sv-num{font-size:30px;font-weight:700;line-height:1;}
+.sv-sbox .sv-lab{font-size:12px;margin-top:6px;font-weight:500;line-height:1.35;}
+.sv-sbox .sv-arrow{position:absolute;top:14px;right:14px;font-size:14px;opacity:0.5;}
+.sv-sbox-2{background:#FBFCFE;border-color:#C9DDF1;}
+.sv-sbox-2 .sv-num,.sv-sbox-2 .sv-lab{color:#185FA5;}
+.sv-sbox-3{background:#FBE6E6;border-color:#F2C6C6;}
+.sv-sbox-3 .sv-num,.sv-sbox-3 .sv-lab{color:#A4271F;}
+.sv-divider{height:1px;background:rgba(0,0,0,0.07);margin:6px 0 14px;}
+.sv-mydk-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;flex-wrap:wrap;}
+.sv-mydk-title{font-size:15px;font-weight:700;color:#2D2D2D;}
+.sv-range{font-size:11px;padding:5px 9px;border-radius:8px;border:0.5px solid rgba(0,0,0,0.15);background:#fff;color:#555;}
+.sv-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;}
+.sv-sc{border-radius:12px;padding:14px 6px;text-align:center;border:0.5px solid rgba(0,0,0,0.06);}
+.sv-sc .sv-v{font-size:24px;font-weight:700;line-height:1;}
+.sv-sc .sv-l{font-size:11px;color:#777;margin-top:6px;font-weight:500;line-height:1.25;}
+.sv-sc-d{background:#FFFBF5;} .sv-sc-d .sv-v{color:#EF9F27;}
+.sv-sc-s{background:#E1F5EE;} .sv-sc-s .sv-v{color:#1D9E75;}
+.sv-sc-t{background:#E6F1FB;} .sv-sc-t .sv-v{color:#185FA5;}
+.sv-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.sv-ndock{background:#FAEEDA;border:none;border-radius:12px;padding:16px 8px;font-size:14px;font-weight:600;color:#633806;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;}
+.sv-ndock .sv-ic{font-size:20px;}
 /* ── Login screen — larger inputs & button ── */
 #ls .card{padding:2.25rem 1.75rem;width:100%;max-width:430px;}
 #ls label{font-size:14px;color:#555;margin-bottom:7px;font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;}
@@ -433,26 +471,58 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <!-- In-app notices (e.g. "docket approved — ready to invoice") for the logged-in user -->
       <div id="invoice-notice"></div>
 
-      <!-- ── SUPERVISOR DASHBOARD ── -->
+      <!-- ── SUPERVISOR DASHBOARD (mockup v2 — urgency-ordered) ── -->
       <div id="dash-supervisor" class="hidden">
-        <div id="sup-fixed-top">
-          <!-- Mini stats — aligned like worker: Drafts / Signed / Sent -->
-          <div class="wk-stats">
-            <div class="wk-sc wk-sc-drafts"><div class="wk-sv" id="sup-stat-drafts">0</div><div class="wk-sl">Drafts</div></div>
-            <div class="wk-sc wk-sc-signed"><div class="wk-sv" id="sup-stat-signed">0</div><div class="wk-sl">Signed</div></div>
-            <div class="wk-sc wk-sc-sent"><div class="wk-sv" id="sup-stat-sent">0</div><div class="wk-sl">Sent</div></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-            <button onclick="showTab('drafts',document.getElementById('n-drafts'))" class="ndock-tile">
-              <i class="ti ti-pencil" aria-hidden="true"></i>Drafts <span id="sup-draft-badge" class="hidden" style="background:#2D2D2D;color:#EF9F27;border-radius:10px;font-size:10px;padding:1px 6px;">0</span>
-            </button>
-            <button onclick="showTab('md',document.getElementById('n2'))" class="ndock-tile">
-              <i class="ti ti-files" aria-hidden="true"></i>My dockets
-            </button>
-          </div>
-        </div>
         <div id="sup-scroll-area">
-          <!-- Pending billing folder (cross-company signed dockets awaiting billing) -->
+          <!-- STATE 1: flashing hero alert — subcontractor docket signed & chargeable, not yet sent up-chain -->
+          <div id="sup-hero" class="sv-hero sv-hero-red hidden" onclick="supHeroAction()">
+            <span class="sv-live-dot"></span>
+            <div class="sv-hero-pulse"></div>
+            <div class="sv-hero-content">
+              <div class="sv-hero-top"><span class="sv-hero-ic">⚡</span><span class="sv-hero-num" id="sup-hero-num">0</span></div>
+              <div class="sv-hero-lab">Subcontractor docket signed &amp; chargeable</div>
+              <div class="sv-hero-sub">Tap to send to client supervisor for sign off</div>
+            </div>
+            <span class="sv-hero-arrow">›</span>
+          </div>
+          <!-- STATES 2 & 3: compact summary boxes -->
+          <div class="sv-two-box">
+            <div class="sv-sbox sv-sbox-2" onclick="showTab('md',document.getElementById('n2'))">
+              <span class="sv-arrow">›</span>
+              <div class="sv-num" id="sup-box-await">0</div>
+              <div class="sv-lab">⏳ Awaiting client supervisor signature</div>
+            </div>
+            <div class="sv-sbox sv-sbox-3" onclick="showTab('md',document.getElementById('n2'))">
+              <span class="sv-arrow">›</span>
+              <div class="sv-num" id="sup-box-rejected">0</div>
+              <div class="sv-lab">⚠️ Pending / rejected by client administrator</div>
+            </div>
+          </div>
+
+          <div class="sv-divider"></div>
+
+          <!-- My dockets header + date range -->
+          <div class="sv-mydk-head">
+            <span class="sv-mydk-title">My dockets</span>
+            <select class="sv-range" id="sup-range" onchange="renSupervisorDash()">
+              <option value="week">This week</option>
+              <option value="today">Today</option>
+              <option value="month">This month</option>
+              <option value="all">All time</option>
+            </select>
+          </div>
+          <div class="sv-stats">
+            <div class="sv-sc sv-sc-d"><div class="sv-v" id="sup-stat-awaiting">0</div><div class="sv-l">Awaiting my signature</div></div>
+            <div class="sv-sc sv-sc-s"><div class="sv-v" id="sup-stat-signed">0</div><div class="sv-l">Dockets signed</div></div>
+            <div class="sv-sc sv-sc-t"><div class="sv-v" id="sup-stat-clientsigned">0</div><div class="sv-l">Signed by client sup</div></div>
+          </div>
+
+          <div class="sv-tiles">
+            <div class="sv-ndock" onclick="showTab('drafts',document.getElementById('n-drafts'))"><span class="sv-ic">✏️</span>Drafts <span id="sup-draft-badge" class="hidden" style="background:#2D2D2D;color:#EF9F27;border-radius:10px;font-size:10px;padding:1px 6px;">0</span></div>
+            <div class="sv-ndock" onclick="showTab('md',document.getElementById('n2'))"><span class="sv-ic">🗂️</span>My dockets</div>
+          </div>
+
+          <!-- Pending billing folder (cross-company signed dockets awaiting a billing decision) -->
           <div id="sup-pending-billing-wrap" class="hidden">
             <p class="st" style="margin-top:0;color:#854F0B;">⏳ Pending billing</p>
             <div class="card" style="padding:0;border:0.5px solid #F2D9A8;background:#FFFBF5;margin-bottom:14px;"><div id="sup-pending-billing-list"></div></div>
@@ -460,9 +530,6 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <!-- My projects (allocated by admin) -->
           <p class="st" style="margin-top:0;">My projects</p>
           <div class="card" style="padding:0;"><div id="sup-proj-list"></div></div>
-          <!-- Project dockets (all dockets on allocated projects) -->
-          <p class="st" style="margin-top:14px;">Project dockets</p>
-          <div class="card" style="padding:0;"><div id="sup-proj-dockets-list" class="recent-list" style="display:block;"></div></div>
           <!-- Recent dockets (this supervisor's own) -->
           <p class="st" style="margin-top:14px;">Recent dockets</p>
           <div class="card" style="padding:0;margin-bottom:8px;"><div id="sup-rd-list" class="recent-list" style="display:block;"></div></div>
@@ -6836,41 +6903,69 @@ function docketAgeDays(d){
   return Math.max(0,Math.floor(ms/86400000));
 }
 
+// Supervisor dashboard — mockup v2 (urgency-ordered). No money values ever.
 function renSupervisorDash(){
   if(!CU)return;
-  const mine=myD();
-  // Draft count
+  const own=dockets.filter(d=>d.createdBy===CU.u);
+  const usr=getUserData();
+  const ap=usr?.projectAccess||[];
+  const projDockets=dockets.filter(d=>ap.includes(d.pcode));
+
+  // Date-range filter for the "My dockets" stats block
+  const range=document.getElementById('sup-range')?.value||'week';
+  const inRange=(d)=>{
+    if(range==='all')return true;
+    const ts=d.date?new Date(d.date):(d.createdAt?new Date(d.createdAt):null);
+    if(!ts||isNaN(ts.getTime()))return true;
+    const now=new Date();
+    if(range==='today')return ts.toDateString()===now.toDateString();
+    if(range==='week'){const w=new Date(now);w.setDate(now.getDate()-7);return ts>=w;}
+    if(range==='month'){const m=new Date(now);m.setMonth(now.getMonth()-1);return ts>=m;}
+    return true;
+  };
+  const ownR=own.filter(inRange);
+  const projR=projDockets.filter(inRange);
+
+  // Drafts badge
   const drafts=ldL('dlb_drafts_'+CU.u)||[];
   const dc=Array.isArray(drafts)?drafts.length:Object.keys(drafts).length;
   const supBadge=document.getElementById('sup-draft-badge');
   if(supBadge){supBadge.textContent=dc;supBadge.classList.toggle('hidden',dc===0);}
-  // Stats — Drafts / Signed / Sent (own dockets), aligned like worker
-  const own=dockets.filter(d=>d.createdBy===CU.u);
-  const sent=own.filter(d=>!d.sig&&(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')).length;
-  const signed=own.filter(d=>d.sig).length;
-  const sdEl=document.getElementById('sup-stat-drafts');if(sdEl)sdEl.textContent=dc;
-  const sgEl=document.getElementById('sup-stat-signed');if(sgEl)sgEl.textContent=signed;
-  const ssEl=document.getElementById('sup-stat-sent');if(ssEl)ssEl.textContent=sent;
 
-  // ── Pending billing folder ──
-  // Cross-company dockets this supervisor signed that still need a billing
-  // decision (chargeable / backcharge / own cost).
+  // STATE 1 hero — signed & chargeable, not yet sent up the chain to the client
+  const heroList=own.filter(d=>d.sig&&d.bill==='ch'&&!dockets.find(x=>x.refSubDocketId===d.id));
+  const hero=document.getElementById('sup-hero');
+  const heroNum=document.getElementById('sup-hero-num');
+  if(hero){
+    if(heroList.length){hero.classList.remove('hidden');if(heroNum)heroNum.textContent=heroList.length;window._supHeroFirst=heroList[0].id;}
+    else{hero.classList.add('hidden');window._supHeroFirst=null;}
+  }
+
+  // STATE 2 — awaiting client supervisor signature (sent, not yet signed)
+  const awaitClient=own.filter(d=>!d.sig&&(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')).length;
+  const b2=document.getElementById('sup-box-await');if(b2)b2.textContent=awaitClient;
+  // STATE 3 — pending / rejected (queried) by the client administrator
+  const rejected=own.filter(d=>d.approvalStatus==='queried').length;
+  const b3=document.getElementById('sup-box-rejected');if(b3)b3.textContent=rejected;
+
+  // My dockets stats (date-range filtered)
+  const awaitingMySig=projR.filter(d=>!d.sig).length;              // on my projects, not yet signed
+  const signedByMe=ownR.filter(d=>d.sig).length;
+  const signedByClient=ownR.filter(d=>d.sig&&d.approvalStatus==='approved').length;
+  const s1=document.getElementById('sup-stat-awaiting');if(s1)s1.textContent=awaitingMySig;
+  const s2=document.getElementById('sup-stat-signed');if(s2)s2.textContent=signedByMe;
+  const s3=document.getElementById('sup-stat-clientsigned');if(s3)s3.textContent=signedByClient;
+
+  // ── Pending billing folder (cross-company signed dockets needing a billing decision) ──
   const pendingBilling=dockets.filter(d=>d.sig&&d.signedBySupervisor===CU.u&&(!d.bill||d.bill==='pending'));
   const pbWrap=document.getElementById('sup-pending-billing-wrap');
   const pbList=document.getElementById('sup-pending-billing-list');
   if(pbWrap&&pbList){
-    if(pendingBilling.length){
-      pbWrap.classList.remove('hidden');
-      pbList.innerHTML=pendingBilling.map(d=>billingChooserRow(d)).join('');
-    } else {
-      pbWrap.classList.add('hidden');
-      pbList.innerHTML='';
-    }
+    if(pendingBilling.length){pbWrap.classList.remove('hidden');pbList.innerHTML=pendingBilling.map(d=>billingChooserRow(d)).join('');}
+    else{pbWrap.classList.add('hidden');pbList.innerHTML='';}
   }
 
   // ── My projects (allocated by admin) ──
-  const usr=getUserData();
-  const ap=usr?.projectAccess||[];
   const myProjects=projects.filter(p=>ap.includes(p.code));
   const pl=document.getElementById('sup-proj-list');
   if(pl){
@@ -6892,12 +6987,15 @@ function renSupervisorDash(){
     }
   }
 
-  // ── Project dockets (all dockets on allocated projects) ──
-  const projDockets=dockets.filter(d=>ap.includes(d.pcode));
-  renRecentList('sup-proj-dockets-list',projDockets,{money:false});
-
   // ── Recent dockets (this supervisor's own) ──
   renRecentList('sup-rd-list',own,{money:false});
+}
+
+// Tapping the flashing hero opens the first signed-and-chargeable docket so the
+// supervisor can send it up the chain to the client supervisor.
+function supHeroAction(){
+  if(window._supHeroFirst){vD(window._supHeroFirst);}
+  else{showTab('md',document.getElementById('n2'));}
 }
 
 // A compact row for the pending-billing folder with inline chargeable/backcharge/own-cost buttons
