@@ -4426,16 +4426,12 @@ function openRecovery(){
 }
 function closeRecovery(){const m=document.getElementById('recovery-modal');if(m)m.classList.add('hidden');const n=document.getElementById('rec-firsttime');if(n)n.classList.add('hidden');}
 
-// Prompt once, on first sign-in, if the user hasn't set a recovery question
+// The forced "set a security question" pop-up on login has been disabled — it
+// was intrusive. Recovery is still available on demand: the Forgot-password flow
+// works, and a user can set their security question from openRecovery() if we
+// wire a button for it later. This intentionally does nothing now.
 function maybePromptRecovery(){
-  if(!CU)return;
-  if(getRecovery(CU.u))return;                 // already set up — never nag
-  // No question set yet: prompt on every login until they set one.
-  setTimeout(()=>{
-    const note=document.getElementById('rec-firsttime');
-    if(note)note.classList.remove('hidden');
-    openRecovery();
-  },700);
+  return;
 }
 function saveRecovery(){
   if(!CU)return;
