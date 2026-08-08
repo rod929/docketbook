@@ -426,6 +426,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
     <!-- DASHBOARD -->
     <div id="t-dash">
       <div id="dss" class="ok hidden"></div>
+      <!-- In-app notices (e.g. "docket approved — ready to invoice") for the logged-in user -->
+      <div id="invoice-notice"></div>
 
       <!-- ── SUPERVISOR DASHBOARD ── -->
       <div id="dash-supervisor" class="hidden">
@@ -524,9 +526,11 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             </div>
             <button onclick="showTab('ad',document.getElementById('n3'))" style="background:#EF9F27;color:#412402;border:none;border-radius:6px;font-size:11px;padding:5px 12px;cursor:pointer;font-weight:500;white-space:nowrap;">Review</button>
           </div>
-          <!-- Pending billing folder (cross-company dockets signed by supervisors) -->
+          <!-- Subcontractor pending dockets — signed by our supervisors, not yet
+               sent/invoiced by the sub (a.k.a. the Pending billing folder) -->
           <div id="admin-pending-billing-wrap" class="hidden">
-            <p class="st" style="margin-top:4px;color:#854F0B;">⏳ Pending billing</p>
+            <p class="st" style="margin-top:4px;color:#854F0B;">⏳ Subcontractor pending dockets</p>
+            <p style="font-size:11px;color:#9a7b3c;margin:-4px 0 6px;">Signed by your supervisor · awaiting billing &amp; the sub's invoice</p>
             <div class="card" style="padding:0;border:0.5px solid #F2D9A8;background:#FFFBF5;margin-bottom:10px;"><div id="admin-pending-billing-list"></div></div>
           </div>
           <!-- Awaiting final approval folder (PM / Contracts Admin sign-off) -->
@@ -6573,6 +6577,7 @@ function exitNdFullpage(){
 
 function showCorrectDashboard(){
   if(!CU)return;
+  if(typeof renInvoiceNotices==='function')renInvoiceNotices();
   const isWorker=CU.role==='worker';
   const isSuper=CU.role==='hc_supervisor'||(CU.role==='sub'&&CU.subRole==='supervisor');
   document.getElementById('dash-worker').classList.toggle('hidden',!isWorker);
@@ -6915,6 +6920,34 @@ function setPendingBilling(id,type){
 
 // ─── APPROVAL GATE (PM / Contracts Admin final sign-off) ──────────────
 // Approve: docket becomes a firm committed cost (flows to invoicing).
+// ── In-app notices (per user). Same-device only until the backend lands; a
+// cross-device / cross-company alert on approval needs the server (see CLAUDE.md).
+function addNotice(u,obj){
+  if(!u)return;
+  const all=ldL('dlb_notify')||{};
+  const list=all[u]||[];
+  list.push({id:'n_'+Date.now()+'_'+Math.random().toString(36).slice(2,5),at:new Date().toISOString(),...obj});
+  all[u]=list;svL('dlb_notify',all);
+}
+function dismissNotice(nid){
+  if(!CU)return;
+  const all=ldL('dlb_notify')||{};
+  all[CU.u]=(all[CU.u]||[]).filter(x=>x.id!==nid);
+  svL('dlb_notify',all);
+  renInvoiceNotices();
+}
+function renInvoiceNotices(){
+  const el=document.getElementById('invoice-notice');
+  if(!el)return;
+  if(!CU){el.innerHTML='';return;}
+  const list=(ldL('dlb_notify')||{})[CU.u]||[];
+  if(!list.length){el.innerHTML='';return;}
+  el.innerHTML=list.map(n=>`<div style="background:#E1F5EE;border-left:3px solid #1D9E75;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+    <span style="font-size:13px;color:#085041;">${esc(n.msg||'')}</span>
+    <button onclick="dismissNotice('${n.id}')" title="Dismiss" style="background:none;border:none;color:#085041;font-size:18px;line-height:1;cursor:pointer;flex-shrink:0;">×</button>
+  </div>`).join('');
+}
+
 function approveDocket(id){
   if(!canApproveDockets()){alert('You do not have permission to approve dockets.');return;}
   const d=dockets.find(x=>x.id===id);
@@ -6923,8 +6956,12 @@ function approveDocket(id){
   d.approvedBy=CU.u;
   d.approvedByName=CU.name;
   d.approvedAt=new Date().toISOString();
+  d.invoiceReady=true;
   d.queryNote='';
   svL('v4_dock',dockets);
+  // Alert whoever submitted the docket that it's approved and ready to invoice.
+  addNotice(d.createdBy,{docketId:d.id,type:'approved',
+    msg:'✓ Docket #'+d.id+' ('+(d.pname||d.pcode||'(no project)')+') approved — ready to invoice.'});
   if(typeof showCorrectDashboard==='function')showCorrectDashboard();
   if(typeof renAD==='function')renAD();
 }

@@ -49,11 +49,16 @@ Legend:  [ ] todo   [~] in progress   [x] done   ⚠ = needs backend to fully wo
 ## 4. DASHBOARD (admin)
 - [ ] **6. Restyle admin dashboard** to match the other dashboards (same fonts,
   boxes, appearance). It's currently messy with too many sections — declutter.
-- [ ] **7. Subcontractor pending dockets** section — dockets signed by our
+- [x] **7. Subcontractor pending dockets** section — dockets signed by our
   supervisors but not yet sent by the subcontractor.
-- [ ] **8. Admin final sign-off** section — all dockets signed by a supervisor but
+  DONE: this is the existing "Pending billing" folder (signed by our supervisor,
+  pending); retitled "Subcontractor pending dockets" with a clarifying subtitle.
+- [x] **8. Admin final sign-off** section — all dockets signed by a supervisor but
   awaiting final admin sign-off; on approval, alert whoever submitted the docket so
   they can invoice.
+  DONE: the "Awaiting final approval" folder already lists these; approveDocket now
+  posts an in-app notice to the submitter ("approved — ready to invoice") shown as
+  a banner on their dashboard. (Cross-device alert needs the backend.)
 - [x] **9. Admin can create a docket** (same options as workers/supervisors).
   DONE: added a prominent "New docket" button to the admin dashboard. The form
   already supports admins (company locked to appSettings.name; billing chooser is
