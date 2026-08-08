@@ -27,9 +27,12 @@ Legend:  [ ] todo   [~] in progress   [x] done   ⚠ = needs backend to fully wo
   DONE: seed trial staff (Site Manager / Project Manager / Foreman) and
   prefillReqBy() auto-selects a default (logged-in user if on the list, else the
   first staff member) whenever the field is blank.
-- [ ] **4. Per-worker times.** When adding additional workers, allow each to have
+- [x] **4. Per-worker times.** When adding additional workers, allow each to have
   their own start/finish time, OR a "copy same hours as main worker" tick box.
   (A "same hours for all" tick already exists — extend to per-worker start/finish.)
+  DONE: each additional worker row has Start/Finish inputs that auto-calc their
+  hours; "Same hours for all" disables those and copies the main hours. Times are
+  saved per worker (workersOnSite[].start/finish).
 
 ## 3. DOCKET PDF  (everything must fit on ONE A4 page)
 - [ ] **5. PDF setout order:**

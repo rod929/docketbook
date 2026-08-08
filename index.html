@@ -5796,7 +5796,9 @@ function initWorkersSection(){
 }
 
 // Add a worker row. isPrimary marks the logged-in worker (name read-only).
-function addWorkerRow(name='',hours='',isPrimary=false){
+// Additional workers can enter their OWN start/finish time (their hours are then
+// auto-calculated); the primary worker uses the docket's top-level start/finish.
+function addWorkerRow(name='',hours='',isPrimary=false,start='',finish=''){
   const id='wk_'+Date.now()+'_'+Math.random().toString(36).slice(2,5);
   workerRows.push(id);
   const list=document.getElementById('workers-list');
@@ -5808,15 +5810,26 @@ function addWorkerRow(name='',hours='',isPrimary=false){
   row.style.cssText='display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;padding:10px;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;margin-bottom:8px;background:#fff;';
   const sameOn=document.getElementById('workers-same-hours')?.checked;
   const placeholderName=isPrimary?'':('Worker '+(idx+1)+' (name optional)');
+  const lblCss='font-size:12px;color:#888;font-weight:500;margin-bottom:4px;';
+  const timeCols=isPrimary?''
+    :('<div style="flex:1;min-width:76px;">'
+        +'<label style="'+lblCss+'">Start</label>'
+        +'<input type="text" inputmode="numeric" class="wk-start" value="'+esc(start)+'" placeholder="e.g. 0730" autocomplete="off" onblur="normalizeTime(this)" onchange="onWorkerTimeChange(this)"'+(sameOn?' disabled style="background:#f5f5f3;"':'')+'>'
+      +'</div>'
+      +'<div style="flex:1;min-width:76px;">'
+        +'<label style="'+lblCss+'">Finish</label>'
+        +'<input type="text" inputmode="numeric" class="wk-finish" value="'+esc(finish)+'" placeholder="e.g. 1600" autocomplete="off" onblur="normalizeTime(this)" onchange="onWorkerTimeChange(this)"'+(sameOn?' disabled style="background:#f5f5f3;"':'')+'>'
+      +'</div>');
   row.innerHTML=
-    '<div style="flex:2;min-width:150px;">'
-      +'<label style="font-size:12px;color:#888;font-weight:500;margin-bottom:4px;">'
+    '<div style="flex:2;min-width:130px;">'
+      +'<label style="'+lblCss+'">'
         +(isPrimary?'Filled out by':('Worker '+(idx+1)))+'</label>'
       +'<input type="text" class="wk-name" value="'+esc(name)+'" placeholder="'+placeholderName+'"'
         +(isPrimary?' readonly style="background:#f5f5f3;font-weight:500;"':'')+'>'
     +'</div>'
-    +'<div style="flex:1;min-width:90px;">'
-      +'<label style="font-size:12px;color:#888;font-weight:500;margin-bottom:4px;">Hours</label>'
+    +timeCols
+    +'<div style="flex:1;min-width:80px;">'
+      +'<label style="'+lblCss+'">Hours</label>'
       +'<input type="number" class="wk-hours" value="'+hours+'" min="0" step="0.25" placeholder="e.g. 7.5" oninput="updWorkersTotal()"'+(sameOn?' readonly style="background:#f5f5f3;"':'')+'>'
     +'</div>'
     +(isPrimary
@@ -5856,13 +5869,34 @@ function relabelWorkerRows(){
   });
 }
 
+// A worker's own start/finish changed → auto-calculate that worker's hours.
+function onWorkerTimeChange(inp){
+  const row=inp.closest('[data-primary]');
+  if(!row)return;
+  const sEl=row.querySelector('.wk-start'),fEl=row.querySelector('.wk-finish'),hEl=row.querySelector('.wk-hours');
+  if(!sEl||!fEl||!hEl)return;
+  const s=parseTime(sEl.value),f=parseTime(fEl.value);
+  if(s&&f){
+    let mins=(f.h*60+f.m)-(s.h*60+s.m);
+    if(mins<0)mins+=1440; // finish past midnight
+    hEl.value=Math.round(mins/60*100)/100;
+  }
+  updWorkersTotal();
+}
+
 // When "same hours" is ticked, copy the docket hours to every row and lock them
+// (and disable the per-worker start/finish, since everyone uses the main hours).
 function toggleSameHours(on){
   const list=document.getElementById('workers-list');
   if(!list)return;
   if(on){applySameHours();}
   Array.from(list.querySelectorAll('.wk-hours')).forEach(inp=>{
     inp.readOnly=on;
+    inp.style.background=on?'#f5f5f3':'';
+  });
+  Array.from(list.querySelectorAll('.wk-start,.wk-finish')).forEach(inp=>{
+    inp.disabled=on;
+    if(on)inp.value='';
     inp.style.background=on?'#f5f5f3':'';
   });
   updWorkersTotal();
@@ -5912,7 +5946,11 @@ function getWorkersOnSite(){
     const name=(row.querySelector('.wk-name')?.value||'').trim();
     const hours=parseFloat(row.querySelector('.wk-hours')?.value)||0;
     const primary=row.dataset.primary==='1';
-    out.push({name,hours,primary,trade:primary?currentWorkerTrade():''});
+    // Primary worker's times come from the docket's top-level start/finish;
+    // additional workers carry their own (if entered).
+    const start=primary?(document.getElementById('d-start')?.value||''):(row.querySelector('.wk-start')?.value||'');
+    const finish=primary?(document.getElementById('d-finish')?.value||''):(row.querySelector('.wk-finish')?.value||'');
+    out.push({name,hours,start,finish,primary,trade:primary?currentWorkerTrade():''});
   });
   return out;
 }
@@ -5927,7 +5965,7 @@ function setWorkersOnSite(arr){
     addWorkerRow(currentWorkerName(),'',true);
     return;
   }
-  arr.forEach((w,i)=>addWorkerRow(w.name||'',w.hours||'',i===0?true:false));
+  arr.forEach((w,i)=>addWorkerRow(w.name||'',w.hours||'',i===0?true:false,w.start||'',w.finish||''));
 }
 
 // ─── FREE DOCKET (admin: record without allocating a project) ──────────
