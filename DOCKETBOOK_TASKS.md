@@ -89,9 +89,13 @@ Legend:  [ ] todo   [~] in progress   [x] done   ⚠ = needs backend to fully wo
   pending-billing folder's chargeable/backcharge/own-cost chooser.
 
 ## 6. PASSWORD
-- [ ] **13. ⚠ Forgot-password / recovery.** A complete password recovery setup.
+- [x] **13. ⚠ Forgot-password / recovery.** A complete password recovery setup.
   NOTE: real recovery (email reset links) needs the backend. Build the UI now; full
   function lands with the backend.
+  DONE: the working security-question recovery already exists (Forgot password →
+  verify username → answer → set new password, offline). Added the backend-deferred
+  "Email me a reset link" option (looks up the account email, masks it, explains it
+  activates with the backend). Admin one-click reset also already exists.
 
 ---
 

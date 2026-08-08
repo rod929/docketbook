@@ -349,7 +349,11 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div id="reset-step1">
         <p style="font-size:12px;color:#888;margin:0 0 14px;">Enter your username to continue.</p>
         <div style="margin-bottom:14px;"><label>Username</label><input type="text" id="reset-user" placeholder="Your username" onkeydown="if(event.key==='Enter')continueReset()"></div>
-        <button class="btn btn-p signin" onclick="continueReset()" style="margin-top:0;">Continue</button>
+        <button class="btn btn-p signin" onclick="continueReset()" style="margin-top:0;">Continue with security question</button>
+        <div style="margin-top:14px;padding-top:14px;border-top:0.5px solid rgba(0,0,0,0.08);">
+          <button class="forgot" type="button" onclick="emailResetLink()" style="margin:0;">Or email me a reset link →</button>
+          <p style="font-size:11px;color:#aaa;margin:6px 0 0;">Sends a secure reset link to the email on your account. Turns on with the Docketbook backend.</p>
+        </div>
       </div>
 
       <!-- Step 2: answer security question + new password -->
@@ -4465,6 +4469,38 @@ function accountExists(u){
   if(users.find(x=>x.u===u))return true;
   if(u===ADM.u)return true;
   return false;
+}
+
+// Look up the email on file for an account (used by the reset-link path)
+function accountEmail(u){
+  subs=ldL('v4_subs')||(typeof DSUBS!=='undefined'?DSUBS:[])||[];
+  workers=ldL('v4_workers')||(typeof DWORKERS!=='undefined'?DWORKERS:[])||[];
+  users=ldL('dlb_users')||(typeof DUSERS!=='undefined'?DUSERS:[])||[];
+  const rec=(subs.find(x=>x.u===u)||workers.find(x=>x.u===u)||users.find(x=>x.u===u));
+  return (rec&&rec.email)?rec.email:'';
+}
+function maskEmail(e){
+  const [a,b]=String(e).split('@');
+  if(!b)return e;
+  const ma=a.length<=2?a[0]+'*':a[0]+'***'+a[a.length-1];
+  return ma+'@'+b;
+}
+// Email reset link — the backend-dependent path. mailto/local storage can't send
+// a real secure link, so this explains the flow and where the link would go; it
+// activates once the Docketbook backend is live. The working security-question
+// path above covers recovery today.
+function emailResetLink(){
+  const u=document.getElementById('reset-user').value.trim();
+  const msg=document.getElementById('reset-msg');
+  const show=(text,ok)=>{msg.textContent=text;msg.style.background=ok?'#E1F5EE':'#FCEBEB';msg.style.color=ok?'#085041':'#9b2c2c';msg.classList.remove('hidden');};
+  if(!u){show('Enter your username first, then request a reset link.',false);return;}
+  if(!accountExists(u)){show('No account found with that username. Check the spelling or contact your administrator.',false);return;}
+  const email=accountEmail(u);
+  if(email){
+    show('A secure reset link will be sent to '+maskEmail(email)+'. Email reset links turn on with the Docketbook backend — for now use the security question above, or ask your administrator to reset your password.',true);
+  } else {
+    show('No email is on file for this account, so a reset link can\'t be sent yet. Use your security question above, or ask your administrator to reset your password.',false);
+  }
 }
 
 function continueReset(){
