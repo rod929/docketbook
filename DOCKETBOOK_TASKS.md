@@ -110,6 +110,16 @@ defer 11 and 13 until the backend.
 Both: build UI/logic now, fully works once the backend exists.
 
 ## MUST-FIX BEFORE GO-LIVE (needs backend)
+- **Notifications to close out open items (needs-billing / needs-forwarding /
+  awaiting-signature).** Optimal strategy, all backend-dependent:
+  1. PUSH (primary) — app installed to home screen (PWA groundwork added: inline
+     manifest + icon, single-file). Backend + service worker sends free,
+     instant, phone-native push that deep-links to the item.
+  2. SMS (escalation only) — for the time-sensitive cashflow event (signed →
+     needs billing) or if a push goes unread; costs per message, use sparingly.
+  3. EMAIL (digest) — daily "outstanding items" summary, mainly for the office.
+  Rule: batch/digest, don't fire one-per-event (notification fatigue). Today the
+  app can only alert IN-app when opened; proactive reach-out needs the backend.
 - **Cross-device sync — the cashflow trigger (CORE).** Admin and supervisor are
   on DIFFERENT devices. The instant "our supervisor signs a docket → it appears
   on the admin's dashboard (Pending billing) with the cost estimate" must work
