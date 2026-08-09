@@ -2234,9 +2234,13 @@ function calcHours(){
 }
 
 function updCP(){
-  const h=parseFloat(document.getElementById('dh').value)||0;
   const cp=document.getElementById('cp');
-  if(!CU||!h){cp.textContent='';return;}
+  if(!cp)return;
+  // Money is ADMIN-ONLY (CLAUDE.md). Never show cost or hourly rate to
+  // workers, supervisors or subs — including the forward-to-client flow.
+  if(!CU||CU.role!=='admin'){cp.textContent='';return;}
+  const h=parseFloat(document.getElementById('dh').value)||0;
+  if(!h){cp.textContent='';return;}
   const pcode=document.getElementById('dp')?.value||'';
   const pr=getProjectRate(pcode,CU.u);
   const r=pr.rate||getRate(CU.u);
@@ -2440,7 +2444,7 @@ function renRD(){
     const cr=getClientRate(d.pcode);
     const clientRate=cr.length?cr[0].std:null;
     const clientCost=clientRate&&d.hours?Math.round(d.hours*clientRate*100)/100:null;
-    const showFinancials=CU.role==='admin'||CU.role==='manager'||CU.role==='supervisor';
+    const showFinancials=CU.role==='admin'; // money is admin-only (CLAUDE.md)
     return`<tr>
       <td><span class="dn">#${d.id}</span></td>
       <td><span class="badge bi">${esc(d.pcode)}</span></td>
