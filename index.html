@@ -1764,6 +1764,28 @@ function seedTrialData(){
   if(ldL('dlb_staff')===null){
     svL('dlb_staff',['Site Manager','Project Manager','Foreman']);
   }
+
+  // Demo docket for supervisor hcsup2 (Dana Mills): signed by the supervisor,
+  // chargeable, and NOT yet forwarded up-chain to the builder's supervisor — this
+  // is exactly the state that lights up the red "hero" alert on the dashboard.
+  if(Array.isArray(dockets)&&!dockets.find(d=>d.id==='DEMO01')){
+    const _today=new Date().toISOString().split('T')[0];
+    const _demoSig='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="90"><path d="M12 62 C40 8 60 8 78 52 S120 78 140 44 S190 10 228 58" fill="none" stroke="#185FA5" stroke-width="3" stroke-linecap="round"/></svg>');
+    dockets.push({
+      id:'DEMO01',pcode:'HV-T1',pname:'Harbourview Tower — Stage 1',freeDocket:false,
+      date:_today,sub:'Coastline Painting',reqBy:'Site Manager',reqHow:'',
+      photos:[],materials:[],accommodation:null,refSubDocketId:null,
+      signerRole:'hc_supervisor',signerName:'Dana Mills',workerName:'Tom Reilly',
+      workersOnSite:[{name:'Tom Reilly',hours:7.5,start:'07:00',finish:'15:00',primary:true,trade:'Painter'}],
+      startTime:'07:00',finishTime:'15:00',breakMins:30,hours:7.5,rate:0,cost:null,
+      bill:'ch',bcTarget:'',desc:'Prep and two coats to level 3 common areas.',notes:'',
+      supervisorNote:'',sig:_demoSig,sigStatus:'signed',signToken:null,
+      signedAt:new Date().toISOString(),signedBySupervisor:'hcsup2',
+      sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',
+      createdBy:'hcsup2',createdAt:new Date().toISOString()
+    });
+    svL('v4_dock',dockets);
+  }
 }
 
 // ─── AUTH ─────────────────────────────────────────────────────────────
