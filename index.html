@@ -561,6 +561,11 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <div class="sv-ndock" onclick="showTab('md',document.getElementById('n2'))"><span class="sv-ic">🗂️</span><span id="sup-tile-mydockets">My dockets</span></div>
           </div>
 
+          <!-- Subcontractor dockets received (all sub dockets on my projects, with status) -->
+          <div id="sup-received-wrap" class="hidden">
+            <p class="st" style="margin-top:0;color:#185FA5;">📥 Subcontractor dockets received <span id="sup-received-count" style="background:#E3EEF9;color:#185FA5;border-radius:10px;font-size:11px;font-weight:700;padding:1px 8px;margin-left:4px;">0</span></p>
+            <div class="card" style="padding:0;border:0.5px solid #C9DDF1;background:#FBFCFE;margin-bottom:14px;"><div id="sup-received-list"></div></div>
+          </div>
           <!-- Pending billing folder (cross-company signed dockets awaiting a billing decision) -->
           <div id="sup-pending-billing-wrap" class="hidden">
             <p class="st" style="margin-top:0;color:#854F0B;">⏳ Pending billing</p>
@@ -7456,6 +7461,27 @@ function renSupervisorDash(){
   }
   _set('sup-billing-lab',_t.svBillingLab);_set('sup-billing-sub',_t.svBillingSub);
 
+  // ── Subcontractor dockets received (every sub docket on my projects, w/ status) ──
+  const _subIds=new Set(subs.map(s=>s.u));
+  const _wIds=new Set(workers.map(w=>w.u));
+  const _myCo=(appSettings.name||'').toLowerCase();
+  const received=projDockets.filter(d=>d.createdBy!==CU.u&&(_subIds.has(d.createdBy)||_wIds.has(d.createdBy)||((d.sub||'').toLowerCase()!==_myCo)))
+    .slice().sort((a,b)=>{
+      const aw=a.sig?1:0,bw=b.sig?1:0;               // unsigned (to-sign) first
+      if(aw!==bw)return aw-bw;
+      return String(b.date||'').localeCompare(String(a.date||''));
+    });
+  const rvWrap=document.getElementById('sup-received-wrap');
+  const rvList=document.getElementById('sup-received-list');
+  const rvCount=document.getElementById('sup-received-count');
+  if(rvWrap&&rvList){
+    if(received.length){
+      rvWrap.classList.remove('hidden');
+      if(rvCount)rvCount.textContent=received.length;
+      rvList.innerHTML=received.slice(0,25).map(subReceivedRow).join('');
+    } else {rvWrap.classList.add('hidden');rvList.innerHTML='';}
+  }
+
   // ── My projects (allocated by admin) ──
   const myProjects=projects.filter(p=>ap.includes(p.code));
   const _lng=localStorage.getItem('dlb_lang_'+CU.u)||'en';
@@ -7497,6 +7523,24 @@ function scrollToPendingBilling(){
 }
 
 // A compact row for the pending-billing folder with inline chargeable/backcharge/own-cost buttons
+// A row in the supervisor's "Subcontractor dockets received" list. No money —
+// hours / company / date / status only. Unsigned ones get a "Review & sign"
+// action; the rest a "View".
+function subReceivedRow(d){
+  const needsSig=!d.sig&&!(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms');
+  const worker=(d.workersOnSite&&d.workersOnSite[0]&&d.workersOnSite[0].name)||d.workerName||'';
+  const btn=needsSig
+    ? `<button class="btn btn-p btn-s" style="background:#185FA5;border-color:#185FA5;color:#fff;flex-shrink:0;" onclick="vD('${d.id}')">✍️ Review &amp; sign</button>`
+    : `<button class="btn btn-s" style="flex-shrink:0;" onclick="vD('${d.id}')">View</button>`;
+  return `<div style="padding:11px 12px;border-top:0.5px solid rgba(201,221,241,0.7);display:flex;align-items:center;gap:10px;">
+    <div style="flex:1;min-width:0;">
+      <div style="font-size:13px;font-weight:500;color:#2D2D2D;">${esc(d.sub||'')}${worker?' · '+esc(worker):''}</div>
+      <div style="font-size:11px;color:#8a8a8a;margin:2px 0 4px;">#${d.id} · ${esc(d.pname||d.pcode||'')} · ${fd(d.date)} · ${d.hours||0}h</div>
+      ${statusBadge(d)}
+    </div>
+    ${btn}
+  </div>`;
+}
 function billingChooserRow(d){
   const who=esc(d.sub||'');
   const age=(typeof docketAgeDays==='function')?docketAgeDays(d):0;

@@ -142,6 +142,13 @@ Both: build UI/logic now, fully works once the backend exists.
   — so a stray touch or a scroll over the pad can't leave an accidental mark.
   Clearing re-locks it.
 
+- [x] **Subcontractor dockets received (supervisor dashboard).** A new section
+  listing every sub docket on the supervisor's projects, with a status badge on
+  each. Ones awaiting the supervisor's signature sort to the top with a
+  "Review & sign" button (opens the sign-on-screen pad); already-handled ones
+  show their status with a "View" button. No money shown. Sits above Pending
+  billing (received = before signing; pending billing = after signing).
+
 ## MUST-FIX BEFORE GO-LIVE (needs backend)
 - **Notifications to close out open items (needs-billing / needs-forwarding /
   awaiting-signature).** Optimal strategy, all backend-dependent:
