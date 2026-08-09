@@ -1938,6 +1938,9 @@ function doLogout(){
   document.getElementById('dsb').readOnly=false;
   const dsbWrapL=document.getElementById('dsb-wrap');if(dsbWrapL)dsbWrapL.style.display='';
   const bn=document.getElementById('bill-type-pending-note');if(bn)bn.classList.add('hidden');
+  // Hide the bottom nav on the login screen (CU is now null → renBottomNav hides it)
+  if(typeof renBottomNav==='function')renBottomNav();
+  const invn=document.getElementById('invoice-notice');if(invn)invn.innerHTML='';
   showTab('dash',document.getElementById('n0'));
 }
 
