@@ -2322,11 +2322,19 @@ function autoFillContact(){
 document.addEventListener('change',function(e){if(e.target.id==='d-contact')autoFillContact();});
 
 function updClientFromProject(){
+  // Subs sign up to the head contractor — lockSubClient handles their client.
+  if(CU&&CU.role==='sub')return;
   const pcode=document.getElementById('dp').value;
   const proj=projects.find(p=>p.code===pcode);
+  const dClient=document.getElementById('d-client');
   if(proj&&proj.clientId){
-    document.getElementById('d-client').value=proj.clientId;
+    // The client is determined by the project — lock it so only that company's
+    // contacts show under client sign-off (no picking other companies).
+    if(dClient){dClient.value=proj.clientId;dClient.disabled=true;}
     loadClientContacts();
+  } else {
+    // No project client (e.g. free docket) — let the admin choose.
+    if(dClient)dClient.disabled=false;
   }
 }
 
@@ -2982,6 +2990,7 @@ function resetDF(){
   document.getElementById('desc').value='';document.getElementById('dnotes').value='';
   {const svn=document.getElementById('review-supervisor-note');if(svn)svn.value='';window._reviewSupervisorNote='';}
   document.getElementById('d-client').value='';document.getElementById('d-contact').innerHTML='<option value="">— Select contact —</option>';
+  {const dc=document.getElementById('d-client');if(dc&&!(CU&&CU.role==='sub'))dc.disabled=false;}
   document.getElementById('send-email').value='';document.getElementById('send-sms').value='';
   setDD();clrSig();setSigMethod('onsite');
   if(CU&&CU.role!=='sub'){
