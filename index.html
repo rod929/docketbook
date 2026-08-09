@@ -7158,7 +7158,10 @@ function renSupervisorDash(){
   if(supBadge){supBadge.textContent=dc;supBadge.classList.toggle('hidden',dc===0);}
 
   // STATE 1 hero — signed & chargeable, not yet sent up the chain to the client
-  const heroList=own.filter(d=>d.sig&&d.bill==='ch'&&!dockets.find(x=>x.refSubDocketId===d.id));
+  // Signed + chargeable + not yet forwarded up-chain. Includes dockets this
+  // supervisor SIGNED (not only created) so it picks up where "needs billing"
+  // left off once billing is set to chargeable.
+  const heroList=dockets.filter(d=>d.sig&&d.bill==='ch'&&(d.createdBy===CU.u||d.signedBySupervisor===CU.u)&&!dockets.find(x=>x.refSubDocketId===d.id));
   const hero=document.getElementById('sup-hero');
   const heroNum=document.getElementById('sup-hero-num');
   if(hero){
