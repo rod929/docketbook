@@ -1173,6 +1173,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <option value="needs_billing">💲 Needs billing</option>
           <option value="chargeable_ready">✓ Signed · ready to send</option>
           <option value="queried">⚠ Queried</option>
+          <option value="rejected">⛔ Rejected</option>
           <option value="signed">✓ Signed (all)</option>
         </select>
       </div>
@@ -2214,6 +2215,7 @@ function sigBadge(d){
 // One of: queried | awaiting_client | awaiting_my_sig | needs_billing |
 // chargeable_ready | signed.
 function docketStatus(d){
+  if(d.approvalStatus==='rejected')return'rejected';
   if(d.approvalStatus==='queried')return'queried';
   if(!d.sig){
     if(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')return'awaiting_client';
@@ -2224,6 +2226,7 @@ function docketStatus(d){
   return'signed';
 }
 const STATUS_META={
+  rejected:{label:'⛔ Rejected',bg:'#FBD9D6',fg:'#8A1F19'},
   queried:{label:'⚠ Queried',bg:'#FBE3E1',fg:'#B23B39'},
   awaiting_client:{label:'📤 Awaiting client sign',bg:'#E3EEF9',fg:'#185FA5'},
   awaiting_my_sig:{label:'✍️ Needs my signature',bg:'#FCEFD6',fg:'#96631A'},
@@ -2234,6 +2237,48 @@ const STATUS_META={
 function statusBadge(d){
   const m=STATUS_META[docketStatus(d)]||STATUS_META.signed;
   return'<span class="badge" style="background:'+m.bg+';color:'+m.fg+';">'+m.label+'</span>';
+}
+// Approval banner shown at the top of the docket view: approved / awaiting /
+// queried / rejected, with the reasons + note and (for our side) a
+// Resolve & re-submit button plus the full query/response history.
+function renderQueryStatus(d){
+  if(!d||!d.sig||!d.approvalStatus)return'';
+  const st=d.approvalStatus;
+  if(st==='approved'){
+    return`<div style="background:#E1F5EE;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#0F6E56;">✓ <strong>Approved</strong>${d.approvedByName?' by '+esc(d.approvedByName):''}${d.approvedAt?' · '+fd(d.approvedAt.slice(0,10)):''} — firm committed cost.</div>`;
+  }
+  if(st==='awaiting'){
+    const re=d.resubmittedAt?' · re-submitted '+fd(d.resubmittedAt.slice(0,10)):'';
+    return`<div style="background:#FBFCFE;border:0.5px solid #C9DDF1;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#185FA5;">⏳ <strong>Awaiting final approval</strong>${re} — pending PM / Contracts Admin sign-off.</div>${queryThreadHtml(d)}`;
+  }
+  if(st==='queried'||st==='rejected'){
+    const isRej=st==='rejected';
+    const reasons=(d.queryReasons&&d.queryReasons.length)?'<div style="margin-top:5px;">'+d.queryReasons.map(r=>'<span style="display:inline-block;background:#fff;border:0.5px solid #E7B9B6;border-radius:12px;padding:2px 9px;margin:3px 4px 0 0;font-size:11px;">'+esc(r)+'</span>').join('')+'</div>':'';
+    const btn=canResolveDocket(d)?`<div style="margin-top:10px;"><button class="btn btn-p btn-s" style="background:#1D9E75;border-color:#1D9E75;color:#fff;" onclick="openResolveModal('${d.id}')">↩ Resolve &amp; re-submit</button></div>`:'';
+    return`<div style="background:${isRej?'#FBD9D6':'#FBE6E6'};border-radius:10px;padding:11px 14px;margin-bottom:12px;font-size:12px;color:#8A1F19;">
+      ${isRej?'⛔':'⚠'} <strong>${isRej?'Rejected':'Queried'}</strong>${d.queriedByName?' by '+esc(d.queriedByName):''}${d.queriedAt?' · '+fd(d.queriedAt.slice(0,10)):''}
+      ${reasons}
+      ${d.queryNote?'<div style="margin-top:5px;">"'+esc(d.queryNote)+'"</div>':''}
+      ${btn}
+    </div>${queryThreadHtml(d)}`;
+  }
+  return'';
+}
+// The running query/response conversation (skips the current live query, which
+// is already shown in the banner above).
+function queryThreadHtml(d){
+  const t=(d.queryThread||[]);
+  if(t.length<2)return'';
+  const rows=t.slice(0,-1).map(e=>{
+    const when=e.at?fd(e.at.slice(0,10)):'';
+    if(e.type==='response'){
+      return`<div style="border-left:2px solid #1D9E75;padding:2px 0 2px 8px;margin:6px 0;font-size:11px;color:#0F6E56;"><strong>↩ ${esc(e.byName||'Re-submitted')}</strong>${when?' · '+when:''}${e.photosAdded?' · +'+e.photosAdded+' photo'+(e.photosAdded>1?'s':''):''}${e.note?' — '+esc(e.note):''}</div>`;
+    }
+    const label=e.type==='reject'?'⛔ Rejected':'⚠ Queried';
+    const rs=(e.reasons&&e.reasons.length)?' ['+e.reasons.map(esc).join(', ')+']':'';
+    return`<div style="border-left:2px solid #C99;padding:2px 0 2px 8px;margin:6px 0;font-size:11px;color:#8A1F19;"><strong>${label} ${esc(e.byName||'')}</strong>${when?' · '+when:''}${rs}${e.note?' — '+esc(e.note):''}</div>`;
+  }).join('');
+  return`<div style="background:#FAFAF8;border-radius:8px;padding:6px 12px;margin-bottom:12px;"><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.04em;color:#aaa;margin:4px 0;">History</div>${rows}</div>`;
 }
 function getContactLabel(d){
   if(!d.clientId)return'—';
@@ -3169,17 +3214,7 @@ function vD(id){
       <button class="btn btn-s" onclick="translateDocketView()">Translate</button>
       <span id="vd-translate-hint" style="font-size:11px;color:#aaa;"></span>
     </div>
-    ${(CU&&CU.role==='admin'&&d.sig&&d.approvalStatus)?(()=>{
-      const st=d.approvalStatus;
-      if(st==='approved'){
-        return`<div style="background:#E1F5EE;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#0F6E56;">✓ <strong>Approved</strong>${d.approvedByName?' by '+esc(d.approvedByName):''}${d.approvedAt?' · '+fd(d.approvedAt.slice(0,10)):''} — firm committed cost.</div>`;
-      } else if(st==='queried'){
-        return`<div style="background:#FBE6E6;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#A4271F;">⚠ <strong>Queried</strong>${d.queriedByName?' by '+esc(d.queriedByName):''} — ${esc(d.queryNote||'(no note)')}</div>`;
-      } else if(st==='awaiting'){
-        return`<div style="background:#FBFCFE;border:0.5px solid #C9DDF1;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#185FA5;">⏳ <strong>Awaiting final approval</strong> — billing assigned, pending PM / Contracts Admin sign-off.</div>`;
-      }
-      return'';
-    })():''}
+    ${renderQueryStatus(d)}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;margin-bottom:14px;">
       <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Docket #</span><strong>#${d.id}</strong>${d.refSubDocketId?`<span class="badge bs" style="margin-left:6px;font-size:10px;">Client docket (ref #${d.refSubDocketId})</span>`:''}</div>
       <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Date</span>${fd(d.date)}</div>
@@ -7291,8 +7326,9 @@ function approvalRow(d){
   const c=calcC(d);
   const est=(c!=null)?`<span style="color:#185FA5;font-weight:600;">~$${c.toFixed(2)}</span>`:'';
   const billLabel={ch:'Chargeable',bc:'Backcharge',ow:'Own cost'}[d.bill]||d.bill;
-  const queried=d.approvalStatus==='queried';
-  const queryBanner=queried?`<div style="background:#FBE6E6;border-radius:8px;padding:7px 10px;margin-bottom:8px;font-size:11px;color:#A4271F;">⚠ Queried: ${esc(d.queryNote||'(no note)')}</div>`:'';
+  const queried=d.approvalStatus==='queried'||d.approvalStatus==='rejected';
+  const _qr=(d.queryReasons&&d.queryReasons.length)?d.queryReasons.join(', ')+(d.queryNote?' — ':''):'';
+  const queryBanner=queried?`<div style="background:#FBE6E6;border-radius:8px;padding:7px 10px;margin-bottom:8px;font-size:11px;color:#A4271F;">${d.approvalStatus==='rejected'?'⛔ Rejected':'⚠ Queried'}: ${esc(_qr+(d.queryNote||''))||'(no note)'}</div>`:'';
   return `<div style="padding:12px;border-top:0.5px solid rgba(201,221,241,0.7);">
     ${queryBanner}
     <div onclick="vD('${d.id}')" style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:8px;">
@@ -7373,8 +7409,8 @@ function renSupervisorDash(){
   // STATE 2 — awaiting client supervisor signature (sent, not yet signed)
   const awaitClient=own.filter(d=>!d.sig&&(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')).length;
   const b2=document.getElementById('sup-box-await');if(b2)b2.textContent=awaitClient;
-  // STATE 3 — pending / rejected (queried) by the client administrator
-  const rejected=own.filter(d=>d.approvalStatus==='queried').length;
+  // STATE 3 — queried or formally rejected by the client administrator
+  const rejected=own.filter(d=>d.approvalStatus==='queried'||d.approvalStatus==='rejected').length;
   const b3=document.getElementById('sup-box-rejected');if(b3)b3.textContent=rejected;
 
   // My dockets stats (date-range filtered)
@@ -7530,10 +7566,19 @@ function renInvoiceNotices(){
   if(!CU){el.innerHTML='';return;}
   const list=(ldL('dlb_notify')||{})[CU.u]||[];
   if(!list.length){el.innerHTML='';return;}
-  el.innerHTML=list.map(n=>`<div style="background:#E1F5EE;border-left:3px solid #1D9E75;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
-    <span style="font-size:13px;color:#085041;">${esc(n.msg||'')}</span>
-    <button onclick="dismissNotice('${n.id}')" title="Dismiss" style="background:none;border:none;color:#085041;font-size:18px;line-height:1;cursor:pointer;flex-shrink:0;">×</button>
-  </div>`).join('');
+  // Colour by type: query/reject = red, re-submitted = blue, approved/other = green.
+  const theme={
+    queried:{bg:'#FBE6E6',bar:'#A4271F',fg:'#8A1F19'},
+    rejected:{bg:'#FBD9D6',bar:'#8A1F19',fg:'#8A1F19'},
+    resubmitted:{bg:'#E6F1FB',bar:'#185FA5',fg:'#0C447C'}
+  };
+  el.innerHTML=list.map(n=>{
+    const t=theme[n.type]||{bg:'#E1F5EE',bar:'#1D9E75',fg:'#085041'};
+    const click=n.docketId?`onclick="vD('${n.docketId}')"`:'';
+    return`<div style="background:${t.bg};border-left:3px solid ${t.bar};border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+    <span ${click} style="font-size:13px;color:${t.fg};${n.docketId?'cursor:pointer;':''}">${esc(n.msg||'')}</span>
+    <button onclick="dismissNotice('${n.id}')" title="Dismiss" style="background:none;border:none;color:${t.fg};font-size:18px;line-height:1;cursor:pointer;flex-shrink:0;">×</button>
+  </div>`;}).join('');
 }
 
 function approveDocket(id){
@@ -7554,21 +7599,144 @@ function approveDocket(id){
   if(typeof renAD==='function')renAD();
 }
 
-// Query: send the docket back with a note (out of scope, wrong rate, etc.)
+// ─── QUERY / REJECT (client admin sends a docket back with reasons) ────
+const QUERY_REASONS=['Provide more photos','Clarify hours worked','Not in scope','Wrong rate','Missing details','Duplicate docket'];
+let _queryTargetId=null;
+let _queryType='query';
+// Called by the "⚠ Query" button — opens the query/reject modal.
 function queryDocket(id){
   if(!canApproveDockets()){alert('You do not have permission to query dockets.');return;}
   const d=dockets.find(x=>x.id===id);
   if(!d)return;
-  const note=prompt('Query this docket — what needs to be resolved? (e.g. not in scope, wrong rate, hours dispute)','');
-  if(note===null)return; // cancelled
-  d.approvalStatus='queried';
-  d.queryNote=note.trim();
+  _queryTargetId=id;
+  setQueryType('query');
+  const box=document.getElementById('qm-reasons');
+  if(box)box.innerHTML=QUERY_REASONS.map((r,i)=>`<label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#444;background:#f5f5f3;border-radius:20px;padding:5px 12px;cursor:pointer;"><input type="checkbox" class="qm-reason" value="${esc(r)}" style="width:15px;height:15px;margin:0;">${esc(r)}</label>`).join('');
+  const note=document.getElementById('qm-note');if(note)note.value='';
+  const err=document.getElementById('qm-err');if(err)err.classList.add('hidden');
+  const sub=document.getElementById('query-modal-sub');if(sub)sub.textContent='Docket #'+d.id+' — '+(d.pname||d.pcode||'')+'. Add a reason so they know what to fix.';
+  document.getElementById('query-modal').classList.remove('hidden');
+}
+function setQueryType(t){
+  _queryType=t;
+  const q=document.getElementById('qm-type-query'),r=document.getElementById('qm-type-reject');
+  if(q){q.style.borderColor=t==='query'?'#E0A800':'#ddd';q.style.background=t==='query'?'#FFF9E9':'#fff';}
+  if(r){r.style.borderColor=t==='reject'?'#A4271F':'#ddd';r.style.background=t==='reject'?'#FBE6E6':'#fff';}
+  const btn=document.getElementById('qm-send-btn');
+  if(btn){
+    btn.textContent=t==='reject'?'Reject docket':'Send back';
+    btn.style.background=t==='reject'?'#A4271F':'#E0A800';
+    btn.style.color=t==='reject'?'#fff':'#3a2e00';
+  }
+}
+function closeQueryModal(){document.getElementById('query-modal').classList.add('hidden');_queryTargetId=null;}
+function submitQueryModal(){
+  const d=dockets.find(x=>x.id===_queryTargetId);
+  if(!d){closeQueryModal();return;}
+  const reasons=[...document.querySelectorAll('.qm-reason:checked')].map(c=>c.value);
+  const note=(document.getElementById('qm-note').value||'').trim();
+  const err=document.getElementById('qm-err');
+  if(!reasons.length&&!note){err.textContent='Please pick a reason or write a note.';err.classList.remove('hidden');return;}
+  err.classList.add('hidden');
+  const isReject=_queryType==='reject';
+  d.approvalStatus=isReject?'rejected':'queried';
+  d.queryType=_queryType;
+  d.queryReasons=reasons;
+  d.queryNote=note;
   d.queriedBy=CU.u;
   d.queriedByName=CU.name;
   d.queriedAt=new Date().toISOString();
+  d.queryThread=d.queryThread||[];
+  d.queryThread.push({type:_queryType,by:CU.u,byName:CU.name,at:new Date().toISOString(),reasons,note});
   svL('v4_dock',dockets);
+  // Alert whoever submitted the docket (and the supervisor who signed it).
+  const summary=(reasons.length?reasons.join(', ')+(note?' — ':''):'')+note;
+  const msg=(isReject?'⛔ Docket #'+d.id+' rejected':'⚠ Docket #'+d.id+' queried')+(summary?': '+summary:'')+'.';
+  const targets=new Set([d.createdBy,d.signedBySupervisor].filter(Boolean));
+  targets.forEach(u=>addNotice(u,{docketId:d.id,type:isReject?'rejected':'queried',msg}));
+  closeQueryModal();
   if(typeof showCorrectDashboard==='function')showCorrectDashboard();
   if(typeof renAD==='function')renAD();
+  if(typeof renInvoiceNotices==='function')renInvoiceNotices();
+}
+
+// ─── RESOLVE & RE-SUBMIT (our side answers the query) ─────────────────
+let _resolveTargetId=null;
+let _resolvePhotos=[];
+// Can the current user resolve/re-submit this docket? The submitter, the
+// supervisor who signed it, or any company admin.
+function canResolveDocket(d){
+  if(!CU||!d)return false;
+  return CU.role==='admin'||d.createdBy===CU.u||d.signedBySupervisor===CU.u;
+}
+function openResolveModal(id){
+  const d=dockets.find(x=>x.id===id);
+  if(!d)return;
+  if(!canResolveDocket(d)){alert('Only the submitter, signing supervisor or an admin can re-submit this docket.');return;}
+  _resolveTargetId=id;
+  _resolvePhotos=[];
+  const reasons=(d.queryReasons&&d.queryReasons.length)?'<div style="margin-bottom:5px;">'+d.queryReasons.map(r=>'<span style="display:inline-block;background:#fff;border:0.5px solid #E7B9B6;border-radius:12px;padding:2px 8px;margin:2px 3px 0 0;">'+esc(r)+'</span>').join('')+'</div>':'';
+  const who=(d.queriedByName?'by '+esc(d.queriedByName):'')+(d.queriedAt?' · '+fd(d.queriedAt.slice(0,10)):'');
+  const head=(d.approvalStatus==='rejected'?'⛔ Rejected ':'⚠ Queried ')+who;
+  document.getElementById('rsv-query').innerHTML='<strong>'+head+'</strong>'+reasons+(d.queryNote?'<div style="margin-top:4px;">"'+esc(d.queryNote)+'"</div>':'');
+  document.getElementById('rsv-note').value='';
+  document.getElementById('rsv-photos').innerHTML='';
+  const err=document.getElementById('rsv-err');if(err)err.classList.add('hidden');
+  const inp=document.getElementById('rsv-photo-input');if(inp)inp.value='';
+  document.getElementById('resolve-modal').classList.remove('hidden');
+}
+function closeResolveModal(){document.getElementById('resolve-modal').classList.add('hidden');_resolveTargetId=null;_resolvePhotos=[];}
+function handleResolvePhoto(e){
+  const files=e.target.files;if(!files)return;
+  [...files].forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=function(ev){
+      // Downscale to keep localStorage small (reuse the same approach as docket photos)
+      const img=new Image();
+      img.onload=function(){
+        const max=1000;let w=img.width,h=img.height;
+        if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}
+        const c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        const durl=c.toDataURL('image/jpeg',0.75);
+        _resolvePhotos.push(durl);
+        const wrap=document.createElement('div');wrap.style.cssText='position:relative;display:inline-block;';
+        const im=document.createElement('img');im.src=durl;im.style.cssText='width:70px;height:70px;object-fit:cover;border-radius:8px;border:0.5px solid rgba(0,0,0,0.1);';
+        const btn=document.createElement('button');btn.innerHTML='&times;';btn.style.cssText='position:absolute;top:-4px;right:-4px;background:#E24B4A;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;';
+        btn.onclick=function(){const i=_resolvePhotos.indexOf(durl);if(i>-1)_resolvePhotos.splice(i,1);wrap.remove();};
+        wrap.appendChild(im);wrap.appendChild(btn);document.getElementById('rsv-photos').appendChild(wrap);
+      };
+      img.src=ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function submitResolve(){
+  const d=dockets.find(x=>x.id===_resolveTargetId);
+  if(!d){closeResolveModal();return;}
+  const note=(document.getElementById('rsv-note').value||'').trim();
+  const err=document.getElementById('rsv-err');
+  if(!note&&!_resolvePhotos.length){err.textContent='Add a response note or attach a photo before re-submitting.';err.classList.remove('hidden');return;}
+  err.classList.add('hidden');
+  if(_resolvePhotos.length){d.photos=(d.photos||[]).concat(_resolvePhotos);}
+  d.queryThread=d.queryThread||[];
+  d.queryThread.push({type:'response',by:CU.u,byName:CU.name,at:new Date().toISOString(),note,photosAdded:_resolvePhotos.length});
+  // Back into the approval queue; clear the active query flags (history kept in thread)
+  d.approvalStatus='awaiting';
+  d.queryType=null;d.queryReasons=[];d.queryNote='';
+  d.resubmittedAt=new Date().toISOString();
+  svL('v4_dock',dockets);
+  // Notify the client admin who raised the query that it's been answered.
+  if(d.queriedBy){
+    addNotice(d.queriedBy,{docketId:d.id,type:'resubmitted',
+      msg:'↩ Docket #'+d.id+' re-submitted'+(_resolvePhotos.length?' with '+_resolvePhotos.length+' photo'+(_resolvePhotos.length>1?'s':''):'')+(note?': '+note:'')+'.'});
+  }
+  closeResolveModal();
+  if(typeof showCorrectDashboard==='function')showCorrectDashboard();
+  if(typeof renAD==='function')renAD();
+  if(typeof renMD==='function')renMD();
+  if(typeof renInvoiceNotices==='function')renInvoiceNotices();
+  alert('↩ Docket #'+d.id+' re-submitted for approval.');
 }
 
 // Override the billing treatment during approval (PM/CA has the commercial view)
@@ -8051,6 +8219,46 @@ document.addEventListener('change',function(e){
     <div style="display:flex;gap:10px;margin-top:18px;">
       <button class="btn" onclick="closeRecovery()" style="flex:1;padding:12px;">Cancel</button>
       <button class="btn btn-p" onclick="saveRecovery()" style="flex:1;padding:12px;background:#EF9F27;color:#000;border:none;font-weight:600;">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Query / reject a docket (client admin) -->
+<div id="query-modal" class="hidden" style="position:fixed;inset:0;z-index:720;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;">
+  <div style="background:#fff;border-radius:14px;max-width:460px;width:100%;padding:1.4rem;box-shadow:0 10px 40px rgba(0,0,0,0.2);margin:2rem auto;">
+    <p style="font-size:17px;font-weight:600;color:#2D2D2D;margin:0 0 4px;">Send back to the subcontractor</p>
+    <p style="font-size:12px;color:#888;margin:0 0 16px;" id="query-modal-sub">Add a reason so they know what to fix, then re-submit.</p>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <button type="button" id="qm-type-query" onclick="setQueryType('query')" class="btn" style="flex:1;padding:11px;border:2px solid #E0A800;background:#FFF9E9;color:#8A6D00;font-weight:600;border-radius:10px;">⚠ Query<br><span style="font-size:10px;font-weight:400;">needs more info — will come back</span></button>
+      <button type="button" id="qm-type-reject" onclick="setQueryType('reject')" class="btn" style="flex:1;padding:11px;border:2px solid #ddd;background:#fff;color:#A4271F;font-weight:600;border-radius:10px;">⛔ Reject<br><span style="font-size:10px;font-weight:400;">formally decline this docket</span></button>
+    </div>
+    <label style="font-size:13px;color:#555;display:block;margin-bottom:6px;">Reason(s)</label>
+    <div id="qm-reasons" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;"></div>
+    <label style="font-size:13px;color:#555;display:block;margin-bottom:6px;">Note / questions</label>
+    <textarea id="qm-note" placeholder="e.g. Please attach site photos of the completed area, and confirm the 9 hours." style="width:100%;min-height:80px;font-size:14px;padding:11px;border-radius:10px;"></textarea>
+    <div id="qm-err" class="err hidden" style="margin-top:10px;"></div>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <button class="btn" onclick="closeQueryModal()" style="flex:1;padding:12px;">Cancel</button>
+      <button class="btn btn-p" onclick="submitQueryModal()" id="qm-send-btn" style="flex:1;padding:12px;background:#E0A800;color:#3a2e00;border:none;font-weight:600;">Send back</button>
+    </div>
+  </div>
+</div>
+
+<!-- Resolve a query and re-submit (our side) -->
+<div id="resolve-modal" class="hidden" style="position:fixed;inset:0;z-index:720;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;">
+  <div style="background:#fff;border-radius:14px;max-width:480px;width:100%;padding:1.4rem;box-shadow:0 10px 40px rgba(0,0,0,0.2);margin:2rem auto;">
+    <p style="font-size:17px;font-weight:600;color:#2D2D2D;margin:0 0 4px;">Resolve &amp; re-submit</p>
+    <p style="font-size:12px;color:#888;margin:0 0 14px;">Answer the query, attach anything that was asked for, and send it back for approval.</p>
+    <div id="rsv-query" style="background:#FBE6E6;border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:#A4271F;"></div>
+    <label style="font-size:13px;color:#555;display:block;margin-bottom:6px;">Your response</label>
+    <textarea id="rsv-note" placeholder="e.g. Photos of the finished level 4 area attached. Hours confirmed at 9." style="width:100%;min-height:80px;font-size:14px;padding:11px;border-radius:10px;"></textarea>
+    <label style="font-size:13px;color:#555;display:block;margin:14px 0 6px;">Add photos <span style="color:#aaa;font-weight:400;">(optional)</span></label>
+    <input type="file" id="rsv-photo-input" accept="image/*" multiple onchange="handleResolvePhoto(event)" style="font-size:13px;">
+    <div id="rsv-photos" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;"></div>
+    <div id="rsv-err" class="err hidden" style="margin-top:10px;"></div>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <button class="btn" onclick="closeResolveModal()" style="flex:1;padding:12px;">Cancel</button>
+      <button class="btn btn-p" onclick="submitResolve()" style="flex:1;padding:12px;background:#1D9E75;color:#fff;border:none;font-weight:600;">↩ Re-submit for approval</button>
     </div>
   </div>
 </div>

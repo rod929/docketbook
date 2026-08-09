@@ -124,6 +124,18 @@ Both: build UI/logic now, fully works once the backend exists.
   clears on submit. Stored in dlb_ready. ⚠ Cross-device routing to the correct
   worker's phone needs the backend (localStorage is per-device) — flagged in-app.
 
+- [x] **Query / reject with reasons + resolve & re-submit.** When approving,
+  the "⚠ Query" button now opens a modal: choose Query (needs info, comes back)
+  or Reject (formal), tick reason chips (more photos / clarify hours / not in
+  scope / wrong rate / missing details / duplicate) and add a note. The docket
+  view shows the reasons + note prominently to our side (submitter, signing
+  supervisor, admin) with a "↩ Resolve & re-submit" button → answer the query,
+  attach photos, re-submit (status back to Awaiting approval). A running
+  query/response history is kept on the docket (queryThread). In-app notices are
+  colour-coded (red query/reject, blue re-submitted, green approved) and click
+  through to the docket. ⚠ Cross-company/device delivery of these alerts needs
+  the backend.
+
 ## MUST-FIX BEFORE GO-LIVE (needs backend)
 - **Notifications to close out open items (needs-billing / needs-forwarding /
   awaiting-signature).** Optimal strategy, all backend-dependent:
