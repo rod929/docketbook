@@ -3382,14 +3382,14 @@ function vD(id){
   if(!d.sig&&d.signToken){
     const signLink=window.location.href.split('#')[0]+'#sign:'+d.id+':'+d.signToken;
     const presetEmail=d.sendEmail||'';
-    slb.innerHTML=`<div style="background:#E6F1FB;border-radius:8px;padding:12px 14px;font-size:13px;color:#0C447C;">
-      <strong>Sign on screen now</strong>
-      <p style="margin:4px 0 8px;font-size:12px;">Get the client or supervisor to sign here directly.</p>
-      <div class="sig-wrap"><canvas id="vd-sign-canvas" style="width:100%;height:180px;border:2px solid #185FA5;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas><div id="vd-sign-lock" class="sig-lock" onclick="armSig('vd-sign-lock')"><span>✍️ Tap here to sign<small>pad is locked until you tap</small></span></div></div>
-      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-        <button class="btn btn-s" onclick="clearVdSign()">Clear</button>
-        <button class="btn btn-s btn-p" style="background:#1D9E75;border-color:#1D9E75;" onclick="saveVdSign('${d.id}')">✓ Save signature</button>
-      </div>
+    // A SUBCONTRACTOR docket — one the sub made for OUR (head-contractor)
+    // supervisor to sign (signerRole 'hc') — has already been brought to us, so
+    // it only offers "sign on screen", not the option to email a signing link
+    // onward. Our OWN dockets going UP to a client/builder supervisor
+    // (signerRole 'client') keep the send-for-signature option.
+    const _sr=d.signerRole||'';
+    const isSubDocket=(_sr==='hc'||_sr==='hc_supervisor')&&!d.refSubDocketId;
+    const sendBlock=isSubDocket?'':`
       <div style="margin-top:12px;padding-top:10px;border-top:0.5px solid rgba(0,0,0,0.1);">
         <strong>Or send for signature</strong>
         <p style="margin:4px 0 8px;font-size:12px;">Email the signing link to the client or supervisor.</p>
@@ -3399,7 +3399,16 @@ function vD(id){
           <a href="${signLink}" target="_blank" style="color:#185FA5;word-break:break-all;font-size:11px;">${signLink}</a>
           <button class="btn btn-s" style="margin-top:6px;display:block;" onclick="copyLink('${signLink}')">📋 Copy link</button>
         </div>
+      </div>`;
+    slb.innerHTML=`<div style="background:#E6F1FB;border-radius:8px;padding:12px 14px;font-size:13px;color:#0C447C;">
+      <strong>${isSubDocket?'Sign this subcontractor docket':'Sign on screen now'}</strong>
+      <p style="margin:4px 0 8px;font-size:12px;">${isSubDocket?'This docket was sent to you by '+esc(d.sub||'the subcontractor')+' to sign. Capture your signature below, then set the billing.':'Get the client or supervisor to sign here directly.'}</p>
+      <div class="sig-wrap"><canvas id="vd-sign-canvas" style="width:100%;height:180px;border:2px solid #185FA5;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas><div id="vd-sign-lock" class="sig-lock" onclick="armSig('vd-sign-lock')"><span>✍️ Tap here to sign<small>pad is locked until you tap</small></span></div></div>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+        <button class="btn btn-s" onclick="clearVdSign()">Clear</button>
+        <button class="btn btn-s btn-p" style="background:#1D9E75;border-color:#1D9E75;" onclick="saveVdSign('${d.id}')">✓ Save signature</button>
       </div>
+      ${sendBlock}
     </div>`;
     slb.classList.remove('hidden');
     resendBtn.classList.add('hidden');

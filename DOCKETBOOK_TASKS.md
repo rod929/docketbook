@@ -149,6 +149,14 @@ Both: build UI/logic now, fully works once the backend exists.
   show their status with a "View" button. No money shown. Sits above Pending
   billing (received = before signing; pending billing = after signing).
 
+- [x] **Sub docket pending signature = sign only (no re-send).** When our
+  supervisor opens a subcontractor docket that's waiting on their signature
+  (signerRole 'hc'), the sign box now offers ONLY "sign on screen" — the
+  "email a signing link" option is hidden, since the sub already brought it to
+  the supervisor. After signing, cross-company dockets land in Pending billing
+  to set chargeable/backcharge/own cost. Our own dockets going up to a client
+  supervisor still keep the send-for-signature option.
+
 ## MUST-FIX BEFORE GO-LIVE (needs backend)
 - **Notifications to close out open items (needs-billing / needs-forwarding /
   awaiting-signature).** Optimal strategy, all backend-dependent:
