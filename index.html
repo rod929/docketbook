@@ -185,6 +185,12 @@ tr:last-child td{border-bottom:none;}
 tr:hover td{background:#fafaf8;}
 .sw{border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;margin-top:4px;background:#fff;}
 canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:none;}
+/* Signature pads stay LOCKED (this overlay covers them) until the user taps
+   "Tap here to sign", so a stray touch or scroll can't leave a stray mark. */
+.sig-wrap{position:relative;}
+.sig-lock{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;background:rgba(240,240,238,0.92);border-radius:10px;cursor:pointer;z-index:4;}
+.sig-lock span{background:#185FA5;color:#fff;font-weight:600;font-size:14px;padding:10px 18px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.18);line-height:1.25;}
+.sig-lock small{display:block;font-weight:400;font-size:10.5px;opacity:0.85;margin-top:3px;}
 .err{color:#E24B4A;font-size:12px;margin-top:4px;}
 .ok{background:#E1F5EE;color:#085041;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;}
 .info-box{background:#E6F1FB;color:#0C447C;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;}
@@ -836,7 +842,10 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             </div>
             <!-- On site -->
             <div id="rsm-onsite">
+              <div class="sig-wrap">
               <canvas id="review-sigc" width="100%" height="220" style="width:100%;height:220px;border:2px solid #185FA5;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas>
+              <div id="review-sig-lock" class="sig-lock" onclick="armSig('review-sig-lock')"><span>✍️ Tap here to sign<small>pad is locked until you tap</small></span></div>
+              </div>
               <div style="display:flex;gap:8px;margin-top:8px;">
                 <button class="btn btn-s" onclick="clearReviewSig()">Clear signature</button>
                 <span id="review-sig-name" style="font-size:12px;color:#aaa;align-self:center;"></span>
@@ -1106,7 +1115,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             </div>
             <div id="sm-onsite" class="sig-method-box">
               <div id="sig-lang-warn" class="hidden"></div>
-              <div class="sw"><canvas class="sc" id="sigc" width="800" height="110"></canvas></div>
+              <div class="sw sig-wrap"><canvas class="sc" id="sigc" width="800" height="110"></canvas><div id="sig-lock" class="sig-lock" onclick="armSig('sig-lock')"><span>✍️ Tap here to sign<small>pad is locked until you tap</small></span></div></div>
               <div style="display:flex;gap:8px;margin-top:6px;">
                 <button class="btn btn-s" onclick="clrSig()">Clear</button>
                 <span id="ss" style="font-size:12px;color:#aaa;align-self:center;">No signature yet</span>
@@ -2876,6 +2885,9 @@ function checkSigLangWarn(){
   warn.classList.toggle('hidden', lang==='en');
 }
 
+// A signature pad shows a lock overlay until the user deliberately taps it.
+function armSig(overlayId){const o=document.getElementById(overlayId);if(o)o.style.display='none';}
+function lockSig(overlayId){const o=document.getElementById(overlayId);if(o)o.style.display='flex';}
 function initSig(){
   const c=document.getElementById('sigc');if(!c)return;
   const ctx=c.getContext('2d');ctx.strokeStyle='#185FA5';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';
@@ -2886,12 +2898,14 @@ function initSig(){
   function en(){sigOn=false;}
   c.addEventListener('mousedown',s);c.addEventListener('mousemove',dr);c.addEventListener('mouseup',en);c.addEventListener('mouseleave',en);
   c.addEventListener('touchstart',s,{passive:false});c.addEventListener('touchmove',dr,{passive:false});c.addEventListener('touchend',en);
+  lockSig('sig-lock');
 }
 function clrSig(){
   const c=document.getElementById('sigc');if(!c)return;
   c.getContext('2d').clearRect(0,0,c.width,c.height);sigHas=false;
   document.getElementById('ss').textContent='No signature yet';document.getElementById('ss').style.color='#aaa';
   lockBillingBtns();
+  lockSig('sig-lock');
 }
 
 // ─── SUBMIT DOCKET ────────────────────────────────────────────────────
@@ -3029,12 +3043,14 @@ function initVdSign(){
   c.onmousedown=c.ontouchstart=(e)=>{drawing=true;const p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);e.preventDefault();};
   c.onmousemove=c.ontouchmove=(e)=>{if(!drawing)return;const p=pos(e);ctx.lineTo(p.x,p.y);ctx.strokeStyle='#2D2D2D';ctx.lineWidth=2;ctx.lineCap='round';ctx.stroke();_vdSigHas=true;e.preventDefault();};
   c.onmouseup=c.ontouchend=()=>{drawing=false;};
+  lockSig('vd-sign-lock');
 }
 function clearVdSign(){
   const c=document.getElementById('vd-sign-canvas');
   if(!c)return;
   c.getContext('2d').clearRect(0,0,c.width,c.height);
   _vdSigHas=false;
+  lockSig('vd-sign-lock');
 }
 function saveVdSign(id){
   if(!_vdSigHas){alert('Please capture a signature first.');return;}
@@ -3364,7 +3380,7 @@ function vD(id){
     slb.innerHTML=`<div style="background:#E6F1FB;border-radius:8px;padding:12px 14px;font-size:13px;color:#0C447C;">
       <strong>Sign on screen now</strong>
       <p style="margin:4px 0 8px;font-size:12px;">Get the client or supervisor to sign here directly.</p>
-      <canvas id="vd-sign-canvas" style="width:100%;height:180px;border:2px solid #185FA5;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas>
+      <div class="sig-wrap"><canvas id="vd-sign-canvas" style="width:100%;height:180px;border:2px solid #185FA5;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas><div id="vd-sign-lock" class="sig-lock" onclick="armSig('vd-sign-lock')"><span>✍️ Tap here to sign<small>pad is locked until you tap</small></span></div></div>
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
         <button class="btn btn-s" onclick="clearVdSign()">Clear</button>
         <button class="btn btn-s btn-p" style="background:#1D9E75;border-color:#1D9E75;" onclick="saveVdSign('${d.id}')">✓ Save signature</button>
@@ -3484,7 +3500,7 @@ function showSignForm(d){
     <div class="sign-card">
       <p style="font-size:13px;font-weight:500;margin-bottom:4px;">Your signature</p>
       <p style="font-size:12px;color:#888;margin-bottom:10px;">By signing below you confirm the above work was completed to your satisfaction.</p>
-      <div class="sw"><canvas id="remote-sigc" width="800" height="130" style="display:block;width:100%;height:130px;cursor:crosshair;touch-action:none;"></canvas></div>
+      <div class="sw sig-wrap"><canvas id="remote-sigc" width="800" height="130" style="display:block;width:100%;height:130px;cursor:crosshair;touch-action:none;"></canvas><div id="remote-sig-lock" class="sig-lock" onclick="armSig('remote-sig-lock')"><span>✍️ Tap here to sign<small>pad is locked until you tap</small></span></div></div>
       <div style="display:flex;gap:8px;margin-top:8px;align-items:center;">
         <button class="btn btn-s" onclick="clrRemoteSig()">Clear</button>
         <span id="remote-ss" style="font-size:12px;color:#aaa;">No signature yet</span>
@@ -3509,11 +3525,13 @@ function initRemoteSig(){
   function en(){remoteSigOn=false;}
   c.addEventListener('mousedown',s);c.addEventListener('mousemove',dr);c.addEventListener('mouseup',en);c.addEventListener('mouseleave',en);
   c.addEventListener('touchstart',s,{passive:false});c.addEventListener('touchmove',dr,{passive:false});c.addEventListener('touchend',en);
+  lockSig('remote-sig-lock');
 }
 function clrRemoteSig(){
   const c=document.getElementById('remote-sigc');if(!c)return;
   c.getContext('2d').clearRect(0,0,c.width,c.height);remoteSigHas=false;
   document.getElementById('remote-ss').textContent='No signature yet';document.getElementById('remote-ss').style.color='#aaa';
+  lockSig('remote-sig-lock');
 }
 function submitRemoteSig(dockId,token){
   const e=document.getElementById('sign-err');
@@ -5258,7 +5276,7 @@ function loadDraftIntoForm(draftId){
   if(d.sig){
     const c=document.getElementById('sigc');
     const img=new Image();
-    img.onload=function(){c.getContext('2d').drawImage(img,0,0);sigHas=true;unlockBilling();document.getElementById('ss').textContent='Signature captured ✓';document.getElementById('ss').style.color='#1D9E75';};
+    img.onload=function(){c.getContext('2d').drawImage(img,0,0);sigHas=true;unlockBilling();armSig('sig-lock');document.getElementById('ss').textContent='Signature captured ✓';document.getElementById('ss').style.color='#1D9E75';};
     img.src=d.sig;
   }
   if(d.photos&&d.photos.length){
@@ -8010,6 +8028,7 @@ function initReviewSig(){
   canvas.onmousedown=canvas.ontouchstart=(e)=>{drawing=true;const p=getPos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);e.preventDefault();};
   canvas.onmousemove=canvas.ontouchmove=(e)=>{if(!drawing)return;const p=getPos(e);ctx.lineTo(p.x,p.y);ctx.strokeStyle='#2D2D2D';ctx.lineWidth=2;ctx.lineCap='round';ctx.stroke();reviewSigHas=true;e.preventDefault();};
   canvas.onmouseup=canvas.ontouchend=()=>{drawing=false;if(reviewSigHas)revealReviewBilling();};
+  lockSig('review-sig-lock');
 }
 
 function revealReviewBilling(){
@@ -8025,6 +8044,7 @@ function clearReviewSig(){
   reviewSigHas=false;
   const card=document.getElementById('review-billing-card');
   if(card)card.classList.add('hidden');
+  lockSig('review-sig-lock');
 }
 
 // Build a plain-text summary of the docket currently in the form

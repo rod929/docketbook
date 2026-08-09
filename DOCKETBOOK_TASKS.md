@@ -136,6 +136,12 @@ Both: build UI/logic now, fully works once the backend exists.
   through to the docket. ⚠ Cross-company/device delivery of these alerts needs
   the backend.
 
+- [x] **Signature pads lock until tapped.** Every signature box (Review & Sign,
+  new-docket form, docket-view sign-on-screen, and the remote signing page) now
+  shows a "✍️ Tap here to sign" overlay and only accepts a signature once tapped
+  — so a stray touch or a scroll over the pad can't leave an accidental mark.
+  Clearing re-locks it.
+
 ## MUST-FIX BEFORE GO-LIVE (needs backend)
 - **Notifications to close out open items (needs-billing / needs-forwarding /
   awaiting-signature).** Optimal strategy, all backend-dependent:
