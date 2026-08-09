@@ -110,6 +110,15 @@ defer 11 and 13 until the backend.
 Both: build UI/logic now, fully works once the backend exists.
 
 ## MUST-FIX BEFORE GO-LIVE (needs backend)
+- **Cross-device sync — the cashflow trigger (CORE).** Admin and supervisor are
+  on DIFFERENT devices. The instant "our supervisor signs a docket → it appears
+  on the admin's dashboard (Pending billing) with the cost estimate" must work
+  across phones, not just on one device. Today all the logic is built
+  (signedBySupervisor + bill:pending routing, both dashboards, distributeSignedCopies
+  admin alert), but delivery is per-device localStorage. The backend (shared
+  server storage) makes it real: sign on phone A → visible on phone B instantly.
+  This is the product's core value; MUST work at go-live. (Owner confirmed
+  different devices, 2026-08-09.)
 - **Docket-number uniqueness per company.** Each company runs its own docket
   book (Company A #0001 and Company B #0001 is fine), but WITHIN a company a
   number must be used once — no matter who creates it (worker / supervisor /
