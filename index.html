@@ -480,8 +480,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <div class="sv-hero-pulse"></div>
             <div class="sv-hero-content">
               <div class="sv-hero-top"><span class="sv-hero-ic">⚡</span><span class="sv-hero-num" id="sup-hero-num">0</span></div>
-              <div class="sv-hero-lab">Subcontractor docket signed &amp; chargeable</div>
-              <div class="sv-hero-sub">Tap to send to client supervisor for sign off</div>
+              <div class="sv-hero-lab" id="sup-hero-lab">Subcontractor docket signed &amp; chargeable</div>
+              <div class="sv-hero-sub" id="sup-hero-sub">Tap to send to client supervisor for sign off</div>
             </div>
             <span class="sv-hero-arrow">›</span>
           </div>
@@ -490,12 +490,12 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <div class="sv-sbox sv-sbox-2" onclick="showTab('md',document.getElementById('n2'))">
               <span class="sv-arrow">›</span>
               <div class="sv-num" id="sup-box-await">0</div>
-              <div class="sv-lab">⏳ Awaiting client supervisor signature</div>
+              <div class="sv-lab" id="sup-await-lab">⏳ Awaiting client supervisor signature</div>
             </div>
             <div class="sv-sbox sv-sbox-3" onclick="showTab('md',document.getElementById('n2'))">
               <span class="sv-arrow">›</span>
               <div class="sv-num" id="sup-box-rejected">0</div>
-              <div class="sv-lab">⚠️ Pending / rejected by client administrator</div>
+              <div class="sv-lab" id="sup-rejected-lab">⚠️ Pending / rejected by client administrator</div>
             </div>
           </div>
 
@@ -503,7 +503,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 
           <!-- My dockets header + date range -->
           <div class="sv-mydk-head">
-            <span class="sv-mydk-title">My dockets</span>
+            <span class="sv-mydk-title" id="sup-mydk-title">My dockets</span>
             <select class="sv-range" id="sup-range" onchange="renSupervisorDash()">
               <option value="week">This week</option>
               <option value="today">Today</option>
@@ -512,14 +512,14 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             </select>
           </div>
           <div class="sv-stats">
-            <div class="sv-sc sv-sc-d"><div class="sv-v" id="sup-stat-awaiting">0</div><div class="sv-l">Awaiting my signature</div></div>
-            <div class="sv-sc sv-sc-s"><div class="sv-v" id="sup-stat-signed">0</div><div class="sv-l">Dockets signed</div></div>
-            <div class="sv-sc sv-sc-t"><div class="sv-v" id="sup-stat-clientsigned">0</div><div class="sv-l">Signed by client sup</div></div>
+            <div class="sv-sc sv-sc-d"><div class="sv-v" id="sup-stat-awaiting">0</div><div class="sv-l" id="sup-l-awaiting">Awaiting my signature</div></div>
+            <div class="sv-sc sv-sc-s"><div class="sv-v" id="sup-stat-signed">0</div><div class="sv-l" id="sup-l-signed">Dockets signed</div></div>
+            <div class="sv-sc sv-sc-t"><div class="sv-v" id="sup-stat-clientsigned">0</div><div class="sv-l" id="sup-l-clientsigned">Signed by client sup</div></div>
           </div>
 
           <div class="sv-tiles">
-            <div class="sv-ndock" onclick="showTab('drafts',document.getElementById('n-drafts'))"><span class="sv-ic">✏️</span>Drafts <span id="sup-draft-badge" class="hidden" style="background:#2D2D2D;color:#EF9F27;border-radius:10px;font-size:10px;padding:1px 6px;">0</span></div>
-            <div class="sv-ndock" onclick="showTab('md',document.getElementById('n2'))"><span class="sv-ic">🗂️</span>My dockets</div>
+            <div class="sv-ndock" onclick="showTab('drafts',document.getElementById('n-drafts'))"><span class="sv-ic">✏️</span><span id="sup-tile-drafts">Drafts</span> <span id="sup-draft-badge" class="hidden" style="background:#2D2D2D;color:#EF9F27;border-radius:10px;font-size:10px;padding:1px 6px;">0</span></div>
+            <div class="sv-ndock" onclick="showTab('md',document.getElementById('n2'))"><span class="sv-ic">🗂️</span><span id="sup-tile-mydockets">My dockets</span></div>
           </div>
 
           <!-- Pending billing folder (cross-company signed dockets awaiting a billing decision) -->
@@ -528,10 +528,10 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <div class="card" style="padding:0;border:0.5px solid #F2D9A8;background:#FFFBF5;margin-bottom:14px;"><div id="sup-pending-billing-list"></div></div>
           </div>
           <!-- My projects (allocated by admin) -->
-          <p class="st" style="margin-top:0;">My projects</p>
+          <p class="st" id="sup-ttl-projects" style="margin-top:0;">My projects</p>
           <div class="card" style="padding:0;"><div id="sup-proj-list"></div></div>
           <!-- Recent dockets (this supervisor's own) -->
-          <p class="st" style="margin-top:14px;">Recent dockets</p>
+          <p class="st" id="sup-ttl-recent" style="margin-top:14px;">Recent dockets</p>
           <div class="card" style="padding:0;margin-bottom:8px;"><div id="sup-rd-list" class="recent-list" style="display:block;"></div></div>
         </div>
         <!-- Fixed bottom New docket button (same as worker) -->
@@ -3720,7 +3720,11 @@ const LANGS={
     wkMyProjects:'My projects', wkRecent:'Recent dockets', wkNewDocket:'New docket',
     wkAnyJob:'✓ You can create dockets on any job.', wkNoDockets:'No dockets yet',
     stPending:'Pending', stSigned:'Signed', stSent:'Sent', stBackcharge:'Backcharge',
-    navHome:'Home', navDockets:'Dockets', navDrafts:'Drafts', navReports:'Reports', navAdmin:'Admin', navTeam:'Team'
+    navHome:'Home', navDockets:'Dockets', navDrafts:'Drafts', navReports:'Reports', navAdmin:'Admin', navTeam:'Team',
+    svHeroLab:'Subcontractor docket signed & chargeable', svHeroSub:'Tap to send to client supervisor for sign off',
+    svAwaitClient:'⏳ Awaiting client supervisor signature', svRejected:'⚠️ Pending / rejected by client administrator',
+    svRangeToday:'Today', svRangeWeek:'This week', svRangeMonth:'This month', svRangeAll:'All time',
+    svStatAwaiting:'Awaiting my signature', svStatSigned:'Dockets signed', svStatClientSigned:'Signed by client sup'
   },
   zh:{
     dashboard:'主页', newDocket:'+ 新工单', myDockets:'我的工单',
@@ -3770,7 +3774,11 @@ const LANGS={
     wkMyProjects:'我的项目', wkRecent:'最近工单', wkNewDocket:'新工单',
     wkAnyJob:'✓ 您可以在任何项目上创建工单。', wkNoDockets:'暂无工单',
     stPending:'待处理', stSigned:'已签字', stSent:'已发送', stBackcharge:'转嫁费用',
-    navHome:'主页', navDockets:'工单', navDrafts:'草稿', navReports:'报告', navAdmin:'管理', navTeam:'团队'
+    navHome:'主页', navDockets:'工单', navDrafts:'草稿', navReports:'报告', navAdmin:'管理', navTeam:'团队',
+    svHeroLab:'分包商工单已签字且可计费', svHeroSub:'点击发送给客户主管签字',
+    svAwaitClient:'⏳ 等待客户主管签字', svRejected:'⚠️ 客户管理员待处理／已退回',
+    svRangeToday:'今天', svRangeWeek:'本周', svRangeMonth:'本月', svRangeAll:'全部',
+    svStatAwaiting:'等待我签字', svStatSigned:'已签字工单', svStatClientSigned:'客户主管已签'
   },
   es:{
     dashboard:'Inicio', newDocket:'+ Nueva orden', myDockets:'Mis órdenes',
@@ -3820,7 +3828,11 @@ const LANGS={
     wkMyProjects:'Mis proyectos', wkRecent:'Partes recientes', wkNewDocket:'Nuevo parte',
     wkAnyJob:'✓ Puede crear partes en cualquier obra.', wkNoDockets:'Aún no hay partes',
     stPending:'Pendiente', stSigned:'Firmado', stSent:'Enviado', stBackcharge:'Recargo',
-    navHome:'Inicio', navDockets:'Órdenes', navDrafts:'Borradores', navReports:'Informes', navAdmin:'Admin', navTeam:'Equipo'
+    navHome:'Inicio', navDockets:'Órdenes', navDrafts:'Borradores', navReports:'Informes', navAdmin:'Admin', navTeam:'Equipo',
+    svHeroLab:'Parte del subcontratista firmado y facturable', svHeroSub:'Toque para enviar al supervisor del cliente para firma',
+    svAwaitClient:'⏳ Esperando firma del supervisor del cliente', svRejected:'⚠️ Pendiente / rechazado por el administrador del cliente',
+    svRangeToday:'Hoy', svRangeWeek:'Esta semana', svRangeMonth:'Este mes', svRangeAll:'Todo',
+    svStatAwaiting:'Esperando mi firma', svStatSigned:'Partes firmados', svStatClientSigned:'Firmado por sup. cliente'
   }
 };
 
@@ -6906,6 +6918,17 @@ function docketAgeDays(d){
 // Supervisor dashboard — mockup v2 (urgency-ordered). No money values ever.
 function renSupervisorDash(){
   if(!CU)return;
+  // Translate the v2 labels so a language switch updates the whole dashboard.
+  const _t=LANGS[localStorage.getItem('dlb_lang_'+CU.u)||'en']||LANGS.en;
+  const _set=(id,v)=>{const e=document.getElementById(id);if(e&&v!=null)e.textContent=v;};
+  _set('sup-hero-lab',_t.svHeroLab);_set('sup-hero-sub',_t.svHeroSub);
+  _set('sup-await-lab',_t.svAwaitClient);_set('sup-rejected-lab',_t.svRejected);
+  _set('sup-mydk-title',_t.myDockets);
+  _set('sup-l-awaiting',_t.svStatAwaiting);_set('sup-l-signed',_t.svStatSigned);_set('sup-l-clientsigned',_t.svStatClientSigned);
+  _set('sup-tile-drafts',_t.wkDrafts);_set('sup-tile-mydockets',_t.myDockets);
+  _set('sup-ttl-projects',_t.wkMyProjects);_set('sup-ttl-recent',_t.wkRecent);
+  const _rs=document.getElementById('sup-range');
+  if(_rs){const _rmap={today:_t.svRangeToday,week:_t.svRangeWeek,month:_t.svRangeMonth,all:_t.svRangeAll};for(const o of _rs.options){if(_rmap[o.value])o.textContent=_rmap[o.value];}}
   const own=dockets.filter(d=>d.createdBy===CU.u);
   const usr=getUserData();
   const ap=usr?.projectAccess||[];
