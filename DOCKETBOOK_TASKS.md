@@ -157,6 +157,14 @@ Both: build UI/logic now, fully works once the backend exists.
   to set chargeable/backcharge/own cost. Our own dockets going up to a client
   supervisor still keep the send-for-signature option.
 
+- [x] **Auto billing prompt after signing a received sub docket.** When the
+  supervisor signs a subcontractor docket that had been sent to them (signed via
+  the on-screen pad, not on the spot), a prompt now asks how to bill it:
+  Chargeable / Backcharge / Own cost / TBC. Chargeable/backcharge/own-cost assign
+  billing and enter the approval gate (chargeable still offers the up-chain
+  client docket). TBC leaves it in the Pending billing folder tagged
+  "🔶 TBC — action required" for a decision later.
+
 ## MUST-FIX BEFORE GO-LIVE (needs backend)
 - **Notifications to close out open items (needs-billing / needs-forwarding /
   awaiting-signature).** Optimal strategy, all backend-dependent:

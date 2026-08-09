@@ -3085,7 +3085,8 @@ function saveVdSign(id){
   // Distribute copies per Company-setup settings (signer record copy + admin alerts)
   if(typeof distributeSignedCopies==='function')distributeSignedCopies(d);
   if(crossCompany){
-    setTimeout(()=>alert('Signed. Docket #'+d.id+' is now in your Pending billing folder — choose chargeable, backcharge or own cost there (also visible to company admin).'),250);
+    // Signed after being sent (not on the spot) — auto-ask how to bill it.
+    setTimeout(()=>promptPostSignBilling(d.id),250);
   } else {
     // Otherwise keep the existing same-company up-chain mirror offer
     maybePromptUpchainMirror(d);
@@ -7583,7 +7584,7 @@ function billingChooserRow(d){
         <div style="font-size:11px;color:#aaa;">#${d.id} · ${fd(d.date)} · ${d.hours}h · Signed ✓${estLine}</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end;">
-        <span style="font-size:10px;padding:2px 8px;border-radius:8px;background:#FAEEDA;color:#633806;white-space:nowrap;">Needs billing</span>
+        <span style="font-size:10px;padding:2px 8px;border-radius:8px;background:${d.billTbc?'#EEF2F6':'#FAEEDA'};color:${d.billTbc?'#41505E':'#633806'};white-space:nowrap;">${d.billTbc?'🔶 TBC — action required':'Needs billing'}</span>
         ${ageBadge}
       </div>
     </div>
@@ -7604,6 +7605,23 @@ function setPendingBilling(id,type){
     if(!name)return;
     d.bcTarget=name;
   }
+  applyPendingBilling(id,type);
+}
+// Core billing-assignment used by the folder buttons AND the post-sign prompt.
+// 'tbc' = decision deferred: it stays pending (in the action-required folder).
+function applyPendingBilling(id,type){
+  const d=dockets.find(x=>x.id===id);
+  if(!d)return;
+  if(type==='tbc'){
+    d.bill='pending';           // still needs a decision — stays in the folder
+    d.billTbc=true;             // but consciously flagged "to be confirmed"
+    svL('v4_dock',dockets);
+    if(typeof showCorrectDashboard==='function')showCorrectDashboard();
+    if(typeof renAD==='function')renAD();
+    if(typeof updM==='function')updM();
+    return;
+  }
+  d.billTbc=false;
   d.bill=type;
   // Once billing is assigned, the docket enters the approval gate (awaiting
   // final sign-off by a PM/CA or Owner) — unless it's already been approved.
@@ -7621,6 +7639,33 @@ function setPendingBilling(id,type){
       if(go){curDock=d;createClientDocket();}
     },200);
   }
+}
+
+// ── Post-sign billing prompt: after a subcontractor docket is signed (having
+// been sent to the supervisor, not signed on the spot), ask how to bill it.
+let _psbId=null;
+function promptPostSignBilling(id){
+  _psbId=id;
+  const d=dockets.find(x=>x.id===id);
+  const sub=document.getElementById('psb-sub');
+  if(sub)sub.textContent='Docket #'+id+(d&&d.sub?' — '+d.sub:'')+' is signed. How should it be billed?';
+  const bcWrap=document.getElementById('psb-bc-wrap');if(bcWrap)bcWrap.classList.add('hidden');
+  const bcT=document.getElementById('psb-bc-target');if(bcT)bcT.value='';
+  document.getElementById('postsign-billing-modal').classList.remove('hidden');
+}
+function closePsb(){document.getElementById('postsign-billing-modal').classList.add('hidden');_psbId=null;}
+function psbPick(type){
+  if(type==='bc'){document.getElementById('psb-bc-wrap').classList.remove('hidden');return;}
+  const id=_psbId;closePsb();
+  applyPendingBilling(id,type);
+}
+function psbConfirmBc(){
+  const t=(document.getElementById('psb-bc-target').value||'').trim();
+  if(!t){alert('Please enter which subcontractor to backcharge.');return;}
+  const d=dockets.find(x=>x.id===_psbId);
+  if(d)d.bcTarget=t;
+  const id=_psbId;closePsb();
+  applyPendingBilling(id,'bc');
 }
 
 // ─── APPROVAL GATE (PM / Contracts Admin final sign-off) ──────────────
@@ -8343,6 +8388,27 @@ document.addEventListener('change',function(e){
       <button class="btn" onclick="closeResolveModal()" style="flex:1;padding:12px;">Cancel</button>
       <button class="btn btn-p" onclick="submitResolve()" style="flex:1;padding:12px;background:#1D9E75;color:#fff;border:none;font-weight:600;">↩ Re-submit for approval</button>
     </div>
+  </div>
+</div>
+
+<!-- Post-sign billing prompt (after a sub docket is signed, not on the spot) -->
+<div id="postsign-billing-modal" class="hidden" style="position:fixed;inset:0;z-index:730;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;">
+  <div style="background:#fff;border-radius:14px;max-width:440px;width:100%;padding:1.4rem;box-shadow:0 10px 40px rgba(0,0,0,0.2);margin:2.5rem auto;">
+    <p style="font-size:17px;font-weight:600;color:#1D9E75;margin:0 0 4px;">✓ Signed</p>
+    <p id="psb-sub" style="font-size:13px;color:#555;margin:0 0 16px;">How should this docket be billed?</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <button class="btn" onclick="psbPick('ch')" style="padding:14px 8px;border:2px solid #1D9E75;background:#fff;color:#0F6E56;font-weight:600;border-radius:10px;">$ Chargeable</button>
+      <button class="btn" onclick="psbPick('bc')" style="padding:14px 8px;border:2px solid #5B21B6;background:#fff;color:#5B21B6;font-weight:600;border-radius:10px;">↩ Backcharge</button>
+      <button class="btn" onclick="psbPick('ow')" style="padding:14px 8px;border:2px solid #854F0B;background:#fff;color:#633806;font-weight:600;border-radius:10px;">🏢 Own cost</button>
+      <button class="btn" onclick="psbPick('tbc')" style="padding:14px 8px;border:2px solid #888;background:#fff;color:#555;font-weight:600;border-radius:10px;">❓ TBC</button>
+    </div>
+    <div id="psb-bc-wrap" class="hidden" style="margin-top:12px;">
+      <label style="font-size:13px;color:#555;display:block;margin-bottom:6px;">Backcharge to which subcontractor?</label>
+      <input type="text" id="psb-bc-target" placeholder="e.g. ABC Concreting" style="width:100%;font-size:14px;padding:11px;border-radius:10px;margin-bottom:8px;">
+      <button class="btn btn-p" onclick="psbConfirmBc()" style="width:100%;padding:11px;background:#5B21B6;border-color:#5B21B6;color:#fff;font-weight:600;">Confirm backcharge</button>
+    </div>
+    <p style="font-size:11px;color:#999;margin:14px 0 0;">TBC leaves it in your Pending billing folder for action later.</p>
+    <div style="margin-top:14px;text-align:right;"><button class="btn btn-s" onclick="closePsb()">Decide later</button></div>
   </div>
 </div>
 
