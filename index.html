@@ -5866,15 +5866,17 @@ function createClientDocket(){
       updWorkersTotal();
     }
 
-    // Show a prominent info banner
+    // Show a prominent info banner. Money (client rate / cost) is ADMIN-ONLY —
+    // supervisors never see rates, so the banner stays money-free for them.
     const nds=document.getElementById('nds');
-    const rateInfo=clientStd?` at $${clientStd}/hr (client rate) = $${clientCost?.toFixed(2)}`:'';
+    const _isAdm=CU&&CU.role==='admin';
+    const rateInfo=(_isAdm&&clientStd)?` at $${clientStd}/hr (client rate) = $${clientCost?.toFixed(2)}`:'';
     nds.innerHTML=`<div style="display:flex;gap:10px;align-items:flex-start;">
       <span style="font-size:18px;flex-shrink:0;">📋</span>
       <div>
         <strong>Client docket pre-filled</strong> from sub docket <strong>#${d.id}</strong>${rateInfo}.<br>
         <span style="font-size:11px;opacity:0.85;">Review details, get client signature, then submit.</span>
-        ${!clientStd?'<br><span style="color:#E24B4A;font-size:11px;">⚠️ No client rate set for this project — set one in the Rates tab.</span>':''}
+        ${(_isAdm&&!clientStd)?'<br><span style="color:#E24B4A;font-size:11px;">⚠️ No client rate set for this project — set one in the Rates tab.</span>':''}
       </div>
     </div>`;
     nds.classList.remove('hidden');
