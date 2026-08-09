@@ -3727,7 +3727,8 @@ const LANGS={
     svHeroLab:'Subcontractor docket signed & chargeable', svHeroSub:'Tap to send to client supervisor for sign off',
     svAwaitClient:'⏳ Awaiting client supervisor signature', svRejected:'⚠️ Pending / rejected by client administrator',
     svRangeToday:'Today', svRangeWeek:'This week', svRangeMonth:'This month', svRangeAll:'All time',
-    svStatAwaiting:'Awaiting my signature', svStatSigned:'Dockets signed', svStatClientSigned:'Signed by client sup'
+    svStatAwaiting:'Awaiting my signature', svStatSigned:'Dockets signed', svStatClientSigned:'Signed by client sup',
+    svDocketsWord:'dockets', svNoProjects:'No projects allocated yet. Ask your administrator to assign you to a project.'
   },
   zh:{
     dashboard:'主页', newDocket:'+ 新工单', myDockets:'我的工单',
@@ -3781,7 +3782,8 @@ const LANGS={
     svHeroLab:'分包商工单已签字且可计费', svHeroSub:'点击发送给客户主管签字',
     svAwaitClient:'⏳ 等待客户主管签字', svRejected:'⚠️ 客户管理员待处理／已退回',
     svRangeToday:'今天', svRangeWeek:'本周', svRangeMonth:'本月', svRangeAll:'全部',
-    svStatAwaiting:'等待我签字', svStatSigned:'已签字工单', svStatClientSigned:'客户主管已签'
+    svStatAwaiting:'等待我签字', svStatSigned:'已签字工单', svStatClientSigned:'客户主管已签',
+    svDocketsWord:'个工单', svNoProjects:'尚未分配项目。请让管理员为您分配项目。'
   },
   es:{
     dashboard:'Inicio', newDocket:'+ Nueva orden', myDockets:'Mis órdenes',
@@ -3835,7 +3837,8 @@ const LANGS={
     svHeroLab:'Parte del subcontratista firmado y facturable', svHeroSub:'Toque para enviar al supervisor del cliente para firma',
     svAwaitClient:'⏳ Esperando firma del supervisor del cliente', svRejected:'⚠️ Pendiente / rechazado por el administrador del cliente',
     svRangeToday:'Hoy', svRangeWeek:'Esta semana', svRangeMonth:'Este mes', svRangeAll:'Todo',
-    svStatAwaiting:'Esperando mi firma', svStatSigned:'Partes firmados', svStatClientSigned:'Firmado por sup. cliente'
+    svStatAwaiting:'Esperando mi firma', svStatSigned:'Partes firmados', svStatClientSigned:'Firmado por sup. cliente',
+    svDocketsWord:'órdenes', svNoProjects:'Aún no tiene obras asignadas. Pida a su administrador que le asigne una.'
   }
 };
 
@@ -6993,19 +6996,21 @@ function renSupervisorDash(){
 
   // ── My projects (allocated by admin) ──
   const myProjects=projects.filter(p=>ap.includes(p.code));
+  const _lng=localStorage.getItem('dlb_lang_'+CU.u)||'en';
   const pl=document.getElementById('sup-proj-list');
   if(pl){
     if(!myProjects.length){
-      pl.innerHTML='<div style="padding:16px 12px;text-align:center;color:#aaa;font-size:13px;">No projects allocated yet. Ask your administrator to assign you to a project.</div>';
+      pl.innerHTML='<div style="padding:16px 12px;text-align:center;color:#aaa;font-size:13px;">'+esc(_t.svNoProjects||'No projects allocated yet.')+'</div>';
     } else {
       pl.innerHTML=myProjects.map(p=>{
         const cli=p.clientId?clients.find(c=>c.id===p.clientId):null;
         const cnt=dockets.filter(d=>d.pcode===p.code).length;
+        const dw=(_lng==='en')?('docket'+(cnt!==1?'s':'')):(_t.svDocketsWord||'dockets');
         return `<div style="display:flex;align-items:center;gap:10px;padding:12px;border-top:0.5px solid rgba(0,0,0,0.07);">
           <span style="width:8px;height:8px;border-radius:50%;background:#185FA5;flex-shrink:0;"></span>
           <div style="flex:1;min-width:0;">
             <div style="font-size:13px;font-weight:500;color:#2D2D2D;">${esc(p.name)}</div>
-            <div style="font-size:11px;color:#aaa;">${esc(p.code)}${cli?' · '+esc(cli.name):''} · ${cnt} docket${cnt!==1?'s':''}</div>
+            <div style="font-size:11px;color:#aaa;">${esc(p.code)}${cli?' · '+esc(cli.name):''} · ${cnt} ${dw}</div>
           </div>
         </div>`;
       }).join('');
