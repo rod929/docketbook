@@ -2789,7 +2789,9 @@ function submitD(){
   const signerRole=getSignerRole();
   const signerName=window._reviewSignerName||null;
   const workersOnSite=(typeof getWorkersOnSite==='function')?getWorkersOnSite():[];
-  const workerName=currentWorkerName();
+  // Non-worker roles aren't a worker on the docket — use the first crew member's
+  // name, not the person filling it out.
+  const workerName=(CU&&CU.role==='worker')?currentWorkerName():((workersOnSite[0]&&workersOnSite[0].name)||'');
   const _isFree=!!window._freeDocket;
   const d={id:String(dctr).padStart(4,'0'),pcode:_isFree?'':proj,pname:_isFree?'(No project)':(p?p.name:proj),freeDocket:_isFree,date,sub,reqBy,reqHow,siNumber,photos,materials,accommodation,refSubDocketId:refId,signerRole,signerName,workerName,workersOnSite,startTime,finishTime,breakMins,hours:parseFloat(hrs),rate,cost,bill,bcTarget,desc,notes,supervisorNote:(window._reviewSupervisorNote||''),sig,sigStatus,signToken,sendEmail,sendSms,clientId,contactId,createdBy:CU.u,createdAt:new Date().toISOString()};
   dockets.push(d);dctr++;svD();
@@ -6032,8 +6034,14 @@ function initWorkersSection(){
   list.innerHTML='';
   const sameEl=document.getElementById('workers-same-hours');
   if(sameEl)sameEl.checked=false;
-  // Primary worker = the person logged in
-  addWorkerRow(currentWorkerName(),'',true);
+  // Only a WORKER filling out their own docket is auto-added as worker 1.
+  // Supervisors / admins / subs are usually just filling out and arranging the
+  // signature (not working themselves), so start with a blank worker row.
+  if(CU&&CU.role==='worker'){
+    addWorkerRow(currentWorkerName(),'',true);
+  } else {
+    addWorkerRow('','',false);
+  }
   syncWorkerHoursFromDocket();
 }
 
@@ -6158,9 +6166,10 @@ function syncWorkerHoursFromDocket(){
   const docHours=document.getElementById('dh')?.value||'';
   const sameOn=document.getElementById('workers-same-hours')?.checked;
   if(sameOn){applySameHours();updWorkersTotal();return;}
-  // Otherwise just default the primary row if it's still blank
-  const primary=list.querySelector('div[data-primary="1"] .wk-hours');
-  if(primary&&!primary.value)primary.value=docHours;
+  // Otherwise default the first row's hours if still blank (primary row for a
+  // worker, or the first crew row when a supervisor/admin is filling out).
+  const first=list.querySelector('div[data-primary="1"] .wk-hours')||list.querySelector('.wk-hours');
+  if(first&&!first.value)first.value=docHours;
   updWorkersTotal();
 }
 
