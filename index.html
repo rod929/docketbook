@@ -1786,6 +1786,26 @@ function seedTrialData(){
     });
     svL('v4_dock',dockets);
   }
+
+  // Demo docket received from a subcontractor for our supervisor to sign, still
+  // UNSIGNED — feeds the "Awaiting my signature" stat and shows as Pending.
+  if(Array.isArray(dockets)&&!dockets.find(d=>d.id==='DEMO02')){
+    const _today2=new Date().toISOString().split('T')[0];
+    dockets.push({
+      id:'DEMO02',pcode:'MAR-AP',pname:'Marina Apartments',freeDocket:false,
+      date:_today2,sub:'Apex Tiling',reqBy:'Site Manager',reqHow:'',
+      photos:[],materials:[],accommodation:null,refSubDocketId:null,
+      signerRole:'hc_supervisor',signerName:'',workerName:'Dion Park',
+      workersOnSite:[{name:'Dion Park',hours:8,start:'07:00',finish:'15:30',primary:true,trade:'Tiler'}],
+      startTime:'07:00',finishTime:'15:30',breakMins:30,hours:8,rate:0,cost:null,
+      bill:'pending',bcTarget:'',desc:'Tiling to level 2 bathrooms — awaiting supervisor sign-off.',notes:'',
+      supervisorNote:'',sig:null,sigStatus:'pending',signToken:'demo-token-02',
+      signedAt:null,signedBySupervisor:null,
+      sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',
+      createdBy:'hcsup2',createdAt:new Date().toISOString()
+    });
+    svL('v4_dock',dockets);
+  }
 }
 
 // ─── AUTH ─────────────────────────────────────────────────────────────
