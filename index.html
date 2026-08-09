@@ -936,22 +936,22 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <div><label>Hours worked</label><input type="text" id="dh" placeholder="Auto-calculated" readonly style="background:#f5f5f3;color:#185FA5;font-weight:500;"></div>
           <div>
             <label>Requested by</label>
-            <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;">
-              <select id="d-reqby" style="flex:1;min-width:140px;"><option value="">— Select staff member —</option></select>
-              <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
-                <input type="text" id="d-reqby-new" placeholder="Add staff member" style="width:160px;">
-                <button class="btn" type="button" onclick="addReqByStaff()" style="white-space:nowrap;background:#EF9F27;color:#412402;border:none;font-weight:600;padding:8px 14px;">+ Add</button>
-              </div>
-            </div>
+            <input type="text" id="d-reqby" list="d-reqby-list" placeholder="Type or pick a name" autocomplete="off">
+            <datalist id="d-reqby-list"></datalist>
           </div>
           <div>
             <label>Method</label>
-            <select id="d-reqhow">
+            <select id="d-reqhow" onchange="toggleSIField()">
               <option value="">— Select method —</option>
               <option value="Site Instruction">Site Instruction</option>
               <option value="Email">Email</option>
               <option value="Verbal">Verbal</option>
             </select>
+          </div>
+          <div id="d-si-wrap" class="hidden">
+            <label>Site instruction (SI) number</label>
+            <input type="text" id="d-si-number" list="d-si-list" placeholder="Type or pick an SI number" autocomplete="off">
+            <datalist id="d-si-list"></datalist>
           </div>
           <div class="s2 hidden" id="bill-type-pending-note">
             <div style="background:#FFF3CD;border:0.5px solid #FAC775;border-radius:var(--border-radius-md);padding:10px 14px;font-size:12px;color:#633806;">
@@ -1769,6 +1769,10 @@ function seedTrialData(){
   if(ldL('dlb_staff')===null){
     svL('dlb_staff',['Site Manager','Project Manager','Foreman']);
   }
+  // Trial site-instruction numbers so the SI field can pre-fill / suggest.
+  if(ldL('dlb_si_numbers')===null){
+    svL('dlb_si_numbers',['SI-001','SI-002','SI-003']);
+  }
 
   // Demo docket for supervisor hcsup2 (Dana Mills): signed by the supervisor,
   // chargeable, and NOT yet forwarded up-chain to the builder's supervisor — this
@@ -2009,7 +2013,7 @@ function showTab(tab,btn){
   const tgt=document.getElementById('t-'+tab);if(tgt)tgt.classList.remove('hidden');
   if(btn)btn.classList.add('act');
   if(tab==='nd'){
-    renPS(CU&&CU.role==='worker');renClientSelects();lockSubClient();setCompanyField();loadReqByStaff();prefillReqBy();uploadedPhotos=[];
+    renPS(CU&&CU.role==='worker');renClientSelects();lockSubClient();setCompanyField();loadReqByStaff();prefillReqBy();toggleSIField();uploadedPhotos=[];
     if(typeof initWorkersSection==='function')initWorkersSection();
     // Free-docket option is admin-only; reset it each time the form opens
     const fdWrap=document.getElementById('free-docket-wrap');
@@ -2770,8 +2774,13 @@ function submitD(){
   const bcSubVal=document.getElementById('bc-sub')?.value||null;
   const bcOtherVal=document.getElementById('bc-other')?.value.trim()||null;
   const bcTarget=bill==='bc'?(bcSubVal==='other'?bcOtherVal:(subs.find(s=>s.u===bcSubVal)?.name||bcSubVal)):null;
-  const reqBy=document.getElementById('d-reqby').value||null;
+  const reqBy=document.getElementById('d-reqby').value.trim()||null;
+  // Remember a newly typed staff name so it's suggested next time.
+  if(reqBy){const _st=ldL('dlb_staff')||[];if(!_st.includes(reqBy)){_st.push(reqBy);_st.sort();svL('dlb_staff',_st);}}
   const reqHow=document.getElementById('d-reqhow').value||null;
+  // SI number only when the method is Site Instruction; remember new ones.
+  const siNumber=(reqHow==='Site Instruction')?(document.getElementById('d-si-number')?.value.trim()||null):null;
+  if(siNumber){const _si=ldL('dlb_si_numbers')||[];if(!_si.includes(siNumber)){_si.push(siNumber);_si.sort();svL('dlb_si_numbers',_si);}}
   const materials=getMaterials();
   const accommodation=getAccomData();
   const photos=[...uploadedPhotos];
@@ -2782,7 +2791,7 @@ function submitD(){
   const workersOnSite=(typeof getWorkersOnSite==='function')?getWorkersOnSite():[];
   const workerName=currentWorkerName();
   const _isFree=!!window._freeDocket;
-  const d={id:String(dctr).padStart(4,'0'),pcode:_isFree?'':proj,pname:_isFree?'(No project)':(p?p.name:proj),freeDocket:_isFree,date,sub,reqBy,reqHow,photos,materials,accommodation,refSubDocketId:refId,signerRole,signerName,workerName,workersOnSite,startTime,finishTime,breakMins,hours:parseFloat(hrs),rate,cost,bill,bcTarget,desc,notes,supervisorNote:(window._reviewSupervisorNote||''),sig,sigStatus,signToken,sendEmail,sendSms,clientId,contactId,createdBy:CU.u,createdAt:new Date().toISOString()};
+  const d={id:String(dctr).padStart(4,'0'),pcode:_isFree?'':proj,pname:_isFree?'(No project)':(p?p.name:proj),freeDocket:_isFree,date,sub,reqBy,reqHow,siNumber,photos,materials,accommodation,refSubDocketId:refId,signerRole,signerName,workerName,workersOnSite,startTime,finishTime,breakMins,hours:parseFloat(hrs),rate,cost,bill,bcTarget,desc,notes,supervisorNote:(window._reviewSupervisorNote||''),sig,sigStatus,signToken,sendEmail,sendSms,clientId,contactId,createdBy:CU.u,createdAt:new Date().toISOString()};
   dockets.push(d);dctr++;svD();
 
   // The docket is now submitted — remove the source draft if it came from one
@@ -3094,7 +3103,7 @@ function vD(id){
           </table>
         </div>`;
       })()}
-      ${d.reqBy?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Requested by</span><strong>${esc(d.reqBy)}</strong></div>`:''}${d.reqHow?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Method</span><span class="badge bi">${esc(d.reqHow)}</span></div>`:''}
+      ${d.reqBy?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Requested by</span><strong>${esc(d.reqBy)}</strong></div>`:''}${d.reqHow?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Method</span><span class="badge bi">${esc(d.reqHow)}</span>${d.siNumber?`<span style="font-size:12px;color:#2D2D2D;margin-left:6px;">${esc(d.siNumber)}</span>`:''}</div>`:''}
       ${d.materials&&d.materials.length?(()=>{
         const isAdm=CU&&CU.role==='admin';
         const matCost=d.materials.reduce((s,m)=>s+(m.total||0),0);
@@ -3544,7 +3553,7 @@ function dlbBuildSheet(d,showCosts){
     ? `<div class="left"><img class="colog" src="${s.logo}" alt=""></div>`
     : `<div class="left"><div class="co-name">${esc(s.name||'Day Labour Book')}</div><div class="co-sub">${[s.abn?'ABN '+esc(s.abn):'',esc(s.web||'')].filter(Boolean).join(' · ')}</div></div>`;
   // Job details rows
-  const reqVal=[d.reqBy?esc(d.reqBy):'',d.reqHow?'via '+esc(d.reqHow):''].filter(Boolean).join(' · ');
+  const reqVal=[d.reqBy?esc(d.reqBy):'',d.reqHow?'via '+esc(d.reqHow):'',d.siNumber?esc(d.siNumber):''].filter(Boolean).join(' · ');
   const jobRows=[
     ['Project',`${esc(d.pname||'')}${d.pcode&&!d.freeDocket?` <span class="badge">${esc(d.pcode)}</span>`:''}`],
     ['Date',fd(d.date)],
@@ -4760,12 +4769,12 @@ function setCompanyField(){
 let uploadedPhotos=[];
 
 function loadReqByStaff(){
-  const sel=document.getElementById('d-reqby');if(!sel)return;
-  const cur=sel.value;
+  // "Requested by" is a type-or-pick field: fill the suggestions datalist from
+  // the saved staff list; the input keeps whatever value is already there.
+  const dl=document.getElementById('d-reqby-list');
+  if(!dl)return;
   const staff=ldL('dlb_staff')||[];
-  sel.innerHTML='<option value="">— Select staff member —</option>';
-  staff.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sel.appendChild(o);});
-  if(cur)sel.value=cur;
+  dl.innerHTML=staff.map(s=>'<option value="'+esc(s)+'"></option>').join('');
 }
 
 // Pre-fill the "Requested by" staff member when nothing is selected yet: prefer
@@ -4778,6 +4787,24 @@ function prefillReqBy(){
   const staff=ldL('dlb_staff')||[];
   if(!staff.length)return;
   sel.value=(CU&&CU.name&&staff.includes(CU.name))?CU.name:staff[0];
+}
+
+// Show the SI-number field only when the method is "Site Instruction". It's a
+// type-or-pick field: suggestions from the saved SI list, pre-filled with the
+// first one, and any new number the user types is remembered on submit.
+function toggleSIField(){
+  const wrap=document.getElementById('d-si-wrap');
+  const sel=document.getElementById('d-reqhow');
+  if(!wrap||!sel)return;
+  const isSI=sel.value==='Site Instruction';
+  wrap.classList.toggle('hidden',!isSI);
+  if(isSI){
+    const list=ldL('dlb_si_numbers')||[];
+    const dl=document.getElementById('d-si-list');
+    if(dl)dl.innerHTML=list.map(s=>'<option value="'+esc(s)+'"></option>').join('');
+    const inp=document.getElementById('d-si-number');
+    if(inp&&!inp.value&&list.length)inp.value=list[0];
+  }
 }
 
 function addReqByStaff(){
