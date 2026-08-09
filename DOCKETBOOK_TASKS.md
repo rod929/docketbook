@@ -109,6 +109,21 @@ defer 11 and 13 until the backend.
 - 13 (real password recovery)
 Both: build UI/logic now, fully works once the backend exists.
 
+## Post-list work (done after the numbered punch list)
+- [x] **Clean demo docket set + My-dockets status filter.** Versioned one-time
+  reset (DEMO_DATA_VERSION) wipes dockets and seeds 4 purposeful dockets
+  (#0001–#0004), one per workflow state. My dockets gained a "Filter by status"
+  dropdown and a workflow Status badge column (docketStatus()/statusBadge()).
+- [x] **Worker sign/draft restriction.** In Review & Sign, workers now only see
+  "Sign on site" plus a "Save as draft" button — the remote email/SMS send tabs
+  are hidden and blocked for workers (that path belongs to the supervisor/admin).
+- [x] **Ready to sign list.** Admin/supervisor/sub can "Prepare for a worker" from
+  Review & Sign — fills a docket on the worker's behalf into that worker's new
+  "Ready to sign" tab (top nav + mobile bottom nav, with a count badge). The
+  worker opens it straight into Review & Sign to capture the signature; it
+  clears on submit. Stored in dlb_ready. ⚠ Cross-device routing to the correct
+  worker's phone needs the backend (localStorage is per-device) — flagged in-app.
+
 ## MUST-FIX BEFORE GO-LIVE (needs backend)
 - **Notifications to close out open items (needs-billing / needs-forwarding /
   awaiting-signature).** Optimal strategy, all backend-dependent:
