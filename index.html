@@ -4153,9 +4153,25 @@ function handleLogoUpload(e){
   const file=e.target.files[0];if(!file)return;
   const reader=new FileReader();
   reader.onload=function(ev){
-    appSettings.logo=ev.target.result;
-    updLogoPreview();
+    const img=new Image();
+    img.onload=function(){
+      // Shrink to fit within 400×200 — full-size phone images are far too big
+      // for browser storage and would fail to save.
+      const maxW=400,maxH=200;
+      const scale=Math.min(1,maxW/img.width,maxH/img.height);
+      const w=Math.max(1,Math.round(img.width*scale));
+      const h=Math.max(1,Math.round(img.height*scale));
+      const canvas=document.createElement('canvas');
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      let out=canvas.toDataURL('image/png');
+      if(out.length>180000)out=canvas.toDataURL('image/jpeg',0.85); // fall back to JPEG if still big
+      appSettings.logo=out;
+      updLogoPreview();
     };
+    img.onerror=function(){appSettings.logo=ev.target.result;updLogoPreview();};
+    img.src=ev.target.result;
+  };
   reader.readAsDataURL(file);
 }
 function removeLogo(){
@@ -6168,14 +6184,17 @@ function getWorkersOnSite(){
   const list=document.getElementById('workers-list');
   if(!list)return[];
   const out=[];
+  const sameOn=document.getElementById('workers-same-hours')?.checked;
+  const dStart=document.getElementById('d-start')?.value||'';
+  const dFinish=document.getElementById('d-finish')?.value||'';
   Array.from(list.children).forEach((row,i)=>{
     const name=(row.querySelector('.wk-name')?.value||'').trim();
     const hours=parseFloat(row.querySelector('.wk-hours')?.value)||0;
     const primary=row.dataset.primary==='1';
-    // Primary worker's times come from the docket's top-level start/finish;
-    // additional workers carry their own (if entered).
-    const start=primary?(document.getElementById('d-start')?.value||''):(row.querySelector('.wk-start')?.value||'');
-    const finish=primary?(document.getElementById('d-finish')?.value||''):(row.querySelector('.wk-finish')?.value||'');
+    // Primary worker — and every worker when "same hours for all" is on — uses
+    // the docket's top-level start/finish; otherwise each carries their own.
+    const start=(primary||sameOn)?dStart:(row.querySelector('.wk-start')?.value||'');
+    const finish=(primary||sameOn)?dFinish:(row.querySelector('.wk-finish')?.value||'');
     out.push({name,hours,start,finish,primary,trade:primary?currentWorkerTrade():''});
   });
   return out;
