@@ -2777,8 +2777,9 @@ function submitD(){
   const startTime=_st?String(_st.h).padStart(2,'0')+':'+String(_st.m).padStart(2,'0'):document.getElementById('d-start').value;
   const finishTime=_ft?String(_ft.h).padStart(2,'0')+':'+String(_ft.m).padStart(2,'0'):document.getElementById('d-finish').value;
   const breakMins=parseInt(document.getElementById('d-break').value)||0;
-  // Admin/user dockets are always chargeable - billing is only for subs
-  if(CU&&CU.role!=='sub')bill='ch';
+  // Non-sub dockets default to chargeable, UNLESS billing was deferred to the
+  // internal Pending billing folder (signed without a billing choice).
+  if(CU&&CU.role!=='sub'&&!window._deferBilling)bill='ch';
   const bcSubVal=document.getElementById('bc-sub')?.value||null;
   const bcOtherVal=document.getElementById('bc-other')?.value.trim()||null;
   const bcTarget=bill==='bc'?(bcSubVal==='other'?bcOtherVal:(subs.find(s=>s.u===bcSubVal)?.name||bcSubVal)):null;
@@ -2803,6 +2804,7 @@ function submitD(){
   const _isFree=!!window._freeDocket;
   const d={id:String(dctr).padStart(4,'0'),pcode:_isFree?'':proj,pname:_isFree?'(No project)':(p?p.name:proj),freeDocket:_isFree,date,sub,reqBy,reqHow,siNumber,photos,materials,accommodation,refSubDocketId:refId,signerRole,signerName,workerName,workersOnSite,startTime,finishTime,breakMins,hours:parseFloat(hrs),rate,cost,bill,bcTarget,desc,notes,supervisorNote:(window._reviewSupervisorNote||''),sig,sigStatus,signToken,sendEmail,sendSms,clientId,contactId,createdBy:CU.u,createdAt:new Date().toISOString()};
   dockets.push(d);dctr++;svD();
+  window._deferBilling=false;
 
   // The docket is now submitted — remove the source draft if it came from one
   if(window._openDraftId){
@@ -6957,7 +6959,9 @@ function renAdminMobile(){
     const banner=document.getElementById('am-banner');if(banner)banner.classList.add('hidden');
   }
   // Pending billing folder — all cross-company dockets a supervisor signed that need billing
-  const adminPending=dockets.filter(d=>d.sig&&(d.signedBySupervisor||d.signedLater)&&(!d.bill||d.bill==='pending'));
+  // Any signed docket still awaiting a billing decision (billing is assigned
+  // here, internally, never on the signing screen).
+  const adminPending=dockets.filter(d=>d.sig&&(!d.bill||d.bill==='pending'));
   const apbWrap=document.getElementById('admin-pending-billing-wrap');
   const apbList=document.getElementById('admin-pending-billing-list');
   if(apbWrap&&apbList){
@@ -7104,7 +7108,7 @@ function renSupervisorDash(){
   const s3=document.getElementById('sup-stat-clientsigned');if(s3)s3.textContent=signedByClient;
 
   // ── Pending billing folder (cross-company signed dockets needing a billing decision) ──
-  const pendingBilling=dockets.filter(d=>d.sig&&d.signedBySupervisor===CU.u&&(!d.bill||d.bill==='pending'));
+  const pendingBilling=dockets.filter(d=>d.sig&&(!d.bill||d.bill==='pending')&&(d.createdBy===CU.u||d.signedBySupervisor===CU.u));
   const pbWrap=document.getElementById('sup-pending-billing-wrap');
   const pbList=document.getElementById('sup-pending-billing-list');
   if(pbWrap&&pbList){
@@ -7539,8 +7543,9 @@ function initReviewSig(){
 }
 
 function revealReviewBilling(){
-  const card=document.getElementById('review-billing-card');
-  if(card)card.classList.remove('hidden');
+  // Billing is internal and must NOT appear on the client supervisor's signing
+  // screen. It's assigned later by the admin/supervisor in the Pending billing
+  // folder. So this intentionally does nothing now.
 }
 
 function clearReviewSig(){
@@ -7624,7 +7629,9 @@ function submitFromReview(){
   if(reviewSigMethod==='sms'&&!document.getElementById('review-send-sms').value.trim()){
     err.textContent='Please enter a mobile number.';err.classList.remove('hidden');return;
   }
-  // If signed on site, a billing choice is required
+  // If signed on site, capture the signer's name. Billing is NOT asked here —
+  // it's internal and gets assigned later in the Pending billing folder, so the
+  // client supervisor never sees it.
   if(sig&&reviewSigHas){
     let signerName='';
     const otherChecked=document.getElementById('review-signer-other').checked;
@@ -7638,36 +7645,16 @@ function submitFromReview(){
       if(!signerName){err.textContent='No supervisor selected — tick "Someone else is signing" and enter a name.';err.classList.remove('hidden');return;}
     }
     window._reviewSignerName=signerName;
-    if(!reviewBill){err.textContent='Please choose a billing option after signing.';err.classList.remove('hidden');return;}
-    if(reviewBill==='bc'&&!document.getElementById('rbill-bc-name').value.trim()){
-      err.textContent='Please enter the subcontractor to backcharge.';err.classList.remove('hidden');return;
-    }
   } else {
     window._reviewSignerName=null;
   }
   err.classList.add('hidden');
 
-  // Apply the billing choice into the form's billing state used by submitD
-  if(reviewBill){
-    if(reviewBill==='tbc'){bill='pending';}
-    else{
-      bill=reviewBill;
-      const bcSub=document.getElementById('bc-sub');
-      const bcOther=document.getElementById('bc-other');
-      if(reviewBill==='bc'){
-        const name=document.getElementById('rbill-bc-name').value.trim();
-        if(bcSub){bcSub.value='other';}
-        if(bcOther){bcOther.value=name;}
-      }
-      // Carry the quick billing description into the docket notes
-      const bdesc=(document.getElementById('rbill-desc').value||'').trim();
-      if(bdesc){
-        const dn=document.getElementById('dnotes');
-        const label={ch:'Chargeable',ow:'Company cost',bc:'Backcharge'}[reviewBill]||'';
-        if(dn)dn.value=(dn.value?dn.value+'\n':'')+'['+label+'] '+bdesc;
-      }
-    }
-  }
+  // Defer billing to the internal Pending billing folder — never on the signing
+  // screen. Mark the docket pending so the office assigns chargeable / backcharge
+  // / own cost afterwards.
+  bill='pending';
+  window._deferBilling=true;
 
   // Copy sig data to main form fields then submit
   // Override sigMethod + sigHas for submitD
