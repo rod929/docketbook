@@ -476,6 +476,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <button class="nb" id="n-contacts-sub" onclick="showTab('contacts-sub',this)">👥 Contacts</button>
       <button class="nb" id="n-my-workers" onclick="showTab('my-workers',this)">👷 My workers</button>
       <button class="nb" id="n-drafts" onclick="showTab('drafts',this)">✏️ Drafts <span id="draft-count-badge"  class="hidden" style="background:#E24B4A;color:#fff;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;margin-left:4px;">0</span></button>
+      <button class="nb hidden" id="n-ready" onclick="showTab('ready',this)">📋 Ready to sign <span id="ready-count-badge" class="hidden" style="background:#EF9F27;color:#412402;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px;">0</span></button>
       <button class="nb" id="n2" onclick="showTab('md',this)">My dockets</button>
       <button class="nb hidden" id="n3" onclick="showTab('ad',this)">All dockets</button>
       <button class="nb hidden" id="n4" onclick="showTab('proj',this)">Projects</button>
@@ -903,10 +904,23 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <div id="review-worker-note" class="hidden" style="background:#FFFBF5;border:1px solid #F2D9A8;border-radius:10px;padding:11px 14px;margin-bottom:12px;font-size:12px;color:#633806;">
             Get the site supervisor to <strong>sign on site now</strong>, or <strong>save it as a draft</strong> so your supervisor can send it to the client supervisor for signing.
           </div>
+          <!-- Prepare for a worker to sign (admin / supervisor only) -->
+          <div id="review-prepare-wrap" class="hidden" style="background:#F0F6FC;border:1px solid #BBD6F0;border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+            <p style="font-size:13px;font-weight:600;color:#185FA5;margin:0 0 4px;">Prepare this docket for a worker to sign</p>
+            <p style="font-size:12px;color:#3A6EA5;margin:0 0 10px;">It'll appear in that worker's "Ready to sign" list, all filled in, for them to get the client supervisor's signature on site.</p>
+            <label style="font-size:12px;color:#444;">Which worker?</label>
+            <select id="review-prepare-worker" style="width:100%;margin-bottom:8px;"><option value="">— Select worker —</option></select>
+            <div id="review-prepare-err" class="err hidden" style="margin-bottom:8px;"></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn btn-p" onclick="savePrepared()" style="background:#185FA5;border-color:#185FA5;color:#fff;font-weight:600;">✓ Send to worker's Ready to sign</button>
+              <button class="btn btn-s" onclick="document.getElementById('review-prepare-wrap').classList.add('hidden');">Cancel</button>
+            </div>
+          </div>
           <!-- Action buttons -->
           <div id="review-err" class="err hidden" style="margin-bottom:8px;"></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
             <button class="btn btn-p" onclick="submitFromReview()" style="background:#2D2D2D;border-color:#2D2D2D;color:#EF9F27;font-weight:600;font-size:14px;padding:12px 24px;">✓ Submit docket</button>
+            <button class="btn" id="review-prepare-btn" onclick="openPreparePicker()" style="color:#185FA5;border-color:#185FA5;">📋 Prepare for a worker</button>
             <button class="btn" id="review-save-draft-btn" onclick="saveDraftFromReview()" style="color:#854F0B;border-color:#EF9F27;">💾 Save as draft</button>
             <button class="btn" onclick="hideReview()">← Back to edit</button>
           </div>
@@ -1432,6 +1446,16 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div id="drafts-list"></div>
     </div>
 
+    <!-- READY TO SIGN -->
+    <div id="t-ready" class="hidden">
+      <div class="rb" style="align-items:center;"><p class="st" style="margin:0;">📋 Ready to sign</p><button class="btn btn-s" onclick="showTab('dash',document.getElementById('n0'))" style="background:#EF9F27;color:#412402;border:none;font-weight:600;">← Back to dashboard</button></div>
+      <div class="note" style="background:#FFFBF5;border:1px solid #F2D9A8;border-radius:10px;padding:11px 14px;margin-bottom:12px;font-size:12px;color:#633806;">
+        Dockets prepared by an admin or supervisor, ready for a worker to get signed on site by the client supervisor. Open one to review and capture the signature.
+      </div>
+      <div id="ready-empty" class="note" style="text-align:center;padding:20px;color:#aaa;">Nothing ready to sign.</div>
+      <div id="ready-list"></div>
+    </div>
+
 
 <!-- CLIENT FORM MODAL -->
 <div id="cfm" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);align-items:flex-start;justify-content:center;z-index:1000;padding:1rem;overflow-y:auto;">
@@ -1925,6 +1949,7 @@ function setupUI(){
       +'</div>';
     setTimeout(()=>applyLang(localStorage.getItem('dlb_lang_'+CU.u)||'en'),80);
     ['n3','n4','n5','n6','n7','n8','msc','mpend-card'].forEach(id=>document.getElementById(id).classList.remove('hidden'));
+    document.getElementById('n-ready').classList.remove('hidden');
     // Users tab (access allocation) only for those who can allocate access (owner + PM/CA)
     const n9=document.getElementById('n9');
     if(n9)n9.classList.toggle('hidden',!canAllocateAccess(CU));
@@ -1954,6 +1979,7 @@ function setupUI(){
     document.getElementById('n3').classList.remove('hidden');
     document.getElementById('n3').textContent='All dockets';
     document.getElementById('n-drafts').classList.remove('hidden');
+    document.getElementById('n-ready').classList.remove('hidden');
   } else if(r==='user'||r==='supervisor'||r==='manager'){
     const roleLabels={'user':'Site user','supervisor':'Supervisor','manager':'Manager'};
     ub.textContent=roleLabels[r]||'User';ub.className='badge bs';
@@ -2006,8 +2032,8 @@ function setupUI(){
        'msc','mcc','moc','mbc-card','mpend-card','fin-panel'].forEach(id=>{
         const el=document.getElementById(id);if(el)el.classList.add('hidden');
       });
-      // Show only the three worker tabs
-      ['n1','n2','n-drafts'].forEach(id=>{
+      // Show only the worker tabs (New docket, My dockets, Drafts, Ready to sign)
+      ['n1','n2','n-drafts','n-ready'].forEach(id=>{
         const el=document.getElementById(id);if(el)el.classList.remove('hidden');
       });
       rb.classList.remove('hidden');
@@ -2038,6 +2064,7 @@ function setupUI(){
     bill='pending';
     document.getElementById('n-contacts-sub').classList.remove('hidden');
     document.getElementById('n-my-workers').classList.remove('hidden');
+    document.getElementById('n-ready').classList.remove('hidden');
   }
   rb.classList.remove('hidden');
   if(CU.role==='sub'){
@@ -2054,7 +2081,7 @@ function doLogout(){
   document.getElementById('ma').classList.add('hidden');
   document.getElementById('ls').classList.remove('hidden');
   document.getElementById('lu').value='';document.getElementById('lp').value='';
-  ['n3','n4','n5','n6','n7','n8','n9','n-contacts-sub','msc','mpend-card'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  ['n3','n4','n5','n6','n7','n8','n9','n-contacts-sub','n-my-workers','n-ready','msc','mpend-card'].forEach(id=>document.getElementById(id).classList.add('hidden'));
   document.getElementById('fin-panel').classList.add('hidden');
   document.getElementById('rban').classList.add('hidden');
   document.getElementById('dsb').readOnly=false;
@@ -2068,18 +2095,18 @@ function doLogout(){
 
 // ─── INIT ─────────────────────────────────────────────────────────────
 function initApp(){
-  load();loadSettings();loadRates();loadCRates();loadUsers();loadDrafts();
+  load();loadSettings();loadRates();loadCRates();loadUsers();loadDrafts();loadReady();
   seedTrialData();
   ensureSettingsClientExists();
   setDD();initSig();setBill('ch');setSigMethod('onsite');
-  renPS();renClientSelects();updM();renRD();renPT();renAD();renMD();renST();renClientList();renFD();applySettingsToHeader();lockSubClient();loadReqByStaff();updDraftBadge();
+  renPS();renClientSelects();updM();renRD();renPT();renAD();renMD();renST();renClientList();renFD();applySettingsToHeader();lockSubClient();loadReqByStaff();updDraftBadge();updReadyBadge();
 }
 function setDD(){const d=document.getElementById('dd');if(d)d.value=new Date().toISOString().split('T')[0];}
 
 // ─── TABS ─────────────────────────────────────────────────────────────
 function showTab(tab,btn){
   window._curTab=tab;
-  ['dash','nd','md','ad','proj','subs','clients','settings','rates','drafts','users','contacts-sub','my-workers'].forEach(t=>{const el=document.getElementById('t-'+t);if(el)el.classList.add('hidden');});
+  ['dash','nd','md','ad','proj','subs','clients','settings','rates','drafts','ready','users','contacts-sub','my-workers'].forEach(t=>{const el=document.getElementById('t-'+t);if(el)el.classList.add('hidden');});
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('act'));
   const tgt=document.getElementById('t-'+tab);if(tgt)tgt.classList.remove('hidden');
   if(btn)btn.classList.add('act');
@@ -2142,6 +2169,7 @@ function showTab(tab,btn){
   if(tab==='clients')renClientList();
   if(tab==='settings'){loadSettingsForm();renSettingsPreview();}
   if(tab==='drafts')renDrafts();
+  if(tab==='ready')renReady();
   if(tab==='rates'){renRatesSelects();renRatesTable();}
   if(tab==='users'){renUsersList();renWorkersTable();}
   if(tab==='contacts-sub'){renContactsSub();}
@@ -2911,6 +2939,12 @@ function submitD(){
     drafts=drafts.filter(x=>x.id!==window._openDraftId);
     svDrafts();updDraftBadge();
     window._openDraftId=null;
+  }
+  // If it came from a "Ready to sign" prepared docket, clear that too
+  if(window._openReadyId){
+    readyItems=readyItems.filter(x=>x.id!==window._openReadyId);
+    svReady();updReadyBadge();
+    window._openReadyId=null;
   }
 
   // Build sign link (uses current page URL + token as hash)
@@ -5255,6 +5289,142 @@ function updDraftBadge(){
   else badge.classList.add('hidden');
 }
 
+// ─── READY TO SIGN ────────────────────────────────────────────────────
+// Dockets an admin/supervisor prepares on a worker's behalf. Stored globally
+// (dlb_ready) so on this device the worker can pick theirs up. Cross-device
+// routing to the right worker needs the backend (localStorage is per-device).
+let readyItems=[];
+function loadReady(){readyItems=ldL('dlb_ready')||[];}
+function svReady(){svL('dlb_ready',readyItems);}
+// Workers see items prepared for them; preparers see items they created. Subs
+// only for their own workers. Admin/hc_supervisor see all they prepared.
+function readyVisible(){
+  if(!CU)return[];
+  if(CU.role==='worker')return readyItems.filter(x=>x.preparedFor===CU.u);
+  return readyItems.filter(x=>x.preparedBy===CU.u||x.preparedFor===CU.u);
+}
+// Populate the worker picker with the appropriate workers, then reveal it.
+function openPreparePicker(){
+  const sel=document.getElementById('review-prepare-worker');
+  const wrap=document.getElementById('review-prepare-wrap');
+  const errEl=document.getElementById('review-prepare-err');
+  if(errEl)errEl.classList.add('hidden');
+  if(sel){
+    let list=workers;
+    if(CU&&CU.role==='sub')list=workers.filter(w=>w.parentSub===CU.u);
+    sel.innerHTML='<option value="">— Select worker —</option>'+list.map(w=>`<option value="${esc(w.u)}">${esc(w.name)}${w.trade?' · '+esc(w.trade):''}</option>`).join('');
+    if(!list.length)sel.innerHTML='<option value="">No workers set up yet</option>';
+  }
+  if(wrap)wrap.classList.remove('hidden');
+  if(wrap&&wrap.scrollIntoView)wrap.scrollIntoView({behavior:'smooth',block:'center'});
+}
+// Save the current review-form docket into a chosen worker's Ready-to-sign list.
+function savePrepared(){
+  const errEl=document.getElementById('review-prepare-err');
+  const wid=document.getElementById('review-prepare-worker').value;
+  if(!wid){if(errEl){errEl.textContent='Please choose which worker this is for.';errEl.classList.remove('hidden');}return;}
+  const w=workers.find(x=>x.u===wid);
+  const item={
+    id:'ready_'+Date.now(),
+    proj:document.getElementById('dp').value,
+    date:document.getElementById('dd').value,
+    sub:document.getElementById('dsb').value.trim(),
+    hrs:document.getElementById('dh').value,
+    desc:document.getElementById('desc').value.trim(),
+    notes:document.getElementById('dnotes').value.trim(),
+    startTime:document.getElementById('d-start').value,
+    finishTime:document.getElementById('d-finish').value,
+    breakMins:document.getElementById('d-break').value,
+    reqBy:document.getElementById('d-reqby').value||null,
+    reqHow:document.getElementById('d-reqhow').value||null,
+    clientId:document.getElementById('d-client').value||null,
+    contactId:document.getElementById('d-contact').value||null,
+    workersOnSite:(typeof getWorkersOnSite==='function')?getWorkersOnSite():[],
+    preparedFor:wid,
+    preparedForName:w?w.name:'',
+    preparedBy:CU.u,
+    preparedByName:CU.name,
+    savedAt:new Date().toISOString()
+  };
+  readyItems.unshift(item);
+  svReady();
+  updReadyBadge();
+  hideReview();
+  document.body.classList.remove('nd-fullpage');
+  resetDF();
+  showTab('dash',document.getElementById('n0'));
+  if(typeof showCorrectDashboard==='function')showCorrectDashboard();
+  alert('📋 Sent to '+(w?w.name:'the worker')+"'s Ready to sign list.\n\nNote: on a real phone this reaches the worker once the backend sync is live; on this device it's ready now.");
+}
+function openReadyItem(id){
+  const d=readyItems.find(x=>x.id===id);
+  if(!d)return;
+  renPS(CU&&CU.role==='worker');
+  if(d.proj)document.getElementById('dp').value=d.proj;
+  if(d.date)document.getElementById('dd').value=d.date;
+  if(d.sub){const dsb=document.getElementById('dsb');if(!dsb.readOnly)dsb.value=d.sub;}
+  if(d.hrs)document.getElementById('dh').value=d.hrs;
+  if(d.desc)document.getElementById('desc').value=d.desc;
+  if(d.notes)document.getElementById('dnotes').value=d.notes;
+  if(d.startTime)document.getElementById('d-start').value=d.startTime;
+  if(d.finishTime)document.getElementById('d-finish').value=d.finishTime;
+  if(d.breakMins)document.getElementById('d-break').value=d.breakMins;
+  if(d.reqBy){loadReqByStaff();document.getElementById('d-reqby').value=d.reqBy;}
+  if(d.reqHow)document.getElementById('d-reqhow').value=d.reqHow;
+  if(d.clientId){document.getElementById('d-client').value=d.clientId;loadClientContacts();}
+  if(d.contactId)setTimeout(()=>{document.getElementById('d-contact').value=d.contactId;},100);
+  calcHours();
+  window._openReadyId=id;
+  showTab('nd',document.getElementById('n1'));
+  if(d.workersOnSite&&d.workersOnSite.length&&typeof setWorkersOnSite==='function'){
+    setTimeout(()=>{setWorkersOnSite(d.workersOnSite);if(typeof updWorkersTotal==='function')updWorkersTotal();},60);
+  }
+  // Jump straight to Review & Sign so the signature can be captured.
+  setTimeout(()=>{if(typeof showReview==='function')showReview();},220);
+}
+function deleteReadyItem(id){
+  readyItems=readyItems.filter(x=>x.id!==id);
+  svReady();updReadyBadge();renReady();
+}
+function renReady(){
+  const list=document.getElementById('ready-list');
+  const empty=document.getElementById('ready-empty');
+  if(!list)return;
+  const src=readyVisible();
+  if(!src.length){list.innerHTML='';if(empty)empty.style.display='';return;}
+  if(empty)empty.style.display='none';
+  const isWorker=CU&&CU.role==='worker';
+  list.innerHTML=src.map(d=>{
+    const savedDate=new Date(d.savedAt).toLocaleDateString('en-AU',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+    const who=isWorker?('Prepared by '+esc(d.preparedByName||'admin')):('For '+esc(d.preparedForName||'worker'));
+    return`<div class="card" style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            ${d.proj?`<span class="badge bi">${esc(d.proj)}</span>`:'<span class="badge" style="background:#f5f5f3;color:#888;">No project</span>'}
+            ${d.date?`<span style="font-size:12px;color:#888;">${fd(d.date)}</span>`:''}
+            <span class="badge" style="background:#EAF3FB;color:#185FA5;">${who}</span>
+          </div>
+          <p style="font-size:13px;color:#1a1a1a;margin-bottom:2px;">${d.desc?esc(d.desc.slice(0,80))+(d.desc.length>80?'…':''):'<span style="color:#aaa;">No description</span>'}</p>
+          <p style="font-size:11px;color:#aaa;">Prepared ${savedDate}${d.hrs?' — '+d.hrs+'h':''}</p>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button class="btn btn-p btn-s" onclick="openReadyItem('${d.id}')">✍️ Open to sign</button>
+          <button class="btn btn-s btn-d" onclick="deleteReadyItem('${d.id}')">Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function updReadyBadge(){
+  const badge=document.getElementById('ready-count-badge');
+  const n=readyVisible().length;
+  if(badge){
+    if(n>0){badge.textContent=n;badge.classList.remove('hidden');}
+    else badge.classList.add('hidden');
+  }
+}
+
 
 // ─── CLIENT DAY LABOUR FORM ───────────────────────────────────────────
 function openClientForm(){
@@ -6951,15 +7121,16 @@ function renBottomNav(){
   if(!CU){nav.classList.add('hidden');document.body.classList.remove('has-bottomnav');return;}
   const r=CU.role;
   const _t=LANGS[(CU&&localStorage.getItem('dlb_lang_'+CU.u))||'en']||LANGS.en;
+  const _rdy=({en:'Ready',zh:'待签',es:'Listo'})[(CU&&localStorage.getItem('dlb_lang_'+CU.u))||'en']||'Ready';
   let items;
   if(r==='worker'){
-    items=[['dash',_t.navHome,'ti-home'],['md',_t.navDockets,'ti-files'],['drafts',_t.navDrafts,'ti-pencil']];
+    items=[['dash',_t.navHome,'ti-home'],['md',_t.navDockets,'ti-files'],['ready',_rdy,'ti-clipboard-check'],['drafts',_t.navDrafts,'ti-pencil']];
   } else if(r==='admin'){
-    items=[['dash',_t.navHome,'ti-home'],['ad',_t.navDockets,'ti-files'],['rates',_t.navReports,'ti-chart-bar'],['settings',_t.navAdmin,'ti-settings']];
+    items=[['dash',_t.navHome,'ti-home'],['ad',_t.navDockets,'ti-files'],['ready',_rdy,'ti-clipboard-check'],['settings',_t.navAdmin,'ti-settings']];
   } else if(r==='sub'){
-    items=[['dash',_t.navHome,'ti-home'],['md',_t.navDockets,'ti-files'],['my-workers',_t.navTeam,'ti-users'],['drafts',_t.navDrafts,'ti-pencil']];
+    items=[['dash',_t.navHome,'ti-home'],['md',_t.navDockets,'ti-files'],['ready',_rdy,'ti-clipboard-check'],['drafts',_t.navDrafts,'ti-pencil']];
   } else { // hc_supervisor + legacy site roles
-    items=[['dash',_t.navHome,'ti-home'],['md',_t.navDockets,'ti-files'],['drafts',_t.navDrafts,'ti-pencil']];
+    items=[['dash',_t.navHome,'ti-home'],['md',_t.navDockets,'ti-files'],['ready',_rdy,'ti-clipboard-check'],['drafts',_t.navDrafts,'ti-pencil']];
   }
   const cur=window._curTab||'dash';
   nav.innerHTML=items.map(([tab,label,icon])=>
@@ -7591,6 +7762,11 @@ function showReview(){
   const _isWorker=CU&&CU.role==='worker';
   ['email','sms'].forEach(x=>{const t=document.getElementById('rtab-'+x);if(t)t.classList.toggle('hidden',_isWorker);});
   const wNote=document.getElementById('review-worker-note');if(wNote)wNote.classList.toggle('hidden',!_isWorker);
+  // "Prepare for a worker" is for admins/supervisors setting a docket up on a
+  // worker's behalf — hidden for workers themselves. Always start collapsed.
+  const canPrepare=CU&&(CU.role==='admin'||CU.role==='hc_supervisor'||CU.role==='sub');
+  const prepBtn=document.getElementById('review-prepare-btn');if(prepBtn)prepBtn.classList.toggle('hidden',!canPrepare);
+  const prepWrap=document.getElementById('review-prepare-wrap');if(prepWrap)prepWrap.classList.add('hidden');
   const billCard=document.getElementById('review-billing-card');
   if(billCard)billCard.classList.add('hidden');
   ['ch','ow','bc','tbc'].forEach(t=>{const b=document.getElementById('rbill-'+t);if(b)b.classList.remove('active');});
