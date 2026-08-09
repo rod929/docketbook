@@ -899,10 +899,15 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
               <span>Email to contracts administrator <span id="review-ca-addr" style="font-size:12px;color:#854F0B;"></span></span>
             </label>
           </div>
+          <!-- Worker guidance: sign on site now, or save a draft for the supervisor -->
+          <div id="review-worker-note" class="hidden" style="background:#FFFBF5;border:1px solid #F2D9A8;border-radius:10px;padding:11px 14px;margin-bottom:12px;font-size:12px;color:#633806;">
+            Get the site supervisor to <strong>sign on site now</strong>, or <strong>save it as a draft</strong> so your supervisor can send it to the client supervisor for signing.
+          </div>
           <!-- Action buttons -->
           <div id="review-err" class="err hidden" style="margin-bottom:8px;"></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
             <button class="btn btn-p" onclick="submitFromReview()" style="background:#2D2D2D;border-color:#2D2D2D;color:#EF9F27;font-weight:600;font-size:14px;padding:12px 24px;">✓ Submit docket</button>
+            <button class="btn" id="review-save-draft-btn" onclick="saveDraftFromReview()" style="color:#854F0B;border-color:#EF9F27;">💾 Save as draft</button>
             <button class="btn" onclick="hideReview()">← Back to edit</button>
           </div>
         </div>
@@ -7580,6 +7585,12 @@ function showReview(){
   reviewSigMethod='onsite';
   reviewBill=null;
   setReviewSigMethod('onsite');
+  // Workers may ONLY get the supervisor to sign on site, or save a draft — no
+  // remote email/SMS send (that path belongs to the supervisor/admin). Hide the
+  // remote-send tabs for workers and show the "save as draft" guidance.
+  const _isWorker=CU&&CU.role==='worker';
+  ['email','sms'].forEach(x=>{const t=document.getElementById('rtab-'+x);if(t)t.classList.toggle('hidden',_isWorker);});
+  const wNote=document.getElementById('review-worker-note');if(wNote)wNote.classList.toggle('hidden',!_isWorker);
   const billCard=document.getElementById('review-billing-card');
   if(billCard)billCard.classList.add('hidden');
   ['ch','ow','bc','tbc'].forEach(t=>{const b=document.getElementById('rbill-'+t);if(b)b.classList.remove('active');});
@@ -7733,8 +7744,21 @@ function buildDocketPdfFromForm(){
   doc.save('docket.pdf');
 }
 
+function saveDraftFromReview(){
+  // Close the review panel, then save the current form as a draft using the
+  // existing draft logic (which reads the live form fields).
+  hideReview();
+  document.body.classList.remove('nd-fullpage');
+  saveDraft();
+}
 function submitFromReview(){
   const err=document.getElementById('review-err');
+  // Workers can only sign on site or save a draft — never remote-send.
+  if(CU&&CU.role==='worker'&&reviewSigMethod!=='onsite'){
+    err.textContent='Please get the supervisor to sign on site, or use "Save as draft" so your supervisor can send it.';
+    err.classList.remove('hidden');
+    return;
+  }
   window._reviewSupervisorNote=(document.getElementById('review-supervisor-note')?.value||'').trim();
   const canvas=document.getElementById('review-sigc');
   const sig=(reviewSigMethod==='onsite'&&reviewSigHas)?canvas.toDataURL('image/png'):null;
