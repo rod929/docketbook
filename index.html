@@ -341,6 +341,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv-sc .sv-v{font-size:24px;font-weight:700;line-height:1;}
 .sv-sc .sv-l{font-size:11px;color:#777;margin-top:6px;font-weight:500;line-height:1.25;}
 .sv-sc-d{background:#FFFBF5;} .sv-sc-d .sv-v{color:#EF9F27;}
+/* Highlight "Awaiting my signature" when it has items to action */
+.sv-sc-hot{background:#FDEBCF!important;border:1.5px solid #EF9F27!important;animation:svTilePulse 1.6s ease-in-out infinite;}
+@keyframes svTilePulse{0%{box-shadow:0 0 0 0 rgba(239,159,39,0.45);}70%{box-shadow:0 0 0 7px rgba(239,159,39,0);}100%{box-shadow:0 0 0 0 rgba(239,159,39,0);}}
 .sv-sc-s{background:#E1F5EE;} .sv-sc-s .sv-v{color:#1D9E75;}
 .sv-sc-t{background:#E6F1FB;} .sv-sc-t .sv-v{color:#185FA5;}
 .sv-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
@@ -512,7 +515,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             </select>
           </div>
           <div class="sv-stats">
-            <div class="sv-sc sv-sc-d"><div class="sv-v" id="sup-stat-awaiting">0</div><div class="sv-l" id="sup-l-awaiting">Awaiting my signature</div></div>
+            <div class="sv-sc sv-sc-d" id="sup-tile-awaiting"><div class="sv-v" id="sup-stat-awaiting">0</div><div class="sv-l" id="sup-l-awaiting">Awaiting my signature</div></div>
             <div class="sv-sc sv-sc-s"><div class="sv-v" id="sup-stat-signed">0</div><div class="sv-l" id="sup-l-signed">Dockets signed</div></div>
             <div class="sv-sc sv-sc-t"><div class="sv-v" id="sup-stat-clientsigned">0</div><div class="sv-l" id="sup-l-clientsigned">Signed by client sup</div></div>
           </div>
@@ -7024,6 +7027,7 @@ function renSupervisorDash(){
   const signedByMe=ownR.filter(d=>d.sig).length;
   const signedByClient=ownR.filter(d=>d.sig&&d.approvalStatus==='approved').length;
   const s1=document.getElementById('sup-stat-awaiting');if(s1)s1.textContent=awaitingMySig;
+  const awTile=document.getElementById('sup-tile-awaiting');if(awTile)awTile.classList.toggle('sv-sc-hot',awaitingMySig>0);
   const s2=document.getElementById('sup-stat-signed');if(s2)s2.textContent=signedByMe;
   const s3=document.getElementById('sup-stat-clientsigned');if(s3)s3.textContent=signedByClient;
 
