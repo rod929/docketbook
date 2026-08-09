@@ -1145,8 +1145,20 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
     <!-- MY DOCKETS -->
     <div id="t-md" class="hidden">
       <div class="rb"><p class="st" style="margin:0;">My dockets</p><div style="display:flex;gap:6px;"><button class="btn btn-s" onclick="showTab('dash',document.getElementById('n0'))" style="background:#EF9F27;color:#412402;border:none;font-weight:600;">← Dashboard</button><button class="btn btn-s" onclick="expCSV(false)">↓ CSV</button><button class="btn btn-s btn-p" onclick="expPDF(false)">↓ PDF</button></div></div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
+        <label style="font-size:13px;font-weight:600;color:#555;">Filter by status:</label>
+        <select id="md-status-filter" style="width:220px;" onchange="renMD()">
+          <option value="">All dockets</option>
+          <option value="awaiting_my_sig">✍️ Needs my signature</option>
+          <option value="awaiting_client">📤 Awaiting client sign</option>
+          <option value="needs_billing">💲 Needs billing</option>
+          <option value="chargeable_ready">✓ Signed · ready to send</option>
+          <option value="queried">⚠ Queried</option>
+          <option value="signed">✓ Signed (all)</option>
+        </select>
+      </div>
       <div class="card" style="padding:0;"><div class="tw"><table>
-        <thead><tr><th>#</th><th>Project</th><th>Date</th><th>Hrs</th><th>Cost</th><th>Billing</th><th>Client contact</th><th>Signature</th><th></th></tr></thead>
+        <thead><tr><th>#</th><th>Project</th><th>Date</th><th>Hrs</th><th>Cost</th><th>Billing</th><th>Client contact</th><th>Status</th><th></th></tr></thead>
         <tbody id="mdb"></tbody>
       </table></div></div>
     </div>
@@ -1803,107 +1815,71 @@ function seedTrialData(){
     svL('dlb_si_numbers',['SI-001','SI-002','SI-003']);
   }
 
-  // Demo docket for supervisor hcsup2 (Dana Mills): signed by the supervisor,
-  // chargeable, and NOT yet forwarded up-chain to the builder's supervisor — this
-  // is exactly the state that lights up the red "hero" alert on the dashboard.
-  if(Array.isArray(dockets)&&!dockets.find(d=>d.id==='DEMO01')){
-    const _today=new Date().toISOString().split('T')[0];
-    const _demoSig='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="90"><path d="M12 62 C40 8 60 8 78 52 S120 78 140 44 S190 10 228 58" fill="none" stroke="#185FA5" stroke-width="3" stroke-linecap="round"/></svg>');
-    dockets.push({
-      id:'DEMO01',pcode:'HV-T1',pname:'Harbourview Tower — Stage 1',freeDocket:false,
-      date:_today,sub:'Coastline Painting',reqBy:'Site Manager',reqHow:'',
-      photos:[],materials:[],accommodation:null,refSubDocketId:null,
-      signerRole:'hc_supervisor',signerName:'Dana Mills',workerName:'Tom Reilly',
-      workersOnSite:[{name:'Tom Reilly',hours:7.5,start:'07:00',finish:'15:00',primary:true,trade:'Painter'}],
-      startTime:'07:00',finishTime:'15:00',breakMins:30,hours:7.5,rate:0,cost:null,
-      bill:'ch',bcTarget:'',desc:'Prep and two coats to level 3 common areas.',notes:'',
-      supervisorNote:'',sig:_demoSig,sigStatus:'signed',signToken:null,
-      signedAt:new Date().toISOString(),signedBySupervisor:'hcsup2',
-      sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',
-      createdBy:'hcsup2',createdAt:new Date().toISOString()
-    });
-    svL('v4_dock',dockets);
-  }
-
-  // Demo docket received from a subcontractor for our supervisor to sign, still
-  // UNSIGNED — feeds the "Awaiting my signature" stat and shows as Pending.
-  if(Array.isArray(dockets)&&!dockets.find(d=>d.id==='DEMO02')){
-    const _today2=new Date().toISOString().split('T')[0];
-    dockets.push({
-      id:'DEMO02',pcode:'MAR-AP',pname:'Marina Apartments',freeDocket:false,
-      date:_today2,sub:'Apex Tiling',reqBy:'Site Manager',reqHow:'',
-      photos:[],materials:[],accommodation:null,refSubDocketId:null,
-      signerRole:'hc_supervisor',signerName:'',workerName:'Dion Park',
-      workersOnSite:[{name:'Dion Park',hours:8,start:'07:00',finish:'15:30',primary:true,trade:'Tiler'}],
-      startTime:'07:00',finishTime:'15:30',breakMins:30,hours:8,rate:0,cost:null,
-      bill:'pending',bcTarget:'',desc:'Tiling to level 2 bathrooms — awaiting supervisor sign-off.',notes:'',
-      supervisorNote:'',sig:null,sigStatus:'pending',signToken:'demo-token-02',
-      signedAt:null,signedBySupervisor:null,
-      sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',
-      createdBy:'hcsup2',createdAt:new Date().toISOString()
-    });
-    svL('v4_dock',dockets);
-  }
-
-  // Demo: our supervisor signed a sub's docket — now needs a billing decision
-  // (fills the amber "needs billing" alert + Pending billing folder + admin).
-  if(Array.isArray(dockets)&&!dockets.find(d=>d.id==='DEMO03')){
-    const _t3=new Date().toISOString().split('T')[0];
-    const _sig3='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="90"><path d="M12 60 C50 12 70 70 100 40 S150 12 180 55 S210 70 228 44" fill="none" stroke="#185FA5" stroke-width="3" stroke-linecap="round"/></svg>');
-    dockets.push({
-      id:'DEMO03',pcode:'HV-T1',pname:'Harbourview Tower — Stage 1',freeDocket:false,
-      date:_t3,sub:'Coastline Painting',reqBy:'Site Manager',reqHow:'Site Instruction',siNumber:'SI-002',
-      photos:[],materials:[],accommodation:null,refSubDocketId:null,
-      signerRole:'hc_supervisor',signerName:'Dana Mills',workerName:'Luca Moretti',
-      workersOnSite:[{name:'Luca Moretti',hours:9,start:'07:00',finish:'16:30',primary:true,trade:'Painter'}],
-      startTime:'07:00',finishTime:'16:30',breakMins:30,hours:9,rate:0,cost:null,
-      bill:'pending',bcTarget:'',desc:'Second fix painting, level 4 apartments.',notes:'',
-      supervisorNote:'',sig:_sig3,sigStatus:'signed',signToken:null,
-      signedAt:new Date().toISOString(),signedBySupervisor:'hcsup2',
-      sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',
-      createdBy:'paintco',createdAt:new Date().toISOString()
-    });
-    svL('v4_dock',dockets);
-  }
-
-  // Demo: docket sent to the client supervisor, awaiting their signature.
-  if(Array.isArray(dockets)&&!dockets.find(d=>d.id==='DEMO04')){
-    const _t4=new Date().toISOString().split('T')[0];
-    dockets.push({
-      id:'DEMO04',pcode:'MAR-AP',pname:'Marina Apartments',freeDocket:false,
-      date:_t4,sub:'Apex Tiling',reqBy:'Project Manager',reqHow:'Email',siNumber:null,
-      photos:[],materials:[],accommodation:null,refSubDocketId:null,
-      signerRole:'client_supervisor',signerName:'',workerName:'Sef Vella',
-      workersOnSite:[{name:'Sef Vella',hours:8,start:'07:00',finish:'15:30',primary:true,trade:'Tiler'}],
-      startTime:'07:00',finishTime:'15:30',breakMins:30,hours:8,rate:0,cost:null,
-      bill:'pending',bcTarget:'',desc:'Floor tiling to lobby and corridors.',notes:'',
-      supervisorNote:'',sig:null,sigStatus:'sent_email',signToken:'demo-token-04',
-      signedAt:null,signedBySupervisor:null,
-      sendEmail:'olivia@harbourview.com.au',sendSms:'',clientId:'ctrial',contactId:'ctc1',
-      createdBy:'hcsup2',createdAt:new Date().toISOString()
-    });
-    svL('v4_dock',dockets);
-  }
-
-  // Demo: docket queried / sent back by the client administrator.
-  if(Array.isArray(dockets)&&!dockets.find(d=>d.id==='DEMO05')){
-    const _t5=new Date().toISOString().split('T')[0];
-    const _sig5='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="90"><path d="M14 58 C44 16 66 66 96 40 S150 14 178 52 S208 66 226 46" fill="none" stroke="#185FA5" stroke-width="3" stroke-linecap="round"/></svg>');
-    dockets.push({
-      id:'DEMO05',pcode:'EAST-FO',pname:'Eastside Fitout',freeDocket:false,
-      date:_t5,sub:'Smooth Set Plastering',reqBy:'Site Manager',reqHow:'Verbal',siNumber:null,
-      photos:[],materials:[],accommodation:null,refSubDocketId:null,
-      signerRole:'hc_supervisor',signerName:'Dana Mills',workerName:'Grant Hughes',
-      workersOnSite:[{name:'Grant Hughes',hours:7,start:'08:00',finish:'15:00',primary:true,trade:'Plasterer'}],
-      startTime:'08:00',finishTime:'15:00',breakMins:0,hours:7,rate:0,cost:null,
-      bill:'ch',bcTarget:'',desc:'Patch and set to level 2 offices.',notes:'',
-      supervisorNote:'',sig:_sig5,sigStatus:'signed',signToken:null,
-      signedAt:new Date().toISOString(),signedBySupervisor:'hcsup2',
-      approvalStatus:'queried',queryNote:'Hours look high for the area — please confirm.',
-      sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',
-      createdBy:'hcsup2',createdAt:new Date().toISOString()
-    });
-    svL('v4_dock',dockets);
+  // ── Clean demo docket set (one-time reset). Bump DEMO_DATA_VERSION to wipe
+  // all dockets and reseed this purposeful set covering each workflow state.
+  // All on hcsup2's projects so they appear in My dockets; numbered #0001–#0004.
+  const DEMO_DATA_VERSION=3;
+  if((ldL('dlb_demo_ver')||0)<DEMO_DATA_VERSION){
+    const _t=new Date().toISOString().split('T')[0];
+    const _now=new Date().toISOString();
+    const _sig=(d)=>'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="90"><path d="'+d+'" fill="none" stroke="#185FA5" stroke-width="3" stroke-linecap="round"/></svg>');
+    const _sigA=_sig('M12 62 C40 8 60 8 78 52 S120 78 140 44 S190 10 228 58');
+    const _sigC=_sig('M14 58 C44 16 66 66 96 40 S150 14 178 52 S208 66 226 46');
+    dockets=[
+      // #0001 — submitted by our subcontractor, signed by our supervisor,
+      // chargeable, ready to send/get signed by the client supervisor.
+      {id:'0001',pcode:'HV-T1',pname:'Harbourview Tower — Stage 1',freeDocket:false,
+        date:_t,sub:'Coastline Painting',reqBy:'Site Manager',reqHow:'Site Instruction',siNumber:'SI-002',
+        photos:[],materials:[],accommodation:null,refSubDocketId:null,
+        signerRole:'hc_supervisor',signerName:'Dana Mills',workerName:'Tom Reilly',
+        workersOnSite:[{name:'Tom Reilly',hours:9,start:'07:00',finish:'16:30',primary:true,trade:'Painter'}],
+        startTime:'07:00',finishTime:'16:30',breakMins:30,hours:9,rate:0,cost:null,
+        bill:'ch',bcTarget:'',desc:'Second fix painting, level 4 apartments.',notes:'',
+        supervisorNote:'',sig:_sigA,sigStatus:'signed',signToken:null,
+        signedAt:_now,signedBySupervisor:'hcsup2',
+        sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',
+        createdBy:'paintco',createdAt:_now},
+      // #0002 — already sent, awaiting the client supervisor's signature.
+      {id:'0002',pcode:'MAR-AP',pname:'Marina Apartments',freeDocket:false,
+        date:_t,sub:'Apex Tiling',reqBy:'Project Manager',reqHow:'Email',siNumber:null,
+        photos:[],materials:[],accommodation:null,refSubDocketId:null,
+        signerRole:'client_supervisor',signerName:'',workerName:'Dion Park',
+        workersOnSite:[{name:'Dion Park',hours:8,start:'07:00',finish:'15:30',primary:true,trade:'Tiler'}],
+        startTime:'07:00',finishTime:'15:30',breakMins:30,hours:8,rate:0,cost:null,
+        bill:'pending',bcTarget:'',desc:'Floor tiling to lobby and corridors.',notes:'',
+        supervisorNote:'',sig:null,sigStatus:'sent_email',signToken:'demo-tok-02',
+        signedAt:null,signedBySupervisor:null,
+        sendEmail:'olivia@harbourview.com.au',sendSms:'',clientId:'ctrial',contactId:'ctc1',
+        createdBy:'hcsup2',createdAt:_now},
+      // #0003 — queried / sent back (rejected, pending fix) by the client admin.
+      {id:'0003',pcode:'EAST-FO',pname:'Eastside Fitout',freeDocket:false,
+        date:_t,sub:'Smooth Set Plastering',reqBy:'Site Manager',reqHow:'Verbal',siNumber:null,
+        photos:[],materials:[],accommodation:null,refSubDocketId:null,
+        signerRole:'hc_supervisor',signerName:'Dana Mills',workerName:'Grant Hughes',
+        workersOnSite:[{name:'Grant Hughes',hours:7,start:'08:00',finish:'15:00',primary:true,trade:'Plasterer'}],
+        startTime:'08:00',finishTime:'15:00',breakMins:0,hours:7,rate:0,cost:null,
+        bill:'ch',bcTarget:'',desc:'Patch and set to level 2 offices.',notes:'',
+        supervisorNote:'',sig:_sigC,sigStatus:'signed',signToken:null,
+        signedAt:_now,signedBySupervisor:'hcsup2',
+        approvalStatus:'queried',queryNote:'Hours look high for the area — please confirm.',
+        sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',
+        createdBy:'hcsup2',createdAt:_now},
+      // #0004 — a subcontractor docket awaiting OUR supervisor's signature.
+      {id:'0004',pcode:'MAR-AP',pname:'Marina Apartments',freeDocket:false,
+        date:_t,sub:'Apex Tiling',reqBy:'Site Manager',reqHow:'Site Instruction',siNumber:'SI-003',
+        photos:[],materials:[],accommodation:null,refSubDocketId:null,
+        signerRole:'hc_supervisor',signerName:'',workerName:'Sef Vella',
+        workersOnSite:[{name:'Sef Vella',hours:8.5,start:'06:30',finish:'15:30',primary:true,trade:'Tiler'}],
+        startTime:'06:30',finishTime:'15:30',breakMins:30,hours:8.5,rate:0,cost:null,
+        bill:'pending',bcTarget:'',desc:'Wall tiling to level 3 bathrooms.',notes:'',
+        supervisorNote:'',sig:null,sigStatus:'pending',signToken:'demo-tok-04',
+        signedAt:null,signedBySupervisor:null,
+        sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',
+        createdBy:'tileco',createdAt:_now}
+    ];
+    dctr=5;
+    svL('v4_dock',dockets);svL('v4_ctr',dctr);
+    svL('dlb_demo_ver',DEMO_DATA_VERSION);
   }
 }
 
@@ -2200,6 +2176,31 @@ function sigBadge(d){
   if(d.sigStatus==='sent_email')return'<span class="badge bsent">📧 Email sent</span>';
   if(d.sigStatus==='sent_sms')return'<span class="badge bsent">💬 SMS sent</span>';
   return'<span class="badge bpend">⏳ Pending</span>';
+}
+// Workflow status of a docket, used by the My-dockets status filter/badge.
+// One of: queried | awaiting_client | awaiting_my_sig | needs_billing |
+// chargeable_ready | signed.
+function docketStatus(d){
+  if(d.approvalStatus==='queried')return'queried';
+  if(!d.sig){
+    if(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')return'awaiting_client';
+    return'awaiting_my_sig';
+  }
+  if(!d.bill||d.bill==='pending')return'needs_billing';
+  if(d.bill==='ch')return'chargeable_ready';
+  return'signed';
+}
+const STATUS_META={
+  queried:{label:'⚠ Queried',bg:'#FBE3E1',fg:'#B23B39'},
+  awaiting_client:{label:'📤 Awaiting client sign',bg:'#E3EEF9',fg:'#185FA5'},
+  awaiting_my_sig:{label:'✍️ Needs my signature',bg:'#FCEFD6',fg:'#96631A'},
+  needs_billing:{label:'💲 Needs billing',bg:'#FCEFD6',fg:'#96631A'},
+  chargeable_ready:{label:'✓ Signed · ready to send',bg:'#DCF3EB',fg:'#0F6E56'},
+  signed:{label:'✓ Signed',bg:'#DCF3EB',fg:'#0F6E56'}
+};
+function statusBadge(d){
+  const m=STATUS_META[docketStatus(d)]||STATUS_META.signed;
+  return'<span class="badge" style="background:'+m.bg+';color:'+m.fg+';">'+m.label+'</span>';
 }
 function getContactLabel(d){
   if(!d.clientId)return'—';
@@ -2567,10 +2568,14 @@ function renRD(){
 }
 function renMD(){
   const tb=document.getElementById('mdb');if(!tb)return;
-  const src=myD().reverse();
-  if(!src.length){tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:#aaa;padding:20px;">No dockets yet</td></tr>';return;}
-  const r=getRate(CU.u);
-  tb.innerHTML=src.map(d=>`<tr><td><span class="dn">#${d.id}</span></td><td><span class="badge bi">${esc(d.pcode)}</span></td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${CU&&CU.role==='admin'?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${sigBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
+  let src=myD().reverse();
+  const sf=document.getElementById('md-status-filter')?.value||'';
+  if(sf){
+    // "signed" = every signed docket; other keys = exact workflow status.
+    src=sf==='signed'?src.filter(d=>!!d.sig):src.filter(d=>docketStatus(d)===sf);
+  }
+  if(!src.length){tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:#aaa;padding:20px;">'+(sf?'No dockets match this filter':'No dockets yet')+'</td></tr>';return;}
+  tb.innerHTML=src.map(d=>`<tr><td><span class="dn">#${d.id}</span></td><td><span class="badge bi">${esc(d.pcode)}</span></td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${CU&&CU.role==='admin'?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
 }
 function renAD(){
   const tb=document.getElementById('adb');if(!tb)return;
@@ -7197,7 +7202,7 @@ function renSupervisorDash(){
   const b3=document.getElementById('sup-box-rejected');if(b3)b3.textContent=rejected;
 
   // My dockets stats (date-range filtered)
-  const awaitingMySig=projR.filter(d=>!d.sig).length;              // on my projects, not yet signed
+  const awaitingMySig=projR.filter(d=>!d.sig&&!(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')).length; // on my projects, not yet signed and not already sent to client
   const signedByMe=ownR.filter(d=>d.sig).length;
   const signedByClient=ownR.filter(d=>d.sig&&d.approvalStatus==='approved').length;
   const s1=document.getElementById('sup-stat-awaiting');if(s1)s1.textContent=awaitingMySig;
