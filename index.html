@@ -1237,6 +1237,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 
     <!-- SETTINGS -->
     <div id="t-settings" class="hidden">
+      <button class="btn btn-s" onclick="showTab('dash',document.getElementById('n0'))" style="margin-bottom:12px;">← Back to dashboard</button>
       <p class="st">Company settings</p>
       <div class="card">
         <p style="font-size:13px;font-weight:500;margin-bottom:14px;">🏢 Company details</p>
@@ -1263,8 +1264,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           </div>
         </div>
         <div id="set-ok" class="ok hidden">Settings saved successfully.</div>
-        <div style="display:flex;gap:8px;margin-top:4px;">
-          <button class="btn btn-p" onclick="saveSettings()">Save settings</button>
+        <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;">
+          <button class="btn btn-p" onclick="saveSettingsClose()">Save &amp; back to dashboard</button>
+          <button class="btn" onclick="saveSettings()">Save</button>
           <button class="btn" onclick="loadSettingsForm()">Reset</button>
         </div>
       </div>
@@ -4078,6 +4080,8 @@ function saveSettings(){
   applySettingsToHeader();renSettingsPreview();
   const ok=document.getElementById('set-ok');ok.classList.remove('hidden');setTimeout(()=>ok.classList.add('hidden'),3000);
 }
+// Save the settings and return to the dashboard (clear way out of the page).
+function saveSettingsClose(){saveSettings();showTab('dash',document.getElementById('n0'));}
 function loadSettingsForm(){
   document.getElementById('set-name').value=appSettings.name||'';
   document.getElementById('set-abn').value=appSettings.abn||'';
