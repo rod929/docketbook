@@ -488,6 +488,17 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             </div>
             <span class="sv-hero-arrow">›</span>
           </div>
+          <!-- URGENT: dockets you've signed that need a billing decision -->
+          <div id="sup-billing-hero" class="sv-hero sv-hero-orange hidden" onclick="scrollToPendingBilling()">
+            <span class="sv-live-dot"></span>
+            <div class="sv-hero-pulse"></div>
+            <div class="sv-hero-content">
+              <div class="sv-hero-top"><span class="sv-hero-ic">⏳</span><span class="sv-hero-num" id="sup-billing-num">0</span></div>
+              <div class="sv-hero-lab" id="sup-billing-lab">Signed — needs billing</div>
+              <div class="sv-hero-sub" id="sup-billing-sub">Tap to set chargeable / backcharge / own cost</div>
+            </div>
+            <span class="sv-hero-arrow">›</span>
+          </div>
           <!-- STATES 2 & 3: compact summary boxes -->
           <div class="sv-two-box">
             <div class="sv-sbox sv-sbox-2" onclick="showTab('md',document.getElementById('n2'))">
@@ -3801,7 +3812,8 @@ const LANGS={
     svAwaitClient:'⏳ Awaiting client supervisor signature', svRejected:'⚠️ Pending / rejected by client administrator',
     svRangeToday:'Today', svRangeWeek:'This week', svRangeMonth:'This month', svRangeAll:'All time',
     svStatAwaiting:'Awaiting my signature', svStatSigned:'Dockets signed', svStatClientSigned:'Signed by client sup',
-    svDocketsWord:'dockets', svNoProjects:'No projects allocated yet. Ask your administrator to assign you to a project.'
+    svDocketsWord:'dockets', svNoProjects:'No projects allocated yet. Ask your administrator to assign you to a project.',
+    svBillingLab:'Signed — needs billing', svBillingSub:'Tap to set chargeable / backcharge / own cost'
   },
   zh:{
     dashboard:'主页', newDocket:'+ 新工单', myDockets:'我的工单',
@@ -3856,7 +3868,8 @@ const LANGS={
     svAwaitClient:'⏳ 等待客户主管签字', svRejected:'⚠️ 客户管理员待处理／已退回',
     svRangeToday:'今天', svRangeWeek:'本周', svRangeMonth:'本月', svRangeAll:'全部',
     svStatAwaiting:'等待我签字', svStatSigned:'已签字工单', svStatClientSigned:'客户主管已签',
-    svDocketsWord:'个工单', svNoProjects:'尚未分配项目。请让管理员为您分配项目。'
+    svDocketsWord:'个工单', svNoProjects:'尚未分配项目。请让管理员为您分配项目。',
+    svBillingLab:'已签字 — 需要计费', svBillingSub:'点击设置：可计费／转嫁／自费'
   },
   es:{
     dashboard:'Inicio', newDocket:'+ Nueva orden', myDockets:'Mis órdenes',
@@ -3911,7 +3924,8 @@ const LANGS={
     svAwaitClient:'⏳ Esperando firma del supervisor del cliente', svRejected:'⚠️ Pendiente / rechazado por el administrador del cliente',
     svRangeToday:'Hoy', svRangeWeek:'Esta semana', svRangeMonth:'Este mes', svRangeAll:'Todo',
     svStatAwaiting:'Esperando mi firma', svStatSigned:'Partes firmados', svStatClientSigned:'Firmado por sup. cliente',
-    svDocketsWord:'órdenes', svNoProjects:'Aún no tiene obras asignadas. Pida a su administrador que le asigne una.'
+    svDocketsWord:'órdenes', svNoProjects:'Aún no tiene obras asignadas. Pida a su administrador que le asigne una.',
+    svBillingLab:'Firmado — falta facturación', svBillingSub:'Toque para fijar facturable / recargo / coste propio'
   }
 };
 
@@ -7115,6 +7129,13 @@ function renSupervisorDash(){
     if(pendingBilling.length){pbWrap.classList.remove('hidden');pbList.innerHTML=pendingBilling.map(d=>billingChooserRow(d)).join('');}
     else{pbWrap.classList.add('hidden');pbList.innerHTML='';}
   }
+  // Urgent amber alert at the top when dockets need a billing decision.
+  const bHero=document.getElementById('sup-billing-hero');
+  if(bHero){
+    if(pendingBilling.length){bHero.classList.remove('hidden');const bn=document.getElementById('sup-billing-num');if(bn)bn.textContent=pendingBilling.length;}
+    else bHero.classList.add('hidden');
+  }
+  _set('sup-billing-lab',_t.svBillingLab);_set('sup-billing-sub',_t.svBillingSub);
 
   // ── My projects (allocated by admin) ──
   const myProjects=projects.filter(p=>ap.includes(p.code));
@@ -7149,6 +7170,11 @@ function renSupervisorDash(){
 function supHeroAction(){
   if(window._supHeroFirst){vD(window._supHeroFirst);}
   else{showTab('md',document.getElementById('n2'));}
+}
+// Jump to the Pending billing folder from the urgent amber alert.
+function scrollToPendingBilling(){
+  const el=document.getElementById('sup-pending-billing-wrap');
+  if(el&&!el.classList.contains('hidden'))el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 // A compact row for the pending-billing folder with inline chargeable/backcharge/own-cost buttons
