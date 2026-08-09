@@ -108,3 +108,13 @@ defer 11 and 13 until the backend.
 - 11 (email PDF attachment)
 - 13 (real password recovery)
 Both: build UI/logic now, fully works once the backend exists.
+
+## MUST-FIX BEFORE GO-LIVE (needs backend)
+- **Docket-number uniqueness per company.** Each company runs its own docket
+  book (Company A #0001 and Company B #0001 is fine), but WITHIN a company a
+  number must be used once — no matter who creates it (worker / supervisor /
+  admin) or on which device. Today the counter is per-device (v4_ctr), so it's
+  unique on a single device but two phones in the same company can both make
+  #0001. The fix: the backend keeps one docket counter PER COMPANY and hands out
+  the next number centrally. Acceptable to leave during dev; MUST be fixed before
+  production. (Owner flagged 2026-08-09.)
