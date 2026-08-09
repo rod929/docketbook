@@ -3753,10 +3753,20 @@ function dlbBuildSheet(d,showCosts){
   const accom=d.accommodation||null;
   const grand=(labour||0)+matCharged+(accom?(accom.total||0):0);
   const chip=dlbStatusChip(d);
-  // Header — uploaded logo on a white plate, else company name + ABN
-  const header=s.logo
-    ? `<div class="left"><img class="colog" src="${s.logo}" alt=""></div>`
-    : `<div class="left"><div class="co-name">${esc(s.name||'Day Labour Book')}</div><div class="co-sub">${[s.abn?'ABN '+esc(s.abn):'',esc(s.web||'')].filter(Boolean).join(' · ')}</div></div>`;
+  // Header — the company that DID the work owns the letterhead. For our OWN
+  // dockets that's us (logo + ABN from Settings); for a SUBCONTRACTOR's docket
+  // it's their company name (we don't hold their logo/ABN, so just the name),
+  // never our Alerce branding.
+  const docketCo=(d.sub||'').trim();
+  const isOwnCo=!docketCo||docketCo.toLowerCase()===(s.name||'').toLowerCase();
+  const subRec=isOwnCo?null:subs.find(x=>(x.name||'').toLowerCase()===docketCo.toLowerCase());
+  const coName=isOwnCo?(s.name||'Day Labour Book'):docketCo;
+  const coAbn=isOwnCo?(s.abn||''):((subRec&&subRec.abn)||'');
+  const coWeb=isOwnCo?(s.web||''):((subRec&&subRec.web)||'');
+  const coLogo=isOwnCo?s.logo:'';   // subcontractor logos aren't stored
+  const header=coLogo
+    ? `<div class="left"><img class="colog" src="${coLogo}" alt=""></div>`
+    : `<div class="left"><div class="co-name">${esc(coName)}</div><div class="co-sub">${[coAbn?'ABN '+esc(coAbn):'',esc(coWeb||'')].filter(Boolean).join(' · ')}</div></div>`;
   // Job details rows
   const reqVal=[d.reqBy?esc(d.reqBy):'',d.reqHow?'via '+esc(d.reqHow):'',d.siNumber?esc(d.siNumber):''].filter(Boolean).join(' · ');
   const jobRows=[
