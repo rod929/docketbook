@@ -8229,12 +8229,20 @@ function renSupervisorDash(){
   const cQL=upList.filter(isQ);
   const cPL=upList.filter(isAwaitingAdmin);
 
+  // "Outstanding since" = the moment the docket entered its current waiting
+  // state: when it was queried (queried/rejected), when it was signed (anything
+  // past signing), else when it was created/received.
+  const outstandingSince=(d)=>{
+    if((d.approvalStatus==='queried'||d.approvalStatus==='rejected')&&d.queriedAt)return d.queriedAt;
+    if(d.sig&&d.signedAt)return d.signedAt;
+    return d.createdAt||d.date;
+  };
   // Oldest outstanding age (days) across a box's dockets — an early-warning of
-  // how long the oldest item has been sitting. Uses the docket's work date.
+  // how long the oldest item has been sitting in this state.
   const oldestDays=(list)=>{
     if(!list||!list.length)return null;
     const now=new Date();let mx=0;
-    list.forEach(d=>{const ts=d.date?new Date(d.date):(d.createdAt?new Date(d.createdAt):null);if(ts&&!isNaN(ts.getTime())){const days=Math.floor((now-ts)/86400000);if(days>mx)mx=days;}});
+    list.forEach(d=>{const raw=outstandingSince(d);const ts=raw?new Date(raw):null;if(ts&&!isNaN(ts.getTime())){const days=Math.floor((now-ts)/86400000);if(days>mx)mx=days;}});
     return mx;
   };
   const ageText=(days)=>days==null?'':(days<=0?'⌛ today':(days===1?'⌛ 1 day':'⌛ '+days+' days'));
