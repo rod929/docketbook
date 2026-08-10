@@ -445,8 +445,15 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 @media(max-width:560px){.sv2-anl-grid{grid-template-columns:1fr;}}
 .sv2-anl-card{background:#fff;border:0.5px solid rgba(0,0,0,0.09);border-radius:14px;box-shadow:0 1px 2px rgba(0,0,0,0.04);padding:14px 14px 13px;}
 .sv2-anl-ct{font-size:12px;font-weight:700;color:#2D2D2D;margin-bottom:8px;}
+.sv2-anl-body{}
 .sv2-anl-chart{display:flex;justify-content:center;align-items:center;min-height:130px;}
 .sv2-anl-legend{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
+/* Pie mode: bigger donut on the left, legend stacked to the right, so the
+   card stays the same height (or shorter) instead of growing downward. */
+.sv2-anl-card.pie-layout .sv2-anl-body{display:flex;align-items:center;gap:14px;}
+.sv2-anl-card.pie-layout .sv2-anl-chart{flex-shrink:0;min-height:0;}
+.sv2-anl-card.pie-layout .sv2-anl-chart svg{width:160px;height:160px;}
+.sv2-anl-card.pie-layout .sv2-anl-legend{margin-top:0;flex:1;min-width:0;}
 .sv2-anl-lg{display:flex;align-items:center;gap:7px;font-size:11.5px;color:#666;}
 .sv2-anl-lg i{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
 .sv2-anl-lg b{color:#2D2D2D;font-variant-numeric:tabular-nums;margin-left:auto;}
@@ -640,15 +647,19 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
               </span>
             </div>
             <div class="sv2-anl-grid">
-              <div class="sv2-anl-card">
+              <div class="sv2-anl-card" id="anl-card-bill">
                 <div class="sv2-anl-ct" id="anl-title-bill">Subcontractor dockets — billing</div>
-                <div class="sv2-anl-chart" id="anl-chart-bill"></div>
-                <div class="sv2-anl-legend" id="anl-legend-bill"></div>
+                <div class="sv2-anl-body">
+                  <div class="sv2-anl-chart" id="anl-chart-bill"></div>
+                  <div class="sv2-anl-legend" id="anl-legend-bill"></div>
+                </div>
               </div>
-              <div class="sv2-anl-card">
+              <div class="sv2-anl-card" id="anl-card-appr">
                 <div class="sv2-anl-ct" id="anl-title-appr">Client dockets — approved vs rejected</div>
-                <div class="sv2-anl-chart" id="anl-chart-appr"></div>
-                <div class="sv2-anl-legend" id="anl-legend-appr"></div>
+                <div class="sv2-anl-body">
+                  <div class="sv2-anl-chart" id="anl-chart-appr"></div>
+                  <div class="sv2-anl-legend" id="anl-legend-appr"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -7875,6 +7886,8 @@ function paintAnl(which,segs,type){
   if(!chart)return;
   const total=segs.reduce((a,s)=>a+s.value,0);
   chart.classList.toggle('bars',type==='bar');
+  const card=document.getElementById('anl-card-'+which);
+  if(card)card.classList.toggle('pie-layout',type==='pie'&&total>0);
   if(!total){chart.innerHTML='<div class="sv2-anl-empty">'+((LANGS[(CU&&localStorage.getItem('dlb_lang_'+CU.u))||'en']||LANGS.en).svNoRange)+'</div>';if(legend)legend.innerHTML='';return;}
   if(type==='bar'){
     // Show every category (including 0) so the full split is always visible.
