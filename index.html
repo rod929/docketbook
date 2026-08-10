@@ -2343,6 +2343,28 @@ function sigBadge(d){
   if(d.sigStatus==='sent_sms')return'<span class="badge bsent">💬 SMS sent</span>';
   return'<span class="badge bpend">⏳ Pending</span>';
 }
+// Project colour badge — each project gets a stable colour (same project = same
+// colour everywhere), from a palette chosen to steer clear of the status colours
+// (green=signed, amber=pending, red/maroon=queried, purple=backcharge, blue=info).
+const PROJ_COLORS=[
+  {bg:'#CDEDE8',fg:'#0F6B5C'}, // teal
+  {bg:'#E1E3FB',fg:'#3A3AA3'}, // indigo
+  {bg:'#FBDDE8',fg:'#A32654'}, // rose
+  {bg:'#D3EAF5',fg:'#14607D'}, // cyan
+  {bg:'#E4EBC7',fg:'#55631A'}, // olive
+  {bg:'#DFE4EA',fg:'#3A4A5E'}, // slate
+  {bg:'#F6DEF3',fg:'#8E2A86'}, // fuchsia
+  {bg:'#E8E2DB',fg:'#5E5147'}  // taupe
+];
+function projColor(code){
+  code=String(code||'');
+  let h=0;for(let i=0;i<code.length;i++)h=(h*31+code.charCodeAt(i))>>>0;
+  return PROJ_COLORS[h%PROJ_COLORS.length];
+}
+function projBadge(code){
+  const c=projColor(code);
+  return '<span class="badge" style="background:'+c.bg+';color:'+c.fg+';">'+esc(code)+'</span>';
+}
 // Workflow status of a docket, used by the My-dockets status filter/badge.
 // One of: queried | awaiting_client | awaiting_my_sig | needs_billing |
 // chargeable_ready | signed.
@@ -2762,7 +2784,7 @@ function renRD(){
     const showFinancials=CU.role==='admin'; // money is admin-only (CLAUDE.md)
     return`<tr>
       <td><span class="dn">#${d.id}</span></td>
-      <td><span class="badge bi">${esc(d.pcode)}</span></td>
+      <td>${projBadge(d.pcode)}</td>
       <td>${fd(d.date)}</td>
       <td>${esc(d.sub)}</td>
       <td>${d.startTime||'—'}</td>
@@ -2819,7 +2841,7 @@ function renMD(){
     });
   }
   if(!src.length){tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:#aaa;padding:20px;">'+((sf||pf||rv!=='all')?'No dockets match these filters':'No dockets yet')+'</td></tr>';return;}
-  tb.innerHTML=src.map(d=>`<tr><td><span class="dn">#${d.id}</span></td><td><span class="badge bi">${esc(d.pcode)}</span></td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${CU&&CU.role==='admin'?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
+  tb.innerHTML=src.map(d=>`<tr><td><span class="dn">#${d.id}</span></td><td>${projBadge(d.pcode)}</td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${CU&&CU.role==='admin'?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
 }
 function renAD(){
   const tb=document.getElementById('adb');if(!tb)return;
@@ -2858,7 +2880,7 @@ function renAD(){
     } else acs.style.display='none';
   }
   if(!fl.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:#aaa;padding:20px;">No dockets found</td></tr>';return;}
-  tb.innerHTML=fl.map(d=>`<tr><td><input type='checkbox' class='docket-sel' value='${d.id}' onchange='updateBulkBar()' ${d.bill==='ch'?'':''}></td><td><span class="dn">#${d.id}</span>${d.refSubDocketId?`<br><span style="font-size:9px;color:#3C3489;cursor:pointer;" onclick="event.stopPropagation();vD('${d.refSubDocketId}')" title="View originating sub docket">↩ sub #${esc(d.refSubDocketId)}</span>`:''}</td><td><span class="badge bi">${esc(d.pcode)}</span></td><td>${fd(d.date)}</td><td>${esc(d.sub)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${d.hours}h</td><td>${showMoney?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td>${sigBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
+  tb.innerHTML=fl.map(d=>`<tr><td><input type='checkbox' class='docket-sel' value='${d.id}' onchange='updateBulkBar()' ${d.bill==='ch'?'':''}></td><td><span class="dn">#${d.id}</span>${d.refSubDocketId?`<br><span style="font-size:9px;color:#3C3489;cursor:pointer;" onclick="event.stopPropagation();vD('${d.refSubDocketId}')" title="View originating sub docket">↩ sub #${esc(d.refSubDocketId)}</span>`:''}</td><td>${projBadge(d.pcode)}</td><td>${fd(d.date)}</td><td>${esc(d.sub)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${d.hours}h</td><td>${showMoney?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td>${sigBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
 }
 function renPS(workerFilter){
   const sel=document.getElementById('dp');if(!sel)return;
@@ -6010,7 +6032,7 @@ function cfmFilterDockets(){
     <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:0.5px solid rgba(0,0,0,0.06);cursor:pointer;font-size:12px;" onchange="cfmUpdateSummary()">
       <input type="checkbox" class="cfm-dock-check" value="${d.id}" style="flex-shrink:0;">
       <span style="flex:1;">
-        <strong>#${d.id}</strong> &nbsp;<span class="badge bi">${esc(d.pcode)}</span>&nbsp; ${fd(d.date)} &nbsp;—&nbsp; ${esc(d.sub)} &nbsp;—&nbsp; ${d.hours}h
+        <strong>#${d.id}</strong> &nbsp;${projBadge(d.pcode)}&nbsp; ${fd(d.date)} &nbsp;—&nbsp; ${esc(d.sub)} &nbsp;—&nbsp; ${d.hours}h
         ${d.sig?'<span class="badge bs" style="font-size:10px;">Signed</span>':'<span class="badge bpend" style="font-size:10px;">Unsigned</span>'}
       </span>
       <span style="color:#185FA5;font-weight:500;flex-shrink:0;">${fc(calcC(d))}</span>
@@ -7576,7 +7598,7 @@ function renSignedPanel(){
     return`<tr>
       <td><span class="dn">#${d.id}</span></td>
       <td>${fd(d.date)}</td>
-      <td><span class="badge bi">${esc(d.pcode)}</span></td>
+      <td>${projBadge(d.pcode)}</td>
       <td style="font-weight:500;">${esc(d.sub)}</td>
       <td>${d.hours}h</td>
       <td>${subCost!=null?'$'+subCost.toFixed(2):'—'}</td>
