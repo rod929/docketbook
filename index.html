@@ -1511,6 +1511,23 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         </div>
       </div>
 
+      <div class="card" id="flash-settings-card" style="margin-top:4px;display:none;">
+        <p style="font-size:13px;font-weight:500;margin-bottom:4px;">🔔 Dashboard alerts <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
+        <p style="font-size:12px;color:#888;margin-bottom:14px;">Control when each supervisor dashboard box flashes for attention. “Flash after threshold” uses how many days the oldest item has been outstanding (counted from its queried / signed / received date).</p>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <label style="font-size:13px;font-weight:500;margin:0;">Flash threshold:</label>
+          <input type="number" id="flash-threshold" min="0" step="1" value="2" style="width:70px;">
+          <span style="font-size:13px;color:#555;">days</span>
+        </div>
+        <div id="flash-rows"></div>
+        <div id="flash-ok" class="ok hidden" style="margin-top:10px;">Alert settings saved.</div>
+        <p style="font-size:11px;color:#aaa;margin:10px 0 0;">Note: saved on this device. Company-wide sync across everyone’s devices arrives with the cloud backend.</p>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+          <button class="btn btn-p" onclick="saveFlashSettings()">Save alerts</button>
+          <button class="btn" onclick="renFlashSettings()">Reset</button>
+        </div>
+      </div>
+
       <div class="card" style="margin-top:4px;">
         <p style="font-size:13px;font-weight:500;margin-bottom:10px;">👁 Preview</p>
         <div id="settings-preview" style="border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:14px;background:#fafaf8;"></div>
@@ -2322,7 +2339,7 @@ function showTab(tab,btn){
   if(tab==='subs')renST();
   if(tab==='proj'){renPT();renClientSelects();}
   if(tab==='clients')renClientList();
-  if(tab==='settings'){loadSettingsForm();renSettingsPreview();}
+  if(tab==='settings'){loadSettingsForm();renSettingsPreview();renFlashSettings();}
   if(tab==='drafts')renDrafts();
   if(tab==='ready')renReady();
   if(tab==='rates'){renRatesSelects();renRatesTable();}
@@ -8167,6 +8184,50 @@ function getFlashCfg(){
   return {thresholdDays:DEFAULT_FLASH_CFG.thresholdDays,boxes:Object.assign({},DEFAULT_FLASH_CFG.boxes)};
 }
 function saveFlashCfg(cfg){try{localStorage.setItem('dlb_flash_cfg',JSON.stringify(cfg));}catch(e){}}
+// The dashboard boxes, in display order, for the admin alert-settings screen.
+const FLASH_BOXES=[
+  {key:'create',label:'Create client docket',group:'Client'},
+  {key:'cAwait',label:'Awaiting client signature',group:'Client'},
+  {key:'cQ',label:'Queried by admin',group:'Client'},
+  {key:'cP',label:'Pending admin review',group:'Client'},
+  {key:'subSign',label:'Awaiting my signature',group:'Subcontractor'},
+  {key:'subBill',label:'Awaiting bill allocation',group:'Subcontractor'},
+  {key:'subQ',label:'Queried by admin',group:'Subcontractor'},
+  {key:'subP',label:'Pending admin review',group:'Subcontractor'}
+];
+// Render the admin-only "Dashboard alerts" settings card. Hidden for anyone who
+// isn't a company administrator (supervisors/workers never see it).
+function renFlashSettings(){
+  const card=document.getElementById('flash-settings-card');
+  const isAdm=!!(CU&&CU.role==='admin');
+  if(card)card.style.display=isAdm?'':'none';
+  if(!isAdm)return;
+  const cfg=getFlashCfg();
+  const th=document.getElementById('flash-threshold');if(th)th.value=cfg.thresholdDays;
+  const rows=document.getElementById('flash-rows');if(!rows)return;
+  const opt=(v,label,sel)=>'<option value="'+v+'"'+(sel===v?' selected':'')+'>'+label+'</option>';
+  let html='',lastGroup='';
+  FLASH_BOXES.forEach(b=>{
+    if(b.group!==lastGroup){html+='<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#999;margin:12px 0 4px;">'+esc(b.group)+'</div>';lastGroup=b.group;}
+    const m=cfg.boxes[b.key]||'never';
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:0.5px solid rgba(0,0,0,0.06);">'
+      +'<span style="font-size:13px;color:#2D2D2D;">'+esc(b.label)+'</span>'
+      +'<select data-flashkey="'+b.key+'" style="width:190px;font-size:12px;flex-shrink:0;">'
+      +opt('never','Off — never flash',m)+opt('instant','Flash immediately',m)+opt('delayed','Flash after threshold',m)
+      +'</select></div>';
+  });
+  rows.innerHTML=html;
+}
+function saveFlashSettings(){
+  if(!(CU&&CU.role==='admin'))return;
+  const cfg=getFlashCfg();
+  const th=parseInt(document.getElementById('flash-threshold')?.value,10);
+  cfg.thresholdDays=(isNaN(th)||th<0)?2:th;
+  document.querySelectorAll('#flash-rows select[data-flashkey]').forEach(s=>{cfg.boxes[s.dataset.flashkey]=s.value;});
+  saveFlashCfg(cfg);
+  const ok=document.getElementById('flash-ok');if(ok){ok.classList.remove('hidden');setTimeout(()=>ok.classList.add('hidden'),2500);}
+  try{const dv=document.getElementById('dash-supervisor');if(dv&&!dv.classList.contains('hidden')&&typeof renSupervisorDash==='function')renSupervisorDash();}catch(e){}
+}
 function renSupervisorDash(){
   if(!CU)return;
   // Translate the v2 labels so a language switch updates the whole dashboard.
