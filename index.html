@@ -1280,6 +1280,11 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
     <!-- MY DOCKETS -->
     <div id="t-md" class="hidden">
       <div class="rb"><p class="st" style="margin:0;">My dockets</p><div style="display:flex;gap:6px;"><button class="btn btn-s" onclick="showTab('dash',document.getElementById('n0'))" style="background:#EF9F27;color:#412402;border:none;font-weight:600;">← Dashboard</button><button class="btn btn-s" onclick="expCSV(false)">↓ CSV</button><button class="btn btn-s btn-p" onclick="expPDF(false)">↓ PDF</button></div></div>
+      <div class="sv2-seg" id="md-type-seg" style="margin-bottom:12px;">
+        <button id="md-type-all" class="on" onclick="setMdType('')">All</button>
+        <button id="md-type-client" onclick="setMdType('client')">📤 Client (sent)</button>
+        <button id="md-type-sub" onclick="setMdType('sub')">📥 Subcontractor (received)</button>
+      </div>
       <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
         <label style="font-size:13px;font-weight:600;color:#555;">Filters:</label>
         <select id="md-status-filter" style="width:200px;" onchange="renMD()">
@@ -2804,9 +2809,25 @@ function mdRangeChange(){
   if(c){const on=(r&&r.value==='custom');c.classList.toggle('hidden',!on);c.style.display=on?'inline-flex':'none';}
   renMD();
 }
+// A "client" (up-chain) docket = one going UP to the client: a mirror of a
+// signed sub docket, or one the client themselves signs. Everything else on
+// My dockets is a subcontractor docket we received.
+function isUpChainDocket(d){return !!d.refSubDocketId||d.signerRole==='client'||d.signerRole==='client_supervisor';}
+// My dockets view toggle: '' = all, 'client' = sent up, 'sub' = received.
+function setMdType(t){
+  window._mdType=t;
+  [['md-type-all',''],['md-type-client','client'],['md-type-sub','sub']].forEach(([id,v])=>{
+    const b=document.getElementById(id);if(b)b.classList.toggle('on',v===t);
+  });
+  renMD();
+}
 function renMD(){
   const tb=document.getElementById('mdb');if(!tb)return;
   let src=myD().reverse();
+  // Type view: client (sent up-chain) vs subcontractor (received).
+  const tf=window._mdType||'';
+  if(tf==='client')src=src.filter(isUpChainDocket);
+  else if(tf==='sub')src=src.filter(d=>!isUpChainDocket(d));
   const sf=document.getElementById('md-status-filter')?.value||'';
   if(sf){
     // "signed" = every signed docket; "pending_review" = awaiting admin sign-off;
@@ -2840,7 +2861,7 @@ function renMD(){
       return true;
     });
   }
-  if(!src.length){tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:#aaa;padding:20px;">'+((sf||pf||rv!=='all')?'No dockets match these filters':'No dockets yet')+'</td></tr>';return;}
+  if(!src.length){tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:#aaa;padding:20px;">'+((sf||pf||tf||rv!=='all')?'No dockets match these filters':'No dockets yet')+'</td></tr>';return;}
   tb.innerHTML=src.map(d=>`<tr><td><span class="dn">#${d.id}</span></td><td>${projBadge(d.pcode)}</td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${CU&&CU.role==='admin'?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
 }
 function renAD(){
