@@ -1368,8 +1368,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div class="rb"><p class="st" style="margin:0;" id="md-title">My dockets</p><div style="display:flex;gap:6px;"><button class="btn btn-s" id="md-btn-dash" onclick="showTab('dash',document.getElementById('n0'))" style="background:#EF9F27;color:#412402;border:none;font-weight:600;">← Dashboard</button><button class="btn btn-s btn-csv" onclick="expCSV(false)">↓ CSV</button><button class="btn btn-s btn-pdf" onclick="expPDF(false)">↓ PDF</button></div></div>
       <div class="sv2-seg" id="md-type-seg" style="margin-bottom:12px;">
         <button id="md-type-all" class="on" onclick="setMdType('')">All</button>
-        <button id="md-type-client" onclick="setMdType('client')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-client-t">Client (sent)</span></button>
-        <button id="md-type-sub" onclick="setMdType('sub')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-sub-t">Subcontractor (received)</span></button>
+        <button id="md-type-client" onclick="setMdType('client')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-client-t">Client</span></button>
+        <button id="md-type-sub" onclick="setMdType('sub')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-sub-t">Subcontractor</span></button>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
         <label style="font-size:13px;font-weight:600;color:#555;" id="md-filters-label">Filters:</label>
@@ -4481,7 +4481,7 @@ const LANGS={
     wStart:'Start', wFinish:'Finish', wHours:'Hours', wFilledBy:'Filled out by', wWorker:'Worker', wNameOpt:'(name optional)',
     speakBtn:'Speak', listening:'● Listening… tap to stop',
     fillDetails:'Fill in the details below', workersHelper:'The worker filling out this docket is listed first. Add anyone else who worked on the same task.', applicableWord:'Applicable',
-    mdDash:'Dashboard', mdAll:'All', mdClientSent:'Client (sent)', mdSubReceived:'Subcontractor (received)', mdFilters:'Filters:', mdAllProjects:'All projects',
+    mdDash:'Dashboard', mdAll:'All', mdClientSent:'Client', mdSubReceived:'Subcontractor', mdFilters:'Filters:', mdAllProjects:'All projects',
     mdsAll:'All statuses', mdsNeedSig:'Needs my signature', mdsAwaitClient:'Pending signature', mdsNeedBill:'Needs billing', mdsReady:'Signed · ready to send', mdsQueried:'Queried', mdsPending:'Pending admin review', mdsRejected:'Rejected', mdsSigned:'Signed (all)',
     mdcProject:'Project', mdcDate:'Date', mdcHrs:'Hrs', mdcCost:'Cost', mdcBilling:'Billing', mdcCompany:'Company', mdcContact:'Client contact', mdcStatus:'Status',
     svHeroLab:'Subcontractor docket signed & chargeable', svHeroSub:'Tap to create a client docket',
@@ -4554,7 +4554,7 @@ const LANGS={
     wStart:'开始', wFinish:'结束', wHours:'工时', wFilledBy:'填写人', wWorker:'工人', wNameOpt:'（姓名可选）',
     speakBtn:'语音', listening:'● 正在聆听…点击停止',
     fillDetails:'请填写以下详细信息', workersHelper:'填写此工单的工人排在第一位。请添加参与同一任务的其他人。', applicableWord:'适用',
-    mdDash:'仪表板', mdAll:'全部', mdClientSent:'客户（已发送）', mdSubReceived:'分包商（已接收）', mdFilters:'筛选：', mdAllProjects:'所有项目',
+    mdDash:'仪表板', mdAll:'全部', mdClientSent:'客户', mdSubReceived:'分包商', mdFilters:'筛选：', mdAllProjects:'所有项目',
     mdsAll:'所有状态', mdsNeedSig:'需要我签名', mdsAwaitClient:'等待签名', mdsNeedBill:'需要计费', mdsReady:'已签名 · 可发送', mdsQueried:'有疑问', mdsPending:'等待管理审核', mdsRejected:'已拒绝', mdsSigned:'已签名（全部）',
     mdcProject:'项目', mdcDate:'日期', mdcHrs:'工时', mdcCost:'成本', mdcBilling:'计费', mdcCompany:'公司', mdcContact:'客户联系人', mdcStatus:'状态',
     svHeroLab:'分包商工单已签字且可计费', svHeroSub:'点击创建客户工单',
@@ -4627,7 +4627,7 @@ const LANGS={
     wStart:'Inicio', wFinish:'Fin', wHours:'Horas', wFilledBy:'Rellenado por', wWorker:'Trabajador', wNameOpt:'(nombre opcional)',
     speakBtn:'Hablar', listening:'● Escuchando… toca para parar',
     fillDetails:'Complete los detalles a continuación', workersHelper:'El trabajador que completa este parte aparece primero. Añada a cualquier otra persona que trabajó en la misma tarea.', applicableWord:'Aplicable',
-    mdDash:'Panel', mdAll:'Todos', mdClientSent:'Cliente (enviado)', mdSubReceived:'Subcontratista (recibido)', mdFilters:'Filtros:', mdAllProjects:'Todos los proyectos',
+    mdDash:'Panel', mdAll:'Todos', mdClientSent:'Cliente', mdSubReceived:'Subcontratista', mdFilters:'Filtros:', mdAllProjects:'Todos los proyectos',
     mdsAll:'Todos los estados', mdsNeedSig:'Necesita mi firma', mdsAwaitClient:'Firma pendiente', mdsNeedBill:'Necesita facturación', mdsReady:'Firmada · lista para enviar', mdsQueried:'Consultada', mdsPending:'Pendiente de revisión', mdsRejected:'Rechazada', mdsSigned:'Firmada (todas)',
     mdcProject:'Proyecto', mdcDate:'Fecha', mdcHrs:'Horas', mdcCost:'Coste', mdcBilling:'Facturación', mdcCompany:'Empresa', mdcContact:'Contacto del cliente', mdcStatus:'Estado',
     svHeroLab:'Parte del subcontratista firmado y facturable', svHeroSub:'Toque para crear un parte de cliente',
@@ -4700,7 +4700,7 @@ const LANGS={
     wStart:'البداية', wFinish:'النهاية', wHours:'الساعات', wFilledBy:'مُعبّأ بواسطة', wWorker:'عامل', wNameOpt:'(الاسم اختياري)',
     speakBtn:'تحدّث', listening:'● جارٍ الاستماع… اضغط للإيقاف',
     fillDetails:'أدخل التفاصيل أدناه', workersHelper:'العامل الذي يعبّئ هذا السند يُدرَج أولاً. أضِف أي شخص آخر عمل في المهمة نفسها.', applicableWord:'ينطبق',
-    mdDash:'لوحة التحكم', mdAll:'الكل', mdClientSent:'العميل (مُرسَل)', mdSubReceived:'المقاول من الباطن (مُستلَم)', mdFilters:'التصفية:', mdAllProjects:'كل المشاريع',
+    mdDash:'لوحة التحكم', mdAll:'الكل', mdClientSent:'العميل', mdSubReceived:'المقاول من الباطن', mdFilters:'التصفية:', mdAllProjects:'كل المشاريع',
     mdsAll:'كل الحالات', mdsNeedSig:'بحاجة لتوقيعي', mdsAwaitClient:'بانتظار التوقيع', mdsNeedBill:'بحاجة للفوترة', mdsReady:'موقّع · جاهز للإرسال', mdsQueried:'استفسار', mdsPending:'بانتظار مراجعة الإدارة', mdsRejected:'مرفوض', mdsSigned:'موقّع (الكل)',
     mdcProject:'المشروع', mdcDate:'التاريخ', mdcHrs:'ساعات', mdcCost:'التكلفة', mdcBilling:'الفوترة', mdcCompany:'الشركة', mdcContact:'جهة اتصال العميل', mdcStatus:'الحالة',
     svHeroLab:'سند مقاول موقّع وقابل للفوترة', svHeroSub:'اضغط لإنشاء سند العميل',
