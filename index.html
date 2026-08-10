@@ -413,14 +413,14 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-bar-track{height:9px;background:#efeeea;border-radius:6px;overflow:hidden;}
 .sv2-bar-fill{height:100%;border-radius:6px;min-width:3px;transition:width .3s ease;}
 /* Two rows of outstanding-count boxes (subcontractor row / client row) */
-.sv2-sec-head{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#2D2D2D;margin:8px 2px 10px;}
-.sv2-sec-ic{font-size:18px;}
+.sv2-sec-head{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:800;color:#2D2D2D;text-transform:uppercase;letter-spacing:0.08em;margin:10px 2px 11px;}
+.sv2-sec-ic{font-size:20px;line-height:1;}
 .sv2-boxrow{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:22px;}
 .sv2-box{background:#fff;border:0.5px solid rgba(0,0,0,0.09);border-radius:14px;padding:14px 5px 12px;text-align:center;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,0.04);display:flex;flex-direction:column;align-items:center;gap:7px;min-height:98px;}
 .sv2-box:active{transform:scale(0.97);}
 .sv2-bv{font-size:26px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;color:#2D2D2D;}
 .sv2-bl{font-size:10px;color:#777;font-weight:600;line-height:1.25;}
-.sv2-b-red .sv2-bv{color:#E24B4A;} .sv2-b-amber .sv2-bv{color:#C7891A;} .sv2-b-blue .sv2-bv{color:#185FA5;} .sv2-b-maroon .sv2-bv{color:#A4271F;} .sv2-b-rej .sv2-bv{color:#8A1F19;}
+.sv2-b-red .sv2-bv{color:#E24B4A;} .sv2-b-amber .sv2-bv{color:#C7891A;} .sv2-b-blue .sv2-bv{color:#185FA5;} .sv2-b-maroon .sv2-bv{color:#A4271F;} .sv2-b-slate .sv2-bv{color:#5A6B7B;}
 .sv2-box.sv2-zero{opacity:0.5;}
 .sv2-box.sv2-zero .sv2-bv{color:#bdbcb6;}
 @keyframes sv2BoxFlash{0%,100%{box-shadow:0 0 0 0 rgba(226,75,74,0.55);}50%{box-shadow:0 0 0 5px rgba(226,75,74,0);}}
@@ -555,22 +555,22 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <!-- ── SUPERVISOR DASHBOARD (mockup v2 — urgency-ordered) ── -->
       <div id="dash-supervisor" class="hidden">
         <div id="sup-scroll-area">
-          <!-- FROM OUR SUBCONTRACTORS — a row of outstanding-count boxes -->
-          <div class="sv2-sec-head"><span class="sv2-sec-ic">&#128229;</span>From our subcontractors</div>
-          <div class="sv2-boxrow">
-            <div class="sv2-box sv2-b-red" onclick="supKpiOpen('awaiting_my_sig')"><div class="sv2-bv" id="sv2b-sign">0</div><div class="sv2-bl">Awaiting my signature</div></div>
-            <div class="sv2-box sv2-b-amber" onclick="supKpiOpen('needs_billing')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl">Awaiting bill allocation</div></div>
-            <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried')"><div class="sv2-bv" id="sv2b-inq">0</div><div class="sv2-bl">Queried by admin</div></div>
-            <div class="sv2-box sv2-b-rej" onclick="supKpiOpen('rejected')"><div class="sv2-bv" id="sv2b-inr">0</div><div class="sv2-bl">Rejected by admin</div></div>
-          </div>
-
-          <!-- TO THE CLIENT — a row of outstanding-count boxes -->
-          <div class="sv2-sec-head"><span class="sv2-sec-ic">&#128228;</span>To the client</div>
+          <!-- CLIENT — dockets going up the chain to the client -->
+          <div class="sv2-sec-head"><i class="ti ti-building-skyscraper sv2-sec-ic" style="color:#185FA5;" aria-hidden="true"></i>Client</div>
           <div class="sv2-boxrow">
             <div class="sv2-box sv2-b-red" id="sv2-box-create" onclick="supKpiOpen('chargeable_ready')"><div class="sv2-bv" id="sv2b-create">0</div><div class="sv2-bl">Create client docket</div></div>
             <div class="sv2-box sv2-b-blue" onclick="supKpiOpen('awaiting_client')"><div class="sv2-bv" id="sv2b-await">0</div><div class="sv2-bl">Awaiting client signature</div></div>
             <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried')"><div class="sv2-bv" id="sv2b-outq">0</div><div class="sv2-bl">Queried by admin</div></div>
-            <div class="sv2-box sv2-b-rej" onclick="supKpiOpen('rejected')"><div class="sv2-bv" id="sv2b-outr">0</div><div class="sv2-bl">Rejected by admin</div></div>
+            <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('pending_review')"><div class="sv2-bv" id="sv2b-outp">0</div><div class="sv2-bl">Pending admin review</div></div>
+          </div>
+
+          <!-- SUBCONTRACTOR — day-labour dockets received from our subcontractors -->
+          <div class="sv2-sec-head"><i class="ti ti-tools sv2-sec-ic" style="color:#EF9F27;" aria-hidden="true"></i>Subcontractor</div>
+          <div class="sv2-boxrow">
+            <div class="sv2-box sv2-b-red" onclick="supKpiOpen('awaiting_my_sig')"><div class="sv2-bv" id="sv2b-sign">0</div><div class="sv2-bl">Awaiting my signature</div></div>
+            <div class="sv2-box sv2-b-amber" onclick="supKpiOpen('needs_billing')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl">Awaiting bill allocation</div></div>
+            <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried')"><div class="sv2-bv" id="sv2b-inq">0</div><div class="sv2-bl">Queried by admin</div></div>
+            <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('pending_review')"><div class="sv2-bv" id="sv2b-inp">0</div><div class="sv2-bl">Pending admin review</div></div>
           </div>
 
           <!-- My projects (allocated by admin) -->
@@ -1186,6 +1186,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <option value="needs_billing">💲 Needs billing</option>
           <option value="chargeable_ready">✓ Signed · ready to send</option>
           <option value="queried">⚠ Queried</option>
+          <option value="pending_review">⏳ Pending admin review</option>
           <option value="rejected">⛔ Rejected</option>
           <option value="signed">✓ Signed (all)</option>
         </select>
@@ -2662,8 +2663,11 @@ function renMD(){
   let src=myD().reverse();
   const sf=document.getElementById('md-status-filter')?.value||'';
   if(sf){
-    // "signed" = every signed docket; other keys = exact workflow status.
-    src=sf==='signed'?src.filter(d=>!!d.sig):src.filter(d=>docketStatus(d)===sf);
+    // "signed" = every signed docket; "pending_review" = awaiting admin sign-off;
+    // other keys = exact workflow status.
+    if(sf==='signed')src=src.filter(d=>!!d.sig);
+    else if(sf==='pending_review')src=src.filter(d=>d.approvalStatus==='awaiting');
+    else src=src.filter(d=>docketStatus(d)===sf);
   }
   if(!src.length){tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:#aaa;padding:20px;">'+(sf?'No dockets match this filter':'No dockets yet')+'</td></tr>';return;}
   tb.innerHTML=src.map(d=>`<tr><td><span class="dn">#${d.id}</span></td><td><span class="badge bi">${esc(d.pcode)}</span></td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${CU&&CU.role==='admin'?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
@@ -7537,21 +7541,24 @@ function renSupervisorDash(){
   const inList=scope.filter(d=>!isUp(d)&&!isDone(d));
   const upList=scope.filter(d=>isUp(d)&&!isDone(d));
 
+  // Pending admin review = signed + billing set + awaiting the admin's sign-off.
+  const isAwaitingAdmin=d=>d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting'&&!isQ(d)&&!isR(d);
   // Subcontractor row (outstanding counts)
   const subSign=inList.filter(d=>!d.sig&&!(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')&&!isQ(d)&&!isR(d)).length;
   const subBill=inList.filter(d=>d.sig&&(!d.bill||d.bill==='pending')&&!isQ(d)&&!isR(d)).length;
   const subQ=inList.filter(isQ).length;
-  const subR=inList.filter(isR).length;
+  // pending review here excludes the chargeable-not-mirrored ones (those are a Create action)
+  const subP=inList.filter(d=>isAwaitingAdmin(d)&&!(d.bill==='ch'&&!isMirrored(d))).length;
   // Client row (outstanding counts). Create = signed sub docket, chargeable, not yet mirrored.
   const cCreate=scope.filter(d=>!isUp(d)&&d.sig&&d.bill==='ch'&&!isMirrored(d)&&!isQ(d)&&!isR(d)&&!isDone(d)).length;
   const cAwait=upList.filter(d=>!d.sig&&!isQ(d)&&!isR(d)).length;
   const cQ=upList.filter(isQ).length;
-  const cR=upList.filter(isR).length;
+  const cP=upList.filter(isAwaitingAdmin).length;
 
   // Paint the boxes; dim a box at 0, and flash the Create box when it has items.
   const setBox=(id,n)=>{const e=document.getElementById(id);if(!e)return;e.textContent=n;const b=e.closest('.sv2-box');if(b)b.classList.toggle('sv2-zero',n===0);};
-  setBox('sv2b-sign',subSign);setBox('sv2b-bill',subBill);setBox('sv2b-inq',subQ);setBox('sv2b-inr',subR);
-  setBox('sv2b-create',cCreate);setBox('sv2b-await',cAwait);setBox('sv2b-outq',cQ);setBox('sv2b-outr',cR);
+  setBox('sv2b-sign',subSign);setBox('sv2b-bill',subBill);setBox('sv2b-inq',subQ);setBox('sv2b-inp',subP);
+  setBox('sv2b-create',cCreate);setBox('sv2b-await',cAwait);setBox('sv2b-outq',cQ);setBox('sv2b-outp',cP);
   const createBox=document.getElementById('sv2-box-create');
   if(createBox)createBox.classList.toggle('sv2-flash',cCreate>0);
 
