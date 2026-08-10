@@ -420,10 +420,10 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-sec-head{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:800;color:#2D2D2D;text-transform:uppercase;letter-spacing:0.08em;margin:10px 2px 11px;}
 .sv2-sec-ic{font-size:20px;line-height:1;}
 .sv2-boxrow{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:22px;}
-.sv2-box{background:#fff;border:0.5px solid rgba(0,0,0,0.09);border-radius:14px;padding:14px 5px 12px;text-align:center;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,0.04);display:flex;flex-direction:column;align-items:center;gap:7px;min-height:98px;}
+.sv2-box{background:#fff;border:0.5px solid rgba(0,0,0,0.09);border-radius:14px;padding:17px 6px 15px;text-align:center;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,0.04);display:flex;flex-direction:column;align-items:center;gap:8px;min-height:112px;}
 .sv2-box:active{transform:scale(0.97);}
-.sv2-bv{font-size:26px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;color:#2D2D2D;}
-.sv2-bl{font-size:10px;color:#777;font-weight:600;line-height:1.25;}
+.sv2-bv{font-size:30px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;color:#2D2D2D;}
+.sv2-bl{font-size:10.5px;color:#777;font-weight:600;line-height:1.25;}
 .sv2-b-red .sv2-bv{color:#E24B4A;} .sv2-b-amber .sv2-bv{color:#C7891A;} .sv2-b-blue .sv2-bv{color:#185FA5;} .sv2-b-maroon .sv2-bv{color:#A4271F;} .sv2-b-slate .sv2-bv{color:#5A6B7B;}
 .sv2-box.sv2-zero{opacity:0.5;}
 .sv2-box.sv2-zero .sv2-bv{color:#bdbcb6;}
@@ -2050,10 +2050,10 @@ function setupUI(){
     const langOptsS=['<option value="en"'+(savedLangS==='en'?' selected':'')+'>🇦🇺 English</option>',
       '<option value="zh"'+(savedLangS==='zh'?' selected':'')+'>🇨🇳 中文</option>',
       '<option value="es"'+(savedLangS==='es'?' selected':'')+'>🇪🇸 Español</option>'].join('');
-    rb.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:10px;">'
-      +'<div style="display:flex;align-items:center;gap:12px;min-width:0;">'+logoHtmlS
-      +'<span style="min-width:0;"><strong>'+esc(CU.name)+'</strong><span style="opacity:0.65;font-weight:400;"> · Supervisor</span></span></div>'
-      +'<select id="lang-switcher-s" style="font-size:12px;padding:4px 10px;border-radius:8px;border:none;background:#fff;color:#2D2D2D;cursor:pointer;flex-shrink:0;" onchange="changeLang(this.value)">'
+    rb.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:nowrap;gap:10px;">'
+      +'<div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;">'+logoHtmlS
+      +'<span style="min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><strong>'+esc(CU.name)+'</strong><span style="opacity:0.65;font-weight:400;"> · Supervisor</span></span></div>'
+      +'<select id="lang-switcher-s" style="font-size:12px;padding:4px 8px;border-radius:8px;background:#fff;color:#2D2D2D;cursor:pointer;flex-shrink:0;max-width:130px;" onchange="changeLang(this.value)">'
       +langOptsS
       +'</select></div>';
     setTimeout(()=>applyLang(savedLangS),80);
