@@ -677,7 +677,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <button id="dv-big" onclick="setDashView('big')"><i class="ti ti-layout-board" aria-hidden="true"></i> Big boxes</button>
           </div>
           <!-- CLIENT — dockets going up the chain to the client -->
-          <div class="sv2-sec-head sec-client"><i class="ti ti-building-skyscraper sv2-sec-ic" style="color:#185FA5;" aria-hidden="true"></i><span id="sv2h-client">Client</span></div>
+          <div class="sv2-sec-head sec-client"><span class="sv2-sec-ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" style="display:block"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span id="sv2h-client">Client</span></div>
           <div class="sv2-boxrow">
             <div class="sv2-box sv2-b-red" id="sv2-box-create" onclick="supKpiOpen('chargeable_ready')"><div class="sv2-bv" id="sv2b-create">0</div><div class="sv2-bl" id="sv2l-create">Create client docket</div></div>
             <div class="sv2-box sv2-b-blue" onclick="supKpiOpen('awaiting_client')"><div class="sv2-bv" id="sv2b-await">0</div><div class="sv2-bl" id="sv2l-await">Awaiting client signature</div></div>
@@ -686,7 +686,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           </div>
 
           <!-- SUBCONTRACTOR — day-labour dockets received from our subcontractors -->
-          <div class="sv2-sec-head sec-sub"><i class="ti ti-tools sv2-sec-ic" style="color:#EF9F27;" aria-hidden="true"></i><span id="sv2h-sub">Subcontractor</span></div>
+          <div class="sv2-sec-head sec-sub"><span class="sv2-sec-ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" style="display:block"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span id="sv2h-sub">Subcontractor</span></div>
           <div class="sv2-boxrow">
             <div class="sv2-box sv2-b-red" onclick="supKpiOpen('awaiting_my_sig')"><div class="sv2-bv" id="sv2b-sign">0</div><div class="sv2-bl" id="sv2l-sign">Awaiting my signature</div></div>
             <div class="sv2-box sv2-b-amber" onclick="supKpiOpen('needs_billing')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl" id="sv2l-bill">Awaiting bill allocation</div></div>
@@ -1347,8 +1347,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div class="rb"><p class="st" style="margin:0;" id="md-title">My dockets</p><div style="display:flex;gap:6px;"><button class="btn btn-s" id="md-btn-dash" onclick="showTab('dash',document.getElementById('n0'))" style="background:#EF9F27;color:#412402;border:none;font-weight:600;">← Dashboard</button><button class="btn btn-s btn-csv" onclick="expCSV(false)">↓ CSV</button><button class="btn btn-s btn-pdf" onclick="expPDF(false)">↓ PDF</button></div></div>
       <div class="sv2-seg" id="md-type-seg" style="margin-bottom:12px;">
         <button id="md-type-all" class="on" onclick="setMdType('')">All</button>
-        <button id="md-type-client" onclick="setMdType('client')"><i class="ti ti-building-skyscraper" style="color:#185FA5;" aria-hidden="true"></i> <span id="md-type-client-t">Client (sent)</span></button>
-        <button id="md-type-sub" onclick="setMdType('sub')"><i class="ti ti-tools" style="color:#EF9F27;" aria-hidden="true"></i> <span id="md-type-sub-t">Subcontractor (received)</span></button>
+        <button id="md-type-client" onclick="setMdType('client')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-client-t">Client (sent)</span></button>
+        <button id="md-type-sub" onclick="setMdType('sub')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-sub-t">Subcontractor (received)</span></button>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
         <label style="font-size:13px;font-weight:600;color:#555;" id="md-filters-label">Filters:</label>
@@ -2899,8 +2899,8 @@ function isUpChainDocket(d){return !!d.refSubDocketId||d.signerRole==='client'||
 // blue building = client (sent up), orange tools = subcontractor (received).
 function docketTypeIcon(d){
   return isUpChainDocket(d)
-    ? '<i class="ti ti-building-skyscraper" style="color:#185FA5;" title="Client docket (sent)" aria-hidden="true"></i>'
-    : '<i class="ti ti-tools" style="color:#EF9F27;" title="Subcontractor docket (received)" aria-hidden="true"></i>';
+    ? '<svg width="14" height="14" viewBox="0 0 24 24" style="vertical-align:-2px"><title>Client docket (sent)</title><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'
+    : '<svg width="14" height="14" viewBox="0 0 24 24" style="vertical-align:-2px"><title>Subcontractor docket (received)</title><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
 }
 // My dockets view toggle: '' = all, 'client' = sent up, 'sub' = received.
 function setMdType(t){
