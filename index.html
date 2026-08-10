@@ -398,6 +398,20 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-rs{font-size:11px;color:#999;}
 .sv2-act{border:none;color:#fff;font-weight:600;font-size:12px;padding:8px 12px;border-radius:9px;flex-shrink:0;cursor:pointer;font-family:inherit;white-space:nowrap;}
 .sv2-empty{padding:16px 12px;text-align:center;color:#aaa;font-size:12px;}
+.sv2-ov{margin-bottom:20px;}
+.sv2-ov-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:9px;}
+.sv2-ov-title{font-size:15px;font-weight:700;color:#2D2D2D;}
+.sv2-ov-filters{display:flex;gap:6px;}
+.sv2-ov-filters select{font-size:12px;padding:5px 8px;border-radius:8px;border:0.5px solid rgba(0,0,0,0.15);background:#fff;color:#2D2D2D;font-family:inherit;max-width:140px;}
+.sv2-ov-total{font-size:12px;color:#777;font-weight:600;margin-bottom:12px;}
+.sv2-bar{margin-bottom:11px;}
+.sv2-bar:last-child{margin-bottom:0;}
+.sv2-bar-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;margin-bottom:5px;gap:8px;}
+.sv2-bar-lab{color:#2D2D2D;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sv2-bar-val{color:#777;font-variant-numeric:tabular-nums;flex-shrink:0;}
+.sv2-bar-val b{color:#2D2D2D;}
+.sv2-bar-track{height:9px;background:#efeeea;border-radius:6px;overflow:hidden;}
+.sv2-bar-fill{height:100%;border-radius:6px;min-width:3px;transition:width .3s ease;}
 /* ── Login screen — larger inputs & button ── */
 #ls .card{padding:2.25rem 1.75rem;width:100%;max-width:430px;}
 #ls label{font-size:14px;color:#555;margin-bottom:7px;font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;}
@@ -558,6 +572,25 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <div class="sv2-fhead"><span class="sv2-fic">&#128228;</span><span class="sv2-ft">To the client</span><span class="sv2-fcount" id="sv2-out-count">0</span></div>
             <div class="sv2-fsub">Your dockets to send up the chain for the client to sign off.</div>
             <div class="card sv2-fcard"><div id="sv2-out-body"></div><div class="sv2-empty" id="sv2-out-empty">Nothing to send to the client yet.</div></div>
+          </div>
+
+          <!-- Overview — all my dockets by status, filterable (% bars) -->
+          <div class="sv2-ov">
+            <div class="sv2-ov-head">
+              <span class="sv2-ov-title">Overview</span>
+              <div class="sv2-ov-filters">
+                <select id="sv2-ov-proj" onchange="renSupOverview()"><option value="">All jobs</option></select>
+                <select id="sv2-ov-range" onchange="renSupOverview()">
+                  <option value="all">All time</option>
+                  <option value="month">This month</option>
+                  <option value="week">This week</option>
+                </select>
+              </div>
+            </div>
+            <div class="card" style="padding:15px 16px;margin-bottom:8px;">
+              <div class="sv2-ov-total" id="sv2-ov-total">0 dockets</div>
+              <div id="sv2-ov-bars"></div>
+            </div>
           </div>
 
           <!-- My projects (allocated by admin) -->
@@ -7407,6 +7440,58 @@ function renSupFolder(which,html,count){
 }
 // Tapping the flashing red banner opens the first "create client docket" item.
 function sv2CreateHeroTap(){if(window._sv2CreateFirst)vD(window._sv2CreateFirst);else showTab('md',document.getElementById('n2'));}
+// Overview — % bars of my dockets by status, filterable by job + date range.
+const OV_META={
+  awaiting_my_sig:{l:'Awaiting my signature',c:'#E24B4A'},
+  needs_billing:{l:'Awaiting bill allocation',c:'#C7891A'},
+  chargeable_ready:{l:'Signed · chargeable',c:'#EF9F27'},
+  awaiting_client:{l:'Awaiting client signature',c:'#185FA5'},
+  signed:{l:'Signed',c:'#1D9E75'},
+  approved:{l:'Approved',c:'#0F6E56'},
+  queried:{l:'Queried',c:'#A4271F'},
+  rejected:{l:'Rejected',c:'#8A1F19'}
+};
+const OV_ORDER=['awaiting_my_sig','needs_billing','chargeable_ready','awaiting_client','queried','rejected','approved','signed'];
+function ovCat(d){return d.approvalStatus==='approved'?'approved':docketStatus(d);}
+function renSupOverview(){
+  if(!CU)return;
+  const usr=getUserData();const ap=usr?.projectAccess||[];
+  const psel=document.getElementById('sv2-ov-proj');
+  if(psel&&psel.options.length<=1){
+    const myProjects=projects.filter(p=>ap.includes(p.code));
+    psel.innerHTML='<option value="">All jobs</option>'+myProjects.map(p=>`<option value="${esc(p.code)}">${esc(p.name)}</option>`).join('');
+  }
+  const pf=psel?psel.value:'';
+  const range=document.getElementById('sv2-ov-range')?.value||'all';
+  const _s=new Set(subs.map(s=>s.u)),_w=new Set(workers.map(w=>w.u)),_co=(appSettings.name||'').toLowerCase();
+  const isSubCo=d=>((d.sub||'').toLowerCase()!==_co)||_s.has(d.createdBy)||_w.has(d.createdBy);
+  const now=new Date();
+  const inR=d=>{
+    if(range==='all')return true;
+    const ts=d.date?new Date(d.date):(d.createdAt?new Date(d.createdAt):null);
+    if(!ts||isNaN(ts.getTime()))return true;
+    if(range==='week'){const wk=new Date(now);wk.setDate(now.getDate()-7);return ts>=wk;}
+    if(range==='month'){const m=new Date(now);m.setMonth(now.getMonth()-1);return ts>=m;}
+    return true;
+  };
+  let src=dockets.filter(d=>d.createdBy===CU.u||d.signedBySupervisor===CU.u||(ap.includes(d.pcode)&&d.createdBy!==CU.u&&isSubCo(d)));
+  if(pf)src=src.filter(d=>d.pcode===pf);
+  src=src.filter(inR);
+  const total=src.length;
+  const totEl=document.getElementById('sv2-ov-total');
+  if(totEl)totEl.textContent=total+' docket'+(total!==1?'s':'')+(pf?' · '+esc(pf):'');
+  const counts={};src.forEach(d=>{const c=ovCat(d);counts[c]=(counts[c]||0)+1;});
+  const bars=document.getElementById('sv2-ov-bars');
+  if(!bars)return;
+  if(!total){bars.innerHTML='<div style="color:#aaa;font-size:12px;text-align:center;padding:8px;">No dockets in this range.</div>';return;}
+  bars.innerHTML=OV_ORDER.filter(k=>counts[k]).map(k=>{
+    const m=OV_META[k];const n=counts[k];const pct=Math.round(n/total*100);
+    return `<div class="sv2-bar">
+      <div class="sv2-bar-top"><span class="sv2-bar-lab">${m.l}</span><span class="sv2-bar-val"><b>${n}</b> · ${pct}%</span></div>
+      <div class="sv2-bar-track"><div class="sv2-bar-fill" style="width:${pct}%;background:${m.c};"></div></div>
+    </div>`;
+  }).join('');
+}
 // Tapping an "Up next" KPI opens My dockets filtered to that state.
 function supKpiOpen(f){
   const sel=document.getElementById('md-status-filter');
@@ -7468,17 +7553,25 @@ function renSupervisorDash(){
   const byDate=(a,b)=>String(b.date||'').localeCompare(String(a.date||''));
   const MAROON='#A4271F', REJ='#8A1F19';
 
+  const SLATE='#5A6B7B';
+  // A docket where the supervisor is done and it's sitting with the admin.
+  const isAwaitingAdmin=d=>d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting'&&!isQ(d)&&!isR(d);
+
   // ── FOLDER 1 — FROM our subcontractors (a sub's work we handle) ──
   const inList=scope.filter(d=>!isUp(d)&&!isDone(d));
   const f1Sign=inList.filter(d=>!d.sig&&!(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')&&!isQ(d)&&!isR(d)).sort(byDate);
   const f1Bill=inList.filter(d=>d.sig&&(!d.bill||d.bill==='pending')&&!isQ(d)&&!isR(d)).sort((a,b)=>docketAgeDays(b)-docketAgeDays(a));
   const f1Query=inList.filter(d=>isQ(d)||isR(d)).sort(byDate);
+  // Awaiting admin approval, but NOT the chargeable-not-yet-mirrored ones (those
+  // are a "create client docket" action, shown in the To-client folder).
+  const f1Appr=inList.filter(d=>isAwaitingAdmin(d)&&!(d.bill==='ch'&&!isMirrored(d))).sort(byDate);
   const inItems=[
     ...f1Sign.map(d=>sv2Row(d,{dot:'#E24B4A',tag:'Awaiting my signature',btn:'Sign',bg:'#185FA5',fn:`vD('${d.id}')`})),
     ...f1Bill.map(d=>sv2Row(d,{dot:'#C7891A',tag:d.billTbc?'Bill — TBC':'Awaiting bill allocation',btn:'Set billing',bg:'#C7891A',fn:`vD('${d.id}')`})),
-    ...f1Query.map(d=>sv2Row(d,{dot:isR(d)?REJ:MAROON,tag:isR(d)?'Rejected by admin':'Queried by admin',btn:'Resolve',bg:isR(d)?REJ:MAROON,fn:`openResolveModal('${d.id}')`}))
+    ...f1Query.map(d=>sv2Row(d,{dot:isR(d)?REJ:MAROON,tag:isR(d)?'Rejected by admin':'Queried by admin',btn:'Resolve',bg:isR(d)?REJ:MAROON,fn:`openResolveModal('${d.id}')`})),
+    ...f1Appr.map(d=>sv2Row(d,{dot:SLATE,tag:'Pending admin approval',btn:'View',bg:SLATE,fn:`vD('${d.id}')`}))
   ];
-  renSupFolder('in',inItems.join(''),f1Sign.length+f1Bill.length+f1Query.length);
+  renSupFolder('in',inItems.join(''),f1Sign.length+f1Bill.length+f1Query.length+f1Appr.length);
 
   // ── FOLDER 2 — TO the client (our claims up the chain) ──
   // Create client docket = a sub docket we signed, marked chargeable, not yet mirrored.
@@ -7486,12 +7579,14 @@ function renSupervisorDash(){
   const upList=scope.filter(d=>isUp(d)&&!isDone(d));
   const f2Await=upList.filter(d=>!d.sig&&!isQ(d)&&!isR(d)).sort(byDate);
   const f2Query=upList.filter(d=>isQ(d)||isR(d)).sort(byDate);
+  const f2Appr=upList.filter(d=>isAwaitingAdmin(d)).sort(byDate);
   const outItems=[
     ...f2Create.map(d=>sv2Row(d,{dot:'#E24B4A',tag:'Signed · chargeable',btn:'Create client docket',bg:'#E24B4A',fn:`vD('${d.id}')`})),
     ...f2Await.map(d=>sv2Row(d,{dot:'#185FA5',tag:'Awaiting client signature',btn:'View',bg:'#8a8a8a',fn:`vD('${d.id}')`})),
-    ...f2Query.map(d=>sv2Row(d,{dot:isR(d)?REJ:MAROON,tag:isR(d)?'Rejected by admin':'Queried by admin',btn:'Resolve',bg:isR(d)?REJ:MAROON,fn:`openResolveModal('${d.id}')`}))
+    ...f2Query.map(d=>sv2Row(d,{dot:isR(d)?REJ:MAROON,tag:isR(d)?'Rejected by admin':'Queried by admin',btn:'Resolve',bg:isR(d)?REJ:MAROON,fn:`openResolveModal('${d.id}')`})),
+    ...f2Appr.map(d=>sv2Row(d,{dot:SLATE,tag:'Pending admin approval',btn:'View',bg:SLATE,fn:`vD('${d.id}')`}))
   ];
-  renSupFolder('out',outItems.join(''),f2Create.length+f2Await.length+f2Query.length);
+  renSupFolder('out',outItems.join(''),f2Create.length+f2Await.length+f2Query.length+f2Appr.length);
 
   // ── Flashing red alert — dockets ready to become a client docket ──
   const chHero=document.getElementById('sv2-create-hero');
@@ -7529,6 +7624,9 @@ function renSupervisorDash(){
       const f=pl.querySelector('div');if(f)f.style.borderTop='none';
     }
   }
+
+  // ── Overview (% bars by status, filterable) ──
+  renSupOverview();
 
   // ── Recent dockets (this supervisor's own) ──
   renRecentList('sup-rd-list',own,{money:false});
