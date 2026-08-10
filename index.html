@@ -2056,7 +2056,7 @@ function setupUI(){
     // HC Supervisor sees: dashboard, all dockets for assigned projects
     document.getElementById('mpend-card').classList.remove('hidden');
     document.getElementById('n3').classList.remove('hidden');
-    document.getElementById('n3').textContent='All dockets';
+    document.getElementById('n3').textContent='Project dockets';
     document.getElementById('n-drafts').classList.remove('hidden');
     document.getElementById('n-ready').classList.remove('hidden');
   } else if(r==='user'||r==='supervisor'||r==='manager'){
@@ -2742,7 +2742,11 @@ function renAD(){
   const fsb=document.getElementById('fsb')?.value||'';
   const fb=document.getElementById('fb')?.value||'';
   const fsig=document.getElementById('fsig')?.value||'';
-  let fl=[...dockets].reverse().filter(d=>{
+  // Admins see every docket; everyone else sees only their project dockets.
+  const isAdm=CU&&CU.role==='admin';
+  const adTitle=document.getElementById('ad-title');
+  if(adTitle)adTitle.textContent=isAdm?'All dockets':'Project dockets';
+  let fl=(isAdm?[...dockets]:myD()).reverse().filter(d=>{
     if(fp&&d.pcode!==fp)return false;
     if(fsb&&d.createdBy!==fsb)return false;
     if(fb&&d.bill!==fb)return false;
@@ -7277,8 +7281,8 @@ function renBottomNav(){
     items=[['dash',_t.navHome,'ti-home'],['ad',_t.navDockets,'ti-files'],['ready',_rdy,'ti-clipboard-check'],['settings',_t.navAdmin,'ti-settings']];
   } else if(r==='sub'){
     items=[['dash',_t.navHome,'ti-home'],['md',_t.navDockets,'ti-files'],['ready',_rdy,'ti-clipboard-check'],['drafts',_t.navDrafts,'ti-pencil']];
-  } else { // hc_supervisor + legacy site roles — Home / My dockets / All dockets / Drafts
-    items=[['dash',_t.navHome,'ti-home'],['md','My dockets','ti-files'],['ad','All dockets','ti-clipboard-list'],['drafts',_t.navDrafts,'ti-pencil']];
+  } else { // hc_supervisor + legacy site roles — Home / My dockets / Project dockets / Drafts
+    items=[['dash',_t.navHome,'ti-home'],['md','My dockets','ti-files'],['ad','Project dockets','ti-clipboard-list'],['drafts',_t.navDrafts,'ti-pencil']];
   }
   const cur=window._curTab||'dash';
   nav.innerHTML=items.map(([tab,label,icon])=>
