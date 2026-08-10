@@ -208,10 +208,10 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 body.role-worker .rban,body.role-supervisor .rban{background:#2D2D2D;color:#fff;padding:9px 14px;border-radius:11px;font-size:13px;margin-bottom:12px;}
 body.role-worker .rban strong,body.role-supervisor .rban strong{color:#EF9F27;font-size:15px;letter-spacing:0.02em;}
 body.role-worker .rban select,body.role-supervisor .rban select{background:#fff;color:#2D2D2D;border:none;font-size:12px;padding:5px 9px;border-radius:8px;}
-/* Supervisor banner — soft neutral greige (subtle, recessive) */
-body.role-supervisor .rban{background:#E4E5D8;color:#4a4d40;border:1px solid #CDCFBA;}
-body.role-supervisor .rban strong{color:#3f4336;}
-body.role-supervisor .rban select{border:1px solid #CDCFBA;}
+/* Supervisor banner — deeper sand */
+body.role-supervisor .rban{background:#EBCE84;color:#463005;border:1px solid #D9B75F;}
+body.role-supervisor .rban strong{color:#7a4808;}
+body.role-supervisor .rban select{border:1px solid #D9B75F;}
 .tg{display:flex;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;overflow:hidden;width:fit-content;}
 .to{padding:7px 14px;font-size:13px;cursor:pointer;border:none;background:transparent;color:#666;}
 .tc{background:#E1F5EE;color:#085041;font-weight:500;}
@@ -600,27 +600,27 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div id="dash-supervisor" class="hidden">
         <div id="sup-scroll-area">
           <!-- CLIENT — dockets going up the chain to the client -->
-          <div class="sv2-sec-head"><i class="ti ti-building-skyscraper sv2-sec-ic" style="color:#185FA5;" aria-hidden="true"></i>Client</div>
+          <div class="sv2-sec-head"><i class="ti ti-building-skyscraper sv2-sec-ic" style="color:#185FA5;" aria-hidden="true"></i><span id="sv2h-client">Client</span></div>
           <div class="sv2-boxrow">
-            <div class="sv2-box sv2-b-red" id="sv2-box-create" onclick="supKpiOpen('chargeable_ready')"><div class="sv2-bv" id="sv2b-create">0</div><div class="sv2-bl">Create client docket</div></div>
-            <div class="sv2-box sv2-b-blue" onclick="supKpiOpen('awaiting_client')"><div class="sv2-bv" id="sv2b-await">0</div><div class="sv2-bl">Awaiting client signature</div></div>
-            <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried')"><div class="sv2-bv" id="sv2b-outq">0</div><div class="sv2-bl">Queried by admin</div></div>
-            <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('pending_review')"><div class="sv2-bv" id="sv2b-outp">0</div><div class="sv2-bl">Pending admin review</div></div>
+            <div class="sv2-box sv2-b-red" id="sv2-box-create" onclick="supKpiOpen('chargeable_ready')"><div class="sv2-bv" id="sv2b-create">0</div><div class="sv2-bl" id="sv2l-create">Create client docket</div></div>
+            <div class="sv2-box sv2-b-blue" onclick="supKpiOpen('awaiting_client')"><div class="sv2-bv" id="sv2b-await">0</div><div class="sv2-bl" id="sv2l-await">Awaiting client signature</div></div>
+            <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried')"><div class="sv2-bv" id="sv2b-outq">0</div><div class="sv2-bl" id="sv2l-outq">Queried by admin</div></div>
+            <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('pending_review')"><div class="sv2-bv" id="sv2b-outp">0</div><div class="sv2-bl" id="sv2l-outp">Pending admin review</div></div>
           </div>
 
           <!-- SUBCONTRACTOR — day-labour dockets received from our subcontractors -->
-          <div class="sv2-sec-head"><i class="ti ti-tools sv2-sec-ic" style="color:#EF9F27;" aria-hidden="true"></i>Subcontractor</div>
+          <div class="sv2-sec-head"><i class="ti ti-tools sv2-sec-ic" style="color:#EF9F27;" aria-hidden="true"></i><span id="sv2h-sub">Subcontractor</span></div>
           <div class="sv2-boxrow">
-            <div class="sv2-box sv2-b-red" onclick="supKpiOpen('awaiting_my_sig')"><div class="sv2-bv" id="sv2b-sign">0</div><div class="sv2-bl">Awaiting my signature</div></div>
-            <div class="sv2-box sv2-b-amber" onclick="supKpiOpen('needs_billing')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl">Awaiting bill allocation</div></div>
-            <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried')"><div class="sv2-bv" id="sv2b-inq">0</div><div class="sv2-bl">Queried by admin</div></div>
-            <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('pending_review')"><div class="sv2-bv" id="sv2b-inp">0</div><div class="sv2-bl">Pending admin review</div></div>
+            <div class="sv2-box sv2-b-red" onclick="supKpiOpen('awaiting_my_sig')"><div class="sv2-bv" id="sv2b-sign">0</div><div class="sv2-bl" id="sv2l-sign">Awaiting my signature</div></div>
+            <div class="sv2-box sv2-b-amber" onclick="supKpiOpen('needs_billing')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl" id="sv2l-bill">Awaiting bill allocation</div></div>
+            <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried')"><div class="sv2-bv" id="sv2b-inq">0</div><div class="sv2-bl" id="sv2l-inq">Queried by admin</div></div>
+            <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('pending_review')"><div class="sv2-bv" id="sv2b-inp">0</div><div class="sv2-bl" id="sv2l-inp">Pending admin review</div></div>
           </div>
 
           <!-- ANALYTICS — billing split + client approval (pie / bar, filterable) -->
           <div class="sv2-anl">
             <div class="sv2-anl-head">
-              <span class="sv2-anl-title">Breakdown</span>
+              <span class="sv2-anl-title" id="sv2h-breakdown">Breakdown</span>
               <div class="sv2-seg">
                 <button id="anl-pie" onclick="setAnlChart('pie')">Pie</button>
                 <button id="anl-bar" class="on" onclick="setAnlChart('bar')">Bar</button>
@@ -641,12 +641,12 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             </div>
             <div class="sv2-anl-grid">
               <div class="sv2-anl-card">
-                <div class="sv2-anl-ct">Subcontractor dockets — billing</div>
+                <div class="sv2-anl-ct" id="anl-title-bill">Subcontractor dockets — billing</div>
                 <div class="sv2-anl-chart" id="anl-chart-bill"></div>
                 <div class="sv2-anl-legend" id="anl-legend-bill"></div>
               </div>
               <div class="sv2-anl-card">
-                <div class="sv2-anl-ct">Client dockets — approved vs rejected</div>
+                <div class="sv2-anl-ct" id="anl-title-appr">Client dockets — approved vs rejected</div>
                 <div class="sv2-anl-chart" id="anl-chart-appr"></div>
                 <div class="sv2-anl-legend" id="anl-legend-appr"></div>
               </div>
@@ -4203,6 +4203,12 @@ const LANGS={
     stPending:'Pending', stSigned:'Signed', stSent:'Sent', stBackcharge:'Backcharge',
     navHome:'Home', navDockets:'Dockets', navDrafts:'Drafts', navReports:'Reports', navAdmin:'Admin', navTeam:'Team',
     svHeroLab:'Subcontractor docket signed & chargeable', svHeroSub:'Tap to create a client docket',
+    svSecClient:'Client', svSecSub:'Subcontractor', svBreakdown:'Breakdown', svSupervisorWord:'Supervisor',
+    svbCreate:'Create client docket', svbAwaitClient:'Awaiting client signature', svbQueried:'Queried by admin', svbPending:'Pending admin review',
+    svbSign:'Awaiting my signature', svbBill:'Awaiting bill allocation',
+    svAllJobs:'All jobs', svR7:'Last 7 days', svRMonth:'This month', svRYTD:'Year to date', svRCustom:'Custom…',
+    svChartBill:'Subcontractor dockets — billing', svChartAppr:'Client dockets — approved vs rejected',
+    svLegCh:'Chargeable to client', svLegBc:'Backchargeable', svLegOw:'Own cost', svLegUn:'Unallocated', svLegApp:'Approved', svLegRej:'Rejected',
     svAwaitClient:'⏳ Awaiting client supervisor signature', svRejected:'⚠️ Pending / rejected by client administrator',
     svRangeToday:'Today', svRangeWeek:'This week', svRangeMonth:'This month', svRangeAll:'All time',
     svStatAwaiting:'Awaiting my signature', svStatSigned:'Dockets signed', svStatClientSigned:'Signed by client sup',
@@ -4259,6 +4265,12 @@ const LANGS={
     stPending:'待处理', stSigned:'已签字', stSent:'已发送', stBackcharge:'转嫁费用',
     navHome:'主页', navDockets:'工单', navDrafts:'草稿', navReports:'报告', navAdmin:'管理', navTeam:'团队',
     svHeroLab:'分包商工单已签字且可计费', svHeroSub:'点击创建客户工单',
+    svSecClient:'客户', svSecSub:'分包商', svBreakdown:'明细', svSupervisorWord:'主管',
+    svbCreate:'创建客户工单', svbAwaitClient:'等待客户签字', svbQueried:'管理员质疑', svbPending:'等待管理员审核',
+    svbSign:'等待我签字', svbBill:'等待费用分配',
+    svAllJobs:'所有项目', svR7:'最近7天', svRMonth:'本月', svRYTD:'年初至今', svRCustom:'自定义…',
+    svChartBill:'分包商工单 — 计费', svChartAppr:'客户工单 — 批准与拒绝',
+    svLegCh:'向客户收费', svLegBc:'可回收费', svLegOw:'自付成本', svLegUn:'未分配', svLegApp:'已批准', svLegRej:'已拒绝',
     svAwaitClient:'⏳ 等待客户主管签字', svRejected:'⚠️ 客户管理员待处理／已退回',
     svRangeToday:'今天', svRangeWeek:'本周', svRangeMonth:'本月', svRangeAll:'全部',
     svStatAwaiting:'等待我签字', svStatSigned:'已签字工单', svStatClientSigned:'客户主管已签',
@@ -4315,6 +4327,12 @@ const LANGS={
     stPending:'Pendiente', stSigned:'Firmado', stSent:'Enviado', stBackcharge:'Recargo',
     navHome:'Inicio', navDockets:'Órdenes', navDrafts:'Borradores', navReports:'Informes', navAdmin:'Admin', navTeam:'Equipo',
     svHeroLab:'Parte del subcontratista firmado y facturable', svHeroSub:'Toque para crear un parte de cliente',
+    svSecClient:'Cliente', svSecSub:'Subcontratista', svBreakdown:'Desglose', svSupervisorWord:'Supervisor',
+    svbCreate:'Crear parte de cliente', svbAwaitClient:'Esperando firma del cliente', svbQueried:'Consultado por admin', svbPending:'Pendiente de revisión admin',
+    svbSign:'Esperando mi firma', svbBill:'Esperando asignación de facturación',
+    svAllJobs:'Todos los trabajos', svR7:'Últimos 7 días', svRMonth:'Este mes', svRYTD:'Año hasta la fecha', svRCustom:'Personalizado…',
+    svChartBill:'Partes del subcontratista — facturación', svChartAppr:'Partes de cliente — aprobados vs rechazados',
+    svLegCh:'Facturable al cliente', svLegBc:'Recargable', svLegOw:'Coste propio', svLegUn:'Sin asignar', svLegApp:'Aprobado', svLegRej:'Rechazado',
     svAwaitClient:'⏳ Esperando firma del supervisor del cliente', svRejected:'⚠️ Pendiente / rechazado por el administrador del cliente',
     svRangeToday:'Hoy', svRangeWeek:'Esta semana', svRangeMonth:'Este mes', svRangeAll:'Todo',
     svStatAwaiting:'Esperando mi firma', svStatSigned:'Partes firmados', svStatClientSigned:'Firmado por sup. cliente',
@@ -7745,17 +7763,20 @@ function renSupAnalytics(){
   let scope=dockets.filter(d=>d.createdBy===CU.u||d.signedBySupervisor===CU.u||(ap.includes(d.pcode)&&d.createdBy!==CU.u&&isSubCo(d)));
   if(pf)scope=scope.filter(d=>d.pcode===pf);
   scope=scope.filter(inR);
+  const _t=LANGS[(CU&&localStorage.getItem('dlb_lang_'+CU.u))||'en']||LANGS.en;
+  const _tt=(id,v)=>{const e=document.getElementById(id);if(e&&v)e.textContent=v;};
+  _tt('anl-title-bill',_t.svChartBill);_tt('anl-title-appr',_t.svChartAppr);
   const subD=scope.filter(d=>!isUp(d));
   const billSegs=[
-    {label:'Chargeable to client',color:'#1D9E75',value:subD.filter(d=>d.bill==='ch').length},
-    {label:'Backchargeable',color:'#EF9F27',value:subD.filter(d=>d.bill==='bc').length},
-    {label:'Own cost',color:'#185FA5',value:subD.filter(d=>d.bill==='ow').length},
-    {label:'Unallocated',color:'#9a9a93',value:subD.filter(d=>!d.bill||d.bill==='pending'||d.bill==='tbc').length}
+    {label:_t.svLegCh||'Chargeable to client',color:'#1D9E75',value:subD.filter(d=>d.bill==='ch').length},
+    {label:_t.svLegBc||'Backchargeable',color:'#EF9F27',value:subD.filter(d=>d.bill==='bc').length},
+    {label:_t.svLegOw||'Own cost',color:'#185FA5',value:subD.filter(d=>d.bill==='ow').length},
+    {label:_t.svLegUn||'Unallocated',color:'#9a9a93',value:subD.filter(d=>!d.bill||d.bill==='pending'||d.bill==='tbc').length}
   ];
   const cliD=scope.filter(isUp);
   const apprSegs=[
-    {label:'Approved',color:'#1D9E75',value:cliD.filter(d=>d.approvalStatus==='approved').length},
-    {label:'Rejected',color:'#8A1F19',value:cliD.filter(d=>d.approvalStatus==='rejected').length}
+    {label:_t.svLegApp||'Approved',color:'#1D9E75',value:cliD.filter(d=>d.approvalStatus==='approved').length},
+    {label:_t.svLegRej||'Rejected',color:'#8A1F19',value:cliD.filter(d=>d.approvalStatus==='rejected').length}
   ];
   const type=window._anlChart||'bar';
   paintAnl('bill',billSegs,type);
@@ -7773,6 +7794,14 @@ function renSupervisorDash(){
   _set('sup-l-awaiting',_t.svStatAwaiting);_set('sup-l-signed',_t.svStatSigned);_set('sup-l-clientsigned',_t.svStatClientSigned);
   _set('sup-tile-drafts',_t.wkDrafts);_set('sup-tile-mydockets',_t.myDockets);
   _set('sup-ttl-projects',_t.wkMyProjects);_set('sup-ttl-recent',_t.wkRecent);
+  // Two-folder box labels + section heads (translate on language switch)
+  _set('sv2h-client',_t.svSecClient);_set('sv2h-sub',_t.svSecSub);_set('sv2h-breakdown',_t.svBreakdown);
+  _set('sv2l-create',_t.svbCreate);_set('sv2l-await',_t.svbAwaitClient);_set('sv2l-outq',_t.svbQueried);_set('sv2l-outp',_t.svbPending);
+  _set('sv2l-sign',_t.svbSign);_set('sv2l-bill',_t.svbBill);_set('sv2l-inq',_t.svbQueried);_set('sv2l-inp',_t.svbPending);
+  // Analytics filter options + Pie/Bar toggle
+  const _pj=document.getElementById('anl-proj');if(_pj&&_pj.options[0])_pj.options[0].textContent=_t.svAllJobs;
+  const _rg=document.getElementById('anl-range');
+  if(_rg){const m={'7d':_t.svR7,'month':_t.svRMonth,'ytd':_t.svRYTD,'custom':_t.svRCustom};for(const o of _rg.options){if(m[o.value])o.textContent=m[o.value];}}
   const _rs=document.getElementById('sup-range');
   if(_rs){const _rmap={today:_t.svRangeToday,week:_t.svRangeWeek,month:_t.svRangeMonth,all:_t.svRangeAll};for(const o of _rs.options){if(_rmap[o.value])o.textContent=_rmap[o.value];}}
   const own=dockets.filter(d=>d.createdBy===CU.u);
