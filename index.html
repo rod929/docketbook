@@ -274,13 +274,14 @@ body.role-worker .nav{display:none;}
 /* ── Declutter the top of the worker view on mobile ── */
 @media(max-width:768px){
   /* Header: keep the centre brand, simplify the rest */
-  body.role-worker header,body.role-supervisor header{padding:8px 12px;gap:6px;}
-  /* Header: show the company logo AND the small app brand */
+  /* Compact header (overrides the element's inline padding/logo heights) so the
+     dashboard fits on one screen — both Compact and Big-box views. */
+  body.role-worker header,body.role-supervisor header{padding:4px 12px!important;gap:6px;}
   body.role-worker #company-logo-wrap,body.role-supervisor #company-logo-wrap{display:flex!important;gap:6px;}
   body.role-worker #header-centre-brand,body.role-supervisor #header-centre-brand{display:flex!important;}
-  body.role-worker #header-company-logo,body.role-supervisor #header-company-logo{height:28px;}
-  body.role-worker #header-co-name-text,body.role-supervisor #header-co-name-text{font-size:12px;}
-  body.role-worker header,body.role-supervisor header{padding:8px 10px;}
+  body.role-worker #header-company-logo,body.role-supervisor #header-company-logo{height:24px!important;}
+  body.role-worker #dlb-centre-logo,body.role-supervisor #dlb-centre-logo{height:24px!important;}
+  body.role-worker #header-co-name-text,body.role-supervisor #header-co-name-text{font-size:11.5px;}
   /* Make the right-side controls compact: drop the role badge + name text, keep small buttons */
   body.role-worker header #ub,body.role-supervisor header #ub,
   body.role-worker header #un,body.role-supervisor header #un{display:none!important;}
