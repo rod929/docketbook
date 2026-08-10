@@ -345,6 +345,27 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
   body.role-supervisor .sv2-anl-head{margin:6px 2px 8px;}
   body.role-supervisor .sv2-anl-filters{margin-bottom:8px;}
 }
+/* Dashboard view toggle (Compact / Big boxes) */
+.dash-view-seg{display:flex;justify-content:flex-end;gap:0;margin:2px 2px 8px;}
+.dash-view-seg button{border:none;background:#efeeea;font-family:inherit;font-size:11.5px;font-weight:600;color:#777;padding:6px 12px;cursor:pointer;display:flex;align-items:center;gap:5px;}
+.dash-view-seg button:first-child{border-radius:9px 0 0 9px;}
+.dash-view-seg button:last-child{border-radius:0 9px 9px 0;}
+.dash-view-seg button.on{background:#2D2D2D;color:#fff;}
+.dash-view-seg button i{font-size:14px;}
+/* ── BIG BOXES mode (supervisor): 2-up boxes that fill the screen, graphs on
+   scroll. Bolder section headings (only in this mode, per request). ── */
+@media(max-width:768px){
+  body.dashbig.role-supervisor .sv2-boxrow{grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px;}
+  body.dashbig.role-supervisor .sv2-box{min-height:14vh;position:relative;justify-content:center;padding:12px 10px;gap:6px;}
+  body.dashbig.role-supervisor .sv2-bv{font-size:42px;}
+  body.dashbig.role-supervisor .sv2-bl{font-size:14px;}
+  body.dashbig.role-supervisor .sv2-age{position:absolute;left:0;right:0;bottom:9px;margin-top:0;padding-top:0;}
+  /* Bolder, colour-coded section headings */
+  body.dashbig.role-supervisor .sv2-sec-head{font-size:14.5px;font-weight:800;padding:8px 13px;border-radius:10px;margin:8px 2px 7px;letter-spacing:0.06em;}
+  body.dashbig.role-supervisor .sv2-sec-head.sec-client{background:#E6F1FB;color:#0C447C;border-left:4px solid #185FA5;}
+  body.dashbig.role-supervisor .sv2-sec-head.sec-sub{background:#FDF1DD;color:#8a530a;border-left:4px solid #EF9F27;}
+  body.dashbig.role-supervisor .sv2-sec-head .sv2-sec-ic{font-size:19px;}
+}
 /* ── Worker dashboard — mockup styling (more colour, bigger type) ── */
 #dash-worker .wk-stats,#dash-supervisor .wk-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
 #dash-worker .wk-sc,#dash-supervisor .wk-sc{border-radius:12px;padding:16px 6px;text-align:center;border:0.5px solid rgba(0,0,0,0.06);}
@@ -643,8 +664,13 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <!-- ── SUPERVISOR DASHBOARD (mockup v2 — urgency-ordered) ── -->
       <div id="dash-supervisor" class="hidden">
         <div id="sup-scroll-area">
+          <!-- Per-user layout toggle: Compact (4-up) vs Big boxes (2-up, fills screen) -->
+          <div class="dash-view-seg" id="dash-view-seg">
+            <button id="dv-compact" onclick="setDashView('compact')"><i class="ti ti-layout-grid" aria-hidden="true"></i> Compact</button>
+            <button id="dv-big" onclick="setDashView('big')"><i class="ti ti-layout-board" aria-hidden="true"></i> Big boxes</button>
+          </div>
           <!-- CLIENT — dockets going up the chain to the client -->
-          <div class="sv2-sec-head"><i class="ti ti-building-skyscraper sv2-sec-ic" style="color:#185FA5;" aria-hidden="true"></i><span id="sv2h-client">Client</span></div>
+          <div class="sv2-sec-head sec-client"><i class="ti ti-building-skyscraper sv2-sec-ic" style="color:#185FA5;" aria-hidden="true"></i><span id="sv2h-client">Client</span></div>
           <div class="sv2-boxrow">
             <div class="sv2-box sv2-b-red" id="sv2-box-create" onclick="supKpiOpen('chargeable_ready')"><div class="sv2-bv" id="sv2b-create">0</div><div class="sv2-bl" id="sv2l-create">Create client docket</div></div>
             <div class="sv2-box sv2-b-blue" onclick="supKpiOpen('awaiting_client')"><div class="sv2-bv" id="sv2b-await">0</div><div class="sv2-bl" id="sv2l-await">Awaiting client signature</div></div>
@@ -653,7 +679,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           </div>
 
           <!-- SUBCONTRACTOR — day-labour dockets received from our subcontractors -->
-          <div class="sv2-sec-head"><i class="ti ti-tools sv2-sec-ic" style="color:#EF9F27;" aria-hidden="true"></i><span id="sv2h-sub">Subcontractor</span></div>
+          <div class="sv2-sec-head sec-sub"><i class="ti ti-tools sv2-sec-ic" style="color:#EF9F27;" aria-hidden="true"></i><span id="sv2h-sub">Subcontractor</span></div>
           <div class="sv2-boxrow">
             <div class="sv2-box sv2-b-red" onclick="supKpiOpen('awaiting_my_sig')"><div class="sv2-bv" id="sv2b-sign">0</div><div class="sv2-bl" id="sv2l-sign">Awaiting my signature</div></div>
             <div class="sv2-box sv2-b-amber" onclick="supKpiOpen('needs_billing')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl" id="sv2l-bill">Awaiting bill allocation</div></div>
@@ -8199,6 +8225,17 @@ function getFlashCfg(){
   return {thresholdDays:DEFAULT_FLASH_CFG.thresholdDays,boxes:Object.assign({},DEFAULT_FLASH_CFG.boxes)};
 }
 function saveFlashCfg(cfg){try{localStorage.setItem('dlb_flash_cfg',JSON.stringify(cfg));}catch(e){}}
+// Per-user dashboard layout: 'compact' (4-up boxes) or 'big' (2-up boxes that
+// fill the screen, graphs on scroll). Remembered per user in localStorage.
+function getDashView(){if(!CU)return'compact';return localStorage.getItem('dlb_dash_view_'+CU.u)||'compact';}
+function applyDashView(){
+  const v=getDashView();
+  document.body.classList.toggle('dashbig',v==='big');
+  const c=document.getElementById('dv-compact'),b=document.getElementById('dv-big');
+  if(c)c.classList.toggle('on',v==='compact');
+  if(b)b.classList.toggle('on',v==='big');
+}
+function setDashView(v){if(!CU)return;localStorage.setItem('dlb_dash_view_'+CU.u,v);applyDashView();}
 // The dashboard boxes, in display order, for the admin alert-settings screen.
 const FLASH_BOXES=[
   {key:'create',label:'Create client docket',group:'Client'},
@@ -8245,6 +8282,7 @@ function saveFlashSettings(){
 }
 function renSupervisorDash(){
   if(!CU)return;
+  applyDashView();  // apply saved layout (compact / big) + toggle state
   // Translate the v2 labels so a language switch updates the whole dashboard.
   const _t=LANGS[localStorage.getItem('dlb_lang_'+CU.u)||'en']||LANGS.en;
   const _set=(id,v)=>{const e=document.getElementById(id);if(e&&v!=null)e.textContent=v;};
