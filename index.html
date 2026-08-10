@@ -330,6 +330,21 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
   body.role-worker #dash-worker{padding-bottom:192px;}
   body.role-supervisor #dash-supervisor{padding-bottom:192px;}
 }
+/* Supervisor dashboard — tighten vertical rhythm so the Breakdown pie sits
+   higher on a phone: smaller banner, less gap under the header, tighter
+   sections. Box labels get a bigger font; the ageing line stays small. */
+@media(max-width:768px){
+  body.role-supervisor .app{padding-top:8px;}
+  body.role-supervisor .rban{padding:6px 12px;margin-bottom:7px;font-size:12px;}
+  body.role-supervisor .rban strong{font-size:13.5px;}
+  body.role-supervisor .rban select{padding:4px 8px;font-size:11px;}
+  body.role-supervisor .sv2-sec-head{margin:4px 2px 6px;}
+  body.role-supervisor .sv2-boxrow{margin-bottom:12px;gap:7px;}
+  body.role-supervisor .sv2-box{min-height:96px;padding:12px 5px 10px;gap:6px;}
+  body.role-supervisor .sv2-bl{font-size:12px;}
+  body.role-supervisor .sv2-anl-head{margin:6px 2px 8px;}
+  body.role-supervisor .sv2-anl-filters{margin-bottom:8px;}
+}
 /* ── Worker dashboard — mockup styling (more colour, bigger type) ── */
 #dash-worker .wk-stats,#dash-supervisor .wk-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
 #dash-worker .wk-sc,#dash-supervisor .wk-sc{border-radius:12px;padding:16px 6px;text-align:center;border:0.5px solid rgba(0,0,0,0.06);}
