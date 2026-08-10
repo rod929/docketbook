@@ -215,6 +215,15 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 .vd-grid code{font-size:11px;}
 .vdk{color:#9a958c;font-size:10px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;display:block;margin-bottom:3px;}
 #vd-desc-text,#vd-notes-text{line-height:1.6;font-size:15px;color:#2b2b2b;display:block;}
+/* PDF-style header banner for the quick viewer */
+.vd-sheet-head{border-radius:12px;overflow:hidden;border:1px solid #eee;margin-bottom:16px;}
+.vd-head-top{background:#2D2D2D;color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.vd-head-top .vd-co{font-size:16px;font-weight:700;letter-spacing:.02em;line-height:1.2;}
+.vd-head-top .vd-brand{font-size:9.5px;font-weight:800;letter-spacing:.12em;color:#EF9F27;text-transform:uppercase;text-align:right;flex-shrink:0;}
+.vd-numstrip{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;background:#FAEEDA;border-bottom:2px solid #EF9F27;gap:10px;}
+.vd-numstrip .vd-num-lab{font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:#854F0B;font-weight:600;}
+.vd-numstrip .vd-num{font-size:22px;font-weight:700;color:#185FA5;line-height:1;font-variant-numeric:tabular-nums;}
+.vd-sec-title{font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#C88618;margin:16px 2px 11px;padding-bottom:5px;border-bottom:1px solid #f0e6d4;}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 .s2{grid-column:span 2;}
@@ -3640,7 +3649,16 @@ function vD(id){
   const cli=d.clientId?clients.find(c=>c.id===d.clientId):null;
   const con=cli&&d.contactId?cli.contacts.find(c=>c.id===d.contactId):null;
   const billing=d.bill==='ch'?'Chargeable to client':'Own cost (internal)';
+  // Letterhead company = the company that DID the work (a subcontractor's own
+  // name on their docket; our company on our own), matching the PDF.
+  const _s=appSettings||{};
+  const _docketCo=(d.sub||'').trim();
+  const _headCo=(!_docketCo||_docketCo.toLowerCase()===(_s.name||'').toLowerCase())?(_s.name||'Day Labour Book'):_docketCo;
   document.getElementById('mb').innerHTML=`
+    <div class="vd-sheet-head">
+      <div class="vd-head-top"><div class="vd-co">${esc(_headCo)}</div><div class="vd-brand">Day Labour<br>Docket</div></div>
+      <div class="vd-numstrip"><div><div class="vd-num-lab">Docket</div><div class="vd-num">#${esc(d.id)}</div></div>${statusBadge(d)}</div>
+    </div>
     <div id="vd-translate-bar" style="display:${(d.desc||d.notes)?'flex':'none'};align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;padding-bottom:10px;border-bottom:0.5px solid rgba(0,0,0,0.08);">
       <span style="font-size:12px;color:#888;">Translate description &amp; notes:</span>
       <select id="vd-lang" style="font-size:13px;padding:5px 8px;border-radius:6px;border:0.5px solid rgba(0,0,0,0.15);">
@@ -3652,8 +3670,9 @@ function vD(id){
       <span id="vd-translate-hint" style="font-size:11px;color:#aaa;"></span>
     </div>
     ${renderQueryStatus(d)}
+    <div class="vd-sec-title">Job details</div>
     <div class="vd-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:15px 14px;margin-bottom:16px;">
-      <div><span class="vdk">Docket #</span><strong>#${d.id}</strong>${d.refSubDocketId?`<span class="badge bs" style="margin-left:6px;font-size:10px;">Client docket (ref #${d.refSubDocketId})</span>`:''}</div>
+      ${d.refSubDocketId?`<div><span class="vdk">Linked</span><span class="badge bs" style="font-size:10px;">Client docket · ref #${esc(d.refSubDocketId)}</span></div>`:''}
       <div><span class="vdk">Date</span>${fd(d.date)}</div>
       <div><span class="vdk">Project</span>${esc(d.pname)} <code style="font-size:10px;background:#f5f5f3;padding:1px 4px;border-radius:3px;">${esc(d.pcode)}</code></div>
       <div><span class="vdk">Subcontractor</span>${esc(d.sub)}</div>
