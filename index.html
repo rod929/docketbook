@@ -426,6 +426,32 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 @keyframes sv2BoxFlash{0%,100%{box-shadow:0 0 0 0 rgba(226,75,74,0.55);}50%{box-shadow:0 0 0 5px rgba(226,75,74,0);}}
 .sv2-box.sv2-flash{background:#FDECEA;border-color:#E24B4A;animation:sv2BoxFlash 1.25s ease-in-out infinite;}
 @media(prefers-reduced-motion:reduce){.sv2-box.sv2-flash{animation:none;}}
+/* Analytics — billing split + client approval (pie / bar) */
+.sv2-anl{margin-bottom:22px;}
+.sv2-anl-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 2px 11px;}
+.sv2-anl-title{font-size:13px;font-weight:800;color:#2D2D2D;text-transform:uppercase;letter-spacing:0.08em;}
+.sv2-seg{display:inline-flex;background:#efeeea;border-radius:9px;padding:2px;}
+.sv2-seg button{border:none;background:transparent;font-family:inherit;font-size:12px;font-weight:600;color:#777;padding:5px 13px;border-radius:7px;cursor:pointer;}
+.sv2-seg button.on{background:#fff;color:#2D2D2D;box-shadow:0 1px 2px rgba(0,0,0,0.1);}
+.sv2-anl-filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px;}
+.sv2-anl-filters select,.sv2-anl-filters input{font-size:12px;padding:6px 8px;border-radius:8px;border:0.5px solid rgba(0,0,0,0.15);background:#fff;color:#2D2D2D;font-family:inherit;max-width:150px;}
+.sv2-anl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:560px){.sv2-anl-grid{grid-template-columns:1fr;}}
+.sv2-anl-card{background:#fff;border:0.5px solid rgba(0,0,0,0.09);border-radius:14px;box-shadow:0 1px 2px rgba(0,0,0,0.04);padding:14px 14px 13px;}
+.sv2-anl-ct{font-size:12px;font-weight:700;color:#2D2D2D;margin-bottom:8px;}
+.sv2-anl-chart{display:flex;justify-content:center;align-items:center;min-height:130px;}
+.sv2-anl-legend{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
+.sv2-anl-lg{display:flex;align-items:center;gap:7px;font-size:11.5px;color:#666;}
+.sv2-anl-lg i{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+.sv2-anl-lg b{color:#2D2D2D;font-variant-numeric:tabular-nums;margin-left:auto;}
+.sv2-anl-empty{color:#aaa;font-size:12px;text-align:center;padding:26px 8px;}
+.sv2-anl-bar{margin-bottom:10px;}
+.sv2-anl-chart .sv2-anl-bar:last-child{margin-bottom:0;}
+.sv2-anl-bar-top{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;gap:8px;color:#555;}
+.sv2-anl-bar-top b{color:#2D2D2D;}
+.sv2-anl-bar-track{height:8px;background:#efeeea;border-radius:5px;overflow:hidden;}
+.sv2-anl-bar-fill{height:100%;border-radius:5px;min-width:3px;}
+.sv2-anl-chart.bars{flex-direction:column;align-items:stretch;justify-content:flex-start;}
 /* ── Login screen — larger inputs & button ── */
 #ls .card{padding:2.25rem 1.75rem;width:100%;max-width:430px;}
 #ls label{font-size:14px;color:#555;margin-bottom:7px;font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;}
@@ -571,6 +597,42 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <div class="sv2-box sv2-b-amber" onclick="supKpiOpen('needs_billing')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl">Awaiting bill allocation</div></div>
             <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried')"><div class="sv2-bv" id="sv2b-inq">0</div><div class="sv2-bl">Queried by admin</div></div>
             <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('pending_review')"><div class="sv2-bv" id="sv2b-inp">0</div><div class="sv2-bl">Pending admin review</div></div>
+          </div>
+
+          <!-- ANALYTICS — billing split + client approval (pie / bar, filterable) -->
+          <div class="sv2-anl">
+            <div class="sv2-anl-head">
+              <span class="sv2-anl-title">Breakdown</span>
+              <div class="sv2-seg">
+                <button id="anl-pie" class="on" onclick="setAnlChart('pie')">Pie</button>
+                <button id="anl-bar" onclick="setAnlChart('bar')">Bar</button>
+              </div>
+            </div>
+            <div class="sv2-anl-filters">
+              <select id="anl-proj" onchange="renSupAnalytics()"><option value="">All jobs</option></select>
+              <select id="anl-range" onchange="anlRangeChange()">
+                <option value="7d">Last 7 days</option>
+                <option value="month">This month</option>
+                <option value="ytd">Year to date</option>
+                <option value="custom">Custom…</option>
+              </select>
+              <span id="anl-custom" class="hidden" style="display:none;gap:6px;">
+                <input type="date" id="anl-from" onchange="renSupAnalytics()">
+                <input type="date" id="anl-to" onchange="renSupAnalytics()">
+              </span>
+            </div>
+            <div class="sv2-anl-grid">
+              <div class="sv2-anl-card">
+                <div class="sv2-anl-ct">Subcontractor dockets — billing</div>
+                <div class="sv2-anl-chart" id="anl-chart-bill"></div>
+                <div class="sv2-anl-legend" id="anl-legend-bill"></div>
+              </div>
+              <div class="sv2-anl-card">
+                <div class="sv2-anl-ct">Client dockets — approved vs not</div>
+                <div class="sv2-anl-chart" id="anl-chart-appr"></div>
+                <div class="sv2-anl-legend" id="anl-legend-appr"></div>
+              </div>
+            </div>
           </div>
 
           <!-- My projects (allocated by admin) -->
@@ -2687,22 +2749,25 @@ function renAD(){
     if(fsig==='sent'&&(!d.sigStatus||d.sigStatus==='signed'))return false;
     return true;
   });
+  const showMoney=CU&&CU.role==='admin';   // dollar values are admin-only (CLAUDE.md)
   const chList=fl.filter(d=>d.bill==='ch');
   const ch=chList.reduce((s,d)=>{const c=calcC(d);return s+(c||0);},0);
   const ow=fl.filter(d=>d.bill==='ow').reduce((s,d)=>{const c=calcC(d);return s+(c||0);},0);
   const bcv=fl.filter(d=>d.bill==='bc').reduce((s,d)=>{const c=calcC(d);return s+(c||0);},0);
   const submittedCount=chList.filter(d=>d.submittedToClient).length;
   const acs=document.getElementById('acs');
-  if(fl.length>0){
-    acs.style.display='grid';
-    document.getElementById('ach').textContent='$'+ch.toFixed(2);
-    document.getElementById('aow').textContent='$'+ow.toFixed(2);
-    if(document.getElementById('abc'))document.getElementById('abc').textContent='$'+bcv.toFixed(2);
-    const asubEl=document.getElementById('a-submitted');
-    if(asubEl)asubEl.textContent=submittedCount+'/'+chList.length;
-  } else acs.style.display='none';
+  if(acs){
+    if(showMoney&&fl.length>0){
+      acs.style.display='grid';
+      document.getElementById('ach').textContent='$'+ch.toFixed(2);
+      document.getElementById('aow').textContent='$'+ow.toFixed(2);
+      if(document.getElementById('abc'))document.getElementById('abc').textContent='$'+bcv.toFixed(2);
+      const asubEl=document.getElementById('a-submitted');
+      if(asubEl)asubEl.textContent=submittedCount+'/'+chList.length;
+    } else acs.style.display='none';
+  }
   if(!fl.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:#aaa;padding:20px;">No dockets found</td></tr>';return;}
-  tb.innerHTML=fl.map(d=>`<tr><td><input type='checkbox' class='docket-sel' value='${d.id}' onchange='updateBulkBar()' ${d.bill==='ch'?'':''}></td><td><span class="dn">#${d.id}</span>${d.refSubDocketId?`<br><span style="font-size:9px;color:#3C3489;cursor:pointer;" onclick="event.stopPropagation();vD('${d.refSubDocketId}')" title="View originating sub docket">↩ sub #${esc(d.refSubDocketId)}</span>`:''}</td><td><span class="badge bi">${esc(d.pcode)}</span></td><td>${fd(d.date)}</td><td>${esc(d.sub)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${d.hours}h</td><td>${fc(calcC(d))}</td><td>${bb(d.bill,d)}</td><td>${sigBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
+  tb.innerHTML=fl.map(d=>`<tr><td><input type='checkbox' class='docket-sel' value='${d.id}' onchange='updateBulkBar()' ${d.bill==='ch'?'':''}></td><td><span class="dn">#${d.id}</span>${d.refSubDocketId?`<br><span style="font-size:9px;color:#3C3489;cursor:pointer;" onclick="event.stopPropagation();vD('${d.refSubDocketId}')" title="View originating sub docket">↩ sub #${esc(d.refSubDocketId)}</span>`:''}</td><td><span class="badge bi">${esc(d.pcode)}</span></td><td>${fd(d.date)}</td><td>${esc(d.sub)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${d.hours}h</td><td>${showMoney?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td>${sigBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
 }
 function renPS(workerFilter){
   const sel=document.getElementById('dp');if(!sel)return;
@@ -7210,8 +7275,8 @@ function renBottomNav(){
     items=[['dash',_t.navHome,'ti-home'],['ad',_t.navDockets,'ti-files'],['ready',_rdy,'ti-clipboard-check'],['settings',_t.navAdmin,'ti-settings']];
   } else if(r==='sub'){
     items=[['dash',_t.navHome,'ti-home'],['md',_t.navDockets,'ti-files'],['ready',_rdy,'ti-clipboard-check'],['drafts',_t.navDrafts,'ti-pencil']];
-  } else { // hc_supervisor + legacy site roles
-    items=[['dash',_t.navHome,'ti-home'],['md',_t.navDockets,'ti-files'],['ready',_rdy,'ti-clipboard-check'],['drafts',_t.navDrafts,'ti-pencil']];
+  } else { // hc_supervisor + legacy site roles — Home / My dockets / All dockets / Drafts
+    items=[['dash',_t.navHome,'ti-home'],['md','My dockets','ti-files'],['ad','All dockets','ti-clipboard-list'],['drafts',_t.navDrafts,'ti-pencil']];
   }
   const cur=window._curTab||'dash';
   nav.innerHTML=items.map(([tab,label,icon])=>
@@ -7483,6 +7548,93 @@ function supKpiOpen(f){
   showTab('md',document.getElementById('n2'));
   if(typeof renMD==='function')renMD();
 }
+// ── Supervisor analytics — billing split + client approval (pie / bar) ──
+function setAnlChart(t){
+  window._anlChart=t;
+  const p=document.getElementById('anl-pie'),b=document.getElementById('anl-bar');
+  if(p)p.classList.toggle('on',t==='pie');if(b)b.classList.toggle('on',t==='bar');
+  renSupAnalytics();
+}
+function anlRangeChange(){
+  const c=document.getElementById('anl-custom');const r=document.getElementById('anl-range');
+  if(c)c.style.display=(r&&r.value==='custom')?'inline-flex':'none';
+  renSupAnalytics();
+}
+function anlDonut(segs,total){
+  const r=52,cx=65,cy=65,sw=18,circ=2*Math.PI*r;let off=0;
+  const arcs=segs.filter(s=>s.value>0).map(s=>{
+    const len=s.value/total*circ;
+    const a=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.color}" stroke-width="${sw}" stroke-dasharray="${len.toFixed(2)} ${circ.toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}"></circle>`;
+    off+=len;return a;
+  }).join('');
+  return `<svg viewBox="0 0 130 130" width="130" height="130" role="img"><g transform="rotate(-90 65 65)">${arcs}</g><text x="65" y="62" text-anchor="middle" font-size="23" font-weight="800" fill="#2D2D2D" font-family="inherit">${total}</text><text x="65" y="80" text-anchor="middle" font-size="9" fill="#999" font-family="inherit">dockets</text></svg>`;
+}
+function paintAnl(which,segs,type){
+  const chart=document.getElementById('anl-chart-'+which);
+  const legend=document.getElementById('anl-legend-'+which);
+  if(!chart)return;
+  const total=segs.reduce((a,s)=>a+s.value,0);
+  chart.classList.toggle('bars',type==='bar');
+  if(!total){chart.innerHTML='<div class="sv2-anl-empty">No dockets in range</div>';if(legend)legend.innerHTML='';return;}
+  if(type==='bar'){
+    chart.innerHTML=segs.filter(s=>s.value>0).map(s=>{
+      const pct=Math.round(s.value/total*100);
+      return `<div class="sv2-anl-bar"><div class="sv2-anl-bar-top"><span>${esc(s.label)}</span><span><b>${s.value}</b> · ${pct}%</span></div><div class="sv2-anl-bar-track"><div class="sv2-anl-bar-fill" style="width:${pct}%;background:${s.color};"></div></div></div>`;
+    }).join('');
+    if(legend)legend.innerHTML='';
+  } else {
+    chart.innerHTML=anlDonut(segs,total);
+    if(legend)legend.innerHTML=segs.filter(s=>s.value>0).map(s=>`<div class="sv2-anl-lg"><i style="background:${s.color};"></i>${esc(s.label)}<b>${s.value} · ${Math.round(s.value/total*100)}%</b></div>`).join('');
+  }
+}
+function renSupAnalytics(){
+  if(!CU)return;
+  const usr=getUserData();const ap=usr?.projectAccess||[];
+  const psel=document.getElementById('anl-proj');
+  if(psel&&psel.options.length<=1){
+    const mp=projects.filter(p=>ap.includes(p.code));
+    psel.innerHTML='<option value="">All jobs</option>'+mp.map(p=>`<option value="${esc(p.code)}">${esc(p.name)}</option>`).join('');
+  }
+  const pf=psel?psel.value:'';
+  const range=document.getElementById('anl-range')?.value||'7d';
+  const from=document.getElementById('anl-from')?.value;
+  const to=document.getElementById('anl-to')?.value;
+  const now=new Date();
+  const inR=d=>{
+    const ts=d.date?new Date(d.date):(d.createdAt?new Date(d.createdAt):null);
+    if(!ts||isNaN(ts.getTime()))return true;
+    if(range==='7d'){const w=new Date(now);w.setDate(now.getDate()-7);return ts>=w;}
+    if(range==='month'){return ts>=new Date(now.getFullYear(),now.getMonth(),1);}
+    if(range==='ytd'){return ts>=new Date(now.getFullYear(),0,1);}
+    if(range==='custom'){
+      if(from&&ts<new Date(from))return false;
+      if(to){const t=new Date(to);t.setHours(23,59,59,999);if(ts>t)return false;}
+      return true;
+    }
+    return true;
+  };
+  const _s=new Set(subs.map(s=>s.u)),_w=new Set(workers.map(w=>w.u)),_co=(appSettings.name||'').toLowerCase();
+  const isSubCo=d=>((d.sub||'').toLowerCase()!==_co)||_s.has(d.createdBy)||_w.has(d.createdBy);
+  const isUp=d=>!!d.refSubDocketId||d.signerRole==='client'||d.signerRole==='client_supervisor';
+  let scope=dockets.filter(d=>d.createdBy===CU.u||d.signedBySupervisor===CU.u||(ap.includes(d.pcode)&&d.createdBy!==CU.u&&isSubCo(d)));
+  if(pf)scope=scope.filter(d=>d.pcode===pf);
+  scope=scope.filter(inR);
+  const subD=scope.filter(d=>!isUp(d));
+  const billSegs=[
+    {label:'Chargeable to client',color:'#1D9E75',value:subD.filter(d=>d.bill==='ch').length},
+    {label:'Backchargeable',color:'#EF9F27',value:subD.filter(d=>d.bill==='bc').length},
+    {label:'Own cost',color:'#185FA5',value:subD.filter(d=>d.bill==='ow').length},
+    {label:'Unallocated',color:'#9a9a93',value:subD.filter(d=>!d.bill||d.bill==='pending'||d.bill==='tbc').length}
+  ];
+  const cliD=scope.filter(isUp);
+  const apprSegs=[
+    {label:'Approved',color:'#1D9E75',value:cliD.filter(d=>d.approvalStatus==='approved').length},
+    {label:'Not approved',color:'#C7891A',value:cliD.filter(d=>d.approvalStatus!=='approved').length}
+  ];
+  const type=window._anlChart||'pie';
+  paintAnl('bill',billSegs,type);
+  paintAnl('appr',apprSegs,type);
+}
 // Supervisor dashboard — two folders (from subcontractors / to client). No money.
 function renSupervisorDash(){
   if(!CU)return;
@@ -7561,6 +7713,9 @@ function renSupervisorDash(){
   setBox('sv2b-create',cCreate);setBox('sv2b-await',cAwait);setBox('sv2b-outq',cQ);setBox('sv2b-outp',cP);
   const createBox=document.getElementById('sv2-box-create');
   if(createBox)createBox.classList.toggle('sv2-flash',cCreate>0);
+
+  // ── Analytics (billing split + client approval) ──
+  renSupAnalytics();
 
   // ── My projects (allocated by admin) ──
   const myProjects=projects.filter(p=>ap.includes(p.code));
