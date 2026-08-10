@@ -205,9 +205,9 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 .rban.usr{background:#E1F5EE;color:#085041;}
 .rban.sub{background:#EEEDFE;color:#3C3489;}
 /* Worker banner — mockup dark header look */
-body.role-worker .rban,body.role-supervisor .rban{background:#2D2D2D;color:#fff;padding:18px 18px;border-radius:14px;font-size:16px;}
-body.role-worker .rban strong,body.role-supervisor .rban strong{color:#EF9F27;font-size:20px;letter-spacing:0.02em;}
-body.role-worker .rban select,body.role-supervisor .rban select{background:#fff;color:#2D2D2D;border:none;font-size:15px;padding:8px 14px;border-radius:10px;}
+body.role-worker .rban,body.role-supervisor .rban{background:#2D2D2D;color:#fff;padding:9px 14px;border-radius:11px;font-size:13px;margin-bottom:12px;}
+body.role-worker .rban strong,body.role-supervisor .rban strong{color:#EF9F27;font-size:15px;letter-spacing:0.02em;}
+body.role-worker .rban select,body.role-supervisor .rban select{background:#fff;color:#2D2D2D;border:none;font-size:12px;padding:5px 9px;border-radius:8px;}
 .tg{display:flex;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;overflow:hidden;width:fit-content;}
 .to{padding:7px 14px;font-size:13px;cursor:pointer;border:none;background:transparent;color:#666;}
 .tc{background:#E1F5EE;color:#085041;font-weight:500;}
@@ -271,7 +271,7 @@ body.role-worker .nav{display:none;}
   body.role-worker header #un,body.role-supervisor header #un{display:none!important;}
   body.role-worker header .btn-s,body.role-supervisor header .btn-s{font-size:11px;padding:6px 8px;}
   /* Dark banner: comfortable size, hide the verbose company chip */
-  body.role-worker .rban,body.role-supervisor .rban{padding:16px 16px;margin-bottom:12px;font-size:15px;}
+  body.role-worker .rban,body.role-supervisor .rban{padding:9px 14px;margin-bottom:12px;font-size:13px;}
 }
 /* Worker fixed bottom New docket button (thumb-reachable) */
 #wk-fab-wrap{display:none;}
@@ -296,17 +296,17 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
   background:linear-gradient(to top,var(--color-background-primary,#f5f5f3) 70%,rgba(245,245,243,0));
 }
 #sup-fab{
-  width:100%;background:#2D2D2D;color:#EF9F27;border:none;border-radius:16px;
-  padding:28px 16px;font-size:26px;font-weight:700;letter-spacing:0.05em;
-  display:flex;align-items:center;justify-content:center;gap:14px;cursor:pointer;
-  box-shadow:0 4px 16px rgba(0,0,0,0.18);
+  width:100%;background:#2D2D2D;color:#EF9F27;border:none;border-radius:12px;
+  padding:13px 16px;font-size:16px;font-weight:700;letter-spacing:0.04em;
+  display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,0.16);
 }
-#sup-fab i{font-size:36px;}
+#sup-fab i{font-size:20px;}
 #sup-fab:hover{background:#1a1a1a;}
 /* ── Worker dashboard: natural flow, New docket button fixed at bottom ── */
 @media(max-width:768px){
   body.role-worker #dash-worker{padding-bottom:172px;}
-  body.role-supervisor #dash-supervisor{padding-bottom:172px;}
+  body.role-supervisor #dash-supervisor{padding-bottom:120px;}
   #wk-fab-wrap{position:fixed;}
   #sup-fab-wrap{position:fixed;}
 }
@@ -424,7 +424,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-box.sv2-zero{opacity:0.5;}
 .sv2-box.sv2-zero .sv2-bv{color:#bdbcb6;}
 @keyframes sv2BoxFlash{0%,100%{box-shadow:0 0 0 0 rgba(226,75,74,0.55);}50%{box-shadow:0 0 0 5px rgba(226,75,74,0);}}
-.sv2-box.sv2-flash{background:#FDECEA;border-color:#E24B4A;animation:sv2BoxFlash 1.25s ease-in-out infinite;}
+.sv2-box.sv2-flash{background:#E24B4A;border-color:#E24B4A;animation:sv2BoxFlash 1.25s ease-in-out infinite;}
+.sv2-box.sv2-flash .sv2-bv,.sv2-box.sv2-flash .sv2-bl{color:#fff;}
 @media(prefers-reduced-motion:reduce){.sv2-box.sv2-flash{animation:none;}}
 /* Analytics — billing split + client approval (pie / bar) */
 .sv2-anl{margin-bottom:22px;}
@@ -7577,14 +7578,15 @@ function paintAnl(which,segs,type){
   chart.classList.toggle('bars',type==='bar');
   if(!total){chart.innerHTML='<div class="sv2-anl-empty">No dockets in range</div>';if(legend)legend.innerHTML='';return;}
   if(type==='bar'){
-    chart.innerHTML=segs.filter(s=>s.value>0).map(s=>{
+    // Show every category (including 0) so the full split is always visible.
+    chart.innerHTML=segs.map(s=>{
       const pct=Math.round(s.value/total*100);
       return `<div class="sv2-anl-bar"><div class="sv2-anl-bar-top"><span>${esc(s.label)}</span><span><b>${s.value}</b> · ${pct}%</span></div><div class="sv2-anl-bar-track"><div class="sv2-anl-bar-fill" style="width:${pct}%;background:${s.color};"></div></div></div>`;
     }).join('');
     if(legend)legend.innerHTML='';
   } else {
     chart.innerHTML=anlDonut(segs,total);
-    if(legend)legend.innerHTML=segs.filter(s=>s.value>0).map(s=>`<div class="sv2-anl-lg"><i style="background:${s.color};"></i>${esc(s.label)}<b>${s.value} · ${Math.round(s.value/total*100)}%</b></div>`).join('');
+    if(legend)legend.innerHTML=segs.map(s=>`<div class="sv2-anl-lg"><i style="background:${s.color};"></i>${esc(s.label)}<b>${s.value} · ${Math.round(s.value/total*100)}%</b></div>`).join('');
   }
 }
 function renSupAnalytics(){
