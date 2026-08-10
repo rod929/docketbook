@@ -660,7 +660,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <!-- Fixed bottom New docket button (same as worker) -->
         <div id="sup-fab-wrap">
           <button onclick="showTab('nd',document.getElementById('n1'))" id="sup-fab">
-            <i class="ti ti-plus" style="font-size:36px;" aria-hidden="true"></i> New docket
+            <i class="ti ti-plus" style="font-size:36px;" aria-hidden="true"></i> <span id="sup-fab-label">New docket</span>
           </button>
         </div>
       </div>
@@ -1050,6 +1050,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <option value="en">🇦🇺 English</option>
           <option value="zh">🇨🇳 中文</option>
           <option value="es">🇪🇸 Español</option>
+          <option value="ar">🇸🇦 العربية</option>
         </select>
         <span id="nd-lang-hint" style="font-size:11px;color:#aaa;"></span>
       </div>
@@ -2066,7 +2067,8 @@ function setupUI(){
     const savedLangS=localStorage.getItem('dlb_lang_'+CU.u)||'en';
     const langOptsS=['<option value="en"'+(savedLangS==='en'?' selected':'')+'>🇦🇺 English</option>',
       '<option value="zh"'+(savedLangS==='zh'?' selected':'')+'>🇨🇳 中文</option>',
-      '<option value="es"'+(savedLangS==='es'?' selected':'')+'>🇪🇸 Español</option>'].join('');
+      '<option value="es"'+(savedLangS==='es'?' selected':'')+'>🇪🇸 Español</option>',
+      '<option value="ar"'+(savedLangS==='ar'?' selected':'')+'>🇸🇦 العربية</option>'].join('');
     rb.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:nowrap;gap:10px;">'
       +'<div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;">'+logoHtmlS
       +'<span style="min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><strong>'+esc(CU.name)+'</strong><span style="opacity:0.65;font-weight:400;"> · Supervisor</span></span></div>'
@@ -2109,7 +2111,8 @@ function setupUI(){
       const savedLangW=localStorage.getItem('dlb_lang_'+CU.u)||'en';
       const langOptsW=['<option value="en"'+(savedLangW==='en'?' selected':'')+'>🇦🇺 English</option>',
         '<option value="zh"'+(savedLangW==='zh'?' selected':'')+'>🇨🇳 中文</option>',
-        '<option value="es"'+(savedLangW==='es'?' selected':'')+'>🇪🇸 Español</option>'].join('');
+        '<option value="es"'+(savedLangW==='es'?' selected':'')+'>🇪🇸 Español</option>',
+        '<option value="ar"'+(savedLangW==='ar'?' selected':'')+'>🇸🇦 العربية</option>'].join('');
       const logoHtmlW=appSettings.logo?'<img src="'+appSettings.logo+'" alt="" style="height:38px;max-width:120px;object-fit:contain;background:#fff;border-radius:8px;padding:4px 8px;flex-shrink:0;">':'';
       rb.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:10px;">'
         +'<div style="display:flex;align-items:center;gap:12px;min-width:0;">'+logoHtmlW
@@ -2152,7 +2155,8 @@ function setupUI(){
     const savedLang2=localStorage.getItem('dlb_lang_'+CU.u)||'en';
     const langOpts=['<option value="en"'+(savedLang2==='en'?' selected':'')+'>🇦🇺 English</option>',
       '<option value="zh"'+(savedLang2==='zh'?' selected':'')+'>🇨🇳 中文</option>',
-      '<option value="es"'+(savedLang2==='es'?' selected':'')+'>🇪🇸 Español</option>'].join('');
+      '<option value="es"'+(savedLang2==='es'?' selected':'')+'>🇪🇸 Español</option>',
+      '<option value="ar"'+(savedLang2==='ar'?' selected':'')+'>🇸🇦 العربية</option>'].join('');
     rb.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:8px;">'
       +'<span><strong>'+esc(CU.name)+'</strong></span>'
       +'<div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">'
@@ -4202,6 +4206,7 @@ const LANGS={
     wkAnyJob:'✓ You can create dockets on any job.', wkNoDockets:'No dockets yet',
     stPending:'Pending', stSigned:'Signed', stSent:'Sent', stBackcharge:'Backcharge',
     navHome:'Home', navDockets:'Dockets', navDrafts:'Drafts', navReports:'Reports', navAdmin:'Admin', navTeam:'Team',
+    navProjectDockets:'Project dockets', svNewDocket:'New docket', svNoRange:'No dockets in range',
     svHeroLab:'Subcontractor docket signed & chargeable', svHeroSub:'Tap to create a client docket',
     svSecClient:'Client', svSecSub:'Subcontractor', svBreakdown:'Breakdown', svSupervisorWord:'Supervisor',
     svbCreate:'Create client docket', svbAwaitClient:'Awaiting client signature', svbQueried:'Queried by admin', svbPending:'Pending admin review',
@@ -4264,6 +4269,7 @@ const LANGS={
     wkAnyJob:'✓ 您可以在任何项目上创建工单。', wkNoDockets:'暂无工单',
     stPending:'待处理', stSigned:'已签字', stSent:'已发送', stBackcharge:'转嫁费用',
     navHome:'主页', navDockets:'工单', navDrafts:'草稿', navReports:'报告', navAdmin:'管理', navTeam:'团队',
+    navProjectDockets:'项目工单', svNewDocket:'新工单', svNoRange:'该时间范围内无工单',
     svHeroLab:'分包商工单已签字且可计费', svHeroSub:'点击创建客户工单',
     svSecClient:'客户', svSecSub:'分包商', svBreakdown:'明细', svSupervisorWord:'主管',
     svbCreate:'创建客户工单', svbAwaitClient:'等待客户签字', svbQueried:'管理员质疑', svbPending:'等待管理员审核',
@@ -4326,6 +4332,7 @@ const LANGS={
     wkAnyJob:'✓ Puede crear partes en cualquier obra.', wkNoDockets:'Aún no hay partes',
     stPending:'Pendiente', stSigned:'Firmado', stSent:'Enviado', stBackcharge:'Recargo',
     navHome:'Inicio', navDockets:'Órdenes', navDrafts:'Borradores', navReports:'Informes', navAdmin:'Admin', navTeam:'Equipo',
+    navProjectDockets:'Órdenes del proyecto', svNewDocket:'Nueva orden', svNoRange:'Sin órdenes en el rango',
     svHeroLab:'Parte del subcontratista firmado y facturable', svHeroSub:'Toque para crear un parte de cliente',
     svSecClient:'Cliente', svSecSub:'Subcontratista', svBreakdown:'Desglose', svSupervisorWord:'Supervisor',
     svbCreate:'Crear parte de cliente', svbAwaitClient:'Esperando firma del cliente', svbQueried:'Consultado por admin', svbPending:'Pendiente de revisión admin',
@@ -4338,6 +4345,69 @@ const LANGS={
     svStatAwaiting:'Esperando mi firma', svStatSigned:'Partes firmados', svStatClientSigned:'Firmado por sup. cliente',
     svDocketsWord:'órdenes', svNoProjects:'Aún no tiene obras asignadas. Pida a su administrador que le asigne una.',
     svBillingLab:'Firmado — falta facturación', svBillingSub:'Toque para fijar facturable / recargo / coste propio'
+  },
+  ar:{
+    dashboard:'الرئيسية', newDocket:'+ سند جديد', myDockets:'سنداتي',
+    project:'المشروع *', date:'التاريخ *', companyName:'اسم شركتك *',
+    startTime:'وقت البدء *', finishTime:'وقت الانتهاء *',
+    breakMins:'الاستراحة (دقائق)', breakOpt:'اختياري',
+    billType:'نوع الفوترة', chargeable:'$ قابل للفوترة للعميل', ownCost:'🏢 تكلفتنا الخاصة',
+    chargeHint:'قابل للفوترة: سيتم تحميل تكلفة العمالة هذه على العميل.',
+    ownHint:'تكلفة خاصة: هذه تكلفة داخلية تتحملها شركتك.',
+    descWork:'وصف العمل *', notes:'ملاحظات (اختياري)',
+    clientSignoff:'👤 توقيع العميل / المشرف',
+    client:'العميل', contact:'جهة الاتصال / المشرف',
+    sigMethod:'طريقة التوقيع', signOnSite:'✍️ التوقيع في الموقع',
+    sendEmail:'📧 الإرسال عبر البريد الإلكتروني', sendSMS:'💬 الإرسال عبر الرسائل القصيرة',
+    drawSig:'ارسم التوقيع أدناه', clearSig:'مسح',
+    noSigYet:'لا يوجد توقيع بعد', sigCaptured:'تم التقاط التوقيع ✓',
+    submitDocket:'✓ إرسال السند', clearForm:'مسح النموذج',
+    hoursWorked:'ساعات العمل', recipient:'البريد الإلكتروني للمستلم',
+    optMsg:'رسالة اختيارية', mobile:'رقم الجوال',
+    sigPlaceholder:'مثال: مرحبًا، يرجى الاطلاع على سند اليوم وتوقيعه.',
+    emailNote:'سيتم إنشاء رابط توقيع عند الإرسال. يمكنك نسخه أو إرساله عبر بريدك الإلكتروني.',
+    smsNote:'سيتم إنشاء رابط توقيع عند الإرسال. انسخه إلى تطبيق الرسائل لإرساله.',
+    bannerSub:'مقاول من الباطن',
+    langLabel:'اللغة',
+    phCompany:'مثال: سميث للخرسانة',
+    phHours:'يُحسب تلقائيًا',
+    phBreak:'مثال: 30',
+    phDesc:'صف العمل المنجز اليوم...',
+    phNotes:'أي ملاحظات إضافية...',
+    phAddStaff:'إضافة اسم موظف',
+    phEmailRecipient:'يُملأ تلقائيًا من جهة الاتصال أو أدخله يدويًا',
+    phMobile:'يُملأ تلقائيًا من جهة الاتصال أو أدخله يدويًا',
+    phOptMsg:'مثال: مرحبًا، يرجى الاطلاع على سند اليوم وتوقيعه.',
+    navContacts:'👥 جهات الاتصال',
+    navDrafts:'✏️ المسودات',
+    navMyWorkers:'👷 عمالي',
+    reqBy:'طُلب بواسطة',
+    method:'الطريقة',
+    photos:'الصور',
+    materials:'المواد',
+    accommodation:'الإقامة',
+    saveDraft:'💾 حفظ',
+    cancelDocket:'✕ إلغاء',
+    addItem:'+ إضافة عنصر',
+    applicable:'ينطبق',
+    wkDrafts:'المسودات', wkSigned:'موقّع', wkSent:'مُرسل',
+    wkMyProjects:'مشاريعي', wkRecent:'السندات الأخيرة', wkNewDocket:'سند جديد',
+    wkAnyJob:'✓ يمكنك إنشاء سندات لأي مشروع.', wkNoDockets:'لا توجد سندات بعد',
+    stPending:'قيد الانتظار', stSigned:'موقّع', stSent:'مُرسل', stBackcharge:'إعادة تحميل',
+    navHome:'الرئيسية', navDockets:'السندات', navDrafts:'المسودات', navReports:'التقارير', navAdmin:'الإدارة', navTeam:'الفريق',
+    navProjectDockets:'سندات المشروع', svNewDocket:'سند جديد', svNoRange:'لا توجد سندات في النطاق',
+    svHeroLab:'سند مقاول موقّع وقابل للفوترة', svHeroSub:'اضغط لإنشاء سند العميل',
+    svSecClient:'العميل', svSecSub:'المقاول من الباطن', svBreakdown:'التفصيل', svSupervisorWord:'مشرف',
+    svbCreate:'إنشاء سند العميل', svbAwaitClient:'بانتظار توقيع العميل', svbQueried:'استفسار من الإدارة', svbPending:'بانتظار مراجعة الإدارة',
+    svbSign:'بانتظار توقيعي', svbBill:'بانتظار تخصيص الفوترة',
+    svAllJobs:'كل المشاريع', svR7:'آخر 7 أيام', svRMonth:'هذا الشهر', svRYTD:'منذ بداية السنة', svRCustom:'مخصص…',
+    svChartBill:'سندات المقاول — الفوترة', svChartAppr:'سندات العميل — مقبولة مقابل مرفوضة',
+    svLegCh:'قابل للفوترة للعميل', svLegBc:'قابل لإعادة التحميل', svLegOw:'تكلفة خاصة', svLegUn:'غير مخصص', svLegApp:'مقبول', svLegRej:'مرفوض',
+    svAwaitClient:'⏳ بانتظار توقيع مشرف العميل', svRejected:'⚠️ معلّق / مرفوض من إدارة العميل',
+    svRangeToday:'اليوم', svRangeWeek:'هذا الأسبوع', svRangeMonth:'هذا الشهر', svRangeAll:'كل الوقت',
+    svStatAwaiting:'بانتظار توقيعي', svStatSigned:'سندات موقّعة', svStatClientSigned:'موقّعة من مشرف العميل',
+    svDocketsWord:'سندات', svNoProjects:'لم يتم تعيين مشاريع بعد. اطلب من مسؤولك تعيينك لمشروع.',
+    svBillingLab:'موقّع — يحتاج فوترة', svBillingSub:'اضغط لتحديد قابل للفوترة / إعادة تحميل / تكلفة خاصة'
   }
 };
 
@@ -4348,7 +4418,7 @@ function langSelectHTML(id,style){
   const sl=(CU&&localStorage.getItem('dlb_lang_'+CU.u))||'en';
   const opt=(v,label)=>'<option value="'+v+'"'+(sl===v?' selected':'')+'>'+label+'</option>';
   return '<select id="'+id+'" style="'+(style||'font-size:12px;padding:4px 10px;border-radius:8px;border:none;background:#fff;color:#2D2D2D;cursor:pointer;flex-shrink:0;')+'" onchange="changeLang(this.value)">'
-    +opt('en','🇦🇺 English')+opt('zh','🇨🇳 中文')+opt('es','🇪🇸 Español')+'</select>';
+    +opt('en','🇦🇺 English')+opt('zh','🇨🇳 中文')+opt('es','🇪🇸 Español')+opt('ar','🇸🇦 العربية')+'</select>';
 }
 
 function changeLang(lang){
@@ -4396,6 +4466,13 @@ function changeLang(lang){
 
 function applyLang(lang){
   const t=LANGS[lang]||LANGS.en;
+  // Right-to-left layout for Arabic; left-to-right for everything else.
+  // Set on the <html> element so text alignment, form fields and fl-rows
+  // mirror correctly. Also tag the body so CSS can fine-tune if needed.
+  const isRTL=(lang==='ar');
+  document.documentElement.setAttribute('dir', isRTL?'rtl':'ltr');
+  document.documentElement.setAttribute('lang', lang);
+  document.body.classList.toggle('rtl', isRTL);
   // Worker dashboard labels
   const setTxt=(id,val)=>{const el=document.getElementById(id);if(el&&val)el.textContent=val;};
   setTxt('wk-lbl-drafts',t.wkDrafts);
@@ -7419,7 +7496,7 @@ function renBottomNav(){
   } else if(r==='sub'){
     items=[['dash',_t.navHome,'ti-home'],['md',_t.navDockets,'ti-files'],['ready',_rdy,'ti-clipboard-check'],['drafts',_t.navDrafts,'ti-pencil']];
   } else { // hc_supervisor + legacy site roles — Home / My dockets / Project dockets / Drafts
-    items=[['dash',_t.navHome,'ti-home'],['md','My dockets','ti-files'],['ad','Project dockets','ti-clipboard-list'],['drafts',_t.navDrafts,'ti-pencil']];
+    items=[['dash',_t.navHome,'ti-home'],['md',_t.myDockets,'ti-files'],['ad',_t.navProjectDockets,'ti-clipboard-list'],['drafts',_t.navDrafts,'ti-pencil']];
   }
   const cur=window._curTab||'dash';
   nav.innerHTML=items.map(([tab,label,icon])=>
@@ -7718,7 +7795,7 @@ function paintAnl(which,segs,type){
   if(!chart)return;
   const total=segs.reduce((a,s)=>a+s.value,0);
   chart.classList.toggle('bars',type==='bar');
-  if(!total){chart.innerHTML='<div class="sv2-anl-empty">No dockets in range</div>';if(legend)legend.innerHTML='';return;}
+  if(!total){chart.innerHTML='<div class="sv2-anl-empty">'+((LANGS[(CU&&localStorage.getItem('dlb_lang_'+CU.u))||'en']||LANGS.en).svNoRange)+'</div>';if(legend)legend.innerHTML='';return;}
   if(type==='bar'){
     // Show every category (including 0) so the full split is always visible.
     chart.innerHTML=segs.map(s=>{
@@ -7796,6 +7873,7 @@ function renSupervisorDash(){
   _set('sup-ttl-projects',_t.wkMyProjects);_set('sup-ttl-recent',_t.wkRecent);
   // Two-folder box labels + section heads (translate on language switch)
   _set('sv2h-client',_t.svSecClient);_set('sv2h-sub',_t.svSecSub);_set('sv2h-breakdown',_t.svBreakdown);
+  _set('sup-fab-label',_t.svNewDocket);
   _set('sv2l-create',_t.svbCreate);_set('sv2l-await',_t.svbAwaitClient);_set('sv2l-outq',_t.svbQueried);_set('sv2l-outp',_t.svbPending);
   _set('sv2l-sign',_t.svbSign);_set('sv2l-bill',_t.svbBill);_set('sv2l-inq',_t.svbQueried);_set('sv2l-inp',_t.svbPending);
   // Analytics filter options + Pie/Bar toggle
