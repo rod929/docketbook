@@ -2813,6 +2813,13 @@ function mdRangeChange(){
 // signed sub docket, or one the client themselves signs. Everything else on
 // My dockets is a subcontractor docket we received.
 function isUpChainDocket(d){return !!d.refSubDocketId||d.signerRole==='client'||d.signerRole==='client_supervisor';}
+// Per-row marker so the two categories are distinguishable in the combined view:
+// blue building = client (sent up), orange tools = subcontractor (received).
+function docketTypeIcon(d){
+  return isUpChainDocket(d)
+    ? '<i class="ti ti-building-skyscraper" style="color:#185FA5;" title="Client docket (sent)" aria-hidden="true"></i>'
+    : '<i class="ti ti-tools" style="color:#EF9F27;" title="Subcontractor docket (received)" aria-hidden="true"></i>';
+}
 // My dockets view toggle: '' = all, 'client' = sent up, 'sub' = received.
 function setMdType(t){
   window._mdType=t;
@@ -2862,7 +2869,7 @@ function renMD(){
     });
   }
   if(!src.length){tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:#aaa;padding:20px;">'+((sf||pf||tf||rv!=='all')?'No dockets match these filters':'No dockets yet')+'</td></tr>';return;}
-  tb.innerHTML=src.map(d=>`<tr><td><span class="dn">#${d.id}</span></td><td>${projBadge(d.pcode)}</td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${CU&&CU.role==='admin'?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
+  tb.innerHTML=src.map(d=>`<tr><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span></td><td>${projBadge(d.pcode)}</td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${CU&&CU.role==='admin'?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
 }
 function renAD(){
   const tb=document.getElementById('adb');if(!tb)return;
