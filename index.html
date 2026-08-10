@@ -106,6 +106,9 @@ body.review-open #sup-fab-wrap{display:none!important;}
 .btn-csv:hover{background:#D7EDE1;}
 .btn-pdf{background:#E6F1FB;color:#185FA5;border:1px solid #C7DEF3;}
 .btn-pdf:hover{background:#D8E8F8;}
+/* Soft-grey row "View" button — reads as tappable without adding a competing colour */
+.btn-view{background:#f0efec;border:none;color:#3a3a38;font-weight:600;}
+.btn-view:hover{background:#e6e4df;}
 .badge{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:500;display:inline-block;}
 .bi{background:#E6F1FB;color:#0C447C;}
 .bs{background:#E1F5EE;color:#085041;}
@@ -2420,9 +2423,18 @@ function fc(c){return c!=null?'$'+c.toFixed(2):'—';}
 function bb(b,d){
   if(b==='ch')return'<span class="badge bc">Chargeable</span>';
   if(b==='ow')return'<span class="badge bo">Own cost</span>';
-  if(b==='bc'){const t=d&&d.bcTarget?': '+esc(d.bcTarget):'';return'<span class="badge" style="background:#EDE9FE;color:#5B21B6;">↩ Backcharge'+t+'</span>';}
-  if(b==='pending')return'<span class="badge bpend">⏳ Pending billing</span>';
-  return'<span class="badge bpend">⏳ Pending billing</span>';
+  if(b==='bc'){const t=d&&d.bcTarget?': '+esc(d.bcTarget):'';return'<span class="badge" style="background:#EDE9FE;color:#5B21B6;">Backcharge'+t+'</span>';}
+  if(b==='pending')return'<span class="badge bpend">Pending billing</span>';
+  return'<span class="badge bpend">Pending billing</span>';
+}
+// Quiet billing text for the My dockets list — no filled pill, no emoji, so the
+// Status badge is the only thing that "pops". Green kept only for Chargeable.
+function mdBilling(d){
+  const b=d.bill;
+  if(b==='ch')return'<span style="color:#0e7a54;font-size:12px;">Chargeable</span>';
+  if(b==='ow')return'<span style="color:#6b675f;font-size:12px;">Own cost</span>';
+  if(b==='bc'){const t=d.bcTarget?' · '+esc(d.bcTarget):'';return'<span style="color:#6b675f;font-size:12px;">Backcharge'+t+'</span>';}
+  return'<span style="color:#9a958c;font-size:12px;">Pending billing</span>';
 }
 function sigBadge(d){
   if(d.sig)return'<span class="badge bs">✓ Signed</span>';
@@ -2965,7 +2977,7 @@ function renMD(){
     });
   }
   if(!src.length){tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:#aaa;padding:20px;">'+((sf||pf||tf||rv!=='all')?'No dockets match these filters':'No dockets yet')+'</td></tr>';return;}
-  tb.innerHTML=src.map(d=>`<tr><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span></td><td>${projBadge(d.pcode)}</td><td style="max-width:140px;">${esc(d.sub||'—')}</td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${CU&&CU.role==='admin'?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
+  tb.innerHTML=src.map(d=>`<tr><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span></td><td>${projBadge(d.pcode)}</td><td style="max-width:140px;">${esc(d.sub||'—')}</td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${CU&&CU.role==='admin'?fc(calcC(d)):'—'}</td><td>${mdBilling(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s btn-view" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
 }
 function renAD(){
   const tb=document.getElementById('adb');if(!tb)return;
