@@ -100,6 +100,12 @@ body.review-open #sup-fab-wrap{display:none!important;}
 .btn-s{padding:4px 10px;font-size:12px;}
 .btn-grn{background:#1D9E75;color:#fff;border-color:#1D9E75;}
 .btn-grn:hover{background:#147a5a;}
+/* Soft pastel export buttons — CSV (green) / PDF (blue), harmonised so they sit
+   together nicely next to the orange Dashboard button. */
+.btn-csv{background:#E4F3EC;color:#1D7A5F;border:1px solid #C4E6D6;}
+.btn-csv:hover{background:#D7EDE1;}
+.btn-pdf{background:#E6F1FB;color:#185FA5;border:1px solid #C7DEF3;}
+.btn-pdf:hover{background:#D8E8F8;}
 .badge{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:500;display:inline-block;}
 .bi{background:#E6F1FB;color:#0C447C;}
 .bs{background:#E1F5EE;color:#085041;}
@@ -642,6 +648,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <div class="sv2-anl-filters">
               <select id="anl-proj" onchange="renSupAnalytics()"><option value="">All jobs</option></select>
               <select id="anl-range" onchange="anlRangeChange()">
+                <option value="all" selected>All time</option>
                 <option value="7d">Last 7 days</option>
                 <option value="month">This month</option>
                 <option value="ytd">Year to date</option>
@@ -1279,14 +1286,14 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 
     <!-- MY DOCKETS -->
     <div id="t-md" class="hidden">
-      <div class="rb"><p class="st" style="margin:0;">My dockets</p><div style="display:flex;gap:6px;"><button class="btn btn-s" onclick="showTab('dash',document.getElementById('n0'))" style="background:#EF9F27;color:#412402;border:none;font-weight:600;">← Dashboard</button><button class="btn btn-s" onclick="expCSV(false)">↓ CSV</button><button class="btn btn-s btn-p" onclick="expPDF(false)">↓ PDF</button></div></div>
+      <div class="rb"><p class="st" style="margin:0;" id="md-title">My dockets</p><div style="display:flex;gap:6px;"><button class="btn btn-s" id="md-btn-dash" onclick="showTab('dash',document.getElementById('n0'))" style="background:#EF9F27;color:#412402;border:none;font-weight:600;">← Dashboard</button><button class="btn btn-s btn-csv" onclick="expCSV(false)">↓ CSV</button><button class="btn btn-s btn-pdf" onclick="expPDF(false)">↓ PDF</button></div></div>
       <div class="sv2-seg" id="md-type-seg" style="margin-bottom:12px;">
         <button id="md-type-all" class="on" onclick="setMdType('')">All</button>
-        <button id="md-type-client" onclick="setMdType('client')"><i class="ti ti-building-skyscraper" style="color:#185FA5;" aria-hidden="true"></i> Client (sent)</button>
-        <button id="md-type-sub" onclick="setMdType('sub')"><i class="ti ti-tools" style="color:#EF9F27;" aria-hidden="true"></i> Subcontractor (received)</button>
+        <button id="md-type-client" onclick="setMdType('client')"><i class="ti ti-building-skyscraper" style="color:#185FA5;" aria-hidden="true"></i> <span id="md-type-client-t">Client (sent)</span></button>
+        <button id="md-type-sub" onclick="setMdType('sub')"><i class="ti ti-tools" style="color:#EF9F27;" aria-hidden="true"></i> <span id="md-type-sub-t">Subcontractor (received)</span></button>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
-        <label style="font-size:13px;font-weight:600;color:#555;">Filters:</label>
+        <label style="font-size:13px;font-weight:600;color:#555;" id="md-filters-label">Filters:</label>
         <select id="md-status-filter" style="width:200px;" onchange="renMD()">
           <option value="">All dockets</option>
           <option value="awaiting_my_sig">✍️ Needs my signature</option>
@@ -1312,14 +1319,14 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         </span>
       </div>
       <div class="card" style="padding:0;"><div class="tw"><table class="sticky-first">
-        <thead><tr><th>#</th><th>Project</th><th>Date</th><th>Hrs</th><th>Cost</th><th>Billing</th><th>Client contact</th><th>Status</th><th></th></tr></thead>
+        <thead><tr><th>#</th><th id="th-md-proj">Project</th><th id="th-md-date">Date</th><th id="th-md-hrs">Hrs</th><th id="th-md-cost">Cost</th><th id="th-md-billing">Billing</th><th id="th-md-contact">Client contact</th><th id="th-md-status">Status</th><th></th></tr></thead>
         <tbody id="mdb"></tbody>
       </table></div></div>
     </div>
 
     <!-- ALL DOCKETS -->
     <div id="t-ad" class="hidden">
-      <div class="rb"><p class="st" style="margin:0;" id="ad-title">All dockets</p><div style="display:flex;gap:6px;flex-wrap:wrap;" id="ad-actions"><button class="btn btn-s" onclick="expCSV(true)">↓ CSV</button><button class="btn btn-s btn-p" onclick="expPDF(true)">↓ PDF</button><button class="btn btn-s" style="background:#1D9E75;color:#fff;border-color:#1D9E75;" id="btn-client-form" onclick="openClientForm()">📋 Client day labour form</button></div></div>
+      <div class="rb"><p class="st" style="margin:0;" id="ad-title">All dockets</p><div style="display:flex;gap:6px;flex-wrap:wrap;" id="ad-actions"><button class="btn btn-s btn-csv" onclick="expCSV(true)">↓ CSV</button><button class="btn btn-s btn-pdf" onclick="expPDF(true)">↓ PDF</button><button class="btn btn-s" style="background:#1D9E75;color:#fff;border-color:#1D9E75;" id="btn-client-form" onclick="openClientForm()">📋 Client day labour form</button></div></div>
       <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
         <select id="fp" style="width:150px;" onchange="renAD()"><option value="">All projects</option></select>
         <select id="fsb" style="width:150px;" onchange="renAD()"><option value="">All subcontractors</option></select>
@@ -2828,6 +2835,20 @@ function setMdType(t){
   });
   renMD();
 }
+// Translate the My dockets section (title, toggle, filters, table headers).
+function translateMyDockets(t){
+  const set=(id,v)=>{const e=document.getElementById(id);if(e&&v!=null)e.textContent=v;};
+  set('md-title',t.myDockets);
+  const db=document.getElementById('md-btn-dash');if(db&&t.mdDash)db.textContent='← '+t.mdDash;
+  set('md-type-all',t.mdAll);set('md-type-client-t',t.mdClientSent);set('md-type-sub-t',t.mdSubReceived);
+  set('md-filters-label',t.mdFilters);
+  const st=document.getElementById('md-status-filter');
+  if(st){const m={'':t.mdsAll,'awaiting_my_sig':t.mdsNeedSig,'awaiting_client':t.mdsAwaitClient,'needs_billing':t.mdsNeedBill,'chargeable_ready':t.mdsReady,'queried':t.mdsQueried,'pending_review':t.mdsPending,'rejected':t.mdsRejected,'signed':t.mdsSigned};for(const o of st.options){if(m[o.value]!=null)o.textContent=m[o.value];}}
+  const pj=document.getElementById('md-proj-filter');if(pj&&pj.options[0]&&t.mdAllProjects)pj.options[0].textContent=t.mdAllProjects;
+  const rg=document.getElementById('md-range-filter');
+  if(rg){const m={'all':t.svRangeAll,'7d':t.svR7,'month':t.svRMonth,'ytd':t.svRYTD,'custom':t.svRCustom};for(const o of rg.options){if(m[o.value])o.textContent=m[o.value];}}
+  set('th-md-proj',t.mdcProject);set('th-md-date',t.mdcDate);set('th-md-hrs',t.mdcHrs);set('th-md-cost',t.mdcCost);set('th-md-billing',t.mdcBilling);set('th-md-contact',t.mdcContact);set('th-md-status',t.mdcStatus);
+}
 function renMD(){
   const tb=document.getElementById('mdb');if(!tb)return;
   let src=myD().reverse();
@@ -2848,7 +2869,7 @@ function renMD(){
   if(pfSel&&pfSel.options.length<=1){
     const seen={};const opts=[];
     myD().forEach(d=>{if(d.pcode&&!seen[d.pcode]){seen[d.pcode]=1;const p=projects.find(x=>x.code===d.pcode);opts.push('<option value="'+esc(d.pcode)+'">'+esc(p?p.name:d.pcode)+'</option>');}});
-    pfSel.innerHTML='<option value="">All projects</option>'+opts.join('');
+    pfSel.innerHTML='<option value="">'+(_L().mdAllProjects||'All projects')+'</option>'+opts.join('');
   }
   const pf=pfSel?pfSel.value:'';
   if(pf)src=src.filter(d=>d.pcode===pf);
@@ -4330,6 +4351,9 @@ const LANGS={
     wStart:'Start', wFinish:'Finish', wHours:'Hours', wFilledBy:'Filled out by', wWorker:'Worker', wNameOpt:'(name optional)',
     speakBtn:'Speak', listening:'● Listening… tap to stop',
     fillDetails:'Fill in the details below', workersHelper:'The worker filling out this docket is listed first. Add anyone else who worked on the same task.', applicableWord:'Applicable',
+    mdDash:'Dashboard', mdAll:'All', mdClientSent:'Client (sent)', mdSubReceived:'Subcontractor (received)', mdFilters:'Filters:', mdAllProjects:'All projects',
+    mdsAll:'All dockets', mdsNeedSig:'✍️ Needs my signature', mdsAwaitClient:'📤 Awaiting client sign', mdsNeedBill:'💲 Needs billing', mdsReady:'✓ Signed · ready to send', mdsQueried:'⚠ Queried', mdsPending:'⏳ Pending admin review', mdsRejected:'⛔ Rejected', mdsSigned:'✓ Signed (all)',
+    mdcProject:'Project', mdcDate:'Date', mdcHrs:'Hrs', mdcCost:'Cost', mdcBilling:'Billing', mdcContact:'Client contact', mdcStatus:'Status',
     svHeroLab:'Subcontractor docket signed & chargeable', svHeroSub:'Tap to create a client docket',
     svSecClient:'Client', svSecSub:'Subcontractor', svBreakdown:'Breakdown', svSupervisorWord:'Supervisor',
     svbCreate:'Create client docket', svbAwaitClient:'Awaiting client signature', svbQueried:'Queried by admin', svbPending:'Pending admin review',
@@ -4400,6 +4424,9 @@ const LANGS={
     wStart:'开始', wFinish:'结束', wHours:'工时', wFilledBy:'填写人', wWorker:'工人', wNameOpt:'（姓名可选）',
     speakBtn:'语音', listening:'● 正在聆听…点击停止',
     fillDetails:'请填写以下详细信息', workersHelper:'填写此工单的工人排在第一位。请添加参与同一任务的其他人。', applicableWord:'适用',
+    mdDash:'仪表板', mdAll:'全部', mdClientSent:'客户（已发送）', mdSubReceived:'分包商（已接收）', mdFilters:'筛选：', mdAllProjects:'所有项目',
+    mdsAll:'全部工单', mdsNeedSig:'✍️ 需要我签名', mdsAwaitClient:'📤 等待客户签名', mdsNeedBill:'💲 需要计费', mdsReady:'✓ 已签名 · 可发送', mdsQueried:'⚠ 有疑问', mdsPending:'⏳ 等待管理审核', mdsRejected:'⛔ 已拒绝', mdsSigned:'✓ 已签名（全部）',
+    mdcProject:'项目', mdcDate:'日期', mdcHrs:'工时', mdcCost:'成本', mdcBilling:'计费', mdcContact:'客户联系人', mdcStatus:'状态',
     svHeroLab:'分包商工单已签字且可计费', svHeroSub:'点击创建客户工单',
     svSecClient:'客户', svSecSub:'分包商', svBreakdown:'明细', svSupervisorWord:'主管',
     svbCreate:'创建客户工单', svbAwaitClient:'等待客户签字', svbQueried:'管理员质疑', svbPending:'等待管理员审核',
@@ -4470,6 +4497,9 @@ const LANGS={
     wStart:'Inicio', wFinish:'Fin', wHours:'Horas', wFilledBy:'Rellenado por', wWorker:'Trabajador', wNameOpt:'(nombre opcional)',
     speakBtn:'Hablar', listening:'● Escuchando… toca para parar',
     fillDetails:'Complete los detalles a continuación', workersHelper:'El trabajador que completa este parte aparece primero. Añada a cualquier otra persona que trabajó en la misma tarea.', applicableWord:'Aplicable',
+    mdDash:'Panel', mdAll:'Todos', mdClientSent:'Cliente (enviado)', mdSubReceived:'Subcontratista (recibido)', mdFilters:'Filtros:', mdAllProjects:'Todos los proyectos',
+    mdsAll:'Todas las órdenes', mdsNeedSig:'✍️ Necesita mi firma', mdsAwaitClient:'📤 Esperando firma del cliente', mdsNeedBill:'💲 Necesita facturación', mdsReady:'✓ Firmada · lista para enviar', mdsQueried:'⚠ Consultada', mdsPending:'⏳ Pendiente de revisión', mdsRejected:'⛔ Rechazada', mdsSigned:'✓ Firmada (todas)',
+    mdcProject:'Proyecto', mdcDate:'Fecha', mdcHrs:'Horas', mdcCost:'Coste', mdcBilling:'Facturación', mdcContact:'Contacto del cliente', mdcStatus:'Estado',
     svHeroLab:'Parte del subcontratista firmado y facturable', svHeroSub:'Toque para crear un parte de cliente',
     svSecClient:'Cliente', svSecSub:'Subcontratista', svBreakdown:'Desglose', svSupervisorWord:'Supervisor',
     svbCreate:'Crear parte de cliente', svbAwaitClient:'Esperando firma del cliente', svbQueried:'Consultado por admin', svbPending:'Pendiente de revisión admin',
@@ -4540,6 +4570,9 @@ const LANGS={
     wStart:'البداية', wFinish:'النهاية', wHours:'الساعات', wFilledBy:'مُعبّأ بواسطة', wWorker:'عامل', wNameOpt:'(الاسم اختياري)',
     speakBtn:'تحدّث', listening:'● جارٍ الاستماع… اضغط للإيقاف',
     fillDetails:'أدخل التفاصيل أدناه', workersHelper:'العامل الذي يعبّئ هذا السند يُدرَج أولاً. أضِف أي شخص آخر عمل في المهمة نفسها.', applicableWord:'ينطبق',
+    mdDash:'لوحة التحكم', mdAll:'الكل', mdClientSent:'العميل (مُرسَل)', mdSubReceived:'المقاول من الباطن (مُستلَم)', mdFilters:'التصفية:', mdAllProjects:'كل المشاريع',
+    mdsAll:'كل السندات', mdsNeedSig:'✍️ بحاجة لتوقيعي', mdsAwaitClient:'📤 بانتظار توقيع العميل', mdsNeedBill:'💲 بحاجة للفوترة', mdsReady:'✓ موقّع · جاهز للإرسال', mdsQueried:'⚠ استفسار', mdsPending:'⏳ بانتظار مراجعة الإدارة', mdsRejected:'⛔ مرفوض', mdsSigned:'✓ موقّع (الكل)',
+    mdcProject:'المشروع', mdcDate:'التاريخ', mdcHrs:'ساعات', mdcCost:'التكلفة', mdcBilling:'الفوترة', mdcContact:'جهة اتصال العميل', mdcStatus:'الحالة',
     svHeroLab:'سند مقاول موقّع وقابل للفوترة', svHeroSub:'اضغط لإنشاء سند العميل',
     svSecClient:'العميل', svSecSub:'المقاول من الباطن', svBreakdown:'التفصيل', svSupervisorWord:'مشرف',
     svbCreate:'إنشاء سند العميل', svbAwaitClient:'بانتظار توقيع العميل', svbQueried:'استفسار من الإدارة', svbPending:'بانتظار مراجعة الإدارة',
@@ -4655,6 +4688,7 @@ function applyLang(lang){
   // "optional" tags on Materials / Accommodation / Photos labels
   document.querySelectorAll('#t-nd label span').forEach(sp=>{if(['optional','可选','opcional','اختياري'].includes(sp.textContent.trim()))sp.textContent=t.breakOpt;});
   if(typeof retranslateWorkerRows==='function')retranslateWorkerRows();
+  if(typeof translateMyDockets==='function')translateMyDockets(t);
   // Nav
   const n1=document.getElementById('n1');if(n1)n1.textContent=t.newDocket;
   const n2=document.getElementById('n2');if(n2)n2.textContent=t.myDockets;
@@ -8063,7 +8097,7 @@ function renSupAnalytics(){
     psel.innerHTML='<option value="">All jobs</option>'+mp.map(p=>`<option value="${esc(p.code)}">${esc(p.name)}</option>`).join('');
   }
   const pf=psel?psel.value:'';
-  const range=document.getElementById('anl-range')?.value||'7d';
+  const range=document.getElementById('anl-range')?.value||'all';
   const from=document.getElementById('anl-from')?.value;
   const to=document.getElementById('anl-to')?.value;
   const now=new Date();
@@ -8125,7 +8159,7 @@ function renSupervisorDash(){
   // Analytics filter options + Pie/Bar toggle
   const _pj=document.getElementById('anl-proj');if(_pj&&_pj.options[0])_pj.options[0].textContent=_t.svAllJobs;
   const _rg=document.getElementById('anl-range');
-  if(_rg){const m={'7d':_t.svR7,'month':_t.svRMonth,'ytd':_t.svRYTD,'custom':_t.svRCustom};for(const o of _rg.options){if(m[o.value])o.textContent=m[o.value];}}
+  if(_rg){const m={'all':_t.svRangeAll,'7d':_t.svR7,'month':_t.svRMonth,'ytd':_t.svRYTD,'custom':_t.svRCustom};for(const o of _rg.options){if(m[o.value])o.textContent=m[o.value];}}
   const _rs=document.getElementById('sup-range');
   if(_rs){const _rmap={today:_t.svRangeToday,week:_t.svRangeWeek,month:_t.svRangeMonth,all:_t.svRangeAll};for(const o of _rs.options){if(_rmap[o.value])o.textContent=_rmap[o.value];}}
   const own=dockets.filter(d=>d.createdBy===CU.u);
