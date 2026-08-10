@@ -630,7 +630,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
                 <div class="sv2-anl-legend" id="anl-legend-bill"></div>
               </div>
               <div class="sv2-anl-card">
-                <div class="sv2-anl-ct">Client dockets — approved vs not</div>
+                <div class="sv2-anl-ct">Client dockets — approved vs rejected</div>
                 <div class="sv2-anl-chart" id="anl-chart-appr"></div>
                 <div class="sv2-anl-legend" id="anl-legend-appr"></div>
               </div>
@@ -7632,7 +7632,7 @@ function renSupAnalytics(){
   const cliD=scope.filter(isUp);
   const apprSegs=[
     {label:'Approved',color:'#1D9E75',value:cliD.filter(d=>d.approvalStatus==='approved').length},
-    {label:'Not approved',color:'#C7891A',value:cliD.filter(d=>d.approvalStatus!=='approved').length}
+    {label:'Rejected',color:'#8A1F19',value:cliD.filter(d=>d.approvalStatus==='rejected').length}
   ];
   const type=window._anlChart||'pie';
   paintAnl('bill',billSegs,type);
