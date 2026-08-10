@@ -863,7 +863,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
     <!-- NEW DOCKET -->
     <div id="t-nd" class="hidden" style="position:relative;">
       <button id="nd-back-btn" onclick="exitNdFullpage()">
-        <i class="ti ti-arrow-left" style="font-size:18px;" aria-hidden="true"></i> Back to dashboard
+        <i class="ti ti-arrow-left" style="font-size:18px;" aria-hidden="true"></i> <span id="lbl-nd-back">Back to dashboard</span>
       </button>
       <!-- REVIEW & SIGN PANEL -->
       <div id="review-panel" class="hidden" style="position:absolute;top:0;left:0;width:100%;min-height:100%;background:#f5f5f3;z-index:600;overflow-y:auto;">
@@ -1043,7 +1043,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         </div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;padding:10px 18px;background:#f5f5f3;border-radius:0 0 8px 8px;border:0.5px solid rgba(0,0,0,0.08);border-top:none;margin-top:0;">
-      <p class="st" style="margin:0;font-size:13px;color:#666;">Fill in the details below</p>
+      <p class="st" id="lbl-fill-details" style="margin:0;font-size:13px;color:#666;">Fill in the details below</p>
       <div id="nd-lang-wrap" class="hidden" style="display:flex;align-items:center;gap:8px;">
         <span style="font-size:12px;color:#888;">Language / 语言 / Idioma:</span>
         <select id="nd-lang-sel" style="font-size:13px;padding:5px 10px;border-radius:8px;" onchange="changeLang(this.value)">
@@ -1069,7 +1069,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           </label>
         </div>
         <div class="fg">
-          <div id="dp-wrap"><label>Project *</label><select id="dp" onchange="updClientFromProject()"><option value="">— Select project —</option></select></div>
+          <div id="dp-wrap"><label>Project *</label><select id="dp" onchange="updClientFromProject()"><option value="" id="opt-sel-project">— Select project —</option></select></div>
           <div><label>Date *</label><input type="date" id="dd"></div>
           <div id="dsb-wrap"><label>Your company name *</label><input type="text" id="dsb" placeholder="e.g. Smith Concreting"></div>
           <div><label>Start time *</label><input type="text" inputmode="numeric" id="d-start" placeholder="e.g. 7:30 or 0730" autocomplete="off" onblur="normalizeTime(this)" onchange="calcHours()"></div>
@@ -1084,7 +1084,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <div>
             <label>Method</label>
             <select id="d-reqhow" onchange="toggleSIField()">
-              <option value="">— Select method —</option>
+              <option value="" id="opt-sel-method">— Select method —</option>
               <option value="Site Instruction">Site Instruction</option>
               <option value="Email">Email</option>
               <option value="Verbal">Verbal</option>
@@ -1104,27 +1104,27 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <!-- WORKERS ON SITE -->
           <div class="s2" id="workers-section">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:8px;">
-              <label style="margin:0;">Workers on site</label>
+              <label style="margin:0;" id="lbl-workers-on-site">Workers on site</label>
               <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin:0;font-size:13px;color:#666;font-weight:400;">
                 <input type="checkbox" id="workers-same-hours" onchange="toggleSameHours(this.checked)" style="width:16px;height:16px;margin:0;">
-                Same hours for all
+                <span id="lbl-same-hours">Same hours for all</span>
               </label>
             </div>
             <div style="background:#fafaf8;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px;">
-              <div style="font-size:12px;color:#888;margin-bottom:10px;">The worker filling out this docket is listed first. Add anyone else who worked on the same task.</div>
+              <div id="lbl-workers-helper" style="font-size:12px;color:#888;margin-bottom:10px;">The worker filling out this docket is listed first. Add anyone else who worked on the same task.</div>
               <div id="workers-list"></div>
-              <button type="button" class="btn" onclick="addWorkerRow()" style="font-size:14px;background:#EF9F27;color:#412402;border:none;font-weight:600;padding:10px 16px;margin-top:4px;">+ Add another worker</button>
+              <button type="button" class="btn" id="btn-add-worker" onclick="addWorkerRow()" style="font-size:14px;background:#EF9F27;color:#412402;border:none;font-weight:600;padding:10px 16px;margin-top:4px;">+ Add another worker</button>
               <div id="workers-total" style="text-align:right;font-size:13px;color:#185FA5;font-weight:600;margin-top:8px;"></div>
             </div>
           </div>
 
-          <div class="s2"><label style="display:flex;justify-content:space-between;align-items:center;gap:8px;">Description of work * <button type="button" id="desc-mic" class="mic-btn hidden" onclick="startVoice('desc')">🎤 Speak</button></label>
+          <div class="s2"><label style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><span id="lbl-desc">Description of work *</span> <button type="button" id="desc-mic" class="mic-btn hidden" onclick="startVoice('desc')"><span class="mic-ico">🎤</span> <span class="mic-txt">Speak</span></button></label>
             <div class="desc-wrap" style="position:relative;">
               <textarea id="desc" placeholder="Describe the work completed today..." autocomplete="off" oninput="renDescSuggest()" onfocus="renDescSuggest()" onblur="hideDescSuggestSoon()"></textarea>
               <div id="desc-suggest" class="desc-suggest hidden"></div>
             </div>
           </div>
-          <div class="s2"><label style="display:flex;justify-content:space-between;align-items:center;gap:8px;">Notes (optional) <button type="button" id="dnotes-mic" class="mic-btn hidden" onclick="startVoice('dnotes')">🎤 Speak</button></label><textarea id="dnotes" placeholder="Any additional notes..." style="min-height:40px;"></textarea></div>
+          <div class="s2"><label style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><span id="lbl-dnotes">Notes (optional)</span> <button type="button" id="dnotes-mic" class="mic-btn hidden" onclick="startVoice('dnotes')"><span class="mic-ico">🎤</span> <span class="mic-txt">Speak</span></button></label><textarea id="dnotes" placeholder="Any additional notes..." style="min-height:40px;"></textarea></div>
 
         <!-- MATERIALS -->
         <div class="s2">
@@ -1142,7 +1142,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <label style="margin:0;">Accommodation <span style="font-size:11px;color:#aaa;font-weight:400;">optional</span></label>
             <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin:0;font-size:12px;color:#666;">
               <input type="checkbox" id="accom-toggle" onchange="toggleAccom(this.checked)" style="margin:0;">
-              Applicable
+              <span id="lbl-applicable">Applicable</span>
             </label>
           </div>
           <div id="accom-section" class="hidden" style="border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:12px;background:#fafaf8;">
@@ -1167,10 +1167,10 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <label>Photos <span style="font-size:11px;color:#aaa;font-weight:400;">optional</span></label>
           <div style="display:flex;gap:8px;margin-bottom:6px;">
             <button type="button" class="btn" style="flex:1;padding:12px 8px;border-radius:8px;border:1px dashed rgba(0,0,0,0.2);background:#fafaf8;color:#666;font-size:13px;" onclick="document.getElementById('photo-camera').click()">
-              <i class="ti ti-camera" style="font-size:18px;vertical-align:-3px;margin-right:6px;" aria-hidden="true"></i>Take photo
+              <i class="ti ti-camera" style="font-size:18px;vertical-align:-3px;margin-right:6px;" aria-hidden="true"></i><span id="lbl-take-photo">Take photo</span>
             </button>
             <button type="button" class="btn" style="flex:1;padding:12px 8px;border-radius:8px;border:1px dashed rgba(0,0,0,0.2);background:#fafaf8;color:#666;font-size:13px;" onclick="document.getElementById('photo-gallery').click()">
-              <i class="ti ti-photo" style="font-size:18px;vertical-align:-3px;margin-right:6px;" aria-hidden="true"></i>Choose from gallery
+              <i class="ti ti-photo" style="font-size:18px;vertical-align:-3px;margin-right:6px;" aria-hidden="true"></i><span id="lbl-choose-gallery">Choose from gallery</span>
             </button>
           </div>
           <input type="file" id="photo-camera" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoUpload(event)">
@@ -1186,11 +1186,11 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <div class="fg" style="margin-bottom:12px;">
             <div>
               <label style="color:#0C447C;">Client</label>
-              <select id="d-client" onchange="loadClientContacts()"><option value="">— Select client —</option></select>
+              <select id="d-client" onchange="loadClientContacts()"><option value="" id="opt-sel-client">— Select client —</option></select>
             </div>
             <div>
               <label style="color:#0C447C;">Contact / supervisor</label>
-              <select id="d-contact"><option value="">— Select contact —</option></select>
+              <select id="d-contact"><option value="" id="opt-sel-contact">— Select contact —</option></select>
             </div>
           </div>
 
@@ -1251,7 +1251,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 
         <div id="de" class="err hidden" style="margin-top:10px;"></div>
         <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
-          <button class="btn btn-p" onclick="showReview()" style="background:#2D2D2D;border-color:#2D2D2D;color:#EF9F27;font-weight:600;font-size:15px;padding:14px 24px;">Review &amp; Sign →</button>
+          <button class="btn btn-p" id="btn-review-sign" onclick="showReview()" style="background:#2D2D2D;border-color:#2D2D2D;color:#EF9F27;font-weight:600;font-size:15px;padding:14px 24px;">Review &amp; Sign →</button>
           <button class="btn" onclick="resetDF()">Clear form</button>
           <button class="btn" style="color:#854F0B;border-color:#EF9F27;" onclick="saveDraft()">💾 Save</button>
           <button class="btn btn-d" onclick="resetDF();showTab('dash',document.getElementById('n0'))">✕ Cancel</button>
@@ -2449,7 +2449,7 @@ function setBill(t){
 function popBcSubs(){
   const sel=document.getElementById('bc-sub');if(!sel)return;
   const cur=sel.value;
-  sel.innerHTML='<option value="">— Select subcontractor —</option>';
+  sel.innerHTML='<option value="">'+_L().selSub+'</option>';
   subs.forEach(s=>{const o=document.createElement('option');o.value=s.u;o.textContent=s.name;sel.appendChild(o);});
   sel.innerHTML+='<option value="other">Other (specify below)</option>';
   if(cur)sel.value=cur;
@@ -2565,7 +2565,7 @@ function renClientSelects(){
   ['d-client','p-client'].forEach(id=>{
     const sel=document.getElementById(id);if(!sel)return;
     const cur=sel.value;
-    sel.innerHTML='<option value="">'+(id==='d-client'?'— Select client —':'— No client —')+'</option>';
+    sel.innerHTML='<option value="">'+(id==='d-client'?_L().selClient:_L().noClient)+'</option>';
     clients.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name;sel.appendChild(o);});
     if(cur)sel.value=cur;
   });
@@ -2573,7 +2573,7 @@ function renClientSelects(){
 function loadClientContacts(){
   const cid=document.getElementById('d-client').value;
   const sel=document.getElementById('d-contact');
-  sel.innerHTML='<option value="">— Select contact —</option>';
+  sel.innerHTML='<option value="">'+_L().selContact+'</option>';
   if(!cid)return;
   const cli=clients.find(c=>c.id===cid);
   if(!cli)return;
@@ -2803,7 +2803,7 @@ function renAD(){
 function renPS(workerFilter){
   const sel=document.getElementById('dp');if(!sel)return;
   const cur=sel.value;
-  sel.innerHTML='<option value="">— Select project —</option>';
+  sel.innerHTML='<option value="">'+_L().selProject+'</option>';
   let projs=projects;
   let workerNoProjects=false;
   if(workerFilter&&CU&&CU.role==='worker'){
@@ -3369,8 +3369,8 @@ function startVoice(fieldId){
   _voiceRec=rec;_voiceField=fieldId;
   const ta=document.getElementById(fieldId);
   const base=ta?ta.value:'';
-  const reset=()=>{if(btn){btn.classList.remove('mic-live');btn.innerHTML='🎤 Speak';}_voiceRec=null;_voiceField=null;};
-  rec.onstart=()=>{if(btn){btn.classList.add('mic-live');btn.innerHTML='● Listening… tap to stop';}};
+  const reset=()=>{if(btn){btn.classList.remove('mic-live');btn.innerHTML='<span class="mic-ico">🎤</span> <span class="mic-txt">'+_L().speakBtn+'</span>';}_voiceRec=null;_voiceField=null;};
+  rec.onstart=()=>{if(btn){btn.classList.add('mic-live');btn.textContent=_L().listening;}};
   rec.onerror=(e)=>{
     reset();
     if(e&&(e.error==='not-allowed'||e.error==='service-not-allowed'))alert('Microphone access is needed for voice input. Allow the mic in your browser settings, then try again.');
@@ -3389,7 +3389,7 @@ function resetDF(){
   document.getElementById('dp').value='';document.getElementById('d-start').value='';document.getElementById('d-finish').value='';document.getElementById('d-break').value='';document.getElementById('dh').value='';
   document.getElementById('desc').value='';document.getElementById('dnotes').value='';
   {const svn=document.getElementById('review-supervisor-note');if(svn)svn.value='';window._reviewSupervisorNote='';}
-  document.getElementById('d-client').value='';document.getElementById('d-contact').innerHTML='<option value="">— Select contact —</option>';
+  document.getElementById('d-client').value='';document.getElementById('d-contact').innerHTML='<option value="">'+_L().selContact+'</option>';
   {const dc=document.getElementById('d-client');if(dc&&!(CU&&CU.role==='sub'))dc.disabled=false;}
   document.getElementById('send-email').value='';document.getElementById('send-sms').value='';
   setDD();clrSig();setSigMethod('onsite');
@@ -4207,6 +4207,13 @@ const LANGS={
     stPending:'Pending', stSigned:'Signed', stSent:'Sent', stBackcharge:'Backcharge',
     navHome:'Home', navDockets:'Dockets', navDrafts:'Drafts', navReports:'Reports', navAdmin:'Admin', navTeam:'Team',
     navProjectDockets:'Project dockets', svNewDocket:'New docket', svNoRange:'No dockets in range',
+    selProject:'— Select project —', selMethod:'— Select method —', selClient:'— Select client —',
+    selContact:'— Select contact —', selSub:'— Select subcontractor —', selWorker:'— Select worker —', noClient:'— No client —',
+    workersOnSite:'Workers on site', sameHoursAll:'Same hours for all', addAnotherWorker:'+ Add another worker',
+    takePhoto:'Take photo', chooseGallery:'Choose from gallery', backToDash:'Back to dashboard', reviewSign:'Review & Sign →',
+    wStart:'Start', wFinish:'Finish', wHours:'Hours', wFilledBy:'Filled out by', wWorker:'Worker', wNameOpt:'(name optional)',
+    speakBtn:'Speak', listening:'● Listening… tap to stop',
+    fillDetails:'Fill in the details below', workersHelper:'The worker filling out this docket is listed first. Add anyone else who worked on the same task.', applicableWord:'Applicable',
     svHeroLab:'Subcontractor docket signed & chargeable', svHeroSub:'Tap to create a client docket',
     svSecClient:'Client', svSecSub:'Subcontractor', svBreakdown:'Breakdown', svSupervisorWord:'Supervisor',
     svbCreate:'Create client docket', svbAwaitClient:'Awaiting client signature', svbQueried:'Queried by admin', svbPending:'Pending admin review',
@@ -4270,6 +4277,13 @@ const LANGS={
     stPending:'待处理', stSigned:'已签字', stSent:'已发送', stBackcharge:'转嫁费用',
     navHome:'主页', navDockets:'工单', navDrafts:'草稿', navReports:'报告', navAdmin:'管理', navTeam:'团队',
     navProjectDockets:'项目工单', svNewDocket:'新工单', svNoRange:'该时间范围内无工单',
+    selProject:'— 选择项目 —', selMethod:'— 选择方式 —', selClient:'— 选择客户 —',
+    selContact:'— 选择联系人 —', selSub:'— 选择分包商 —', selWorker:'— 选择工人 —', noClient:'— 无客户 —',
+    workersOnSite:'现场工人', sameHoursAll:'所有人相同工时', addAnotherWorker:'+ 添加工人',
+    takePhoto:'拍照', chooseGallery:'从相册选择', backToDash:'返回主页', reviewSign:'审核并签字 →',
+    wStart:'开始', wFinish:'结束', wHours:'工时', wFilledBy:'填写人', wWorker:'工人', wNameOpt:'（姓名可选）',
+    speakBtn:'语音', listening:'● 正在聆听…点击停止',
+    fillDetails:'请填写以下详细信息', workersHelper:'填写此工单的工人排在第一位。请添加参与同一任务的其他人。', applicableWord:'适用',
     svHeroLab:'分包商工单已签字且可计费', svHeroSub:'点击创建客户工单',
     svSecClient:'客户', svSecSub:'分包商', svBreakdown:'明细', svSupervisorWord:'主管',
     svbCreate:'创建客户工单', svbAwaitClient:'等待客户签字', svbQueried:'管理员质疑', svbPending:'等待管理员审核',
@@ -4333,6 +4347,13 @@ const LANGS={
     stPending:'Pendiente', stSigned:'Firmado', stSent:'Enviado', stBackcharge:'Recargo',
     navHome:'Inicio', navDockets:'Órdenes', navDrafts:'Borradores', navReports:'Informes', navAdmin:'Admin', navTeam:'Equipo',
     navProjectDockets:'Órdenes del proyecto', svNewDocket:'Nueva orden', svNoRange:'Sin órdenes en el rango',
+    selProject:'— Seleccionar proyecto —', selMethod:'— Seleccionar método —', selClient:'— Seleccionar cliente —',
+    selContact:'— Seleccionar contacto —', selSub:'— Seleccionar subcontratista —', selWorker:'— Seleccionar trabajador —', noClient:'— Sin cliente —',
+    workersOnSite:'Trabajadores en obra', sameHoursAll:'Mismas horas para todos', addAnotherWorker:'+ Añadir trabajador',
+    takePhoto:'Tomar foto', chooseGallery:'Elegir de la galería', backToDash:'Volver al panel', reviewSign:'Revisar y firmar →',
+    wStart:'Inicio', wFinish:'Fin', wHours:'Horas', wFilledBy:'Rellenado por', wWorker:'Trabajador', wNameOpt:'(nombre opcional)',
+    speakBtn:'Hablar', listening:'● Escuchando… toca para parar',
+    fillDetails:'Complete los detalles a continuación', workersHelper:'El trabajador que completa este parte aparece primero. Añada a cualquier otra persona que trabajó en la misma tarea.', applicableWord:'Aplicable',
     svHeroLab:'Parte del subcontratista firmado y facturable', svHeroSub:'Toque para crear un parte de cliente',
     svSecClient:'Cliente', svSecSub:'Subcontratista', svBreakdown:'Desglose', svSupervisorWord:'Supervisor',
     svbCreate:'Crear parte de cliente', svbAwaitClient:'Esperando firma del cliente', svbQueried:'Consultado por admin', svbPending:'Pendiente de revisión admin',
@@ -4396,6 +4417,13 @@ const LANGS={
     stPending:'قيد الانتظار', stSigned:'موقّع', stSent:'مُرسل', stBackcharge:'إعادة تحميل',
     navHome:'الرئيسية', navDockets:'السندات', navDrafts:'المسودات', navReports:'التقارير', navAdmin:'الإدارة', navTeam:'الفريق',
     navProjectDockets:'سندات المشروع', svNewDocket:'سند جديد', svNoRange:'لا توجد سندات في النطاق',
+    selProject:'— اختر المشروع —', selMethod:'— اختر الطريقة —', selClient:'— اختر العميل —',
+    selContact:'— اختر جهة الاتصال —', selSub:'— اختر المقاول من الباطن —', selWorker:'— اختر العامل —', noClient:'— بدون عميل —',
+    workersOnSite:'العمال في الموقع', sameHoursAll:'نفس الساعات للجميع', addAnotherWorker:'+ إضافة عامل آخر',
+    takePhoto:'التقاط صورة', chooseGallery:'اختر من المعرض', backToDash:'العودة إلى الرئيسية', reviewSign:'مراجعة وتوقيع ←',
+    wStart:'البداية', wFinish:'النهاية', wHours:'الساعات', wFilledBy:'مُعبّأ بواسطة', wWorker:'عامل', wNameOpt:'(الاسم اختياري)',
+    speakBtn:'تحدّث', listening:'● جارٍ الاستماع… اضغط للإيقاف',
+    fillDetails:'أدخل التفاصيل أدناه', workersHelper:'العامل الذي يعبّئ هذا السند يُدرَج أولاً. أضِف أي شخص آخر عمل في المهمة نفسها.', applicableWord:'ينطبق',
     svHeroLab:'سند مقاول موقّع وقابل للفوترة', svHeroSub:'اضغط لإنشاء سند العميل',
     svSecClient:'العميل', svSecSub:'المقاول من الباطن', svBreakdown:'التفصيل', svSupervisorWord:'مشرف',
     svbCreate:'إنشاء سند العميل', svbAwaitClient:'بانتظار توقيع العميل', svbQueried:'استفسار من الإدارة', svbPending:'بانتظار مراجعة الإدارة',
@@ -4410,6 +4438,10 @@ const LANGS={
     svBillingLab:'موقّع — يحتاج فوترة', svBillingSub:'اضغط لتحديد قابل للفوترة / إعادة تحميل / تكلفة خاصة'
   }
 };
+
+// Current-language table (falls back to English). Used by code that rebuilds
+// select placeholders at runtime so they stay translated after re-population.
+function _L(){return LANGS[(CU&&localStorage.getItem('dlb_lang_'+CU.u))||'en']||LANGS.en;}
 
 // Reusable language switcher markup so EVERY role's banner offers the same
 // English / 中文 / Español options (previously only worker + sub + supervisor
@@ -4483,6 +4515,30 @@ function applyLang(lang){
   setTxt('wk-lbl-projects',t.wkMyProjects);
   setTxt('wk-lbl-recent',t.wkRecent);
   setTxt('wk-fab-label',t.wkNewDocket);
+  // New-docket form: placeholder options, worker/photo controls, nav + review buttons.
+  // Target the select's first (value="") option by the SELECT id, because these
+  // selects get re-populated at runtime which strips any id on the option itself.
+  const setFirstOpt=(selId,val)=>{const s=document.getElementById(selId);if(s&&s.options.length&&s.options[0].value===''&&val)s.options[0].textContent=val;};
+  setFirstOpt('dp',t.selProject);
+  setFirstOpt('d-reqhow',t.selMethod);
+  setFirstOpt('d-client',t.selClient);
+  setFirstOpt('d-contact',t.selContact);
+  setTxt('lbl-workers-on-site',t.workersOnSite);
+  setTxt('lbl-same-hours',t.sameHoursAll);
+  setTxt('btn-add-worker',t.addAnotherWorker);
+  setTxt('lbl-take-photo',t.takePhoto);
+  setTxt('lbl-choose-gallery',t.chooseGallery);
+  setTxt('lbl-nd-back',t.backToDash);
+  setTxt('btn-review-sign',t.reviewSign);
+  setTxt('lbl-desc',t.descWork);
+  setTxt('lbl-dnotes',t.notes);
+  setTxt('lbl-fill-details',t.fillDetails);
+  setTxt('lbl-workers-helper',t.workersHelper);
+  setTxt('lbl-applicable',t.applicableWord);
+  document.querySelectorAll('.mic-btn .mic-txt').forEach(el=>{if(!el.closest('.mic-live'))el.textContent=t.speakBtn;});
+  // "optional" tags on Materials / Accommodation / Photos labels
+  document.querySelectorAll('#t-nd label span').forEach(sp=>{if(['optional','可选','opcional','اختياري'].includes(sp.textContent.trim()))sp.textContent=t.breakOpt;});
+  if(typeof retranslateWorkerRows==='function')retranslateWorkerRows();
   // Nav
   const n1=document.getElementById('n1');if(n1)n1.textContent=t.newDocket;
   const n2=document.getElementById('n2');if(n2)n2.textContent=t.myDockets;
@@ -5410,8 +5466,8 @@ function renRatesSelects(){
   const rs=document.getElementById('rate-sub');
   const rfp=document.getElementById('rates-filter-proj');
   const rfs=document.getElementById('rates-filter-sub');
-  if(rp){rp.innerHTML='<option value="">— Select project —</option>';projects.forEach(p=>{const o=document.createElement('option');o.value=p.code;o.textContent=p.name+' ('+p.code+')';rp.appendChild(o);});}
-  if(rs){rs.innerHTML='<option value="">— Select subcontractor —</option>';subs.forEach(s=>{const o=document.createElement('option');o.value=s.u;o.textContent=s.name;rs.appendChild(o);});}
+  if(rp){rp.innerHTML='<option value="">'+_L().selProject+'</option>';projects.forEach(p=>{const o=document.createElement('option');o.value=p.code;o.textContent=p.name+' ('+p.code+')';rp.appendChild(o);});}
+  if(rs){rs.innerHTML='<option value="">'+_L().selSub+'</option>';subs.forEach(s=>{const o=document.createElement('option');o.value=s.u;o.textContent=s.name;rs.appendChild(o);});}
   if(rfp){rfp.innerHTML='<option value="">All projects</option>';projects.forEach(p=>{const o=document.createElement('option');o.value=p.code;o.textContent=p.name;rfp.appendChild(o);});}
   if(rfs){rfs.innerHTML='<option value="">All subcontractors</option>';subs.forEach(s=>{const o=document.createElement('option');o.value=s.u;o.textContent=s.name;rfs.appendChild(o);});}
   renCRatesSelects();
@@ -5678,7 +5734,7 @@ function openPreparePicker(){
   if(sel){
     let list=workers;
     if(CU&&CU.role==='sub')list=workers.filter(w=>w.parentSub===CU.u);
-    sel.innerHTML='<option value="">— Select worker —</option>'+list.map(w=>`<option value="${esc(w.u)}">${esc(w.name)}${w.trade?' · '+esc(w.trade):''}</option>`).join('');
+    sel.innerHTML='<option value="">'+_L().selWorker+'</option>'+list.map(w=>`<option value="${esc(w.u)}">${esc(w.name)}${w.trade?' · '+esc(w.trade):''}</option>`).join('');
     if(!list.length)sel.innerHTML='<option value="">No workers set up yet</option>';
   }
   if(wrap)wrap.classList.remove('hidden');
@@ -5823,7 +5879,7 @@ function closeCFM(){
 
 function cfmLoadContacts(){
   const sel=document.getElementById('cfm-contact');
-  sel.innerHTML='<option value="">— Select contact —</option>';
+  sel.innerHTML='<option value="">'+_L().selContact+'</option>';
   clients.forEach(cli=>{
     cli.contacts.forEach(con=>{
       const o=document.createElement('option');
@@ -6036,7 +6092,7 @@ function switchRateTab(tab){
 function renCRatesSelects(){
   const cp=document.getElementById('crate-proj');
   const cfp=document.getElementById('crates-filter-proj');
-  if(cp){cp.innerHTML='<option value="">— Select project —</option>';projects.forEach(p=>{const o=document.createElement('option');o.value=p.code;o.textContent=p.name+' ('+p.code+')';cp.appendChild(o);});}
+  if(cp){cp.innerHTML='<option value="">'+_L().selProject+'</option>';projects.forEach(p=>{const o=document.createElement('option');o.value=p.code;o.textContent=p.name+' ('+p.code+')';cp.appendChild(o);});}
   if(cfp){cfp.innerHTML='<option value="">All projects</option>';projects.forEach(p=>{const o=document.createElement('option');o.value=p.code;o.textContent=p.name;cfp.appendChild(o);});}
 }
 
@@ -6711,27 +6767,28 @@ function addWorkerRow(name='',hours='',isPrimary=false,start='',finish=''){
   row.dataset.primary=isPrimary?'1':'0';
   row.style.cssText='display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;padding:10px;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;margin-bottom:8px;background:#fff;';
   const sameOn=document.getElementById('workers-same-hours')?.checked;
-  const placeholderName=isPrimary?'':('Worker '+(idx+1)+' (name optional)');
+  const _wl=_L();
+  const placeholderName=isPrimary?'':(_wl.wWorker+' '+(idx+1)+' '+_wl.wNameOpt);
   const lblCss='font-size:12px;color:#888;font-weight:500;margin-bottom:4px;';
   const timeCols=isPrimary?''
     :('<div style="flex:1;min-width:76px;">'
-        +'<label style="'+lblCss+'">Start</label>'
+        +'<label style="'+lblCss+'">'+_wl.wStart+'</label>'
         +'<input type="text" inputmode="numeric" class="wk-start" value="'+esc(start)+'" placeholder="e.g. 0730" autocomplete="off" onblur="normalizeTime(this)" onchange="onWorkerTimeChange(this)"'+(sameOn?' disabled style="background:#f5f5f3;"':'')+'>'
       +'</div>'
       +'<div style="flex:1;min-width:76px;">'
-        +'<label style="'+lblCss+'">Finish</label>'
+        +'<label style="'+lblCss+'">'+_wl.wFinish+'</label>'
         +'<input type="text" inputmode="numeric" class="wk-finish" value="'+esc(finish)+'" placeholder="e.g. 1600" autocomplete="off" onblur="normalizeTime(this)" onchange="onWorkerTimeChange(this)"'+(sameOn?' disabled style="background:#f5f5f3;"':'')+'>'
       +'</div>');
   row.innerHTML=
     '<div style="flex:2;min-width:130px;">'
       +'<label style="'+lblCss+'">'
-        +(isPrimary?'Filled out by':('Worker '+(idx+1)))+'</label>'
+        +(isPrimary?_wl.wFilledBy:(_wl.wWorker+' '+(idx+1)))+'</label>'
       +'<input type="text" class="wk-name" value="'+esc(name)+'" placeholder="'+placeholderName+'"'
         +(isPrimary?' readonly style="background:#f5f5f3;font-weight:500;"':'')+'>'
     +'</div>'
     +timeCols
     +'<div style="flex:1;min-width:80px;">'
-      +'<label style="'+lblCss+'">Hours</label>'
+      +'<label style="'+lblCss+'">'+_wl.wHours+'</label>'
       +'<input type="number" class="wk-hours" value="'+hours+'" min="0" step="0.25" placeholder="e.g. 7.5" oninput="updWorkersTotal()"'+(sameOn?' readonly style="background:#f5f5f3;"':'')+'>'
     +'</div>'
     +(isPrimary
@@ -6764,10 +6821,33 @@ function relabelWorkerRows(){
   if(!list)return;
   Array.from(list.children).forEach((row,i)=>{
     if(row.dataset.primary==='1')return;
+    const _wl=_L();
     const lbl=row.querySelector('label');
-    if(lbl)lbl.textContent='Worker '+(i+1);
+    if(lbl)lbl.textContent=_wl.wWorker+' '+(i+1);
     const nm=row.querySelector('.wk-name');
-    if(nm&&!nm.value.trim())nm.placeholder='Worker '+(i+1)+' (name optional)';
+    if(nm&&!nm.value.trim())nm.placeholder=_wl.wWorker+' '+(i+1)+' '+_wl.wNameOpt;
+  });
+}
+
+// Re-translate the labels inside already-rendered worker rows when the
+// language is switched while the New docket form is open (values are kept).
+function retranslateWorkerRows(){
+  const list=document.getElementById('workers-list');
+  if(!list)return;
+  const _wl=_L();
+  Array.from(list.children).forEach((row,i)=>{
+    const labels=row.querySelectorAll('label');
+    if(row.dataset.primary==='1'){
+      if(labels[0])labels[0].textContent=_wl.wFilledBy;
+      if(labels[1])labels[1].textContent=_wl.wHours; // primary row has no Start/Finish
+    }else{
+      if(labels[0])labels[0].textContent=_wl.wWorker+' '+(i+1);
+      if(labels[1])labels[1].textContent=_wl.wStart;
+      if(labels[2])labels[2].textContent=_wl.wFinish;
+      if(labels[3])labels[3].textContent=_wl.wHours;
+      const nm=row.querySelector('.wk-name');
+      if(nm&&!nm.value.trim())nm.placeholder=_wl.wWorker+' '+(i+1)+' '+_wl.wNameOpt;
+    }
   });
 }
 
