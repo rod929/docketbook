@@ -452,11 +452,12 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
    card stays the same height (or shorter) instead of growing downward. */
 .sv2-anl-card.pie-layout .sv2-anl-body{display:flex;align-items:center;gap:14px;}
 .sv2-anl-card.pie-layout .sv2-anl-chart{flex-shrink:0;min-height:0;}
-.sv2-anl-card.pie-layout .sv2-anl-chart svg{width:160px;height:160px;}
-.sv2-anl-card.pie-layout .sv2-anl-legend{margin-top:0;flex:1;min-width:0;}
-.sv2-anl-lg{display:flex;align-items:center;gap:7px;font-size:11.5px;color:#666;}
-.sv2-anl-lg i{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
-.sv2-anl-lg b{color:#2D2D2D;font-variant-numeric:tabular-nums;margin-left:auto;}
+.sv2-anl-card.pie-layout .sv2-anl-chart svg{width:150px;height:150px;}
+.sv2-anl-card.pie-layout .sv2-anl-legend{margin-top:0;flex:1;min-width:0;gap:9px;}
+.sv2-anl-lg{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:4px 7px;font-size:11.5px;color:#666;}
+.sv2-anl-lg i{width:10px;height:10px;border-radius:3px;}
+.sv2-anl-lg .lg-label{min-width:0;line-height:1.2;}
+.sv2-anl-lg b{color:#2D2D2D;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right;}
 .sv2-anl-empty{color:#aaa;font-size:12px;text-align:center;padding:26px 8px;}
 .sv2-anl-bar{margin-bottom:10px;}
 .sv2-anl-chart .sv2-anl-bar:last-child{margin-bottom:0;}
@@ -7898,7 +7899,7 @@ function paintAnl(which,segs,type){
     if(legend)legend.innerHTML='';
   } else {
     chart.innerHTML=anlDonut(segs,total);
-    if(legend)legend.innerHTML=segs.map(s=>`<div class="sv2-anl-lg"><i style="background:${s.color};"></i>${esc(s.label)}<b>${s.value} · ${Math.round(s.value/total*100)}%</b></div>`).join('');
+    if(legend)legend.innerHTML=segs.map(s=>`<div class="sv2-anl-lg"><i style="background:${s.color};"></i><span class="lg-label">${esc(s.label)}</span><b>${s.value} · ${Math.round(s.value/total*100)}%</b></div>`).join('');
   }
 }
 function renSupAnalytics(){
