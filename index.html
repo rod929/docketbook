@@ -443,6 +443,14 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-box.sv2-flash .sv2-bv{color:#C0392B;}
 .sv2-box.sv2-flash .sv2-bl{color:#8A1F19;}
 @media(prefers-reduced-motion:reduce){.sv2-box.sv2-flash{animation:none;}}
+/* Days-outstanding ageing line at the bottom of each box */
+.sv2-age{font-size:9.5px;font-weight:600;color:#9a9a93;line-height:1;margin-top:-3px;}
+/* Non-zero boxes (except Create) flash a border in their own colour. Create
+   keeps the filled+flashing treatment above. */
+.sv2-b-red{--hot:#E24B4A;} .sv2-b-amber{--hot:#C7891A;} .sv2-b-blue{--hot:#185FA5;} .sv2-b-maroon{--hot:#A4271F;} .sv2-b-slate{--hot:#5A6B7B;}
+@keyframes sv2HotFlash{0%{box-shadow:0 0 0 0 var(--hot);}70%{box-shadow:0 0 0 6px transparent;}100%{box-shadow:0 0 0 0 transparent;}}
+.sv2-box.sv2-hot{border:1.5px solid var(--hot);animation:sv2HotFlash 1.5s ease-in-out infinite;}
+@media(prefers-reduced-motion:reduce){.sv2-box.sv2-hot{animation:none;}}
 /* Analytics — billing split + client approval (pie / bar) */
 .sv2-anl{margin-bottom:22px;}
 .sv2-anl-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 2px 11px;}
@@ -8209,24 +8217,47 @@ function renSupervisorDash(){
 
   // Pending admin review = signed + billing set + awaiting the admin's sign-off.
   const isAwaitingAdmin=d=>d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting'&&!isQ(d)&&!isR(d);
-  // Subcontractor row (outstanding counts)
-  const subSign=inList.filter(d=>!d.sig&&!(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')&&!isQ(d)&&!isR(d)).length;
-  const subBill=inList.filter(d=>d.sig&&(!d.bill||d.bill==='pending')&&!isQ(d)&&!isR(d)).length;
-  const subQ=inList.filter(isQ).length;
+  // Subcontractor row (outstanding lists)
+  const subSignL=inList.filter(d=>!d.sig&&!(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')&&!isQ(d)&&!isR(d));
+  const subBillL=inList.filter(d=>d.sig&&(!d.bill||d.bill==='pending')&&!isQ(d)&&!isR(d));
+  const subQL=inList.filter(isQ);
   // pending review here excludes the chargeable-not-mirrored ones (those are a Create action)
-  const subP=inList.filter(d=>isAwaitingAdmin(d)&&!(d.bill==='ch'&&!isMirrored(d))).length;
-  // Client row (outstanding counts). Create = signed sub docket, chargeable, not yet mirrored.
-  const cCreate=scope.filter(d=>!isUp(d)&&d.sig&&d.bill==='ch'&&!isMirrored(d)&&!isQ(d)&&!isR(d)&&!isDone(d)).length;
-  const cAwait=upList.filter(d=>!d.sig&&!isQ(d)&&!isR(d)).length;
-  const cQ=upList.filter(isQ).length;
-  const cP=upList.filter(isAwaitingAdmin).length;
+  const subPL=inList.filter(d=>isAwaitingAdmin(d)&&!(d.bill==='ch'&&!isMirrored(d)));
+  // Client row (outstanding lists). Create = signed sub docket, chargeable, not yet mirrored.
+  const cCreateL=scope.filter(d=>!isUp(d)&&d.sig&&d.bill==='ch'&&!isMirrored(d)&&!isQ(d)&&!isR(d)&&!isDone(d));
+  const cAwaitL=upList.filter(d=>!d.sig&&!isQ(d)&&!isR(d));
+  const cQL=upList.filter(isQ);
+  const cPL=upList.filter(isAwaitingAdmin);
 
-  // Paint the boxes; dim a box at 0, and flash the Create box when it has items.
-  const setBox=(id,n)=>{const e=document.getElementById(id);if(!e)return;e.textContent=n;const b=e.closest('.sv2-box');if(b)b.classList.toggle('sv2-zero',n===0);};
-  setBox('sv2b-sign',subSign);setBox('sv2b-bill',subBill);setBox('sv2b-inq',subQ);setBox('sv2b-inp',subP);
-  setBox('sv2b-create',cCreate);setBox('sv2b-await',cAwait);setBox('sv2b-outq',cQ);setBox('sv2b-outp',cP);
+  // Oldest outstanding age (days) across a box's dockets — an early-warning of
+  // how long the oldest item has been sitting. Uses the docket's work date.
+  const oldestDays=(list)=>{
+    if(!list||!list.length)return null;
+    const now=new Date();let mx=0;
+    list.forEach(d=>{const ts=d.date?new Date(d.date):(d.createdAt?new Date(d.createdAt):null);if(ts&&!isNaN(ts.getTime())){const days=Math.floor((now-ts)/86400000);if(days>mx)mx=days;}});
+    return mx;
+  };
+  const ageText=(days)=>days==null?'':(days<=0?'⌛ today':(days===1?'⌛ 1 day':'⌛ '+days+' days'));
+
+  // Paint a box: value + zero-dim + border-flash (non-Create) + ageing line.
+  const setBox=(valId,list,{flashFill=false}={})=>{
+    const e=document.getElementById(valId);if(!e)return;
+    const n=list.length;
+    e.textContent=n;
+    const b=e.closest('.sv2-box');if(!b)return;
+    b.classList.toggle('sv2-zero',n===0);
+    if(!flashFill)b.classList.toggle('sv2-hot',n>0); // non-Create boxes flash a coloured border
+    // Ageing line (create/reuse the .sv2-age element under the label)
+    let age=b.querySelector('.sv2-age');
+    if(n>0){
+      if(!age){age=document.createElement('div');age.className='sv2-age';b.appendChild(age);}
+      age.textContent=ageText(oldestDays(list));
+    } else if(age){age.textContent='';}
+  };
+  setBox('sv2b-sign',subSignL);setBox('sv2b-bill',subBillL);setBox('sv2b-inq',subQL);setBox('sv2b-inp',subPL);
+  setBox('sv2b-create',cCreateL,{flashFill:true});setBox('sv2b-await',cAwaitL);setBox('sv2b-outq',cQL);setBox('sv2b-outp',cPL);
   const createBox=document.getElementById('sv2-box-create');
-  if(createBox)createBox.classList.toggle('sv2-flash',cCreate>0);
+  if(createBox)createBox.classList.toggle('sv2-flash',cCreateL.length>0);
 
   // ── Analytics (billing split + client approval) ──
   renSupAnalytics();
