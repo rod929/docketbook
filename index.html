@@ -1358,7 +1358,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <select id="md-status-filter" style="width:200px;" onchange="renMD()">
           <option value="">All dockets</option>
           <option value="awaiting_my_sig">✍️ Needs my signature</option>
-          <option value="awaiting_client">📤 Awaiting client sign</option>
+          <option value="awaiting_client">↑ Pending signature</option>
           <option value="needs_billing">💲 Needs billing</option>
           <option value="chargeable_ready">✓ Signed · ready to send</option>
           <option value="queried">⚠ Queried</option>
@@ -2481,7 +2481,7 @@ function docketStatus(d){
 const STATUS_META={
   rejected:{label:'⛔ Rejected',bg:'#FBD9D6',fg:'#8A1F19'},
   queried:{label:'⚠ Queried',bg:'#FBE3E1',fg:'#B23B39'},
-  awaiting_client:{label:'📤 Awaiting client sign',bg:'#E3EEF9',fg:'#185FA5'},
+  awaiting_client:{label:'↑ Pending signature',bg:'#E3EEF9',fg:'#185FA5'},
   awaiting_my_sig:{label:'✍️ Needs my signature',bg:'#FCEFD6',fg:'#96631A'},
   needs_billing:{label:'💲 Needs billing',bg:'#FCEFD6',fg:'#96631A'},
   chargeable_ready:{label:'✓ Signed · ready to send',bg:'#DCF3EB',fg:'#0F6E56'},
@@ -4439,7 +4439,7 @@ const LANGS={
     speakBtn:'Speak', listening:'● Listening… tap to stop',
     fillDetails:'Fill in the details below', workersHelper:'The worker filling out this docket is listed first. Add anyone else who worked on the same task.', applicableWord:'Applicable',
     mdDash:'Dashboard', mdAll:'All', mdClientSent:'Client (sent)', mdSubReceived:'Subcontractor (received)', mdFilters:'Filters:', mdAllProjects:'All projects',
-    mdsAll:'All dockets', mdsNeedSig:'✍️ Needs my signature', mdsAwaitClient:'📤 Awaiting client sign', mdsNeedBill:'💲 Needs billing', mdsReady:'✓ Signed · ready to send', mdsQueried:'⚠ Queried', mdsPending:'⏳ Pending admin review', mdsRejected:'⛔ Rejected', mdsSigned:'✓ Signed (all)',
+    mdsAll:'All dockets', mdsNeedSig:'✍️ Needs my signature', mdsAwaitClient:'↑ Pending signature', mdsNeedBill:'💲 Needs billing', mdsReady:'✓ Signed · ready to send', mdsQueried:'⚠ Queried', mdsPending:'⏳ Pending admin review', mdsRejected:'⛔ Rejected', mdsSigned:'✓ Signed (all)',
     mdcProject:'Project', mdcDate:'Date', mdcHrs:'Hrs', mdcCost:'Cost', mdcBilling:'Billing', mdcCompany:'Company', mdcContact:'Client contact', mdcStatus:'Status',
     svHeroLab:'Subcontractor docket signed & chargeable', svHeroSub:'Tap to create a client docket',
     svSecClient:'Client', svSecSub:'Subcontractor', svBreakdown:'Breakdown', svSupervisorWord:'Supervisor',
@@ -4512,7 +4512,7 @@ const LANGS={
     speakBtn:'语音', listening:'● 正在聆听…点击停止',
     fillDetails:'请填写以下详细信息', workersHelper:'填写此工单的工人排在第一位。请添加参与同一任务的其他人。', applicableWord:'适用',
     mdDash:'仪表板', mdAll:'全部', mdClientSent:'客户（已发送）', mdSubReceived:'分包商（已接收）', mdFilters:'筛选：', mdAllProjects:'所有项目',
-    mdsAll:'全部工单', mdsNeedSig:'✍️ 需要我签名', mdsAwaitClient:'📤 等待客户签名', mdsNeedBill:'💲 需要计费', mdsReady:'✓ 已签名 · 可发送', mdsQueried:'⚠ 有疑问', mdsPending:'⏳ 等待管理审核', mdsRejected:'⛔ 已拒绝', mdsSigned:'✓ 已签名（全部）',
+    mdsAll:'全部工单', mdsNeedSig:'✍️ 需要我签名', mdsAwaitClient:'↑ 等待签名', mdsNeedBill:'💲 需要计费', mdsReady:'✓ 已签名 · 可发送', mdsQueried:'⚠ 有疑问', mdsPending:'⏳ 等待管理审核', mdsRejected:'⛔ 已拒绝', mdsSigned:'✓ 已签名（全部）',
     mdcProject:'项目', mdcDate:'日期', mdcHrs:'工时', mdcCost:'成本', mdcBilling:'计费', mdcCompany:'公司', mdcContact:'客户联系人', mdcStatus:'状态',
     svHeroLab:'分包商工单已签字且可计费', svHeroSub:'点击创建客户工单',
     svSecClient:'客户', svSecSub:'分包商', svBreakdown:'明细', svSupervisorWord:'主管',
@@ -4585,7 +4585,7 @@ const LANGS={
     speakBtn:'Hablar', listening:'● Escuchando… toca para parar',
     fillDetails:'Complete los detalles a continuación', workersHelper:'El trabajador que completa este parte aparece primero. Añada a cualquier otra persona que trabajó en la misma tarea.', applicableWord:'Aplicable',
     mdDash:'Panel', mdAll:'Todos', mdClientSent:'Cliente (enviado)', mdSubReceived:'Subcontratista (recibido)', mdFilters:'Filtros:', mdAllProjects:'Todos los proyectos',
-    mdsAll:'Todas las órdenes', mdsNeedSig:'✍️ Necesita mi firma', mdsAwaitClient:'📤 Esperando firma del cliente', mdsNeedBill:'💲 Necesita facturación', mdsReady:'✓ Firmada · lista para enviar', mdsQueried:'⚠ Consultada', mdsPending:'⏳ Pendiente de revisión', mdsRejected:'⛔ Rechazada', mdsSigned:'✓ Firmada (todas)',
+    mdsAll:'Todas las órdenes', mdsNeedSig:'✍️ Necesita mi firma', mdsAwaitClient:'↑ Firma pendiente', mdsNeedBill:'💲 Necesita facturación', mdsReady:'✓ Firmada · lista para enviar', mdsQueried:'⚠ Consultada', mdsPending:'⏳ Pendiente de revisión', mdsRejected:'⛔ Rechazada', mdsSigned:'✓ Firmada (todas)',
     mdcProject:'Proyecto', mdcDate:'Fecha', mdcHrs:'Horas', mdcCost:'Coste', mdcBilling:'Facturación', mdcCompany:'Empresa', mdcContact:'Contacto del cliente', mdcStatus:'Estado',
     svHeroLab:'Parte del subcontratista firmado y facturable', svHeroSub:'Toque para crear un parte de cliente',
     svSecClient:'Cliente', svSecSub:'Subcontratista', svBreakdown:'Desglose', svSupervisorWord:'Supervisor',
@@ -4658,7 +4658,7 @@ const LANGS={
     speakBtn:'تحدّث', listening:'● جارٍ الاستماع… اضغط للإيقاف',
     fillDetails:'أدخل التفاصيل أدناه', workersHelper:'العامل الذي يعبّئ هذا السند يُدرَج أولاً. أضِف أي شخص آخر عمل في المهمة نفسها.', applicableWord:'ينطبق',
     mdDash:'لوحة التحكم', mdAll:'الكل', mdClientSent:'العميل (مُرسَل)', mdSubReceived:'المقاول من الباطن (مُستلَم)', mdFilters:'التصفية:', mdAllProjects:'كل المشاريع',
-    mdsAll:'كل السندات', mdsNeedSig:'✍️ بحاجة لتوقيعي', mdsAwaitClient:'📤 بانتظار توقيع العميل', mdsNeedBill:'💲 بحاجة للفوترة', mdsReady:'✓ موقّع · جاهز للإرسال', mdsQueried:'⚠ استفسار', mdsPending:'⏳ بانتظار مراجعة الإدارة', mdsRejected:'⛔ مرفوض', mdsSigned:'✓ موقّع (الكل)',
+    mdsAll:'كل السندات', mdsNeedSig:'✍️ بحاجة لتوقيعي', mdsAwaitClient:'↑ بانتظار التوقيع', mdsNeedBill:'💲 بحاجة للفوترة', mdsReady:'✓ موقّع · جاهز للإرسال', mdsQueried:'⚠ استفسار', mdsPending:'⏳ بانتظار مراجعة الإدارة', mdsRejected:'⛔ مرفوض', mdsSigned:'✓ موقّع (الكل)',
     mdcProject:'المشروع', mdcDate:'التاريخ', mdcHrs:'ساعات', mdcCost:'التكلفة', mdcBilling:'الفوترة', mdcCompany:'الشركة', mdcContact:'جهة اتصال العميل', mdcStatus:'الحالة',
     svHeroLab:'سند مقاول موقّع وقابل للفوترة', svHeroSub:'اضغط لإنشاء سند العميل',
     svSecClient:'العميل', svSecSub:'المقاول من الباطن', svBreakdown:'التفصيل', svSupervisorWord:'مشرف',
