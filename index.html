@@ -630,8 +630,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <div class="sv2-anl-head">
               <span class="sv2-anl-title" id="sv2h-breakdown">Breakdown</span>
               <div class="sv2-seg">
-                <button id="anl-pie" onclick="setAnlChart('pie')">Pie</button>
-                <button id="anl-bar" class="on" onclick="setAnlChart('bar')">Bar</button>
+                <button id="anl-pie" class="on" onclick="setAnlChart('pie')">Pie</button>
+                <button id="anl-bar" onclick="setAnlChart('bar')">Bar</button>
               </div>
             </div>
             <div class="sv2-anl-filters">
@@ -7949,7 +7949,7 @@ function renSupAnalytics(){
     {label:_t.svLegApp||'Approved',color:'#1D9E75',value:cliD.filter(d=>d.approvalStatus==='approved').length},
     {label:_t.svLegRej||'Rejected',color:'#8A1F19',value:cliD.filter(d=>d.approvalStatus==='rejected').length}
   ];
-  const type=window._anlChart||'bar';
+  const type=window._anlChart||'pie';
   paintAnl('bill',billSegs,type);
   paintAnl('appr',apprSegs,type);
 }
