@@ -183,6 +183,11 @@ th{text-align:left;font-size:11px;font-weight:500;color:#888;padding:7px 8px;bor
 td{padding:8px 8px;border-bottom:0.5px solid rgba(0,0,0,0.07);vertical-align:middle;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:#fafaf8;}
+/* Pin the first column (docket #) so it stays visible while scrolling a row
+   sideways. Opaque background + subtle divider so content slides under it. */
+.sticky-first th:first-child,.sticky-first td:first-child{position:sticky;left:0;background:#fff;z-index:1;box-shadow:1px 0 0 rgba(0,0,0,0.08);}
+.sticky-first th:first-child{z-index:2;}
+.sticky-first tr:hover td:first-child{background:#fafaf8;}
 .sw{border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;margin-top:4px;background:#fff;}
 canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:none;}
 /* Signature pads stay LOCKED (this overlay covers them) until the user taps
@@ -419,6 +424,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 /* Two rows of outstanding-count boxes (subcontractor row / client row) */
 .sv2-sec-head{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:800;color:#2D2D2D;text-transform:uppercase;letter-spacing:0.08em;margin:10px 2px 11px;}
 .sv2-sec-ic{font-size:20px;line-height:1;}
+/* Compact timeframe selector inline in a section header — sits on the same line
+   (margin-left:auto) so it never adds height to the box sections below it. */
+.sv2-sec-range{margin-left:auto;font-size:11px;font-weight:600;padding:3px 7px;border-radius:7px;border:0.5px solid rgba(0,0,0,0.15);background:#fff;color:#2D2D2D;text-transform:none;letter-spacing:0;font-family:inherit;cursor:pointer;}
 .sv2-boxrow{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:22px;}
 .sv2-box{background:#fff;border:0.5px solid rgba(0,0,0,0.09);border-radius:14px;padding:17px 6px 15px;text-align:center;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,0.04);display:flex;flex-direction:column;align-items:center;gap:8px;min-height:112px;}
 .sv2-box:active{transform:scale(0.97);}
@@ -608,7 +616,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div id="dash-supervisor" class="hidden">
         <div id="sup-scroll-area">
           <!-- CLIENT — dockets going up the chain to the client -->
-          <div class="sv2-sec-head"><i class="ti ti-building-skyscraper sv2-sec-ic" style="color:#185FA5;" aria-hidden="true"></i><span id="sv2h-client">Client</span></div>
+          <div class="sv2-sec-head"><i class="ti ti-building-skyscraper sv2-sec-ic" style="color:#185FA5;" aria-hidden="true"></i><span id="sv2h-client">Client</span><select id="sup-cli-range" class="sv2-sec-range" onchange="renSupervisorDash()"><option value="7d">Last 7 days</option><option value="month">This month</option><option value="ytd">Year to date</option><option value="all">All time</option></select></div>
           <div class="sv2-boxrow">
             <div class="sv2-box sv2-b-red" id="sv2-box-create" onclick="supKpiOpen('chargeable_ready')"><div class="sv2-bv" id="sv2b-create">0</div><div class="sv2-bl" id="sv2l-create">Create client docket</div></div>
             <div class="sv2-box sv2-b-blue" onclick="supKpiOpen('awaiting_client')"><div class="sv2-bv" id="sv2b-await">0</div><div class="sv2-bl" id="sv2l-await">Awaiting client signature</div></div>
@@ -617,7 +625,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           </div>
 
           <!-- SUBCONTRACTOR — day-labour dockets received from our subcontractors -->
-          <div class="sv2-sec-head"><i class="ti ti-tools sv2-sec-ic" style="color:#EF9F27;" aria-hidden="true"></i><span id="sv2h-sub">Subcontractor</span></div>
+          <div class="sv2-sec-head"><i class="ti ti-tools sv2-sec-ic" style="color:#EF9F27;" aria-hidden="true"></i><span id="sv2h-sub">Subcontractor</span><select id="sup-sub-range" class="sv2-sec-range" onchange="renSupervisorDash()"><option value="7d">Last 7 days</option><option value="month">This month</option><option value="ytd">Year to date</option><option value="all">All time</option></select></div>
           <div class="sv2-boxrow">
             <div class="sv2-box sv2-b-red" onclick="supKpiOpen('awaiting_my_sig')"><div class="sv2-bv" id="sv2b-sign">0</div><div class="sv2-bl" id="sv2l-sign">Awaiting my signature</div></div>
             <div class="sv2-box sv2-b-amber" onclick="supKpiOpen('needs_billing')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl" id="sv2l-bill">Awaiting bill allocation</div></div>
@@ -1276,8 +1284,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
     <div id="t-md" class="hidden">
       <div class="rb"><p class="st" style="margin:0;">My dockets</p><div style="display:flex;gap:6px;"><button class="btn btn-s" onclick="showTab('dash',document.getElementById('n0'))" style="background:#EF9F27;color:#412402;border:none;font-weight:600;">← Dashboard</button><button class="btn btn-s" onclick="expCSV(false)">↓ CSV</button><button class="btn btn-s btn-p" onclick="expPDF(false)">↓ PDF</button></div></div>
       <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
-        <label style="font-size:13px;font-weight:600;color:#555;">Filter by status:</label>
-        <select id="md-status-filter" style="width:220px;" onchange="renMD()">
+        <label style="font-size:13px;font-weight:600;color:#555;">Filters:</label>
+        <select id="md-status-filter" style="width:200px;" onchange="renMD()">
           <option value="">All dockets</option>
           <option value="awaiting_my_sig">✍️ Needs my signature</option>
           <option value="awaiting_client">📤 Awaiting client sign</option>
@@ -1288,8 +1296,20 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <option value="rejected">⛔ Rejected</option>
           <option value="signed">✓ Signed (all)</option>
         </select>
+        <select id="md-proj-filter" style="max-width:200px;" onchange="renMD()"><option value="">All projects</option></select>
+        <select id="md-range-filter" style="width:150px;" onchange="mdRangeChange()">
+          <option value="all">All time</option>
+          <option value="7d">Last 7 days</option>
+          <option value="month">This month</option>
+          <option value="ytd">Year to date</option>
+          <option value="custom">Custom…</option>
+        </select>
+        <span id="md-custom" class="hidden" style="display:none;gap:6px;align-items:center;">
+          <input type="date" id="md-from" onchange="renMD()" style="font-size:12px;padding:5px 7px;border-radius:8px;border:0.5px solid rgba(0,0,0,0.15);">
+          <input type="date" id="md-to" onchange="renMD()" style="font-size:12px;padding:5px 7px;border-radius:8px;border:0.5px solid rgba(0,0,0,0.15);">
+        </span>
       </div>
-      <div class="card" style="padding:0;"><div class="tw"><table>
+      <div class="card" style="padding:0;"><div class="tw"><table class="sticky-first">
         <thead><tr><th>#</th><th>Project</th><th>Date</th><th>Hrs</th><th>Cost</th><th>Billing</th><th>Client contact</th><th>Status</th><th></th></tr></thead>
         <tbody id="mdb"></tbody>
       </table></div></div>
@@ -2759,6 +2779,12 @@ function renRD(){
     </tr>`;
   }).join('');
 }
+function mdRangeChange(){
+  const r=document.getElementById('md-range-filter');
+  const c=document.getElementById('md-custom');
+  if(c)c.style.display=(r&&r.value==='custom')?'inline-flex':'none';
+  renMD();
+}
 function renMD(){
   const tb=document.getElementById('mdb');if(!tb)return;
   let src=myD().reverse();
@@ -2770,7 +2796,32 @@ function renMD(){
     else if(sf==='pending_review')src=src.filter(d=>d.approvalStatus==='awaiting');
     else src=src.filter(d=>docketStatus(d)===sf);
   }
-  if(!src.length){tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:#aaa;padding:20px;">'+(sf?'No dockets match this filter':'No dockets yet')+'</td></tr>';return;}
+  // Project filter — populate once from the projects the user actually has dockets in.
+  const pfSel=document.getElementById('md-proj-filter');
+  if(pfSel&&pfSel.options.length<=1){
+    const seen={};const opts=[];
+    myD().forEach(d=>{if(d.pcode&&!seen[d.pcode]){seen[d.pcode]=1;const p=projects.find(x=>x.code===d.pcode);opts.push('<option value="'+esc(d.pcode)+'">'+esc(p?p.name:d.pcode)+'</option>');}});
+    pfSel.innerHTML='<option value="">All projects</option>'+opts.join('');
+  }
+  const pf=pfSel?pfSel.value:'';
+  if(pf)src=src.filter(d=>d.pcode===pf);
+  // Timeframe filter (default: all time). 7d / month / ytd / custom.
+  const rv=document.getElementById('md-range-filter')?.value||'all';
+  if(rv&&rv!=='all'){
+    const now=new Date();
+    const from=document.getElementById('md-from')?.value;
+    const to=document.getElementById('md-to')?.value;
+    src=src.filter(d=>{
+      const ts=d.date?new Date(d.date):(d.createdAt?new Date(d.createdAt):null);
+      if(!ts||isNaN(ts.getTime()))return true;
+      if(rv==='7d'){const w=new Date(now);w.setDate(now.getDate()-7);return ts>=w;}
+      if(rv==='month')return ts>=new Date(now.getFullYear(),now.getMonth(),1);
+      if(rv==='ytd')return ts>=new Date(now.getFullYear(),0,1);
+      if(rv==='custom'){if(from&&ts<new Date(from))return false;if(to){const t=new Date(to);t.setHours(23,59,59,999);if(ts>t)return false;}return true;}
+      return true;
+    });
+  }
+  if(!src.length){tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:#aaa;padding:20px;">'+((sf||pf||rv!=='all')?'No dockets match these filters':'No dockets yet')+'</td></tr>';return;}
   tb.innerHTML=src.map(d=>`<tr><td><span class="dn">#${d.id}</span></td><td><span class="badge bi">${esc(d.pcode)}</span></td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${CU&&CU.role==='admin'?fc(calcC(d)):'—'}</td><td>${bb(d.bill,d)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s" onclick="vD('${d.id}')">View</button></td></tr>`).join('');
 }
 function renAD(){
@@ -4149,14 +4200,20 @@ function printD(){
 function expCSV(all){
   const src=all?dockets:myD();
   if(!src.length){alert('No dockets to export.');return;}
-  const hdr=['Docket #','Project code','Project name','Date','Start time','Finish time','Break (mins)','Hours','Rate ($/hr)','Total cost ($)','Billing type','Signature status','Requested by','Method','Description','Notes','Photos','Submitted by','Created at'];
+  // Money columns (rate + total cost) are admin-only — supervisors/workers omit them.
+  const isAdm=CU&&CU.role==='admin';
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const hdr=['Docket #','Project code','Project name','Date','Start time','Finish time','Break (mins)','Hours']
+    .concat(isAdm?['Rate ($/hr)','Total cost ($)']:[])
+    .concat(['Billing type','Signature status','Requested by','Method','Description','Notes','Photos','Submitted by','Created at']);
   const rows=src.map(d=>{
     const r2=getRate(d.createdBy);
     const c=d.cost!=null?d.cost:(r2?Math.round(d.hours*r2*100)/100:null);
-    const cli=d.clientId?clients.find(x=>x.id===d.clientId):null;
-    const con=cli&&d.contactId?cli.contacts.find(x=>x.id===d.contactId):null;
     const sigSt=d.sig?'Signed':(d.sigStatus==='sent_email'?'Pending - email sent':(d.sigStatus==='sent_sms'?'Pending - SMS sent':'Pending'));
-    return['#'+d.id,d.pcode,d.pname,d.date,d.startTime||'',d.finishTime||'',d.breakMins!=null?d.breakMins:'',d.hours,r2||'',c!=null?c.toFixed(2):'',d.bill==='ch'?'Chargeable':'Own cost',sigSt,'"'+d.desc.replace(/"/g,'""')+'"','"'+(d.notes||'').replace(/"/g,'""')+'"',d.createdBy,d.createdAt||''];
+    const money=isAdm?[r2||'',c!=null?c.toFixed(2):'']:[];
+    return ['#'+d.id,d.pcode,q(d.pname),d.date,d.startTime||'',d.finishTime||'',d.breakMins!=null?d.breakMins:'',d.hours]
+      .concat(money)
+      .concat([d.bill==='ch'?'Chargeable':'Own cost',sigSt,q(d.reqBy||''),q(d.reqHow||''),q(d.desc||''),q(d.notes||''),(Array.isArray(d.photos)?d.photos.length:0),d.createdBy,d.createdAt||'']);
   });
   const csv=[hdr,...rows].map(r=>r.join(',')).join('\n');
   const blob=new Blob([csv],{type:'text/csv'});
@@ -4881,10 +4938,11 @@ function expPDF(all){
       ['Finish time',d.finishTime||'—'],
       ['Break',d.breakMins!=null?d.breakMins+'min':'—'],
     ];
+    // Money (rate + total cost) is admin-only — supervisors/workers never see it.
+    const isAdm=CU&&CU.role==='admin';
     const rightFields=[
       ['Hours worked',d.hours+'h'],
-      ['Rate',r?'$'+r+'/hr':'—'],
-      ['Total cost',cost!=null?'$'+cost.toFixed(2):'—'],
+      ...(isAdm?[['Rate',r?'$'+r+'/hr':'—'],['Total cost',cost!=null?'$'+cost.toFixed(2):'—']]:[]),
       ['Billing type',billing],
       ['Client',cli?cli.name:'—'],
       ['Contact',con?con.name:'—'],
@@ -7981,6 +8039,8 @@ function renSupervisorDash(){
   if(_rg){const m={'7d':_t.svR7,'month':_t.svRMonth,'ytd':_t.svRYTD,'custom':_t.svRCustom};for(const o of _rg.options){if(m[o.value])o.textContent=m[o.value];}}
   const _rs=document.getElementById('sup-range');
   if(_rs){const _rmap={today:_t.svRangeToday,week:_t.svRangeWeek,month:_t.svRangeMonth,all:_t.svRangeAll};for(const o of _rs.options){if(_rmap[o.value])o.textContent=_rmap[o.value];}}
+  // CLIENT / SUBCONTRACTOR section timeframe selectors
+  ['sup-cli-range','sup-sub-range'].forEach(id=>{const s=document.getElementById(id);if(s){const m={'7d':_t.svR7,'month':_t.svRMonth,'ytd':_t.svRYTD,'all':_t.svRangeAll};for(const o of s.options){if(m[o.value])o.textContent=m[o.value];}}});
   const own=dockets.filter(d=>d.createdBy===CU.u);
   const usr=getUserData();
   const ap=usr?.projectAccess||[];
@@ -8025,19 +8085,36 @@ function renSupervisorDash(){
   const inList=scope.filter(d=>!isUp(d)&&!isDone(d));
   const upList=scope.filter(d=>isUp(d)&&!isDone(d));
 
+  // Per-section timeframe filter (default: last 7 days). Applied only to the
+  // outstanding-count boxes, so the sections stay the same size regardless.
+  const _mkRange=(rv)=>(d)=>{
+    if(!rv||rv==='all')return true;
+    const ts=d.date?new Date(d.date):(d.createdAt?new Date(d.createdAt):null);
+    if(!ts||isNaN(ts.getTime()))return true;
+    const now=new Date();
+    if(rv==='7d'){const w=new Date(now);w.setDate(now.getDate()-7);return ts>=w;}
+    if(rv==='month')return ts>=new Date(now.getFullYear(),now.getMonth(),1);
+    if(rv==='ytd')return ts>=new Date(now.getFullYear(),0,1);
+    return true;
+  };
+  const cliF=_mkRange(document.getElementById('sup-cli-range')?.value||'7d');
+  const subF=_mkRange(document.getElementById('sup-sub-range')?.value||'7d');
+  const inListS=inList.filter(subF);
+  const upListC=upList.filter(cliF);
+
   // Pending admin review = signed + billing set + awaiting the admin's sign-off.
   const isAwaitingAdmin=d=>d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting'&&!isQ(d)&&!isR(d);
   // Subcontractor row (outstanding counts)
-  const subSign=inList.filter(d=>!d.sig&&!(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')&&!isQ(d)&&!isR(d)).length;
-  const subBill=inList.filter(d=>d.sig&&(!d.bill||d.bill==='pending')&&!isQ(d)&&!isR(d)).length;
-  const subQ=inList.filter(isQ).length;
+  const subSign=inListS.filter(d=>!d.sig&&!(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')&&!isQ(d)&&!isR(d)).length;
+  const subBill=inListS.filter(d=>d.sig&&(!d.bill||d.bill==='pending')&&!isQ(d)&&!isR(d)).length;
+  const subQ=inListS.filter(isQ).length;
   // pending review here excludes the chargeable-not-mirrored ones (those are a Create action)
-  const subP=inList.filter(d=>isAwaitingAdmin(d)&&!(d.bill==='ch'&&!isMirrored(d))).length;
+  const subP=inListS.filter(d=>isAwaitingAdmin(d)&&!(d.bill==='ch'&&!isMirrored(d))).length;
   // Client row (outstanding counts). Create = signed sub docket, chargeable, not yet mirrored.
-  const cCreate=scope.filter(d=>!isUp(d)&&d.sig&&d.bill==='ch'&&!isMirrored(d)&&!isQ(d)&&!isR(d)&&!isDone(d)).length;
-  const cAwait=upList.filter(d=>!d.sig&&!isQ(d)&&!isR(d)).length;
-  const cQ=upList.filter(isQ).length;
-  const cP=upList.filter(isAwaitingAdmin).length;
+  const cCreate=scope.filter(d=>!isUp(d)&&d.sig&&d.bill==='ch'&&!isMirrored(d)&&!isQ(d)&&!isR(d)&&!isDone(d)&&cliF(d)).length;
+  const cAwait=upListC.filter(d=>!d.sig&&!isQ(d)&&!isR(d)).length;
+  const cQ=upListC.filter(isQ).length;
+  const cP=upListC.filter(isAwaitingAdmin).length;
 
   // Paint the boxes; dim a box at 0, and flash the Create box when it has items.
   const setBox=(id,n)=>{const e=document.getElementById(id);if(!e)return;e.textContent=n;const b=e.closest('.sv2-box');if(b)b.classList.toggle('sv2-zero',n===0);};
