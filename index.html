@@ -458,6 +458,12 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-anl-bar-track{height:8px;background:#efeeea;border-radius:5px;overflow:hidden;}
 .sv2-anl-bar-fill{height:100%;border-radius:5px;min-width:3px;}
 .sv2-anl-chart.bars{flex-direction:column;align-items:stretch;justify-content:flex-start;}
+/* Description suggestions dropdown (from past dockets, context-ranked) */
+.desc-suggest{position:absolute;left:0;right:0;top:100%;z-index:60;background:#fff;border:1px solid #d9d6cf;border-radius:10px;box-shadow:0 8px 26px rgba(30,26,20,0.14);max-height:240px;overflow-y:auto;margin-top:3px;}
+.desc-suggest .ds-h{font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#9a9a93;padding:9px 12px 5px;font-weight:700;}
+.desc-suggest .ds-i{padding:9px 12px;font-size:13px;color:#2D2D2D;cursor:pointer;border-top:0.5px solid #f1efec;display:flex;justify-content:space-between;gap:8px;align-items:baseline;}
+.desc-suggest .ds-i:hover{background:#FFF7EA;}
+.desc-suggest .ds-i .ds-ctx{font-size:10px;color:#EF9F27;font-weight:700;white-space:nowrap;flex-shrink:0;}
 /* ── Login screen — larger inputs & button ── */
 #ls .card{padding:2.25rem 1.75rem;width:100%;max-width:430px;}
 #ls label{font-size:14px;color:#555;margin-bottom:7px;font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;}
@@ -1105,7 +1111,12 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             </div>
           </div>
 
-          <div class="s2"><label>Description of work *</label><textarea id="desc" placeholder="Describe the work completed today..."></textarea></div>
+          <div class="s2"><label>Description of work *</label>
+            <div class="desc-wrap" style="position:relative;">
+              <textarea id="desc" placeholder="Describe the work completed today..." autocomplete="off" oninput="renDescSuggest()" onfocus="renDescSuggest()" onblur="hideDescSuggestSoon()"></textarea>
+              <div id="desc-suggest" class="desc-suggest hidden"></div>
+            </div>
+          </div>
           <div class="s2"><label>Notes (optional)</label><textarea id="dnotes" placeholder="Any additional notes..." style="min-height:40px;"></textarea></div>
 
         <!-- MATERIALS -->
@@ -3265,6 +3276,59 @@ function emailSignLink(id,token){
   const body=encodeURIComponent('Please review and sign day labour docket #'+id+':\n\n'+signLink);
   window.location.href='mailto:'+encodeURIComponent(email)+'?subject='+subject+'&body='+body;
 }
+
+// ─── DESCRIPTION SUGGESTIONS (from past dockets, context-ranked) ──────
+// Builds a de-duplicated list of past descriptions, ranked: same client
+// first, then same job, then most-used, then most recent.
+function descSuggestList(){
+  const clientId=document.getElementById('d-client')?.value||'';
+  const pcode=document.getElementById('dp')?.value||'';
+  const seen=new Map();
+  (dockets||[]).forEach(d=>{
+    const t=(d.desc||'').trim();
+    if(!t)return;
+    const k=t.toLowerCase();
+    let e=seen.get(k);
+    if(!e){e={text:t,count:0,sameClient:false,sameProj:false,at:''};seen.set(k,e);}
+    e.count++;
+    if(clientId&&d.clientId===clientId)e.sameClient=true;
+    if(pcode&&d.pcode===pcode)e.sameProj=true;
+    const ts=String(d.createdAt||d.date||'');
+    if(ts>e.at)e.at=ts;
+  });
+  return [...seen.values()].sort((a,b)=>{
+    if(a.sameClient!==b.sameClient)return a.sameClient?-1:1;
+    if(a.sameProj!==b.sameProj)return a.sameProj?-1:1;
+    if(b.count!==a.count)return b.count-a.count;
+    return b.at.localeCompare(a.at);
+  });
+}
+function renDescSuggest(){
+  const box=document.getElementById('desc-suggest');
+  const ta=document.getElementById('desc');
+  if(!box||!ta)return;
+  const typed=ta.value.trim().toLowerCase();
+  let list=descSuggestList();
+  if(typed)list=list.filter(e=>e.text.toLowerCase().includes(typed)&&e.text.toLowerCase()!==typed);
+  list=list.slice(0,6);
+  window._descSug=list;
+  if(!list.length){box.classList.add('hidden');box.innerHTML='';return;}
+  const head=typed?'Matching past descriptions':'Recent · common · for this client/job';
+  box.innerHTML='<div class="ds-h">'+esc(head)+'</div>'+list.map((e,i)=>{
+    const ctx=e.sameClient?'this client':(e.sameProj?'this job':(e.count>1?e.count+'×':''));
+    const txt=e.text.length>90?e.text.slice(0,90)+'…':e.text;
+    return '<div class="ds-i" onmousedown="event.preventDefault();pickDescSuggestIdx('+i+')"><span>'+esc(txt)+'</span>'+(ctx?'<span class="ds-ctx">'+esc(ctx)+'</span>':'')+'</div>';
+  }).join('');
+  box.classList.remove('hidden');
+}
+function pickDescSuggestIdx(i){
+  const e=(window._descSug||[])[i];if(!e)return;
+  const ta=document.getElementById('desc');
+  if(ta){ta.value=e.text;ta.classList.remove('field-error');}
+  const box=document.getElementById('desc-suggest');if(box)box.classList.add('hidden');
+  const de=document.getElementById('de');if(de)de.classList.add('hidden');
+}
+function hideDescSuggestSoon(){setTimeout(()=>{const box=document.getElementById('desc-suggest');if(box)box.classList.add('hidden');},160);}
 
 function resetDF(){
   document.getElementById('dp').value='';document.getElementById('d-start').value='';document.getElementById('d-finish').value='';document.getElementById('d-break').value='';document.getElementById('dh').value='';
