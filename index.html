@@ -2782,7 +2782,7 @@ function renRD(){
 function mdRangeChange(){
   const r=document.getElementById('md-range-filter');
   const c=document.getElementById('md-custom');
-  if(c)c.style.display=(r&&r.value==='custom')?'inline-flex':'none';
+  if(c){const on=(r&&r.value==='custom');c.classList.toggle('hidden',!on);c.style.display=on?'inline-flex':'none';}
   renMD();
 }
 function renMD(){
@@ -7927,7 +7927,7 @@ function setAnlChart(t){
 }
 function anlRangeChange(){
   const c=document.getElementById('anl-custom');const r=document.getElementById('anl-range');
-  if(c)c.style.display=(r&&r.value==='custom')?'inline-flex':'none';
+  if(c){const on=(r&&r.value==='custom');c.classList.toggle('hidden',!on);c.style.display=on?'inline-flex':'none';}
   renSupAnalytics();
 }
 function anlDonut(segs,total){
