@@ -206,6 +206,12 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 .ok{background:#E1F5EE;color:#085041;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;}
 .info-box{background:#E6F1FB;color:#0C447C;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;}
 .st{font-size:15px;font-weight:500;margin-bottom:14px;}
+/* Docket view (opened from a list) — clearer, larger, calmer typography */
+.vd-grid{font-size:14.5px;line-height:1.45;color:#2D2D2D;}
+.vd-grid strong{font-weight:700;color:#1e1e1e;}
+.vd-grid code{font-size:11px;}
+.vdk{color:#9a958c;font-size:10px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;display:block;margin-bottom:3px;}
+#vd-desc-text,#vd-notes-text{line-height:1.6;font-size:15px;color:#2b2b2b;display:block;}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 .s2{grid-column:span 2;}
@@ -3634,24 +3640,24 @@ function vD(id){
       <span id="vd-translate-hint" style="font-size:11px;color:#aaa;"></span>
     </div>
     ${renderQueryStatus(d)}
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;margin-bottom:14px;">
-      <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Docket #</span><strong>#${d.id}</strong>${d.refSubDocketId?`<span class="badge bs" style="margin-left:6px;font-size:10px;">Client docket (ref #${d.refSubDocketId})</span>`:''}</div>
-      <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Date</span>${fd(d.date)}</div>
-      <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Project</span>${esc(d.pname)} <code style="font-size:10px;background:#f5f5f3;padding:1px 4px;border-radius:3px;">${esc(d.pcode)}</code></div>
-      <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Subcontractor</span>${esc(d.sub)}</div>
-      <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Start time</span>${d.startTime||'—'}</div>
-      <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Finish time</span>${d.finishTime||'—'}</div>
-      <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Break</span>${d.breakMins!=null?d.breakMins+'min':'—'}</div>
-      <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Hours worked</span><strong>${d.hours}h</strong></div>
-      ${CU&&CU.role==='admin'?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Rate</span>${r?'$'+r+'/hr':'—'}</div>`:''}
-      ${CU&&CU.role==='admin'?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Total cost</span><strong style="font-size:15px;">${cost!=null?'$'+cost.toFixed(2):'—'}</strong></div>`:''}
-      <div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Billing</span>
+    <div class="vd-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:15px 14px;margin-bottom:16px;">
+      <div><span class="vdk">Docket #</span><strong>#${d.id}</strong>${d.refSubDocketId?`<span class="badge bs" style="margin-left:6px;font-size:10px;">Client docket (ref #${d.refSubDocketId})</span>`:''}</div>
+      <div><span class="vdk">Date</span>${fd(d.date)}</div>
+      <div><span class="vdk">Project</span>${esc(d.pname)} <code style="font-size:10px;background:#f5f5f3;padding:1px 4px;border-radius:3px;">${esc(d.pcode)}</code></div>
+      <div><span class="vdk">Subcontractor</span>${esc(d.sub)}</div>
+      <div><span class="vdk">Start time</span>${d.startTime||'—'}</div>
+      <div><span class="vdk">Finish time</span>${d.finishTime||'—'}</div>
+      <div><span class="vdk">Break</span>${d.breakMins!=null?d.breakMins+'min':'—'}</div>
+      <div><span class="vdk">Hours worked</span><strong>${d.hours}h</strong></div>
+      ${CU&&CU.role==='admin'?`<div><span class="vdk">Rate</span>${r?'$'+r+'/hr':'—'}</div>`:''}
+      ${CU&&CU.role==='admin'?`<div><span class="vdk">Total cost</span><strong style="font-size:15px;">${cost!=null?'$'+cost.toFixed(2):'—'}</strong></div>`:''}
+      <div><span class="vdk">Billing</span>
         ${bb(d.bill,d)}
         ${dockets.find(x=>x.refSubDocketId===d.id)?`<div style="font-size:11px;color:#1D9E75;margin-top:3px;">✓ Client docket created (#${dockets.find(x=>x.refSubDocketId===d.id)?.id})</div>`:''}${d.bill==='bc'&&d.bcTarget?`<div style='font-size:11px;color:#5B21B6;margin-top:2px;'>${esc(d.bcTarget)}</div>`:''}
       </div>
-      ${cli?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Client</span>${esc(cli.name)}</div>`:''}
-      ${con?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Contact</span>${esc(con.name)}${con.email?'<div style="font-size:11px;color:#185FA5;">'+esc(con.email)+'</div>':''}${con.mobile?'<div style="font-size:11px;color:#666;">'+esc(con.mobile)+'</div>':''}</div>`:''}
-      <div style="grid-column:span 2"><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Description</span><span id="vd-desc-text">${esc(d.desc)}</span></div>
+      ${cli?`<div><span class="vdk">Client</span>${esc(cli.name)}</div>`:''}
+      ${con?`<div><span class="vdk">Contact</span>${esc(con.name)}${con.email?'<div style="font-size:11px;color:#185FA5;">'+esc(con.email)+'</div>':''}${con.mobile?'<div style="font-size:11px;color:#666;">'+esc(con.mobile)+'</div>':''}</div>`:''}
+      <div style="grid-column:span 2"><span class="vdk">Description</span><span id="vd-desc-text">${esc(d.desc)}</span></div>
       ${d.supervisorNote?`<div style="grid-column:span 2"><span style="color:#854F0B;font-size:11px;display:block;margin-bottom:2px;">Supervisor note</span>${esc(d.supervisorNote)}</div>`:''}
       ${(()=>{
         const ws=d.workersOnSite||[];
@@ -3659,7 +3665,7 @@ function vD(id){
         if(!ws.length&&!primaryName)return'';
         if(ws.length<=1){
           // Single worker docket — just show who filled it out
-          return primaryName?`<div style="grid-column:span 2"><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Filled out by</span><strong>${esc(primaryName)}</strong>${ws[0]&&ws[0].trade?` <span style="color:#aaa;font-weight:400;font-size:12px;">· ${esc(ws[0].trade)}</span>`:''}</div>`:'';
+          return primaryName?`<div style="grid-column:span 2"><span class="vdk">Filled out by</span><strong>${esc(primaryName)}</strong>${ws[0]&&ws[0].trade?` <span style="color:#aaa;font-weight:400;font-size:12px;">· ${esc(ws[0].trade)}</span>`:''}</div>`:'';
         }
         const totalH=ws.reduce((s,w)=>s+(parseFloat(w.hours)||0),0);
         const rows=ws.map((w,i)=>{
@@ -3704,7 +3710,7 @@ function vD(id){
           </table>
         </div>`;
       })()}
-      ${d.reqBy?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Requested by</span><strong>${esc(d.reqBy)}</strong></div>`:''}${d.reqHow?`<div><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Method</span><span class="badge bi">${esc(d.reqHow)}</span>${d.siNumber?`<span style="font-size:12px;color:#2D2D2D;margin-left:6px;">${esc(d.siNumber)}</span>`:''}</div>`:''}
+      ${d.reqBy?`<div><span class="vdk">Requested by</span><strong>${esc(d.reqBy)}</strong></div>`:''}${d.reqHow?`<div><span class="vdk">Method</span><span class="badge bi">${esc(d.reqHow)}</span>${d.siNumber?`<span style="font-size:12px;color:#2D2D2D;margin-left:6px;">${esc(d.siNumber)}</span>`:''}</div>`:''}
       ${d.materials&&d.materials.length?(()=>{
         const isAdm=CU&&CU.role==='admin';
         const matCost=d.materials.reduce((s,m)=>s+(m.total||0),0);
@@ -3742,7 +3748,7 @@ function vD(id){
           ${d.accommodation.notes?`<div style="color:#888;margin-top:2px;">${esc(d.accommodation.notes)}</div>`:''}
         </div></div>`:''}
       ${d.photos&&d.photos.length?`<div style="grid-column:span 2"><span style="color:#888;font-size:11px;display:block;margin-bottom:6px;">Photos (${d.photos.length})</span><div style="display:flex;gap:6px;flex-wrap:wrap;">${d.photos.map(p=>`<img src="${p}" style="width:72px;height:72px;object-fit:cover;border-radius:6px;border:0.5px solid rgba(0,0,0,0.1);cursor:pointer;" onclick="window.open('${p}','_blank')">`).join('')}</div></div>`:''}
-      ${d.notes?`<div style="grid-column:span 2"><span style="color:#888;font-size:11px;display:block;margin-bottom:2px;">Notes</span><span id="vd-notes-text">${esc(d.notes)}</span></div>`:''}
+      ${d.notes?`<div style="grid-column:span 2"><span class="vdk">Notes</span><span id="vd-notes-text">${esc(d.notes)}</span></div>`:''}
     </div>
     <div style="border-top:0.5px solid rgba(0,0,0,0.1);padding-top:12px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
