@@ -7889,6 +7889,8 @@ function paintAnl(which,segs,type){
   chart.classList.toggle('bars',type==='bar');
   const card=document.getElementById('anl-card-'+which);
   if(card)card.classList.toggle('pie-layout',type==='pie'&&total>0);
+  // Only the pie donut is a tap target (→ My dockets); bar/empty are not.
+  chart.onclick=null;chart.style.cursor='';
   if(!total){chart.innerHTML='<div class="sv2-anl-empty">'+((LANGS[(CU&&localStorage.getItem('dlb_lang_'+CU.u))||'en']||LANGS.en).svNoRange)+'</div>';if(legend)legend.innerHTML='';return;}
   if(type==='bar'){
     // Show every category (including 0) so the full split is always visible.
@@ -7900,6 +7902,9 @@ function paintAnl(which,segs,type){
   } else {
     chart.innerHTML=anlDonut(segs,total);
     if(legend)legend.innerHTML=segs.map(s=>`<div class="sv2-anl-lg"><i style="background:${s.color};"></i><span class="lg-label">${esc(s.label)}</span><b>${s.value} · ${Math.round(s.value/total*100)}%</b></div>`).join('');
+    // Tapping the donut opens My dockets (all).
+    chart.style.cursor='pointer';
+    chart.onclick=()=>{if(typeof supKpiOpen==='function')supKpiOpen('');};
   }
 }
 function renSupAnalytics(){
