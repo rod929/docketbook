@@ -412,6 +412,20 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-bar-val b{color:#2D2D2D;}
 .sv2-bar-track{height:9px;background:#efeeea;border-radius:6px;overflow:hidden;}
 .sv2-bar-fill{height:100%;border-radius:6px;min-width:3px;transition:width .3s ease;}
+/* Two rows of outstanding-count boxes (subcontractor row / client row) */
+.sv2-sec-head{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#2D2D2D;margin:8px 2px 10px;}
+.sv2-sec-ic{font-size:18px;}
+.sv2-boxrow{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:22px;}
+.sv2-box{background:#fff;border:0.5px solid rgba(0,0,0,0.09);border-radius:14px;padding:14px 5px 12px;text-align:center;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,0.04);display:flex;flex-direction:column;align-items:center;gap:7px;min-height:98px;}
+.sv2-box:active{transform:scale(0.97);}
+.sv2-bv{font-size:26px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;color:#2D2D2D;}
+.sv2-bl{font-size:10px;color:#777;font-weight:600;line-height:1.25;}
+.sv2-b-red .sv2-bv{color:#E24B4A;} .sv2-b-amber .sv2-bv{color:#C7891A;} .sv2-b-blue .sv2-bv{color:#185FA5;} .sv2-b-maroon .sv2-bv{color:#A4271F;} .sv2-b-rej .sv2-bv{color:#8A1F19;}
+.sv2-box.sv2-zero{opacity:0.5;}
+.sv2-box.sv2-zero .sv2-bv{color:#bdbcb6;}
+@keyframes sv2BoxFlash{0%,100%{box-shadow:0 0 0 0 rgba(226,75,74,0.55);}50%{box-shadow:0 0 0 5px rgba(226,75,74,0);}}
+.sv2-box.sv2-flash{background:#FDECEA;border-color:#E24B4A;animation:sv2BoxFlash 1.25s ease-in-out infinite;}
+@media(prefers-reduced-motion:reduce){.sv2-box.sv2-flash{animation:none;}}
 /* ── Login screen — larger inputs & button ── */
 #ls .card{padding:2.25rem 1.75rem;width:100%;max-width:430px;}
 #ls label{font-size:14px;color:#555;margin-bottom:7px;font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;}
@@ -541,56 +555,22 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <!-- ── SUPERVISOR DASHBOARD (mockup v2 — urgency-ordered) ── -->
       <div id="dash-supervisor" class="hidden">
         <div id="sup-scroll-area">
-          <!-- Flashing red alert — signed & chargeable dockets ready to become a client docket -->
-          <div id="sv2-create-hero" class="sv-hero sv-hero-red hidden" onclick="sv2CreateHeroTap()">
-            <span class="sv-live-dot"></span>
-            <div class="sv-hero-pulse"></div>
-            <div class="sv-hero-content">
-              <div class="sv-hero-top"><span class="sv-hero-ic">⚡</span><span class="sv-hero-num" id="sv2-create-num">0</span></div>
-              <div class="sv-hero-lab">Signed &amp; chargeable — create client docket</div>
-              <div class="sv-hero-sub">Tap to send it up the chain to the client</div>
-            </div>
-            <span class="sv-hero-arrow">›</span>
-          </div>
-          <!-- Up next — live action counts (tap to open the matching list) -->
-          <div class="sv2-kpis">
-            <div class="sv2-kpi sv2-k-sign" id="sv2-kpi-sign" onclick="supKpiOpen('awaiting_my_sig')"><div class="sv2-v" id="sv2-v-sign">0</div><div class="sv2-l">To sign</div></div>
-            <div class="sv2-kpi sv2-k-bill" onclick="supKpiOpen('needs_billing')"><div class="sv2-v" id="sv2-v-bill">0</div><div class="sv2-l">To bill</div></div>
-            <div class="sv2-kpi sv2-k-client" onclick="supKpiOpen('awaiting_client')"><div class="sv2-v" id="sv2-v-client">0</div><div class="sv2-l">At client</div></div>
-            <div class="sv2-kpi sv2-k-query" onclick="supKpiOpen('queried')"><div class="sv2-v" id="sv2-v-query">0</div><div class="sv2-l">Queried</div></div>
+          <!-- FROM OUR SUBCONTRACTORS — a row of outstanding-count boxes -->
+          <div class="sv2-sec-head"><span class="sv2-sec-ic">&#128229;</span>From our subcontractors</div>
+          <div class="sv2-boxrow">
+            <div class="sv2-box sv2-b-red" onclick="supKpiOpen('awaiting_my_sig')"><div class="sv2-bv" id="sv2b-sign">0</div><div class="sv2-bl">Awaiting my signature</div></div>
+            <div class="sv2-box sv2-b-amber" onclick="supKpiOpen('needs_billing')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl">Awaiting bill allocation</div></div>
+            <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried')"><div class="sv2-bv" id="sv2b-inq">0</div><div class="sv2-bl">Queried by admin</div></div>
+            <div class="sv2-box sv2-b-rej" onclick="supKpiOpen('rejected')"><div class="sv2-bv" id="sv2b-inr">0</div><div class="sv2-bl">Rejected by admin</div></div>
           </div>
 
-          <!-- FOLDER 1 — day-labour dockets received FROM our subcontractors -->
-          <div class="sv2-folder">
-            <div class="sv2-fhead"><span class="sv2-fic">&#128229;</span><span class="sv2-ft">From our subcontractors</span><span class="sv2-fcount" id="sv2-in-count">0</span></div>
-            <div class="sv2-fsub">Day-labour dockets your subcontractors sent you &mdash; sign, then set billing.</div>
-            <div class="card sv2-fcard"><div id="sv2-in-body"></div><div class="sv2-empty" id="sv2-in-empty">Nothing waiting from subcontractors.</div></div>
-          </div>
-
-          <!-- FOLDER 2 — dockets we submit / have submitted TO the client -->
-          <div class="sv2-folder">
-            <div class="sv2-fhead"><span class="sv2-fic">&#128228;</span><span class="sv2-ft">To the client</span><span class="sv2-fcount" id="sv2-out-count">0</span></div>
-            <div class="sv2-fsub">Your dockets to send up the chain for the client to sign off.</div>
-            <div class="card sv2-fcard"><div id="sv2-out-body"></div><div class="sv2-empty" id="sv2-out-empty">Nothing to send to the client yet.</div></div>
-          </div>
-
-          <!-- Overview — all my dockets by status, filterable (% bars) -->
-          <div class="sv2-ov">
-            <div class="sv2-ov-head">
-              <span class="sv2-ov-title">Overview</span>
-              <div class="sv2-ov-filters">
-                <select id="sv2-ov-proj" onchange="renSupOverview()"><option value="">All jobs</option></select>
-                <select id="sv2-ov-range" onchange="renSupOverview()">
-                  <option value="all">All time</option>
-                  <option value="month">This month</option>
-                  <option value="week">This week</option>
-                </select>
-              </div>
-            </div>
-            <div class="card" style="padding:15px 16px;margin-bottom:8px;">
-              <div class="sv2-ov-total" id="sv2-ov-total">0 dockets</div>
-              <div id="sv2-ov-bars"></div>
-            </div>
+          <!-- TO THE CLIENT — a row of outstanding-count boxes -->
+          <div class="sv2-sec-head"><span class="sv2-sec-ic">&#128228;</span>To the client</div>
+          <div class="sv2-boxrow">
+            <div class="sv2-box sv2-b-red" id="sv2-box-create" onclick="supKpiOpen('chargeable_ready')"><div class="sv2-bv" id="sv2b-create">0</div><div class="sv2-bl">Create client docket</div></div>
+            <div class="sv2-box sv2-b-blue" onclick="supKpiOpen('awaiting_client')"><div class="sv2-bv" id="sv2b-await">0</div><div class="sv2-bl">Awaiting client signature</div></div>
+            <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried')"><div class="sv2-bv" id="sv2b-outq">0</div><div class="sv2-bl">Queried by admin</div></div>
+            <div class="sv2-box sv2-b-rej" onclick="supKpiOpen('rejected')"><div class="sv2-bv" id="sv2b-outr">0</div><div class="sv2-bl">Rejected by admin</div></div>
           </div>
 
           <!-- My projects (allocated by admin) -->
@@ -7553,53 +7533,27 @@ function renSupervisorDash(){
   const byDate=(a,b)=>String(b.date||'').localeCompare(String(a.date||''));
   const MAROON='#A4271F', REJ='#8A1F19';
 
-  const SLATE='#5A6B7B';
-  // A docket where the supervisor is done and it's sitting with the admin.
-  const isAwaitingAdmin=d=>d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting'&&!isQ(d)&&!isR(d);
-
-  // ── FOLDER 1 — FROM our subcontractors (a sub's work we handle) ──
+  // Split into subcontractor-side work (in) and client-side claims (up).
   const inList=scope.filter(d=>!isUp(d)&&!isDone(d));
-  const f1Sign=inList.filter(d=>!d.sig&&!(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')&&!isQ(d)&&!isR(d)).sort(byDate);
-  const f1Bill=inList.filter(d=>d.sig&&(!d.bill||d.bill==='pending')&&!isQ(d)&&!isR(d)).sort((a,b)=>docketAgeDays(b)-docketAgeDays(a));
-  const f1Query=inList.filter(d=>isQ(d)||isR(d)).sort(byDate);
-  // Awaiting admin approval, but NOT the chargeable-not-yet-mirrored ones (those
-  // are a "create client docket" action, shown in the To-client folder).
-  const f1Appr=inList.filter(d=>isAwaitingAdmin(d)&&!(d.bill==='ch'&&!isMirrored(d))).sort(byDate);
-  const inItems=[
-    ...f1Sign.map(d=>sv2Row(d,{dot:'#E24B4A',tag:'Awaiting my signature',btn:'Sign',bg:'#185FA5',fn:`vD('${d.id}')`})),
-    ...f1Bill.map(d=>sv2Row(d,{dot:'#C7891A',tag:d.billTbc?'Bill — TBC':'Awaiting bill allocation',btn:'Set billing',bg:'#C7891A',fn:`vD('${d.id}')`})),
-    ...f1Query.map(d=>sv2Row(d,{dot:isR(d)?REJ:MAROON,tag:isR(d)?'Rejected by admin':'Queried by admin',btn:'Resolve',bg:isR(d)?REJ:MAROON,fn:`openResolveModal('${d.id}')`})),
-    ...f1Appr.map(d=>sv2Row(d,{dot:SLATE,tag:'Pending admin approval',btn:'View',bg:SLATE,fn:`vD('${d.id}')`}))
-  ];
-  renSupFolder('in',inItems.join(''),f1Sign.length+f1Bill.length+f1Query.length+f1Appr.length);
-
-  // ── FOLDER 2 — TO the client (our claims up the chain) ──
-  // Create client docket = a sub docket we signed, marked chargeable, not yet mirrored.
-  const f2Create=scope.filter(d=>!isUp(d)&&d.sig&&d.bill==='ch'&&!isMirrored(d)&&!isQ(d)&&!isR(d)&&!isDone(d)).sort(byDate);
   const upList=scope.filter(d=>isUp(d)&&!isDone(d));
-  const f2Await=upList.filter(d=>!d.sig&&!isQ(d)&&!isR(d)).sort(byDate);
-  const f2Query=upList.filter(d=>isQ(d)||isR(d)).sort(byDate);
-  const f2Appr=upList.filter(d=>isAwaitingAdmin(d)).sort(byDate);
-  const outItems=[
-    ...f2Create.map(d=>sv2Row(d,{dot:'#E24B4A',tag:'Signed · chargeable',btn:'Create client docket',bg:'#E24B4A',fn:`vD('${d.id}')`})),
-    ...f2Await.map(d=>sv2Row(d,{dot:'#185FA5',tag:'Awaiting client signature',btn:'View',bg:'#8a8a8a',fn:`vD('${d.id}')`})),
-    ...f2Query.map(d=>sv2Row(d,{dot:isR(d)?REJ:MAROON,tag:isR(d)?'Rejected by admin':'Queried by admin',btn:'Resolve',bg:isR(d)?REJ:MAROON,fn:`openResolveModal('${d.id}')`})),
-    ...f2Appr.map(d=>sv2Row(d,{dot:SLATE,tag:'Pending admin approval',btn:'View',bg:SLATE,fn:`vD('${d.id}')`}))
-  ];
-  renSupFolder('out',outItems.join(''),f2Create.length+f2Await.length+f2Query.length+f2Appr.length);
 
-  // ── Flashing red alert — dockets ready to become a client docket ──
-  const chHero=document.getElementById('sv2-create-hero');
-  if(chHero){
-    if(f2Create.length){chHero.classList.remove('hidden');const n=document.getElementById('sv2-create-num');if(n)n.textContent=f2Create.length;window._sv2CreateFirst=f2Create[0].id;}
-    else{chHero.classList.add('hidden');window._sv2CreateFirst=null;}
-  }
+  // Subcontractor row (outstanding counts)
+  const subSign=inList.filter(d=>!d.sig&&!(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')&&!isQ(d)&&!isR(d)).length;
+  const subBill=inList.filter(d=>d.sig&&(!d.bill||d.bill==='pending')&&!isQ(d)&&!isR(d)).length;
+  const subQ=inList.filter(isQ).length;
+  const subR=inList.filter(isR).length;
+  // Client row (outstanding counts). Create = signed sub docket, chargeable, not yet mirrored.
+  const cCreate=scope.filter(d=>!isUp(d)&&d.sig&&d.bill==='ch'&&!isMirrored(d)&&!isQ(d)&&!isR(d)&&!isDone(d)).length;
+  const cAwait=upList.filter(d=>!d.sig&&!isQ(d)&&!isR(d)).length;
+  const cQ=upList.filter(isQ).length;
+  const cR=upList.filter(isR).length;
 
-  // ── "Up next" KPI counts ──
-  const _kv=(id,n)=>{const e=document.getElementById(id);if(e)e.textContent=n;};
-  _kv('sv2-v-sign',f1Sign.length);_kv('sv2-v-bill',f1Bill.length);
-  _kv('sv2-v-client',f2Await.length);_kv('sv2-v-query',f1Query.length+f2Query.length);
-  const ks=document.getElementById('sv2-kpi-sign');if(ks)ks.classList.toggle('sv2-hot',f1Sign.length>0);
+  // Paint the boxes; dim a box at 0, and flash the Create box when it has items.
+  const setBox=(id,n)=>{const e=document.getElementById(id);if(!e)return;e.textContent=n;const b=e.closest('.sv2-box');if(b)b.classList.toggle('sv2-zero',n===0);};
+  setBox('sv2b-sign',subSign);setBox('sv2b-bill',subBill);setBox('sv2b-inq',subQ);setBox('sv2b-inr',subR);
+  setBox('sv2b-create',cCreate);setBox('sv2b-await',cAwait);setBox('sv2b-outq',cQ);setBox('sv2b-outr',cR);
+  const createBox=document.getElementById('sv2-box-create');
+  if(createBox)createBox.classList.toggle('sv2-flash',cCreate>0);
 
   // ── My projects (allocated by admin) ──
   const myProjects=projects.filter(p=>ap.includes(p.code));
@@ -7624,9 +7578,6 @@ function renSupervisorDash(){
       const f=pl.querySelector('div');if(f)f.style.borderTop='none';
     }
   }
-
-  // ── Overview (% bars by status, filterable) ──
-  renSupOverview();
 
   // ── Recent dockets (this supervisor's own) ──
   renRecentList('sup-rd-list',own,{money:false});
