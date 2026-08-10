@@ -4425,7 +4425,7 @@ const LANGS={
     mdcProject:'Project', mdcDate:'Date', mdcHrs:'Hrs', mdcCost:'Cost', mdcBilling:'Billing', mdcContact:'Client contact', mdcStatus:'Status',
     svHeroLab:'Subcontractor docket signed & chargeable', svHeroSub:'Tap to create a client docket',
     svSecClient:'Client', svSecSub:'Subcontractor', svBreakdown:'Breakdown', svSupervisorWord:'Supervisor',
-    svbCreate:'Create client docket', svbAwaitClient:'Awaiting client signature', svbQueried:'Queried by admin', svbPending:'Pending admin review',
+    svbCreate:'Create client docket', svbAwaitClient:'Awaiting client signature', svbAwaitClientShort:'Awaiting client sign', svbQueried:'Queried by admin', svbPending:'Pending admin review',
     svbSign:'Awaiting my signature', svbBill:'Awaiting bill allocation',
     svAllJobs:'All jobs', svR7:'Last 7 days', svRMonth:'This month', svRYTD:'Year to date', svRCustom:'Custom…',
     svChartBill:'Subcontractor dockets — billing', svChartAppr:'Client dockets — approved vs rejected',
@@ -4498,7 +4498,7 @@ const LANGS={
     mdcProject:'项目', mdcDate:'日期', mdcHrs:'工时', mdcCost:'成本', mdcBilling:'计费', mdcContact:'客户联系人', mdcStatus:'状态',
     svHeroLab:'分包商工单已签字且可计费', svHeroSub:'点击创建客户工单',
     svSecClient:'客户', svSecSub:'分包商', svBreakdown:'明细', svSupervisorWord:'主管',
-    svbCreate:'创建客户工单', svbAwaitClient:'等待客户签字', svbQueried:'管理员质疑', svbPending:'等待管理员审核',
+    svbCreate:'创建客户工单', svbAwaitClient:'等待客户签字', svbAwaitClientShort:'等待客户签字', svbQueried:'管理员质疑', svbPending:'等待管理员审核',
     svbSign:'等待我签字', svbBill:'等待费用分配',
     svAllJobs:'所有项目', svR7:'最近7天', svRMonth:'本月', svRYTD:'年初至今', svRCustom:'自定义…',
     svChartBill:'分包商工单 — 计费', svChartAppr:'客户工单 — 批准与拒绝',
@@ -4571,7 +4571,7 @@ const LANGS={
     mdcProject:'Proyecto', mdcDate:'Fecha', mdcHrs:'Horas', mdcCost:'Coste', mdcBilling:'Facturación', mdcContact:'Contacto del cliente', mdcStatus:'Estado',
     svHeroLab:'Parte del subcontratista firmado y facturable', svHeroSub:'Toque para crear un parte de cliente',
     svSecClient:'Cliente', svSecSub:'Subcontratista', svBreakdown:'Desglose', svSupervisorWord:'Supervisor',
-    svbCreate:'Crear parte de cliente', svbAwaitClient:'Esperando firma del cliente', svbQueried:'Consultado por admin', svbPending:'Pendiente de revisión admin',
+    svbCreate:'Crear parte de cliente', svbAwaitClient:'Esperando firma del cliente', svbAwaitClientShort:'Esperando firma', svbQueried:'Consultado por admin', svbPending:'Pendiente de revisión admin',
     svbSign:'Esperando mi firma', svbBill:'Esperando asignación de facturación',
     svAllJobs:'Todos los trabajos', svR7:'Últimos 7 días', svRMonth:'Este mes', svRYTD:'Año hasta la fecha', svRCustom:'Personalizado…',
     svChartBill:'Partes del subcontratista — facturación', svChartAppr:'Partes de cliente — aprobados vs rechazados',
@@ -4644,7 +4644,7 @@ const LANGS={
     mdcProject:'المشروع', mdcDate:'التاريخ', mdcHrs:'ساعات', mdcCost:'التكلفة', mdcBilling:'الفوترة', mdcContact:'جهة اتصال العميل', mdcStatus:'الحالة',
     svHeroLab:'سند مقاول موقّع وقابل للفوترة', svHeroSub:'اضغط لإنشاء سند العميل',
     svSecClient:'العميل', svSecSub:'المقاول من الباطن', svBreakdown:'التفصيل', svSupervisorWord:'مشرف',
-    svbCreate:'إنشاء سند العميل', svbAwaitClient:'بانتظار توقيع العميل', svbQueried:'استفسار من الإدارة', svbPending:'بانتظار مراجعة الإدارة',
+    svbCreate:'إنشاء سند العميل', svbAwaitClient:'بانتظار توقيع العميل', svbAwaitClientShort:'بانتظار التوقيع', svbQueried:'استفسار من الإدارة', svbPending:'بانتظار مراجعة الإدارة',
     svbSign:'بانتظار توقيعي', svbBill:'بانتظار تخصيص الفوترة',
     svAllJobs:'كل المشاريع', svR7:'آخر 7 أيام', svRMonth:'هذا الشهر', svRYTD:'منذ بداية السنة', svRCustom:'مخصص…',
     svChartBill:'سندات المقاول — الفوترة', svChartAppr:'سندات العميل — مقبولة مقابل مرفوضة',
@@ -8236,7 +8236,8 @@ function applyDashView(){
   if(c)c.classList.toggle('on',v==='compact');
   if(b)b.classList.toggle('on',v==='big');
 }
-function setDashView(v){if(!CU)return;localStorage.setItem('dlb_dash_view_'+CU.u,v);applyDashView();}
+function setDashView(v){if(!CU)return;localStorage.setItem('dlb_dash_view_'+CU.u,v);applyDashView();
+  try{const dv=document.getElementById('dash-supervisor');if(dv&&!dv.classList.contains('hidden')&&typeof renSupervisorDash==='function')renSupervisorDash();}catch(e){}}
 // The dashboard boxes, in display order, for the admin alert-settings screen.
 const FLASH_BOXES=[
   {key:'create',label:'Create client docket',group:'Client'},
@@ -8296,7 +8297,7 @@ function renSupervisorDash(){
   // Two-folder box labels + section heads (translate on language switch)
   _set('sv2h-client',_t.svSecClient);_set('sv2h-sub',_t.svSecSub);_set('sv2h-breakdown',_t.svBreakdown);
   _set('sup-fab-label',_t.svNewDocket);
-  _set('sv2l-create',_t.svbCreate);_set('sv2l-await',_t.svbAwaitClient);_set('sv2l-outq',_t.svbQueried);_set('sv2l-outp',_t.svbPending);
+  _set('sv2l-create',_t.svbCreate);_set('sv2l-await',getDashView()==='big'?(_t.svbAwaitClientShort||_t.svbAwaitClient):_t.svbAwaitClient);_set('sv2l-outq',_t.svbQueried);_set('sv2l-outp',_t.svbPending);
   _set('sv2l-sign',_t.svbSign);_set('sv2l-bill',_t.svbBill);_set('sv2l-inq',_t.svbQueried);_set('sv2l-inp',_t.svbPending);
   // Analytics filter options + Pie/Bar toggle
   const _pj=document.getElementById('anl-proj');if(_pj&&_pj.options[0])_pj.options[0].textContent=_t.svAllJobs;
