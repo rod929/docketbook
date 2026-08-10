@@ -424,9 +424,6 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 /* Two rows of outstanding-count boxes (subcontractor row / client row) */
 .sv2-sec-head{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:800;color:#2D2D2D;text-transform:uppercase;letter-spacing:0.08em;margin:10px 2px 11px;}
 .sv2-sec-ic{font-size:20px;line-height:1;}
-/* Compact timeframe selector inline in a section header — sits on the same line
-   (margin-left:auto) so it never adds height to the box sections below it. */
-.sv2-sec-range{margin-left:auto;font-size:11px;font-weight:600;padding:3px 7px;border-radius:7px;border:0.5px solid rgba(0,0,0,0.15);background:#fff;color:#2D2D2D;text-transform:none;letter-spacing:0;font-family:inherit;cursor:pointer;}
 .sv2-boxrow{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:22px;}
 .sv2-box{background:#fff;border:0.5px solid rgba(0,0,0,0.09);border-radius:14px;padding:17px 6px 15px;text-align:center;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,0.04);display:flex;flex-direction:column;align-items:center;gap:8px;min-height:112px;}
 .sv2-box:active{transform:scale(0.97);}
@@ -616,7 +613,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div id="dash-supervisor" class="hidden">
         <div id="sup-scroll-area">
           <!-- CLIENT — dockets going up the chain to the client -->
-          <div class="sv2-sec-head"><i class="ti ti-building-skyscraper sv2-sec-ic" style="color:#185FA5;" aria-hidden="true"></i><span id="sv2h-client">Client</span><select id="sup-cli-range" class="sv2-sec-range" onchange="renSupervisorDash()"><option value="7d">Last 7 days</option><option value="month">This month</option><option value="ytd">Year to date</option><option value="all">All time</option></select></div>
+          <div class="sv2-sec-head"><i class="ti ti-building-skyscraper sv2-sec-ic" style="color:#185FA5;" aria-hidden="true"></i><span id="sv2h-client">Client</span></div>
           <div class="sv2-boxrow">
             <div class="sv2-box sv2-b-red" id="sv2-box-create" onclick="supKpiOpen('chargeable_ready')"><div class="sv2-bv" id="sv2b-create">0</div><div class="sv2-bl" id="sv2l-create">Create client docket</div></div>
             <div class="sv2-box sv2-b-blue" onclick="supKpiOpen('awaiting_client')"><div class="sv2-bv" id="sv2b-await">0</div><div class="sv2-bl" id="sv2l-await">Awaiting client signature</div></div>
@@ -625,7 +622,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           </div>
 
           <!-- SUBCONTRACTOR — day-labour dockets received from our subcontractors -->
-          <div class="sv2-sec-head"><i class="ti ti-tools sv2-sec-ic" style="color:#EF9F27;" aria-hidden="true"></i><span id="sv2h-sub">Subcontractor</span><select id="sup-sub-range" class="sv2-sec-range" onchange="renSupervisorDash()"><option value="7d">Last 7 days</option><option value="month">This month</option><option value="ytd">Year to date</option><option value="all">All time</option></select></div>
+          <div class="sv2-sec-head"><i class="ti ti-tools sv2-sec-ic" style="color:#EF9F27;" aria-hidden="true"></i><span id="sv2h-sub">Subcontractor</span></div>
           <div class="sv2-boxrow">
             <div class="sv2-box sv2-b-red" onclick="supKpiOpen('awaiting_my_sig')"><div class="sv2-bv" id="sv2b-sign">0</div><div class="sv2-bl" id="sv2l-sign">Awaiting my signature</div></div>
             <div class="sv2-box sv2-b-amber" onclick="supKpiOpen('needs_billing')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl" id="sv2l-bill">Awaiting bill allocation</div></div>
@@ -4885,7 +4882,49 @@ function renSettingsPreview(){
   <p style="font-size:11px;color:#aaa;margin-top:10px;">This header appears on the client signing page and all PDF dockets.</p>`;
 }
 
-function expPDF(all){
+// Bulk PDF export. Each docket is rendered with the SAME styled sheet as the
+// single-docket export (dlbBuildSheet → html2canvas), one docket per page.
+// Money is gated by CU.role==='admin' (per CLAUDE.md). Falls back to the plain
+// text layout (expPDFsimple) if html2canvas isn't available.
+async function expPDF(all){
+  const src=all?dockets:myD();
+  if(!src.length){alert('No dockets to export.');return;}
+  if(typeof window.html2canvas!=='function'){return expPDFsimple(all);}
+  const showCosts=!!(CU&&CU.role==='admin');
+  dlbEnsureStyles();
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF({unit:'mm',format:'a4'});
+  const pw=210,ph=297;
+  // Lightweight progress note on the export buttons while rendering.
+  const btns=[...document.querySelectorAll('button')].filter(b=>/PDF/.test(b.textContent)&&/↓/.test(b.textContent));
+  const btnLabels=btns.map(b=>b.innerHTML);const setBtn=t=>btns.forEach(b=>b.textContent=t);
+  setBtn('… PDF');
+  let first=true;
+  for(let i=0;i<src.length;i++){
+    const d=src[i];
+    if(src.length>1)setBtn('PDF '+(i+1)+'/'+src.length);
+    const host=document.createElement('div');
+    host.style.cssText='position:fixed;left:-10000px;top:0;width:820px;background:#fff;z-index:-1;';
+    host.innerHTML=`<div class="dlb-doc" style="width:780px;margin:0 auto;">${dlbBuildSheet(d,showCosts)}</div>`;
+    document.body.appendChild(host);
+    try{
+      const canvas=await window.html2canvas(host.firstChild,{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false});
+      const img=canvas.toDataURL('image/png');
+      let iw=pw,ih=canvas.height*pw/canvas.width;
+      if(ih>ph){ih=ph;iw=canvas.width*ph/canvas.height;}
+      const x=(pw-iw)/2;
+      if(!first)pdf.addPage();
+      first=false;
+      pdf.addImage(img,'PNG',x,0,iw,ih);
+    }catch(e){/* skip a docket that fails to render */}
+    finally{try{document.body.removeChild(host);}catch(e){}}
+  }
+  btns.forEach((b,i)=>b.innerHTML=btnLabels[i]);
+  if(first){return expPDFsimple(all);}  // nothing rendered → fall back
+  pdf.save((all?'all':'my')+'-dockets-'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+// Plain text-only bulk layout — fallback when html2canvas is unavailable.
+function expPDFsimple(all){
   const src=all?dockets:myD();
   if(!src.length){alert('No dockets to export.');return;}
   const {jsPDF}=window.jspdf;
@@ -8039,8 +8078,6 @@ function renSupervisorDash(){
   if(_rg){const m={'7d':_t.svR7,'month':_t.svRMonth,'ytd':_t.svRYTD,'custom':_t.svRCustom};for(const o of _rg.options){if(m[o.value])o.textContent=m[o.value];}}
   const _rs=document.getElementById('sup-range');
   if(_rs){const _rmap={today:_t.svRangeToday,week:_t.svRangeWeek,month:_t.svRangeMonth,all:_t.svRangeAll};for(const o of _rs.options){if(_rmap[o.value])o.textContent=_rmap[o.value];}}
-  // CLIENT / SUBCONTRACTOR section timeframe selectors
-  ['sup-cli-range','sup-sub-range'].forEach(id=>{const s=document.getElementById(id);if(s){const m={'7d':_t.svR7,'month':_t.svRMonth,'ytd':_t.svRYTD,'all':_t.svRangeAll};for(const o of s.options){if(m[o.value])o.textContent=m[o.value];}}});
   const own=dockets.filter(d=>d.createdBy===CU.u);
   const usr=getUserData();
   const ap=usr?.projectAccess||[];
@@ -8082,39 +8119,23 @@ function renSupervisorDash(){
   const MAROON='#A4271F', REJ='#8A1F19';
 
   // Split into subcontractor-side work (in) and client-side claims (up).
+  // These are OUTSTANDING counts — shown regardless of date (no timeframe filter).
   const inList=scope.filter(d=>!isUp(d)&&!isDone(d));
   const upList=scope.filter(d=>isUp(d)&&!isDone(d));
-
-  // Per-section timeframe filter (default: last 7 days). Applied only to the
-  // outstanding-count boxes, so the sections stay the same size regardless.
-  const _mkRange=(rv)=>(d)=>{
-    if(!rv||rv==='all')return true;
-    const ts=d.date?new Date(d.date):(d.createdAt?new Date(d.createdAt):null);
-    if(!ts||isNaN(ts.getTime()))return true;
-    const now=new Date();
-    if(rv==='7d'){const w=new Date(now);w.setDate(now.getDate()-7);return ts>=w;}
-    if(rv==='month')return ts>=new Date(now.getFullYear(),now.getMonth(),1);
-    if(rv==='ytd')return ts>=new Date(now.getFullYear(),0,1);
-    return true;
-  };
-  const cliF=_mkRange(document.getElementById('sup-cli-range')?.value||'7d');
-  const subF=_mkRange(document.getElementById('sup-sub-range')?.value||'7d');
-  const inListS=inList.filter(subF);
-  const upListC=upList.filter(cliF);
 
   // Pending admin review = signed + billing set + awaiting the admin's sign-off.
   const isAwaitingAdmin=d=>d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting'&&!isQ(d)&&!isR(d);
   // Subcontractor row (outstanding counts)
-  const subSign=inListS.filter(d=>!d.sig&&!(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')&&!isQ(d)&&!isR(d)).length;
-  const subBill=inListS.filter(d=>d.sig&&(!d.bill||d.bill==='pending')&&!isQ(d)&&!isR(d)).length;
-  const subQ=inListS.filter(isQ).length;
+  const subSign=inList.filter(d=>!d.sig&&!(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms')&&!isQ(d)&&!isR(d)).length;
+  const subBill=inList.filter(d=>d.sig&&(!d.bill||d.bill==='pending')&&!isQ(d)&&!isR(d)).length;
+  const subQ=inList.filter(isQ).length;
   // pending review here excludes the chargeable-not-mirrored ones (those are a Create action)
-  const subP=inListS.filter(d=>isAwaitingAdmin(d)&&!(d.bill==='ch'&&!isMirrored(d))).length;
+  const subP=inList.filter(d=>isAwaitingAdmin(d)&&!(d.bill==='ch'&&!isMirrored(d))).length;
   // Client row (outstanding counts). Create = signed sub docket, chargeable, not yet mirrored.
-  const cCreate=scope.filter(d=>!isUp(d)&&d.sig&&d.bill==='ch'&&!isMirrored(d)&&!isQ(d)&&!isR(d)&&!isDone(d)&&cliF(d)).length;
-  const cAwait=upListC.filter(d=>!d.sig&&!isQ(d)&&!isR(d)).length;
-  const cQ=upListC.filter(isQ).length;
-  const cP=upListC.filter(isAwaitingAdmin).length;
+  const cCreate=scope.filter(d=>!isUp(d)&&d.sig&&d.bill==='ch'&&!isMirrored(d)&&!isQ(d)&&!isR(d)&&!isDone(d)).length;
+  const cAwait=upList.filter(d=>!d.sig&&!isQ(d)&&!isR(d)).length;
+  const cQ=upList.filter(isQ).length;
+  const cP=upList.filter(isAwaitingAdmin).length;
 
   // Paint the boxes; dim a box at 0, and flash the Create box when it has items.
   const setBox=(id,n)=>{const e=document.getElementById(id);if(!e)return;e.textContent=n;const b=e.closest('.sv2-box');if(b)b.classList.toggle('sv2-zero',n===0);};
