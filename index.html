@@ -669,7 +669,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c10</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c11</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1618,6 +1618,16 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <div id="settings-preview" style="border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:14px;background:#fafaf8;"></div>
       </div>
 
+      <div class="card" id="queryresolve-card" style="margin-top:4px;display:none;">
+        <p style="font-size:13px;font-weight:500;margin-bottom:4px;">↩ Query responses <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
+        <p style="font-size:12px;color:#888;margin-bottom:12px;">When a docket is queried, it needs a response (a note / photo) and re-submission. By default only <strong>admins</strong> can do this. Turn this on to let <strong>supervisors</strong> resolve &amp; re-submit queried dockets too.</p>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin:0;font-size:13px;color:#2D2D2D;">
+          <input type="checkbox" id="allow-sup-resolve" onchange="toggleSupResolve(this.checked)" style="width:18px;height:18px;margin:0;flex-shrink:0;">
+          <span>Allow supervisors to resolve &amp; re-submit queried dockets</span>
+        </label>
+        <div id="queryresolve-ok" class="ok hidden" style="margin-top:10px;">Saved.</div>
+      </div>
+
       <div class="card" id="sampledata-card" style="margin-top:4px;display:none;border-color:#F2D9A8;background:#FFFBF5;">
         <p style="font-size:13px;font-weight:500;margin-bottom:4px;">🧹 Sample data <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
         <p style="font-size:12px;color:#888;margin-bottom:12px;">The app ships with four demo dockets (under Apex Tiling and other sample subcontractors) so it isn’t empty while you explore. Remove them when you’re ready to work with real data only — <strong>anything you’ve created yourself is kept</strong>.</p>
@@ -2436,7 +2446,7 @@ function showTab(tab,btn){
   if(tab==='subs')renST();
   if(tab==='proj'){renPT();renClientSelects();}
   if(tab==='clients')renClientList();
-  if(tab==='settings'){loadSettingsForm();renSettingsPreview();renFlashSettings();renReqBySettings();renSampleDataCard();}
+  if(tab==='settings'){loadSettingsForm();renSettingsPreview();renFlashSettings();renReqBySettings();renSampleDataCard();renQueryResolveSettings();}
   if(tab==='drafts')renDrafts();
   if(tab==='ready')renReady();
   if(tab==='rates'){renRatesSelects();renRatesTable();}
@@ -5823,6 +5833,23 @@ function removeReqByOption(name){
   renReqBySettings();loadReqByStaff();
 }
 
+// ── Admin: who may resolve & re-submit a queried docket ──
+function renQueryResolveSettings(){
+  const card=document.getElementById('queryresolve-card');
+  const isAdm=!!(CU&&CU.role==='admin');
+  if(card)card.style.display=isAdm?'':'none';
+  if(!isAdm)return;
+  const cb=document.getElementById('allow-sup-resolve');
+  if(cb)cb.checked=allowSupResolve();
+}
+function toggleSupResolve(on){
+  if(!(CU&&CU.role==='admin'))return;
+  svL('dlb_allow_sup_resolve',!!on);
+  const ok=document.getElementById('queryresolve-ok');if(ok){ok.classList.remove('hidden');setTimeout(()=>ok.classList.add('hidden'),2000);}
+  // Refresh any open docket view so the button appears/disappears immediately.
+  try{if(curDock&&typeof vD==='function')vD(curDock.id);}catch(e){}
+}
+
 // ── Admin: clear the built-in sample dockets (keeps the user's own) ──
 const DEMO_DOCKET_IDS=['0001','0002','0003','0004'];
 function renSampleDataCard(){
@@ -8965,9 +8992,15 @@ let _resolveTargetId=null;
 let _resolvePhotos=[];
 // Can the current user resolve/re-submit this docket? The submitter, the
 // supervisor who signed it, or any company admin.
+// Admin setting: may supervisors also resolve & re-submit queried dockets?
+// Default OFF — only an admin can respond to a query unless this is turned on.
+function allowSupResolve(){return ldL('dlb_allow_sup_resolve')===true;}
 function canResolveDocket(d){
   if(!CU||!d)return false;
-  return CU.role==='admin'||d.createdBy===CU.u||d.signedBySupervisor===CU.u;
+  if(CU.role==='admin')return true;
+  // When enabled, supervisors (head-contractor or sub) may respond to queries.
+  if(allowSupResolve()&&(CU.role==='hc_supervisor'||(CU.role==='sub'&&CU.subRole==='supervisor')))return true;
+  return false;
 }
 function openResolveModal(id){
   const d=dockets.find(x=>x.id===id);
@@ -9526,7 +9559,7 @@ document.addEventListener('change',function(e){
 </div>
 
 <!-- Query / reject a docket (client admin) -->
-<div id="query-modal" class="hidden" style="position:fixed;inset:0;z-index:720;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;">
+<div id="query-modal" class="hidden" style="position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;">
   <div style="background:#fff;border-radius:14px;max-width:460px;width:100%;padding:1.4rem;box-shadow:0 10px 40px rgba(0,0,0,0.2);margin:2rem auto;">
     <p style="font-size:17px;font-weight:600;color:#2D2D2D;margin:0 0 4px;">Send back to the subcontractor</p>
     <p style="font-size:12px;color:#888;margin:0 0 16px;" id="query-modal-sub">Add a reason so they know what to fix, then re-submit.</p>
@@ -9547,7 +9580,7 @@ document.addEventListener('change',function(e){
 </div>
 
 <!-- Resolve a query and re-submit (our side) -->
-<div id="resolve-modal" class="hidden" style="position:fixed;inset:0;z-index:720;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;">
+<div id="resolve-modal" class="hidden" style="position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;">
   <div style="background:#fff;border-radius:14px;max-width:480px;width:100%;padding:1.4rem;box-shadow:0 10px 40px rgba(0,0,0,0.2);margin:2rem auto;">
     <p style="font-size:17px;font-weight:600;color:#2D2D2D;margin:0 0 4px;">Resolve &amp; re-submit</p>
     <p style="font-size:12px;color:#888;margin:0 0 14px;">Answer the query, attach anything that was asked for, and send it back for approval.</p>
@@ -9566,7 +9599,7 @@ document.addEventListener('change',function(e){
 </div>
 
 <!-- Post-sign billing prompt (after a sub docket is signed, not on the spot) -->
-<div id="postsign-billing-modal" class="hidden" style="position:fixed;inset:0;z-index:730;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;">
+<div id="postsign-billing-modal" class="hidden" style="position:fixed;inset:0;z-index:1110;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;">
   <div style="background:#fff;border-radius:14px;max-width:440px;width:100%;padding:1.4rem;box-shadow:0 10px 40px rgba(0,0,0,0.2);margin:2.5rem auto;">
     <p style="font-size:17px;font-weight:600;color:#1D9E75;margin:0 0 4px;">✓ Signed</p>
     <p id="psb-sub" style="font-size:13px;color:#555;margin:0 0 16px;">How should this docket be billed?</p>
