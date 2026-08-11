@@ -657,7 +657,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-po2</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c3</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1157,7 +1157,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <div id="dsb-wrap"><label>Your company name *</label><input type="text" id="dsb" placeholder="e.g. Smith Concreting"></div>
           <div><label>Start time *</label><input type="text" inputmode="numeric" id="d-start" placeholder="e.g. 7:30 or 0730" autocomplete="off" onblur="normalizeTime(this)" onchange="calcHours()"></div>
           <div><label>Finish time *</label><input type="text" inputmode="numeric" id="d-finish" placeholder="e.g. 4:00 PM or 1600" autocomplete="off" onblur="normalizeTime(this)" onchange="calcHours()"></div>
-          <div><label>Break (mins) <span style="font-size:11px;color:#aaa;font-weight:400;">optional</span></label><input type="number" id="d-break" placeholder="e.g. 30" min="0" step="5" onchange="calcHours()"></div>
+          <div><label>Break (mins) <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:6px;">optional</span></label><input type="number" id="d-break" placeholder="e.g. 30" min="0" step="5" onchange="calcHours()"></div>
           <div><label>Hours worked</label><input type="text" id="dh" placeholder="Auto-calculated" readonly style="background:#f5f5f3;color:#185FA5;font-weight:500;"></div>
           <div>
             <label>Requested by</label>
@@ -1212,7 +1212,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <!-- MATERIALS -->
         <div class="s2">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-            <label style="margin:0;">Materials <span style="font-size:11px;color:#aaa;font-weight:400;">optional</span></label>
+            <label style="margin:0;">Materials <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:6px;">optional</span></label>
             <button type="button" class="btn" onclick="addMaterialRow()" style="font-size:13px;background:#EF9F27;color:#412402;border:none;font-weight:600;padding:8px 14px;">+ Add item</button>
           </div>
           <div id="materials-list"></div>
@@ -1222,7 +1222,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <!-- ACCOMMODATION -->
         <div class="s2">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-            <label style="margin:0;">Accommodation <span style="font-size:11px;color:#aaa;font-weight:400;">optional</span></label>
+            <label style="margin:0;">Accommodation <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:6px;">optional</span></label>
             <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin:0;font-size:12px;color:#666;">
               <input type="checkbox" id="accom-toggle" onchange="toggleAccom(this.checked)" style="margin:0;">
               <span id="lbl-applicable">Applicable</span>
@@ -7105,35 +7105,40 @@ function addWorkerRow(name='',hours='',isPrimary=false,start='',finish=''){
   const row=document.createElement('div');
   row.id=id;
   row.dataset.primary=isPrimary?'1':'0';
-  row.style.cssText='display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;padding:10px;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;margin-bottom:8px;background:#fff;';
+  row.style.cssText='padding:12px;border:0.5px solid rgba(0,0,0,0.12);border-radius:10px;margin-bottom:8px;background:#fff;';
   const sameOn=document.getElementById('workers-same-hours')?.checked;
   const _wl=_L();
   const placeholderName=isPrimary?'':(_wl.wWorker+' '+(idx+1)+' '+_wl.wNameOpt);
-  const lblCss='font-size:12px;color:#888;font-weight:500;margin-bottom:4px;';
+  const lblCss='font-size:11px;color:#999;font-weight:500;margin-bottom:4px;display:block;';
+  // Header: worker label on the left, "✓ You" or a quiet remove ✕ on the right.
+  const header=
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'
+      +'<span style="font-size:12px;font-weight:700;color:#2D2D2D;">'
+        +(isPrimary?_wl.wFilledBy:(_wl.wWorker+' '+(idx+1)))+'</span>'
+      +(isPrimary
+        ?'<span style="font-size:11px;color:#1D9E75;font-weight:600;">✓ You</span>'
+        :'<button type="button" onclick="removeWorkerRow(\''+id+'\')" aria-label="Remove worker" style="background:none;border:none;color:#c0403a;font-size:18px;line-height:1;cursor:pointer;padding:0 2px;">✕</button>')
+    +'</div>';
+  // Name always full-width; times sit on their own tidy row underneath.
+  const nameField=
+    '<input type="text" class="wk-name" value="'+esc(name)+'" placeholder="'+placeholderName+'"'
+      +(isPrimary?' readonly style="background:#f5f5f3;font-weight:500;"':'')+'>';
   const timeCols=isPrimary?''
-    :('<div style="flex:1;min-width:76px;">'
+    :('<div style="flex:1;">'
         +'<label style="'+lblCss+'">'+_wl.wStart+'</label>'
-        +'<input type="text" inputmode="numeric" class="wk-start" value="'+esc(start)+'" placeholder="e.g. 0730" autocomplete="off" onblur="normalizeTime(this)" onchange="onWorkerTimeChange(this)"'+(sameOn?' disabled style="background:#f5f5f3;"':'')+'>'
+        +'<input type="text" inputmode="numeric" class="wk-start" value="'+esc(start)+'" placeholder="0730" autocomplete="off" onblur="normalizeTime(this)" onchange="onWorkerTimeChange(this)"'+(sameOn?' disabled style="background:#f5f5f3;"':'')+'>'
       +'</div>'
-      +'<div style="flex:1;min-width:76px;">'
+      +'<div style="flex:1;">'
         +'<label style="'+lblCss+'">'+_wl.wFinish+'</label>'
-        +'<input type="text" inputmode="numeric" class="wk-finish" value="'+esc(finish)+'" placeholder="e.g. 1600" autocomplete="off" onblur="normalizeTime(this)" onchange="onWorkerTimeChange(this)"'+(sameOn?' disabled style="background:#f5f5f3;"':'')+'>'
+        +'<input type="text" inputmode="numeric" class="wk-finish" value="'+esc(finish)+'" placeholder="1600" autocomplete="off" onblur="normalizeTime(this)" onchange="onWorkerTimeChange(this)"'+(sameOn?' disabled style="background:#f5f5f3;"':'')+'>'
       +'</div>');
-  row.innerHTML=
-    '<div style="flex:2;min-width:130px;">'
-      +'<label style="'+lblCss+'">'
-        +(isPrimary?_wl.wFilledBy:(_wl.wWorker+' '+(idx+1)))+'</label>'
-      +'<input type="text" class="wk-name" value="'+esc(name)+'" placeholder="'+placeholderName+'"'
-        +(isPrimary?' readonly style="background:#f5f5f3;font-weight:500;"':'')+'>'
-    +'</div>'
-    +timeCols
-    +'<div style="flex:1;min-width:80px;">'
+  const hoursCol=
+    '<div style="flex:1;">'
       +'<label style="'+lblCss+'">'+_wl.wHours+'</label>'
-      +'<input type="number" class="wk-hours" value="'+hours+'" min="0" step="0.25" placeholder="e.g. 7.5" oninput="updWorkersTotal()"'+(sameOn?' readonly style="background:#f5f5f3;"':'')+'>'
-    +'</div>'
-    +(isPrimary
-      ?'<div style="flex-shrink:0;font-size:11px;color:#1D9E75;padding-bottom:12px;">✓ You</div>'
-      :'<button type="button" class="btn btn-s btn-d" onclick="removeWorkerRow(\''+id+'\')" style="flex-shrink:0;padding:8px 12px;margin-bottom:1px;">✕</button>');
+      +'<input type="number" class="wk-hours" value="'+hours+'" min="0" step="0.25" placeholder="7.5" oninput="updWorkersTotal()"'+(sameOn?' readonly style="background:#f5f5f3;"':'')+'>'
+    +'</div>';
+  row.innerHTML=header+nameField
+    +'<div style="display:flex;gap:8px;margin-top:8px;">'+timeCols+hoursCol+'</div>';
   list.appendChild(row);
   if(isPrimary){
     const tradeNote=currentWorkerTrade();
