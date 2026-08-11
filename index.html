@@ -692,7 +692,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c26</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c27</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1398,14 +1398,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <label style="font-size:13px;font-weight:600;color:#555;" id="md-filters-label">Filters:</label>
         <select id="md-status-filter" style="width:200px;" onchange="renMD()">
           <option value="">All statuses</option>
-          <option value="awaiting_my_sig" data-mdtype="sub">Needs my signature</option>
-          <option value="awaiting_client" data-mdtype="client">Pending signature</option>
-          <option value="needs_billing" data-mdtype="sub">Needs billing</option>
-          <option value="chargeable_ready" data-mdtype="sub">Signed · ready to send</option>
-          <option value="queried">Queried</option>
-          <option value="pending_review">Pending admin review</option>
+          <option value="approved">Approved</option>
+          <option value="pending">Pending (review / queried)</option>
           <option value="rejected">Rejected</option>
-          <option value="signed">Signed (all)</option>
         </select>
         <select id="md-proj-filter" style="max-width:200px;" onchange="renMD()"><option value="">All projects</option></select>
         <select id="md-range-filter" style="width:150px;" onchange="mdRangeChange()">
@@ -1429,12 +1424,21 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
     <!-- ALL DOCKETS -->
     <div id="t-ad" class="hidden">
       <div class="rb"><p class="st" style="margin:0;" id="ad-title">All dockets</p><div style="display:flex;gap:6px;flex-wrap:wrap;" id="ad-actions"><button class="btn btn-s btn-csv" onclick="expCSV(true)">↓ CSV</button><button class="btn btn-s btn-pdf" onclick="expPDF(true)">↓ PDF</button><button class="btn btn-s" style="background:#1D9E75;color:#fff;border-color:#1D9E75;" id="btn-client-form" onclick="openClientForm()">📋 Client day labour form</button></div></div>
-      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+      <div id="ad-filters-admin" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
         <select id="fp" style="width:150px;" onchange="renAD()"><option value="">All projects</option></select>
         <select id="fsb" style="width:150px;" onchange="renAD()"><option value="">All subcontractors</option></select>
         <select id="fb" style="width:140px;" onchange="renAD()"><option value="">All billing</option><option value="ch">Chargeable</option><option value="ow">Own cost</option><option value="bc">Backcharge</option></select>
         <select id="f-submitted" style="width:150px;" onchange="renAD()"><option value="">All submitted</option><option value="yes">✓ Submitted</option><option value="no">⏳ Not submitted</option></select>
         <select id="fsig" style="width:140px;" onchange="renAD()"><option value="">All signatures</option><option value="signed">Signed</option><option value="pending">Pending</option><option value="sent">Sent</option></select>
+      </div>
+      <div id="ad-filters-sup" class="hidden" style="gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+        <select id="ad-sup-proj" style="max-width:200px;" onchange="renAD()"><option value="">All projects</option></select>
+        <select id="ad-sup-status" style="width:210px;" onchange="renAD()">
+          <option value="">All statuses</option>
+          <option value="approved">Approved</option>
+          <option value="pending">Pending (review / queried)</option>
+          <option value="rejected">Rejected</option>
+        </select>
       </div>
       <!-- Floating bulk action bar -->
       <div id="bulk-action-bar" class="hidden" style="background:#1a1a1a;color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:space-between;">
@@ -3141,11 +3145,12 @@ function renMD(){
   else if(tf==='sub')src=src.filter(d=>!isUpChainDocket(d));
   const sf=document.getElementById('md-status-filter')?.value||'';
   if(sf){
-    // "signed" = every signed docket; "pending_review" = awaiting admin sign-off;
-    // other keys = exact workflow status.
-    if(sf==='signed')src=src.filter(d=>!!d.sig);
-    else if(sf==='pending_review')src=src.filter(d=>d.approvalStatus==='awaiting');
-    else src=src.filter(d=>docketStatus(d)===sf);
+    // Simplified to the post-submission outcomes: approved / rejected / pending
+    // (pending = awaiting admin review OR queried). Everything else is surfaced
+    // by the dashboard outstanding boxes.
+    if(sf==='approved')src=src.filter(d=>d.approvalStatus==='approved');
+    else if(sf==='rejected')src=src.filter(d=>d.approvalStatus==='rejected');
+    else if(sf==='pending')src=src.filter(d=>d.approvalStatus==='awaiting'||d.approvalStatus==='queried');
   }
   // Project filter — populate once from the projects the user actually has dockets in.
   const pfSel=document.getElementById('md-proj-filter');
@@ -3199,6 +3204,10 @@ function renAD(){
   // no export toolbar, no Client-contact column, and NO money — just a broader
   // scope (every docket on their allocated projects, from any staff member).
   const adActions=document.getElementById('ad-actions');if(adActions)adActions.style.display=isAdm?'':'none';
+  // Swap the filter bars: admins keep the full set; supervisors get a simple
+  // Project + Status (Approved / Pending / Rejected) bar.
+  const fAdm=document.getElementById('ad-filters-admin');if(fAdm)fAdm.classList.toggle('hidden',!isAdm);
+  const fSup=document.getElementById('ad-filters-sup');if(fSup){fSup.classList.toggle('hidden',isAdm);fSup.style.display=isAdm?'':'flex';}
   const adThead=document.getElementById('ad-thead');
   if(adThead){
     adThead.innerHTML=isAdm
@@ -3207,8 +3216,22 @@ function renAD(){
   }
   if(!isAdm){
     // Clean supervisor list — mirrors My dockets, money-free, whole-project scope.
-    if(!fl.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:#aaa;padding:20px;">No dockets found</td></tr>';return;}
-    tb.innerHTML=fl.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;"><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span></td><td>${projBadge(d.pcode)}</td><td style="max-width:140px;">${esc(d.sub||'—')}</td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${mdBilling(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td></tr>`).join('');
+    // Populate the project filter once from the supervisor's own project dockets.
+    const spSel=document.getElementById('ad-sup-proj');
+    if(spSel&&spSel.options.length<=1){
+      const seen={};const opts=[];
+      myD().forEach(d=>{if(d.pcode&&!seen[d.pcode]){seen[d.pcode]=1;const p=projects.find(x=>x.code===d.pcode);opts.push('<option value="'+esc(d.pcode)+'">'+esc(p?p.name:d.pcode)+'</option>');}});
+      spSel.innerHTML='<option value="">All projects</option>'+opts.join('');
+    }
+    const sp=spSel?spSel.value:'';
+    const ss=document.getElementById('ad-sup-status')?.value||'';
+    let list=fl;
+    if(sp)list=list.filter(d=>d.pcode===sp);
+    if(ss==='approved')list=list.filter(d=>d.approvalStatus==='approved');
+    else if(ss==='rejected')list=list.filter(d=>d.approvalStatus==='rejected');
+    else if(ss==='pending')list=list.filter(d=>d.approvalStatus==='awaiting'||d.approvalStatus==='queried');
+    if(!list.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:#aaa;padding:20px;">No dockets match these filters</td></tr>';return;}
+    tb.innerHTML=list.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;"><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span></td><td>${projBadge(d.pcode)}</td><td style="max-width:140px;">${esc(d.sub||'—')}</td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${mdBilling(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td></tr>`).join('');
     return;
   }
   const chList=fl.filter(d=>d.bill==='ch');
