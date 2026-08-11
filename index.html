@@ -669,7 +669,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c13</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c14</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -3915,7 +3915,7 @@ function vD(id){
           Backcharge
         </button>
       </div>
-      ${!d.sig?`<p style="font-size:11px;color:#aaa;margin-top:8px;text-align:center;">🔒 Awaiting signature before billing can be set</p>`:(billingLocked(d)?`<p style="font-size:11px;color:#8a5a12;margin-top:8px;text-align:center;background:#FBEFD9;border-radius:8px;padding:7px 10px;">🔒 Billing locked — this docket has gone to the client. It can be changed only if the client queries or rejects it.</p>`:'')}
+      ${!d.sig?`<p style="font-size:11px;color:#aaa;margin-top:8px;text-align:center;">🔒 Awaiting signature before billing can be set</p>`:(billingLocked(d)?`<p style="font-size:11px;color:#8a5a12;margin-top:8px;text-align:center;background:#FBEFD9;border-radius:8px;padding:7px 10px;">🔒 Billing locked — this docket has gone to the client. It can be changed only if the client rejects it.</p>`:'')}
       ${d.bill==='bc'&&d.bcTarget?`<p style="font-size:12px;color:#5B21B6;margin-top:8px;">Backcharge to: <strong>${esc(d.bcTarget)}</strong></p>`:''}
     </div>`:''}`;
 
@@ -5492,14 +5492,16 @@ document.addEventListener('click',function(e){
 });
 
 
-// Billing is locked once the docket is committed to the client — either the
-// admin has marked it Submitted to client (chargeable, with the complete cost)
-// or the client has Approved it. Billing is a post-signature step, so a docket
-// merely awaiting a signature is NOT locked. It reopens if the client sends it
-// back (queried / rejected).
+// Billing is locked once the docket is committed to the client — Submitted to
+// client (chargeable, complete cost), Approved, or come back Queried (it was
+// still sent as chargeable, so answering the query doesn't change the billing).
+// Billing is a post-signature step, so a docket merely awaiting a signature is
+// NOT locked. Only a REJECTION reopens billing, so a rejected charge can be
+// re-classified (own cost / backcharge).
 function billingLocked(d){
   if(!d)return false;
-  if(d.approvalStatus==='queried'||d.approvalStatus==='rejected')return false;
+  if(d.approvalStatus==='rejected')return false;
+  if(d.approvalStatus==='queried')return true;
   if(d.approvalStatus==='approved')return true;
   if(d.submittedToClient)return true;
   return false;
@@ -5507,7 +5509,7 @@ function billingLocked(d){
 function assignBilling(docketId, newBill){
   const d=dockets.find(x=>x.id===docketId);
   if(!d)return;
-  if(billingLocked(d)){alert('This docket has gone to the client, so its billing is locked. It can be changed only if the client queries or rejects it.');return;}
+  if(billingLocked(d)){alert('This docket has gone to the client, so its billing is locked. It can be changed only if the client rejects it.');return;}
   if(newBill==='bc'){
     const subName=prompt('Backcharge to which subcontractor?','');
     if(!subName)return;
@@ -8828,6 +8830,7 @@ function setPendingBilling(id,type){
 function applyPendingBilling(id,type){
   const d=dockets.find(x=>x.id===id);
   if(!d)return;
+  if(billingLocked(d)){alert('This docket has gone to the client, so its billing is locked. It can be changed only if the client rejects it.');return;}
   if(type==='tbc'){
     d.bill='pending';           // still needs a decision — stays in the folder
     d.billTbc=true;             // but consciously flagged "to be confirmed"
