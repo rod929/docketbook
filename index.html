@@ -669,7 +669,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c9</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c10</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1618,6 +1618,14 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <div id="settings-preview" style="border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:14px;background:#fafaf8;"></div>
       </div>
 
+      <div class="card" id="sampledata-card" style="margin-top:4px;display:none;border-color:#F2D9A8;background:#FFFBF5;">
+        <p style="font-size:13px;font-weight:500;margin-bottom:4px;">🧹 Sample data <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
+        <p style="font-size:12px;color:#888;margin-bottom:12px;">The app ships with four demo dockets (under Apex Tiling and other sample subcontractors) so it isn’t empty while you explore. Remove them when you’re ready to work with real data only — <strong>anything you’ve created yourself is kept</strong>.</p>
+        <div id="sampledata-status" style="font-size:12px;color:#888;margin-bottom:10px;"></div>
+        <button class="btn" onclick="clearSampleData()" style="background:#fff;border:1px solid #c0403a;color:#c0403a;font-weight:600;">Clear sample dockets</button>
+        <div id="sampledata-ok" class="ok hidden" style="margin-top:10px;">Sample dockets removed.</div>
+      </div>
+
     </div>
 
 
@@ -2428,7 +2436,7 @@ function showTab(tab,btn){
   if(tab==='subs')renST();
   if(tab==='proj'){renPT();renClientSelects();}
   if(tab==='clients')renClientList();
-  if(tab==='settings'){loadSettingsForm();renSettingsPreview();renFlashSettings();renReqBySettings();}
+  if(tab==='settings'){loadSettingsForm();renSettingsPreview();renFlashSettings();renReqBySettings();renSampleDataCard();}
   if(tab==='drafts')renDrafts();
   if(tab==='ready')renReady();
   if(tab==='rates'){renRatesSelects();renRatesTable();}
@@ -5813,6 +5821,36 @@ function removeReqByOption(name){
   staff=staff.filter(s=>s.toLowerCase()!==String(name).toLowerCase());
   svL('dlb_staff',staff);
   renReqBySettings();loadReqByStaff();
+}
+
+// ── Admin: clear the built-in sample dockets (keeps the user's own) ──
+const DEMO_DOCKET_IDS=['0001','0002','0003','0004'];
+function renSampleDataCard(){
+  const card=document.getElementById('sampledata-card');
+  const isAdm=!!(CU&&CU.role==='admin');
+  if(card)card.style.display=isAdm?'':'none';
+  if(!isAdm)return;
+  const n=dockets.filter(d=>DEMO_DOCKET_IDS.includes(d.id)).length;
+  const st=document.getElementById('sampledata-status');
+  if(st)st.textContent=n?(n+' sample docket'+(n>1?'s':'')+' still present.'):'No sample dockets remaining.';
+  const btn=card?card.querySelector('button'):null;
+  if(btn){btn.disabled=!n;btn.style.opacity=n?'1':'0.5';}
+}
+function clearSampleData(){
+  if(!(CU&&CU.role==='admin'))return;
+  const present=dockets.filter(d=>DEMO_DOCKET_IDS.includes(d.id)).length;
+  if(!present){renSampleDataCard();return;}
+  if(!confirm('Remove the '+present+' sample docket'+(present>1?'s':'')+'? Dockets you have created yourself are kept.'))return;
+  dockets=dockets.filter(d=>!DEMO_DOCKET_IDS.includes(d.id));
+  svL('dlb_demo_ver',999);  // stop the demo set being re-seeded on next load
+  svD();
+  const ok=document.getElementById('sampledata-ok');if(ok){ok.classList.remove('hidden');setTimeout(()=>ok.classList.add('hidden'),2500);}
+  renSampleDataCard();
+  // refresh whatever lists / dashboards are on screen
+  try{updM&&updM();}catch(e){}
+  try{renAD&&renAD();}catch(e){}
+  try{renMD&&renMD();}catch(e){}
+  try{if(typeof showCorrectDashboard==='function')showCorrectDashboard();}catch(e){}
 }
 
 // Show the SI-number field only when the method is "Site Instruction". It's a
