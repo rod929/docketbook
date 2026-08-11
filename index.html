@@ -245,6 +245,13 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 .vd-sheet-head.vd-sub .vd-numstrip{background:#FAEEDA;border-bottom-color:#EF9F27;}
 .vd-sheet-head.vd-sub .vd-num{color:#B9770E;} .vd-sheet-head.vd-sub .vd-num-lab{color:#854F0B;}
 .vd-sec-title{font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#C88618;margin:11px 2px 9px;padding-bottom:5px;border-bottom:1px solid #f0e6d4;}
+/* Docket-view outstanding strip: FILLED status pill + OUTLINE ageing bubble */
+.vd-status-strip{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 2px 12px;flex-wrap:wrap;}
+.vd-pill{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;border-radius:20px;padding:6px 14px;}
+.vd-age{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;border-radius:20px;padding:4px 11px;background:transparent;border:1.5px solid;}
+.vd-typetag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:20px;color:#fff;}
+.vd-sheet-head.vd-client .vd-typetag{background:#185FA5;}
+.vd-sheet-head.vd-sub .vd-typetag{background:#B9770E;}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 .s2{grid-column:span 2;}
@@ -669,7 +676,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c14</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c15</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -2547,6 +2554,32 @@ function statusBadge(d){
   const m=STATUS_META[docketStatus(d)]||STATUS_META.signed;
   return'<span class="badge" style="background:'+m.bg+';color:'+m.fg+';">'+m.label+'</span>';
 }
+// Docket-view "outstanding" strip: a FILLED status pill + an OUTLINE ageing
+// bubble (days outstanding). Skipped for approved dockets (renderQueryStatus
+// already shows the approved banner there).
+function vdStatusStrip(d){
+  if(!d||d.approvalStatus==='approved')return'';
+  const map={
+    rejected:['⛔ Rejected','#E24B4A','#fff','#E24B4A'],
+    queried:['⚠ Queried','#E24B4A','#fff','#E24B4A'],
+    awaiting_client:['↑ Pending signature','#185FA5','#fff','#185FA5'],
+    awaiting_my_sig:['✍️ Needs my signature','#F4B13C','#4a2c02','#C7891A'],
+    needs_billing:['💲 Pending bill allocation','#F4B13C','#4a2c02','#C7891A'],
+    chargeable_ready:['✓ Ready to send','#1D9E75','#fff','#1D9E75'],
+    signed:['✓ Signed','#1D9E75','#fff','#1D9E75']
+  };
+  const m=map[docketStatus(d)]||map.signed;
+  const since=((d.approvalStatus==='queried'||d.approvalStatus==='rejected')&&d.queriedAt)||(d.sig&&d.signedAt)||d.createdAt;
+  let age='';
+  if(since){
+    const days=Math.floor((Date.now()-new Date(since).getTime())/86400000);
+    age=days<=0?'⟳ today':('⟳ '+days+' day'+(days>1?'s':'')+' outstanding');
+  }
+  return `<div class="vd-status-strip">
+    <span class="vd-pill" style="background:${m[1]};color:${m[2]};">${m[0]}</span>
+    ${age?`<span class="vd-age" style="border-color:${m[3]};color:${m[3]};">${age}</span>`:''}
+  </div>`;
+}
 // Approval banner shown at the top of the docket view: approved / awaiting /
 // queried / rejected, with the reasons + note and (for our side) a
 // Resolve & re-submit button plus the full query/response history.
@@ -3764,8 +3797,9 @@ function vD(id){
   document.getElementById('mb').innerHTML=`
     <div class="vd-sheet-head ${isUpChainDocket(d)?'vd-client':'vd-sub'}">
       <div class="vd-head-top"><div class="vd-co">${esc(_headCo)}</div><div class="vd-brand">Day Labour<br>Docket</div></div>
-      <div class="vd-numstrip"><div><div class="vd-num-lab">Docket</div><div class="vd-num">#${esc(d.id)}</div></div>${statusBadge(d)}</div>
+      <div class="vd-numstrip"><div><div class="vd-num-lab">Docket</div><div class="vd-num">#${esc(d.id)}</div></div><div style="display:flex;align-items:center;gap:8px;"><span class="vd-typetag">${isUpChainDocket(d)?'Client':'Subcontractor'}</span>${statusBadge(d)}</div></div>
     </div>
+    ${vdStatusStrip(d)}
     <div id="vd-translate-bar" style="display:${(d.desc||d.notes)?'flex':'none'};align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;padding-bottom:8px;border-bottom:0.5px solid rgba(0,0,0,0.08);">
       <span style="font-size:12px;color:#888;">Translate description &amp; notes:</span>
       <select id="vd-lang" style="font-size:13px;padding:5px 8px;border-radius:6px;border:0.5px solid rgba(0,0,0,0.15);">
