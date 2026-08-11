@@ -692,7 +692,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c30</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c31</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -2682,10 +2682,17 @@ function renderQueryStatus(d){
     const isRej=st==='rejected';
     const reasons=(d.queryReasons&&d.queryReasons.length)?'<div style="margin-top:5px;">'+d.queryReasons.map(r=>'<span style="display:inline-block;background:#fff;border:0.5px solid #E7B9B6;border-radius:12px;padding:2px 9px;margin:3px 4px 0 0;font-size:11px;">'+esc(r)+'</span>').join('')+'</div>':'';
     const btn=canResolveDocket(d)?`<div style="margin-top:10px;"><button class="btn btn-p btn-s" style="background:#1D9E75;border-color:#1D9E75;color:#fff;" onclick="openResolveModal('${d.id}')">↩ Resolve &amp; re-submit</button></div>`:'';
+    // Rejected: the "Rejected by X · date" line is already on the stamp, so the
+    // box just carries the reason. Queried has no stamp, so keep its header line.
+    const head=isRej
+      ? `<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8A1F19;opacity:.75;">Reason for rejection</div>`
+      : `⚠ <strong>Queried</strong>${d.queriedByName?' by '+esc(d.queriedByName):''}${d.queriedAt?' · '+fd(d.queriedAt.slice(0,10)):''}`;
+    const body=(reasons||d.queryNote)
+      ? `${reasons}${d.queryNote?'<div style="margin-top:5px;">"'+esc(d.queryNote)+'"</div>':''}`
+      : (isRej?'<div style="margin-top:4px;color:#a05a52;">No reason recorded.</div>':'');
     return`<div style="background:${isRej?'#FBD9D6':'#FBE6E6'};border-radius:10px;padding:11px 14px;margin-bottom:12px;font-size:12px;color:#8A1F19;">
-      ${isRej?'⛔':'⚠'} <strong>${isRej?'Rejected':'Queried'}</strong>${d.queriedByName?' by '+esc(d.queriedByName):''}${d.queriedAt?' · '+fd(d.queriedAt.slice(0,10)):''}
-      ${reasons}
-      ${d.queryNote?'<div style="margin-top:5px;">"'+esc(d.queryNote)+'"</div>':''}
+      ${head}
+      ${body}
       ${btn}
     </div>${queryThreadHtml(d)}`;
   }
