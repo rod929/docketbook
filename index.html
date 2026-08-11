@@ -259,6 +259,15 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 .vd-rows > div[style*="span 2"]{grid-column:1/-1;border-left:none;}
 .vd-sheet-head.vd-client .vd-typetag{background:#185FA5;}
 .vd-sheet-head.vd-sub .vd-typetag{background:#B9770E;}
+/* Docket stamps — Backcharge (solid ink slab) + Rejected (double-border) */
+.vd-stamp-wrap{display:flex;justify-content:center;margin:2px 0 12px;}
+.vd-stamp{display:inline-block;text-align:center;text-transform:uppercase;}
+.vd-stamp.bc{transform:rotate(-5deg);background:#8A1F4B;color:#fff;padding:8px 20px;border-radius:4px;box-shadow:0 3px 0 rgba(0,0,0,.14);opacity:.95;}
+.vd-stamp.bc .s-big{font-size:18px;font-weight:800;letter-spacing:.13em;line-height:1;}
+.vd-stamp.bc .s-sm{font-size:10px;font-weight:600;letter-spacing:.05em;margin-top:4px;opacity:.92;}
+.vd-stamp.rej{transform:rotate(-7deg);border:3px double #B0271C;color:#B0271C;padding:7px 18px;border-radius:9px;opacity:.9;box-shadow:inset 0 0 0 2px rgba(176,39,28,.12);}
+.vd-stamp.rej .s-big{font-size:20px;font-weight:800;letter-spacing:.12em;line-height:1;}
+.vd-stamp.rej .s-sm{font-size:10px;font-weight:700;letter-spacing:.05em;margin-top:5px;}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 .s2{grid-column:span 2;}
@@ -683,7 +692,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c25</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c26</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -2201,6 +2210,38 @@ function seedTrialData(){
     svL('v4_dock',dockets);svL('v4_ctr',dctr);
     svL('dlb_demo_ver',DEMO_DATA_VERSION);
   }
+  // Extra demo examples for the stamps (backcharge + client-rejected). Appended
+  // non-destructively (keeps anything you created); one-time; skipped once the
+  // sample data has been cleared. Uses the next free docket numbers.
+  if((ldL('dlb_demo_ver')||0)<999 && !ldL('dlb_demo_extra_stamps')){
+    const _dt=new Date().toISOString().split('T')[0];
+    const _dn=new Date().toISOString();
+    const _sg=(p)=>'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="90"><path d="'+p+'" fill="none" stroke="#185FA5" stroke-width="3" stroke-linecap="round"/></svg>');
+    const bcId=String(dctr).padStart(4,'0');dctr++;
+    dockets.push({id:bcId,pcode:'MAR-AP',pname:'Marina Apartments',freeDocket:false,demoExtra:true,
+      date:_dt,sub:'Apex Tiling',reqBy:'Site Manager',reqHow:'Verbal',siNumber:null,po:null,
+      photos:[],materials:[],accommodation:null,refSubDocketId:null,
+      signerRole:'hc_supervisor',signerName:'Dana Mills',workerName:'Dion Park',
+      workersOnSite:[{name:'Dion Park',hours:6,start:'07:00',finish:'13:30',primary:true,trade:'Tiler'}],
+      startTime:'07:00',finishTime:'13:30',breakMins:30,hours:6,rate:0,cost:null,
+      bill:'bc',bcTarget:'Coastline Painting',desc:'Re-tile to level 2 lobby — remedial after water damage caused by others.',notes:'',
+      supervisorNote:'',sig:_sg('M8 60 C30 22,52 78,74 44 S120 26,150 54'),sigStatus:'signed',signToken:null,
+      signedAt:_dn,signedBySupervisor:'hcsup2',approvalStatus:'awaiting',
+      sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',createdBy:'hcsup2',createdAt:_dn});
+    const rjId=String(dctr).padStart(4,'0');dctr++;
+    dockets.push({id:rjId,pcode:'EAST-FO',pname:'Eastside Fitout',freeDocket:false,demoExtra:true,
+      date:_dt,sub:'Smooth Set Plastering',reqBy:'Project Manager',reqHow:'Email',siNumber:null,po:null,
+      photos:[],materials:[],accommodation:null,refSubDocketId:null,
+      signerRole:'hc_supervisor',signerName:'Dana Mills',workerName:'Grant Hughes',
+      workersOnSite:[{name:'Grant Hughes',hours:5,start:'08:00',finish:'13:00',primary:true,trade:'Plasterer'}],
+      startTime:'08:00',finishTime:'13:00',breakMins:0,hours:5,rate:0,cost:null,
+      bill:'ch',bcTarget:'',desc:'Cornice repair, level 1 meeting rooms.',notes:'',
+      supervisorNote:'',sig:_sg('M8 58 C34 20,58 80,86 42 S140 24,168 52'),sigStatus:'signed',signToken:null,
+      signedAt:_dn,signedBySupervisor:'hcsup2',
+      approvalStatus:'rejected',queriedByName:'Olivia Reed',queriedAt:_dn,queryNote:'Not authorised — no site instruction on record.',
+      sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',createdBy:'hcsup2',createdAt:_dn});
+    svL('v4_dock',dockets);svL('v4_ctr',dctr);svL('dlb_demo_extra_stamps',1);
+  }
 }
 
 // ─── AUTH ─────────────────────────────────────────────────────────────
@@ -2587,6 +2628,20 @@ function vdStatusStrip(d){
     <span class="vd-pill" style="background:${m[1]};color:${m[2]};">${m[0]}</span>
     ${age?`<span class="vd-age" style="border-color:${m[3]};color:${m[3]};">${age}</span>`:''}
   </div>`;
+}
+// Cool rubber-stamp shown on the docket: BACKCHARGE (signed + backcharge, with
+// the contractor it's charged back to) or REJECTED (client rejected it).
+function docketStamp(d){
+  if(!d)return'';
+  if(d.approvalStatus==='rejected'){
+    const who=d.queriedByName?('by '+esc(d.queriedByName)):'by client';
+    const dt=d.queriedAt?(' · '+fd(d.queriedAt.slice(0,10))):'';
+    return `<div class="vd-stamp-wrap"><div class="vd-stamp rej"><div class="s-big">Rejected</div><div class="s-sm">${who}${dt}</div></div></div>`;
+  }
+  if(d.bill==='bc'&&d.sig&&d.bcTarget){
+    return `<div class="vd-stamp-wrap"><div class="vd-stamp bc"><div class="s-big">Backcharge</div><div class="s-sm">to ${esc(d.bcTarget)}</div></div></div>`;
+  }
+  return'';
 }
 // Approval banner shown at the top of the docket view: approved / awaiting /
 // queried / rejected, with the reasons + note and (for our side) a
@@ -3843,6 +3898,7 @@ function vD(id){
       <span id="vd-translate-hint" style="font-size:11px;color:#aaa;"></span>
     </div>
     ${vdStatusStrip(d)}
+    ${docketStamp(d)}
     ${renderQueryStatus(d)}
     <div class="vd-sec-title">Job details</div>
     <div class="vd-rows">
@@ -4362,7 +4418,15 @@ function dlbEnsureStyles(){
   .dlb-doc .sign-meta{margin-top:8px;font-size:12px;color:#777;}
   .dlb-doc .sign-meta strong{color:#2D2D2D;}
   .dlb-doc .foot{padding:14px 30px 22px;border-top:1px solid #eee;display:flex;justify-content:space-between;font-size:10px;color:#b3b3ac;letter-spacing:0.03em;}
-  .dlb-doc .foot .fb{font-family:'Nunito',sans-serif;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#cfcfc8;}`;
+  .dlb-doc .foot .fb{font-family:'Nunito',sans-serif;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#cfcfc8;}
+  .dlb-doc .stamp-row{display:flex;justify-content:flex-end;margin:0 0 14px;}
+  .dlb-doc .dlb-stamp{text-align:center;text-transform:uppercase;font-family:'Nunito','Century Gothic',sans-serif;}
+  .dlb-doc .dlb-stamp.bc{transform:rotate(-6deg);background:#8A1F4B;color:#fff;padding:10px 24px;border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,.14);}
+  .dlb-doc .dlb-stamp.bc .b{font-size:22px;font-weight:800;letter-spacing:0.14em;line-height:1;}
+  .dlb-doc .dlb-stamp.bc .s{font-size:11px;font-weight:600;letter-spacing:0.05em;margin-top:5px;}
+  .dlb-doc .dlb-stamp.rej{transform:rotate(-8deg);border:3.5px double #B0271C;color:#B0271C;padding:9px 22px;border-radius:10px;}
+  .dlb-doc .dlb-stamp.rej .b{font-size:24px;font-weight:800;letter-spacing:0.13em;line-height:1;}
+  .dlb-doc .dlb-stamp.rej .s{font-size:11px;font-weight:700;letter-spacing:0.05em;margin-top:5px;}`;
   document.head.appendChild(st);
 }
 function dlbBuildSheet(d,showCosts){
@@ -4500,6 +4564,9 @@ function dlbBuildSheet(d,showCosts){
     </div>
     <div class="numstrip"><div><div class="label">Docket Number</div><div class="num">#${esc(d.id)}</div></div><div class="status" style="background:${chip.bg};">${chip.txt}</div></div>
     <div class="body">
+      ${(d.approvalStatus==='rejected')
+        ?`<div class="stamp-row"><div class="dlb-stamp rej"><div class="b">Rejected</div><div class="s">${d.queriedByName?'by '+esc(d.queriedByName):'by client'}${d.queriedAt?' · '+fd(d.queriedAt.slice(0,10)):''}</div></div></div>`
+        :(showCosts&&d.bill==='bc'&&d.sig&&d.bcTarget?`<div class="stamp-row"><div class="dlb-stamp bc"><div class="b">Backcharge</div><div class="s">to ${esc(d.bcTarget)}</div></div></div>`:'')}
       <div class="sec"><div class="sec-title">Job Details</div><div class="grid">${jobRows}</div></div>
       ${workersSec}
       ${tiles}${breakdown}
@@ -5958,7 +6025,7 @@ function renSampleDataCard(){
   const isAdm=!!(CU&&CU.role==='admin');
   if(card)card.style.display=isAdm?'':'none';
   if(!isAdm)return;
-  const n=dockets.filter(d=>DEMO_DOCKET_IDS.includes(d.id)).length;
+  const n=dockets.filter(d=>DEMO_DOCKET_IDS.includes(d.id)||d.demoExtra).length;
   const st=document.getElementById('sampledata-status');
   if(st)st.textContent=n?(n+' sample docket'+(n>1?'s':'')+' still present.'):'No sample dockets remaining.';
   const btn=card?card.querySelector('button'):null;
@@ -5966,10 +6033,10 @@ function renSampleDataCard(){
 }
 function clearSampleData(){
   if(!(CU&&CU.role==='admin'))return;
-  const present=dockets.filter(d=>DEMO_DOCKET_IDS.includes(d.id)).length;
+  const present=dockets.filter(d=>DEMO_DOCKET_IDS.includes(d.id)||d.demoExtra).length;
   if(!present){renSampleDataCard();return;}
   if(!confirm('Remove the '+present+' sample docket'+(present>1?'s':'')+'? Dockets you have created yourself are kept.'))return;
-  dockets=dockets.filter(d=>!DEMO_DOCKET_IDS.includes(d.id));
+  dockets=dockets.filter(d=>!(DEMO_DOCKET_IDS.includes(d.id)||d.demoExtra));
   svL('dlb_demo_ver',999);  // stop the demo set being re-seeded on next load
   svD();
   const ok=document.getElementById('sampledata-ok');if(ok){ok.classList.remove('hidden');setTimeout(()=>ok.classList.add('hidden'),2500);}
