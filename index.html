@@ -262,7 +262,7 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 /* Docket stamps — Backcharge (solid ink slab) + Rejected (double-border) */
 .vd-stamp-wrap{display:flex;justify-content:center;margin:2px 0 12px;}
 .vd-stamp{display:inline-block;text-align:center;text-transform:uppercase;}
-.vd-stamp.bc{transform:rotate(-5deg);background:#8A1F4B;color:#fff;padding:8px 20px;border-radius:4px;box-shadow:0 3px 0 rgba(0,0,0,.14);opacity:.95;}
+.vd-stamp.bc{transform:rotate(-5deg);border:3px double #8A1F4B;color:#8A1F4B;padding:7px 18px;border-radius:9px;opacity:.9;box-shadow:inset 0 0 0 2px rgba(138,31,75,.12);}
 .vd-stamp.bc .s-big{font-size:18px;font-weight:800;letter-spacing:.13em;line-height:1;}
 .vd-stamp.bc .s-sm{font-size:10px;font-weight:600;letter-spacing:.05em;margin-top:4px;opacity:.92;}
 .vd-stamp.rej{transform:rotate(-7deg);border:3px double #B0271C;color:#B0271C;padding:7px 18px;border-radius:9px;opacity:.9;box-shadow:inset 0 0 0 2px rgba(176,39,28,.12);}
@@ -692,7 +692,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c27</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c28</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -3920,8 +3920,7 @@ function vD(id){
       <button class="btn btn-s" style="font-size:12px;padding:5px 11px;" onclick="translateDocketView()">Translate</button>
       <span id="vd-translate-hint" style="font-size:11px;color:#aaa;"></span>
     </div>
-    ${vdStatusStrip(d)}
-    ${docketStamp(d)}
+    ${docketStamp(d)||vdStatusStrip(d)}
     ${renderQueryStatus(d)}
     <div class="vd-sec-title">Job details</div>
     <div class="vd-rows">
@@ -4444,7 +4443,7 @@ function dlbEnsureStyles(){
   .dlb-doc .foot .fb{font-family:'Nunito',sans-serif;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#cfcfc8;}
   .dlb-doc .stamp-row{display:flex;justify-content:flex-end;margin:0 0 14px;}
   .dlb-doc .dlb-stamp{text-align:center;text-transform:uppercase;font-family:'Nunito','Century Gothic',sans-serif;}
-  .dlb-doc .dlb-stamp.bc{transform:rotate(-6deg);background:#8A1F4B;color:#fff;padding:10px 24px;border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,.14);}
+  .dlb-doc .dlb-stamp.bc{transform:rotate(-6deg);border:3.5px double #8A1F4B;color:#8A1F4B;padding:9px 24px;border-radius:10px;}
   .dlb-doc .dlb-stamp.bc .b{font-size:22px;font-weight:800;letter-spacing:0.14em;line-height:1;}
   .dlb-doc .dlb-stamp.bc .s{font-size:11px;font-weight:600;letter-spacing:0.05em;margin-top:5px;}
   .dlb-doc .dlb-stamp.rej{transform:rotate(-8deg);border:3.5px double #B0271C;color:#B0271C;padding:9px 22px;border-radius:10px;}
