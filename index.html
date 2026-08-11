@@ -683,7 +683,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c23</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c24</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1446,7 +1446,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <div class="cc" style="background:#E6F1FB;border:0.5px solid #B5D4F4;"><div class="ccv" id="a-submitted" style="color:#185FA5;">0/0</div><div class="ccl" style="color:#185FA5;">✓ Submitted to client</div></div>
       </div>
       <div class="card" style="padding:0;"><div class="tw"><table>
-        <thead><tr><th>#</th><th>Project</th><th>Date</th><th>Subcontractor</th><th>Client contact</th><th>Hrs</th><th id="ad-th-cost">Cost</th><th>Billing</th><th>Signature</th><th></th></tr></thead>
+        <thead id="ad-thead"><tr><th>#</th><th>Project</th><th>Date</th><th>Subcontractor</th><th>Client contact</th><th>Hrs</th><th id="ad-th-cost">Cost</th><th>Billing</th><th>Signature</th><th></th></tr></thead>
         <tbody id="adb"></tbody>
       </table></div></div>
     </div>
@@ -3136,9 +3136,22 @@ function renAD(){
     return true;
   });
   const showMoney=CU&&CU.role==='admin';   // dollar values are admin-only (CLAUDE.md)
-  // Drop the Cost column entirely for non-admins (supervisors) — no monetary
-  // values at all on their Project dockets view, matching My dockets.
-  const thCost=document.getElementById('ad-th-cost');if(thCost)thCost.style.display=showMoney?'':'none';
+  // Non-admins (supervisors) get the clean My-dockets layout: no bulk tick-boxes,
+  // no export toolbar, no Client-contact column, and NO money — just a broader
+  // scope (every docket on their allocated projects, from any staff member).
+  const adActions=document.getElementById('ad-actions');if(adActions)adActions.style.display=isAdm?'':'none';
+  const adThead=document.getElementById('ad-thead');
+  if(adThead){
+    adThead.innerHTML=isAdm
+      ? `<tr><th>#</th><th>Project</th><th>Date</th><th>Subcontractor</th><th>Client contact</th><th>Hrs</th><th id="ad-th-cost">Cost</th><th>Billing</th><th>Signature</th><th></th></tr>`
+      : `<tr><th>#</th><th>Project</th><th>Company</th><th>Date</th><th>Hrs</th><th>Billing</th><th>Status</th><th></th></tr>`;
+  }
+  if(!isAdm){
+    // Clean supervisor list — mirrors My dockets, money-free, whole-project scope.
+    if(!fl.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:#aaa;padding:20px;">No dockets found</td></tr>';return;}
+    tb.innerHTML=fl.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;"><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span></td><td>${projBadge(d.pcode)}</td><td style="max-width:140px;">${esc(d.sub||'—')}</td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${mdBilling(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td></tr>`).join('');
+    return;
+  }
   const chList=fl.filter(d=>d.bill==='ch');
   const ch=chList.reduce((s,d)=>{const c=calcC(d);return s+(c||0);},0);
   const ow=fl.filter(d=>d.bill==='ow').reduce((s,d)=>{const c=calcC(d);return s+(c||0);},0);
