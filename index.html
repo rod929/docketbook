@@ -692,7 +692,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c31</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c32</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -2240,7 +2240,7 @@ function seedTrialData(){
       startTime:'07:00',finishTime:'13:30',breakMins:30,hours:6,rate:0,cost:null,
       bill:'bc',bcTarget:'Coastline Painting',desc:'Re-tile to level 2 lobby — remedial after water damage caused by others.',notes:'',
       supervisorNote:'',sig:_sg('M8 60 C30 22,52 78,74 44 S120 26,150 54'),sigStatus:'signed',signToken:null,
-      signedAt:_dn,signedBySupervisor:'hcsup2',approvalStatus:'awaiting',
+      signedAt:_dn,signedBySupervisor:'hcsup2',approvalStatus:'approved',approvedByName:'Contracts Admin',approvedAt:_dn,
       sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',createdBy:'hcsup2',createdAt:_dn});
     const rjId=String(dctr).padStart(4,'0');dctr++;
     dockets.push({id:rjId,pcode:'EAST-FO',pname:'Eastside Fitout',freeDocket:false,demoExtra:true,
@@ -2255,6 +2255,13 @@ function seedTrialData(){
       approvalStatus:'rejected',queriedByName:'Olivia Reed',queriedAt:_dn,queryNote:'Not authorised — no site instruction on record.',
       sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',createdBy:'hcsup2',createdAt:_dn});
     svL('v4_dock',dockets);svL('v4_ctr',dctr);svL('dlb_demo_extra_stamps',1);
+  }
+  // One-time: the demo backcharge example needs to be Approved to show its stamp
+  // (a backcharge isn't confirmed until admin approves the docket).
+  if(!ldL('dlb_demo_bc_approved')){
+    const bcDemo=dockets.find(x=>x.demoExtra&&x.bill==='bc'&&x.approvalStatus!=='approved');
+    if(bcDemo){bcDemo.approvalStatus='approved';bcDemo.approvedByName='Contracts Admin';bcDemo.approvedAt=new Date().toISOString();svL('v4_dock',dockets);}
+    svL('dlb_demo_bc_approved',1);
   }
 }
 
@@ -2652,7 +2659,9 @@ function docketStamp(d){
     const dt=d.queriedAt?(' · '+fd(d.queriedAt.slice(0,10))):'';
     return `<div class="vd-stamp-wrap"><div class="vd-stamp rej"><div class="s-big">Rejected</div><div class="s-sm">${who}${dt}</div></div></div>`;
   }
-  if(d.bill==='bc'&&d.sig&&d.bcTarget){
+  // A backcharge is only confirmed once admin has APPROVED the docket — before
+  // that it's just a proposed billing type, not yet a backcharge.
+  if(d.bill==='bc'&&d.sig&&d.bcTarget&&d.approvalStatus==='approved'){
     return `<div class="vd-stamp-wrap"><div class="vd-stamp bc"><div class="s-big">Backcharge</div><div class="s-sm">to ${esc(d.bcTarget)}</div></div></div>`;
   }
   return'';
@@ -4077,7 +4086,7 @@ function vD(id){
       </div>
       ${!d.sig?`<p style="font-size:11px;color:#aaa;margin-top:8px;text-align:center;">🔒 Awaiting signature before billing can be set</p>`:(billingLocked(d)?`<p style="font-size:11px;color:#8a5a12;margin-top:8px;text-align:center;background:#FBEFD9;border-radius:8px;padding:7px 10px;">🔒 Billing locked — this docket has gone to the client. It can be changed only if the client rejects it.</p>`:'')}
       ${d.bill==='bc'&&d.bcTarget?`<p style="font-size:12px;color:#5B21B6;margin-top:8px;">Backcharge to: <strong>${esc(d.bcTarget)}</strong></p>`:''}
-      ${(CU&&CU.role==='admin'&&d.bill==='bc'&&d.sig&&d.bcTarget)?`<div style="margin-top:8px;"><button class="btn btn-s" style="border-color:#8A1F4B;color:#8A1F4B;font-weight:600;" onclick="forwardBackchargeNotice('${d.id}')">📨 Forward backcharge notice</button>${d.bcNoticeSent?`<span style="font-size:11px;color:#1D9E75;margin-left:8px;">✓ Notice sent ${fd(d.bcNoticeSent.slice(0,10))}</span>`:''}</div>`:''}
+      ${(CU&&CU.role==='admin'&&d.bill==='bc'&&d.sig&&d.bcTarget&&d.approvalStatus==='approved')?`<div style="margin-top:8px;"><button class="btn btn-s" style="border-color:#8A1F4B;color:#8A1F4B;font-weight:600;" onclick="forwardBackchargeNotice('${d.id}')">📨 Forward backcharge notice</button>${d.bcNoticeSent?`<span style="font-size:11px;color:#1D9E75;margin-left:8px;">✓ Notice sent ${fd(d.bcNoticeSent.slice(0,10))}</span>`:''}</div>`:''}
     </div>`:''}`;
 
   // Show signing link for remote
@@ -4601,7 +4610,7 @@ function dlbBuildSheet(d,showCosts){
     <div class="body">
       ${(d.approvalStatus==='rejected')
         ?`<div class="stamp-row"><div class="dlb-stamp rej"><div class="b">Rejected</div><div class="s">${d.queriedByName?'by '+esc(d.queriedByName):'by client'}${d.queriedAt?' · '+fd(d.queriedAt.slice(0,10)):''}</div></div></div>`
-        :(showCosts&&d.bill==='bc'&&d.sig&&d.bcTarget?`<div class="stamp-row"><div class="dlb-stamp bc"><div class="b">Backcharge</div><div class="s">to ${esc(d.bcTarget)}</div></div></div>`:'')}
+        :(showCosts&&d.bill==='bc'&&d.sig&&d.bcTarget&&d.approvalStatus==='approved'?`<div class="stamp-row"><div class="dlb-stamp bc"><div class="b">Backcharge</div><div class="s">to ${esc(d.bcTarget)}</div></div></div>`:'')}
       <div class="sec"><div class="sec-title">Job Details</div><div class="grid">${jobRows}</div></div>
       ${workersSec}
       ${tiles}${breakdown}
