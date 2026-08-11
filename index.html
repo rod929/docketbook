@@ -46,6 +46,14 @@ textarea{resize:vertical;min-height:60px;}
 #t-nd label{font-size:15px;margin-bottom:8px;color:#444;font-weight:500;}
 #t-nd select{height:auto;min-height:60px;}
 #t-nd textarea{min-height:120px;}
+/* ── Subtle alignment with the finalised dashboard look ── */
+/* Cards: same soft radius + hairline shadow as the dashboard boxes */
+#t-nd .card{border-radius:16px;border-color:rgba(0,0,0,0.08);box-shadow:0 1px 3px rgba(45,45,45,0.05);}
+/* Major section headings styled as the dashboard's uppercase eyebrow labels */
+#t-nd label.nd-sec-head{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#9a958c;}
+#t-nd label.nd-sec-head span{text-transform:none;letter-spacing:0;}
+/* Inner grouping boxes (workers / accommodation) share the softer card corners */
+#t-nd .nd-subcard{border-radius:14px;border-color:rgba(0,0,0,0.08);}
 /* When the Review & Sign panel is open, hide the app chrome for a clean full-screen docket */
 body.review-open header{display:none!important;}
 body.review-open .rban{display:none!important;}
@@ -661,7 +669,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c5</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c6</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1191,13 +1199,13 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <!-- WORKERS ON SITE -->
           <div class="s2" id="workers-section">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:8px;">
-              <label style="margin:0;" id="lbl-workers-on-site">Workers on site</label>
+              <label class="nd-sec-head" style="margin:0;" id="lbl-workers-on-site">Workers on site</label>
               <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin:0;font-size:13px;color:#666;font-weight:400;">
                 <input type="checkbox" id="workers-same-hours" onchange="toggleSameHours(this.checked)" style="width:16px;height:16px;margin:0;">
                 <span id="lbl-same-hours">Same hours for all</span>
               </label>
             </div>
-            <div style="background:#fafaf8;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px;">
+            <div class="nd-subcard" style="background:#fafaf8;border:0.5px solid rgba(0,0,0,0.1);padding:12px;">
               <div id="lbl-workers-helper" style="font-size:12px;color:#888;margin-bottom:10px;">The worker filling out this docket is listed first. Add anyone else who worked on the same task.</div>
               <div id="workers-list"></div>
               <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
@@ -1219,7 +1227,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <!-- MATERIALS -->
         <div class="s2">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-            <label style="margin:0;">Materials <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:6px;">optional</span></label>
+            <label class="nd-sec-head" style="margin:0;">Materials <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:6px;">optional</span></label>
             <button type="button" class="btn" onclick="addMaterialRow()" style="font-size:13px;background:#EF9F27;color:#412402;border:none;font-weight:600;padding:8px 14px;">+ Add item</button>
           </div>
           <div id="materials-list"></div>
@@ -1229,13 +1237,13 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <!-- ACCOMMODATION -->
         <div class="s2">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-            <label style="margin:0;">Accommodation <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:6px;">optional</span></label>
+            <label class="nd-sec-head" style="margin:0;">Accommodation <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:6px;">optional</span></label>
             <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin:0;font-size:12px;color:#666;">
               <input type="checkbox" id="accom-toggle" onchange="toggleAccom(this.checked)" style="margin:0;">
               <span id="lbl-applicable">Applicable</span>
             </label>
           </div>
-          <div id="accom-section" class="hidden" style="border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:12px;background:#fafaf8;">
+          <div id="accom-section" class="hidden" style="border:0.5px solid rgba(0,0,0,0.08);border-radius:14px;padding:12px;background:#fafaf8;">
             <div class="fg3" style="margin-bottom:8px;">
               <div><label>Type</label>
                 <select id="accom-type">
@@ -1254,7 +1262,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           </div>
         </div>
         <div class="s2">
-          <label>Photos <span style="font-size:11px;color:#aaa;font-weight:400;">optional</span></label>
+          <label class="nd-sec-head">Photos <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:6px;">optional</span></label>
           <div style="display:flex;gap:8px;margin-bottom:6px;">
             <button type="button" class="btn" style="flex:1;padding:12px 8px;border-radius:8px;border:1px dashed rgba(0,0,0,0.2);background:#fafaf8;color:#666;font-size:13px;" onclick="document.getElementById('photo-camera').click()">
               <i class="ti ti-camera" style="font-size:18px;vertical-align:-3px;margin-right:6px;" aria-hidden="true"></i><span id="lbl-take-photo">Take photo</span>
