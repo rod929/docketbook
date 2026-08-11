@@ -669,7 +669,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c11</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c12</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -3749,6 +3749,8 @@ function resetDF(){
 function vD(id){
   const d=dockets.find(x=>x.id===id);if(!d)return;
   curDock=d;
+  // Billing type is editable only once signed AND not yet committed to the client.
+  const _canBill=d.sig&&!billingLocked(d);
   const r=getRate(d.createdBy);
   const cost=d.cost!=null?d.cost:(r?Math.round(d.hours*r*100)/100:null);
   const cli=d.clientId?clients.find(c=>c.id===d.clientId):null;
@@ -3901,19 +3903,19 @@ function vD(id){
       <p style="font-size:12px;font-weight:500;color:#1a1a1a;margin-bottom:10px;">Billing type</p>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <button onclick="assignBilling('${d.id}','ch')"
-          style="flex:1;min-width:120px;padding:10px 8px;border-radius:8px;border:2px solid ${d.bill==='ch'?'#185FA5':'rgba(0,0,0,0.12)'};background:${d.bill==='ch'?'#E6F1FB':'#fff'};color:${d.bill==='ch'?'#0C447C':'#666'};font-size:13px;font-weight:${d.bill==='ch'?'600':'400'};cursor:${d.sig?'pointer':'not-allowed'};opacity:${d.sig?'1':'0.4'};" ${d.sig?'':'disabled'}>
+          style="flex:1;min-width:120px;padding:10px 8px;border-radius:8px;border:2px solid ${d.bill==='ch'?'#185FA5':'rgba(0,0,0,0.12)'};background:${d.bill==='ch'?'#E6F1FB':'#fff'};color:${d.bill==='ch'?'#0C447C':'#666'};font-size:13px;font-weight:${d.bill==='ch'?'600':'400'};cursor:${_canBill?'pointer':'not-allowed'};opacity:${_canBill?'1':'0.4'};" ${_canBill?'':'disabled'}>
           Chargeable
         </button>
         <button onclick="assignBilling('${d.id}','ow')"
-          style="flex:1;min-width:120px;padding:10px 8px;border-radius:8px;border:2px solid ${d.bill==='ow'?'#854F0B':'rgba(0,0,0,0.12)'};background:${d.bill==='ow'?'#FAEEDA':'#fff'};color:${d.bill==='ow'?'#633806':'#666'};font-size:13px;font-weight:${d.bill==='ow'?'600':'400'};cursor:${d.sig?'pointer':'not-allowed'};opacity:${d.sig?'1':'0.4'};" ${d.sig?'':'disabled'}>
+          style="flex:1;min-width:120px;padding:10px 8px;border-radius:8px;border:2px solid ${d.bill==='ow'?'#854F0B':'rgba(0,0,0,0.12)'};background:${d.bill==='ow'?'#FAEEDA':'#fff'};color:${d.bill==='ow'?'#633806':'#666'};font-size:13px;font-weight:${d.bill==='ow'?'600':'400'};cursor:${_canBill?'pointer':'not-allowed'};opacity:${_canBill?'1':'0.4'};" ${_canBill?'':'disabled'}>
           Own cost
         </button>
         <button onclick="assignBilling('${d.id}','bc')"
-          style="flex:1;min-width:120px;padding:10px 8px;border-radius:8px;border:2px solid ${d.bill==='bc'?'#5B21B6':'rgba(0,0,0,0.12)'};background:${d.bill==='bc'?'#EDE9FE':'#fff'};color:${d.bill==='bc'?'#5B21B6':'#666'};font-size:13px;font-weight:${d.bill==='bc'?'600':'400'};cursor:${d.sig?'pointer':'not-allowed'};opacity:${d.sig?'1':'0.4'};" ${d.sig?'':'disabled'}>
+          style="flex:1;min-width:120px;padding:10px 8px;border-radius:8px;border:2px solid ${d.bill==='bc'?'#5B21B6':'rgba(0,0,0,0.12)'};background:${d.bill==='bc'?'#EDE9FE':'#fff'};color:${d.bill==='bc'?'#5B21B6':'#666'};font-size:13px;font-weight:${d.bill==='bc'?'600':'400'};cursor:${_canBill?'pointer':'not-allowed'};opacity:${_canBill?'1':'0.4'};" ${_canBill?'':'disabled'}>
           Backcharge
         </button>
       </div>
-      ${!d.sig?`<p style="font-size:11px;color:#aaa;margin-top:8px;text-align:center;">🔒 Awaiting signature before billing can be set</p>`:''}
+      ${!d.sig?`<p style="font-size:11px;color:#aaa;margin-top:8px;text-align:center;">🔒 Awaiting signature before billing can be set</p>`:(billingLocked(d)?`<p style="font-size:11px;color:#8a5a12;margin-top:8px;text-align:center;background:#FBEFD9;border-radius:8px;padding:7px 10px;">🔒 Billing locked — this docket has gone to the client. It can be changed only if the client queries or rejects it.</p>`:'')}
       ${d.bill==='bc'&&d.bcTarget?`<p style="font-size:12px;color:#5B21B6;margin-top:8px;">Backcharge to: <strong>${esc(d.bcTarget)}</strong></p>`:''}
     </div>`:''}`;
 
@@ -5490,9 +5492,22 @@ document.addEventListener('click',function(e){
 });
 
 
+// Billing is locked once the docket is committed to the client — approved,
+// marked submitted to client, or an up-chain docket awaiting the client's
+// signature. It can be changed again only if the client sends it back
+// (queried / rejected).
+function billingLocked(d){
+  if(!d)return false;
+  if(d.approvalStatus==='queried'||d.approvalStatus==='rejected')return false;
+  if(d.approvalStatus==='approved')return true;
+  if(d.submittedToClient)return true;
+  if(typeof docketStatus==='function'&&docketStatus(d)==='awaiting_client')return true;
+  return false;
+}
 function assignBilling(docketId, newBill){
   const d=dockets.find(x=>x.id===docketId);
   if(!d)return;
+  if(billingLocked(d)){alert('This docket has gone to the client, so its billing is locked. It can be changed only if the client queries or rejects it.');return;}
   if(newBill==='bc'){
     const subName=prompt('Backcharge to which subcontractor?','');
     if(!subName)return;
