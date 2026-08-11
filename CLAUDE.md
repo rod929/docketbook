@@ -129,6 +129,22 @@ OUTSTANDING WORK (in priority order):
    metering for billing. All cross-company/approval logic already anticipates
    this — switch the data layer, keep the logic.
 3. Before production: remove demo logins; add proper auth/security.
+4. Materials receipt auto-read (BACKEND-COUPLED). Today the Materials section
+   only ATTACHES a receipt/invoice image or PDF (stored as a data URL on the
+   material row); the Total ($) is typed by hand — there is NO auto-detection.
+   Desired flow once the backend exists: staff photograph the receipt/invoice →
+   it's attached → a vision/OCR service (e.g. Claude vision, Google Vision, AWS
+   Textract) reads the amount and pre-fills the material Total (distinguishing
+   the true total from subtotal/GST/line items; always user-confirmable). Do
+   this via the backend, NOT client-side Tesseract (heavy CDN dep + unreliable
+   at picking the right figure). THEN the 10% materials purchasing charge should
+   gain two new modes on top of today's per-docket admin-only tick (d.materialsFee):
+   (a) a per-docket tick the SUPERVISOR can set — a policy flag ("we purchased
+   these materials → apply purchasing charge") that must NOT reveal dollar
+   amounts, to stay within the money rule; and (b) an ADMIN global default that
+   permanently switches the charge on or off company-wide (a Settings toggle),
+   which per-docket ticks can still override. The admin global default (b) is
+   independent of the backend and buildable now if wanted ahead of time.
 
 Business context (for reference, not for the app code): pricing is $80/month per
 subcontractor for 50 dockets; builders get free access initially then a smaller
