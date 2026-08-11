@@ -661,7 +661,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c3</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c4</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1582,6 +1582,21 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         </div>
       </div>
 
+      <div class="card" id="reqby-settings-card" style="margin-top:4px;display:none;">
+        <p style="font-size:13px;font-weight:500;margin-bottom:4px;">🧑‍💼 “Requested by” options <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
+        <p style="font-size:12px;color:#888;margin-bottom:14px;">These appear as pick-list suggestions in the “Requested by” field when creating a docket. The four standard roles are always available; add any extra names or roles your team uses.</p>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#999;margin-bottom:6px;">Standard roles</div>
+        <div id="reqby-defaults" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;"></div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#999;margin-bottom:6px;">Your added options</div>
+        <div id="reqby-custom" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="text" id="reqby-new" placeholder="e.g. Site Engineer" style="flex:1;min-width:150px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addReqByOption();}">
+          <button class="btn btn-p" onclick="addReqByOption()">+ Add</button>
+        </div>
+        <div id="reqby-ok" class="ok hidden" style="margin-top:10px;">Saved.</div>
+        <p style="font-size:11px;color:#aaa;margin:10px 0 0;">Note: saved on this device. Company-wide sync across everyone’s devices arrives with the cloud backend.</p>
+      </div>
+
       <div class="card" style="margin-top:4px;">
         <p style="font-size:13px;font-weight:500;margin-bottom:10px;">👁 Preview</p>
         <div id="settings-preview" style="border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:14px;background:#fafaf8;"></div>
@@ -2061,10 +2076,10 @@ function seedTrialData(){
   TCRATES.forEach(cr=>{if(!cRates.find(x=>x.projCode===cr.projCode&&x.trade===cr.trade)){cRates.push({...cr,updated:new Date().toISOString()});cratesChanged=true;}});
   if(cratesChanged)svCRates();
 
-  // Trial "Requested by" staff so the New Docket field can pre-fill. Only seeded
-  // when the key is entirely absent — an empty list the owner created is left be.
+  // The four standard "Requested by" roles are now built in (DEFAULT_REQBY), so
+  // no seeding needed — dlb_staff holds only admin-added extras. Start it empty.
   if(ldL('dlb_staff')===null){
-    svL('dlb_staff',['Site Manager','Project Manager','Foreman']);
+    svL('dlb_staff',[]);
   }
   // Trial site-instruction numbers so the SI field can pre-fill / suggest.
   if(ldL('dlb_si_numbers')===null){
@@ -2397,7 +2412,7 @@ function showTab(tab,btn){
   if(tab==='subs')renST();
   if(tab==='proj'){renPT();renClientSelects();}
   if(tab==='clients')renClientList();
-  if(tab==='settings'){loadSettingsForm();renSettingsPreview();renFlashSettings();}
+  if(tab==='settings'){loadSettingsForm();renSettingsPreview();renFlashSettings();renReqBySettings();}
   if(tab==='drafts')renDrafts();
   if(tab==='ready')renReady();
   if(tab==='rates'){renRatesSelects();renRatesTable();}
@@ -3642,10 +3657,23 @@ function startVoice(fieldId){
     else if(e&&e.error==='no-speech'){/* silent — user just didn't speak */}
   };
   rec.onend=reset;
+  // Accumulate FINALISED speech ourselves and only read NEW results (from
+  // ev.resultIndex). Re-summing ev.results every event caused words to repeat
+  // on some phones, where finalised segments get re-emitted.
+  let finalText='';
   rec.onresult=(ev)=>{
-    let full='';
-    for(let i=0;i<ev.results.length;i++)full+=ev.results[i][0].transcript;
-    if(ta){const sep=base&&!/\s$/.test(base)?' ':'';ta.value=base+sep+full;ta.classList.remove('field-error');}
+    let interim='';
+    for(let i=ev.resultIndex;i<ev.results.length;i++){
+      const r=ev.results[i];
+      if(r.isFinal)finalText+=r[0].transcript;
+      else interim+=r[0].transcript;
+    }
+    if(ta){
+      const spoken=(finalText+interim).replace(/\s+/g,' ').trim();
+      const sep=base&&spoken&&!/\s$/.test(base)?' ':'';
+      ta.value=base+sep+spoken;
+      ta.classList.remove('field-error');
+    }
   };
   try{rec.start();}catch(e){reset();}
 }
@@ -5697,13 +5725,23 @@ function setCompanyField(){
 // ─── STAFF (Requested By) ─────────────────────────────────────────────
 let uploadedPhotos=[];
 
+// The four standard roles every company starts with. Always offered as
+// "Requested by" suggestions; admins can add extra names/roles on top.
+const DEFAULT_REQBY=['Project Manager','Site Manager','Foreman','Contracts Administrator'];
+// Admin-added extras only (anything saved that isn't already a standard role).
+function getReqByCustom(){
+  return (ldL('dlb_staff')||[]).filter(s=>s&&!DEFAULT_REQBY.some(d=>d.toLowerCase()===String(s).toLowerCase()));
+}
+// Full pick-list: the four standard roles first, then any admin-added extras.
+function getReqByAll(){
+  return DEFAULT_REQBY.concat(getReqByCustom().slice().sort((a,b)=>a.localeCompare(b)));
+}
 function loadReqByStaff(){
   // "Requested by" is a type-or-pick field: fill the suggestions datalist from
-  // the saved staff list; the input keeps whatever value is already there.
+  // the standard roles + admin extras; the input keeps whatever value it has.
   const dl=document.getElementById('d-reqby-list');
   if(!dl)return;
-  const staff=ldL('dlb_staff')||[];
-  dl.innerHTML=staff.map(s=>'<option value="'+esc(s)+'"></option>').join('');
+  dl.innerHTML=getReqByAll().map(s=>'<option value="'+esc(s)+'"></option>').join('');
 }
 
 // Pre-fill the "Requested by" staff member when nothing is selected yet: prefer
@@ -5713,9 +5751,48 @@ function loadReqByStaff(){
 function prefillReqBy(){
   const sel=document.getElementById('d-reqby');if(!sel)return;
   if(sel.value)return;
-  const staff=ldL('dlb_staff')||[];
+  const staff=getReqByAll();
   if(!staff.length)return;
   sel.value=(CU&&CU.name&&staff.includes(CU.name))?CU.name:staff[0];
+}
+
+// ── Admin: manage the "Requested by" pick-list (Settings) ─────────────
+function renReqBySettings(){
+  const card=document.getElementById('reqby-settings-card');
+  const isAdm=!!(CU&&CU.role==='admin');
+  if(card)card.style.display=isAdm?'':'none';
+  if(!isAdm)return;
+  const defs=document.getElementById('reqby-defaults');
+  if(defs)defs.innerHTML=DEFAULT_REQBY.map(s=>
+    '<span style="font-size:12px;background:#eef1f4;color:#3a3a38;border-radius:14px;padding:5px 11px;">'+esc(s)+'</span>').join('');
+  const cust=document.getElementById('reqby-custom');
+  if(cust){
+    const list=getReqByCustom().slice().sort((a,b)=>a.localeCompare(b));
+    cust.innerHTML=list.length?list.map(s=>
+      '<span style="font-size:12px;background:#FBEFD9;color:#8a530a;border-radius:14px;padding:5px 6px 5px 11px;display:inline-flex;align-items:center;gap:6px;">'
+      +esc(s)+'<button type="button" onclick="removeReqByOption('+JSON.stringify(s).replace(/"/g,'&quot;')+')" aria-label="Remove" style="background:none;border:none;color:#b26a10;font-size:15px;line-height:1;cursor:pointer;padding:0 2px;">✕</button></span>').join('')
+      :'<span style="font-size:12px;color:#aaa;">None yet — add your own below.</span>';
+  }
+}
+function addReqByOption(){
+  if(!(CU&&CU.role==='admin'))return;
+  const inp=document.getElementById('reqby-new');
+  const name=(inp?inp.value:'').trim();
+  if(!name)return;
+  const staff=ldL('dlb_staff')||[];
+  const exists=staff.some(s=>s.toLowerCase()===name.toLowerCase())
+    ||DEFAULT_REQBY.some(d=>d.toLowerCase()===name.toLowerCase());
+  if(!exists){staff.push(name);svL('dlb_staff',staff);}
+  if(inp)inp.value='';
+  renReqBySettings();loadReqByStaff();
+  const ok=document.getElementById('reqby-ok');if(ok){ok.classList.remove('hidden');setTimeout(()=>ok.classList.add('hidden'),2000);}
+}
+function removeReqByOption(name){
+  if(!(CU&&CU.role==='admin'))return;
+  let staff=ldL('dlb_staff')||[];
+  staff=staff.filter(s=>s.toLowerCase()!==String(name).toLowerCase());
+  svL('dlb_staff',staff);
+  renReqBySettings();loadReqByStaff();
 }
 
 // Show the SI-number field only when the method is "Site Instruction". It's a
@@ -7117,7 +7194,7 @@ function addWorkerRow(name='',hours='',isPrimary=false,start='',finish=''){
   // Header: worker label on the left, "✓ You" or a quiet remove ✕ on the right.
   const header=
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'
-      +'<span style="font-size:12px;font-weight:700;color:#2D2D2D;">'
+      +'<span class="wk-hdr" style="font-size:12px;font-weight:700;color:#2D2D2D;">'
         +(isPrimary?_wl.wFilledBy:(_wl.wWorker+' '+(idx+1)))+'</span>'
       +(isPrimary
         ?'<span style="font-size:11px;color:#1D9E75;font-weight:600;">✓ You</span>'
@@ -7171,8 +7248,8 @@ function relabelWorkerRows(){
   Array.from(list.children).forEach((row,i)=>{
     if(row.dataset.primary==='1')return;
     const _wl=_L();
-    const lbl=row.querySelector('label');
-    if(lbl)lbl.textContent=_wl.wWorker+' '+(i+1);
+    const hdr=row.querySelector('.wk-hdr');
+    if(hdr)hdr.textContent=_wl.wWorker+' '+(i+1);
     const nm=row.querySelector('.wk-name');
     if(nm&&!nm.value.trim())nm.placeholder=_wl.wWorker+' '+(i+1)+' '+_wl.wNameOpt;
   });
@@ -7185,15 +7262,16 @@ function retranslateWorkerRows(){
   if(!list)return;
   const _wl=_L();
   Array.from(list.children).forEach((row,i)=>{
+    const hdr=row.querySelector('.wk-hdr');
     const labels=row.querySelectorAll('label');
     if(row.dataset.primary==='1'){
-      if(labels[0])labels[0].textContent=_wl.wFilledBy;
-      if(labels[1])labels[1].textContent=_wl.wHours; // primary row has no Start/Finish
+      if(hdr)hdr.textContent=_wl.wFilledBy;
+      if(labels[0])labels[0].textContent=_wl.wHours; // primary row has only the Hours label
     }else{
-      if(labels[0])labels[0].textContent=_wl.wWorker+' '+(i+1);
-      if(labels[1])labels[1].textContent=_wl.wStart;
-      if(labels[2])labels[2].textContent=_wl.wFinish;
-      if(labels[3])labels[3].textContent=_wl.wHours;
+      if(hdr)hdr.textContent=_wl.wWorker+' '+(i+1);
+      if(labels[0])labels[0].textContent=_wl.wStart;
+      if(labels[1])labels[1].textContent=_wl.wFinish;
+      if(labels[2])labels[2].textContent=_wl.wHours;
       const nm=row.querySelector('.wk-name');
       if(nm&&!nm.value.trim())nm.placeholder=_wl.wWorker+' '+(i+1)+' '+_wl.wNameOpt;
     }
