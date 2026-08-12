@@ -692,7 +692,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c36</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c37</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1258,7 +1258,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <!-- Admin-only 10% purchasing charge, shown once a material has a value -->
           <label id="nd-mat-fee-wrap" class="hidden" style="display:flex;align-items:center;gap:8px;font-size:13px;color:#633806;cursor:pointer;margin-top:10px;background:#FFFBF5;border:0.5px solid #F2D9A8;border-radius:10px;padding:11px 12px;">
             <input type="checkbox" id="nd-mat-fee" style="width:18px;height:18px;margin:0;flex-shrink:0;">
-            <span>Add 10% materials purchasing charge <span style="font-size:10px;color:#185FA5;background:#E6F1FB;padding:1px 6px;border-radius:8px;margin-left:2px;">ADMIN</span></span>
+            <span>Add <span id="nd-fee-pct">10%</span> materials purchasing charge <span style="font-size:10px;color:#185FA5;background:#E6F1FB;padding:1px 6px;border-radius:8px;margin-left:2px;">ADMIN</span></span>
           </label>
         </div>
 
@@ -1614,8 +1614,19 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <p style="font-size:12px;color:#888;margin-bottom:14px;">Company-wide defaults applied to new dockets. Individual dockets can still override them.</p>
         <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin:0;font-size:13px;color:#2D2D2D;">
           <input type="checkbox" id="def-materials-fee" onchange="toggleMaterialsFeeDefault(this.checked)" style="width:18px;height:18px;margin:2px 0 0;flex-shrink:0;">
-          <span>Apply the <strong>10% materials purchasing charge</strong> by default <span style="color:#888;font-weight:400;">— pre-ticks the charge on new dockets that have materials (admin can untick per docket)</span></span>
+          <span>Apply the <strong><span id="def-fee-pct-lbl">10%</span> materials purchasing charge</strong> by default <span style="color:#888;font-weight:400;">— pre-ticks the charge on new dockets that have materials (admin can untick per docket)</span></span>
         </label>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap;">
+          <label style="margin:0;font-size:13px;color:#2D2D2D;">Materials purchasing charge rate</label>
+          <div style="display:flex;align-items:center;gap:4px;"><input type="number" id="def-materials-pct" min="0" max="100" step="0.5" value="10" onchange="saveMaterialsPct(this.value)" style="width:80px;"><span style="font-size:13px;color:#555;">%</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap;">
+          <label style="margin:0;font-size:13px;color:#2D2D2D;">Default billing for new admin dockets</label>
+          <select id="def-bill" onchange="saveDefaultBill(this.value)" style="width:160px;">
+            <option value="ch">Chargeable</option>
+            <option value="ow">Own cost</option>
+          </select>
+        </div>
         <div id="company-defaults-ok" class="ok hidden" style="margin-top:10px;">Saved.</div>
         <p style="font-size:11px;color:#aaa;margin:10px 0 0;">Note: saved on this device. Company-wide sync across everyone’s devices arrives with the cloud backend.</p>
       </div>
@@ -3583,9 +3594,10 @@ function submitD(){
   const startTime=_st?String(_st.h).padStart(2,'0')+':'+String(_st.m).padStart(2,'0'):document.getElementById('d-start').value;
   const finishTime=_ft?String(_ft.h).padStart(2,'0')+':'+String(_ft.m).padStart(2,'0'):document.getElementById('d-finish').value;
   const breakMins=parseInt(document.getElementById('d-break').value)||0;
-  // Non-sub dockets default to chargeable, UNLESS billing was deferred to the
-  // internal Pending billing folder (signed without a billing choice).
-  if(CU&&CU.role!=='sub'&&!window._deferBilling)bill='ch';
+  // Non-sub dockets take the company default billing, UNLESS billing was deferred
+  // to the Pending billing folder. Up-chain client mirrors are always chargeable
+  // (they're the docket being charged to the client).
+  if(CU&&CU.role!=='sub'&&!window._deferBilling)bill=window._refSubDocketId?'ch':defaultBill();
   const bcSubVal=document.getElementById('bc-sub')?.value||null;
   const bcOtherVal=document.getElementById('bc-other')?.value.trim()||null;
   const bcTarget=bill==='bc'?(bcSubVal==='other'?bcOtherVal:(subs.find(s=>s.u===bcSubVal)?.name||bcSubVal)):null;
@@ -3924,7 +3936,7 @@ function resetDF(){
   if(CU&&CU.role!=='sub'){
     const bw=document.getElementById('bill-type-wrap');if(bw){bw.classList.add('hidden');bw.style.display='';}
     const bn=document.getElementById('bill-type-pending-note');if(bn)bn.classList.add('hidden');
-    bill='ch';
+    bill=defaultBill();
   } else {
     lockBillingBtns();
   }
@@ -4053,7 +4065,7 @@ function vD(id){
         const isAdm=CU&&CU.role==='admin';
         const matCost=d.materials.reduce((s,m)=>s+(m.total||0),0);
         const feeOn=!!d.materialsFee;
-        const fee=feeOn?Math.round(matCost*0.10*100)/100:0;
+        const fee=feeOn?Math.round(matCost*materialsFeePct()*100)/100:0;
         const matCharged=matCost+fee;
         const headTotal=isAdm?'<th style="color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);text-align:right;">Total</th>':'';
         const rows=d.materials.map(m=>`<tr><td style="padding:4px 6px;">${esc(m.desc||'—')}</td><td style="padding:4px 6px;text-align:center;">${m.invoice?'📎':'—'}</td>${isAdm?`<td style="padding:4px 6px;text-align:right;color:#185FA5;font-weight:500;">${m.total?'$'+m.total.toFixed(2):'—'}</td>`:''}</tr>`).join('');
@@ -4061,13 +4073,13 @@ function vD(id){
         if(isAdm){
           foot=`<tfoot>
             <tr><td colspan="2" style="padding:4px 6px;text-align:right;color:#888;">Materials (at cost)</td><td style="padding:4px 6px;text-align:right;">$${matCost.toFixed(2)}</td></tr>
-            ${feeOn?`<tr><td colspan="2" style="padding:4px 6px;text-align:right;color:#888;">+ 10% purchasing charge</td><td style="padding:4px 6px;text-align:right;">$${fee.toFixed(2)}</td></tr>`:''}
+            ${feeOn?`<tr><td colspan="2" style="padding:4px 6px;text-align:right;color:#888;">+ ${feePctLabel()} purchasing charge</td><td style="padding:4px 6px;text-align:right;">$${fee.toFixed(2)}</td></tr>`:''}
             <tr><td colspan="2" style="padding:4px 6px;font-weight:600;text-align:right;border-top:0.5px solid rgba(0,0,0,0.1);">Materials charged</td><td style="padding:4px 6px;text-align:right;color:#185FA5;font-weight:600;border-top:0.5px solid rgba(0,0,0,0.1);">$${matCharged.toFixed(2)}</td></tr>
           </tfoot>`;
         }
         const feeToggle=isAdm?`<label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#633806;cursor:pointer;margin-top:8px;background:#FFFBF5;border:0.5px solid #F2D9A8;border-radius:8px;padding:8px 10px;">
           <input type="checkbox" ${feeOn?'checked':''} onchange="toggleMaterialsFee('${d.id}',this.checked)" style="width:16px;height:16px;margin:0;">
-          Add 10% materials purchasing charge <span style="font-size:10px;color:#185FA5;background:#E6F1FB;padding:1px 6px;border-radius:8px;">ADMIN</span>
+          Add ${feePctLabel()} materials purchasing charge <span style="font-size:10px;color:#185FA5;background:#E6F1FB;padding:1px 6px;border-radius:8px;">ADMIN</span>
         </label>`:'';
         return`<div style="grid-column:span 2">
           <span style="color:#888;font-size:11px;display:block;margin-bottom:6px;">Materials</span>
@@ -4395,8 +4407,8 @@ function dlbTextPdf(d,showCosts,filename){
     fields.push(['Materials',matLines]);
     if(_isAdmPDF){
       const matCost=d.materials.reduce((s,m)=>s+(m.total||0),0);
-      const fee=d.materialsFee?Math.round(matCost*0.10*100)/100:0;
-      fields.push(['Materials charged','$'+(matCost+fee).toFixed(2)+(d.materialsFee?' (incl. 10% purchasing)':'')]);
+      const fee=d.materialsFee?Math.round(matCost*materialsFeePct()*100)/100:0;
+      fields.push(['Materials charged','$'+(matCost+fee).toFixed(2)+(d.materialsFee?' (incl. '+feePctLabel()+' purchasing)':'')]);
     }
   }
   if(d.notes)fields.push(['Notes',d.notes]);
@@ -4516,7 +4528,7 @@ function dlbBuildSheet(d,showCosts){
   const mats=d.materials||[];
   const matCost=mats.reduce((a,m)=>a+(m.total||0),0);
   const feeOn=!!d.materialsFee;
-  const fee=feeOn?Math.round(matCost*0.10*100)/100:0;
+  const fee=feeOn?Math.round(matCost*materialsFeePct()*100)/100:0;
   const matCharged=matCost+fee;
   const accom=d.accommodation||null;
   const grand=(labour||0)+matCharged+(accom?(accom.total||0):0);
@@ -4578,7 +4590,7 @@ function dlbBuildSheet(d,showCosts){
       <div class="tile hours"><div class="tv">${dlbHrs(totalH)}</div><div class="tl">Total Hours · ${ws.length} worker${ws.length!==1?'s':''}</div></div>
       <div class="tile rate"><span class="admin-flag">ADMIN</span><div class="tv">${labour!=null?'$'+labour.toFixed(2):'—'}</div><div class="tl">Total Labour</div></div>
       <div class="tile cost"><div class="tv">$${grand.toFixed(2)}</div><div class="tl">Total</div></div></div>`;
-    const parts=[`Labour ${labour!=null?'$'+labour.toFixed(2):'—'}`,`Materials $${matCharged.toFixed(2)}${feeOn?' (incl. 10% purchasing)':''}`];
+    const parts=[`Labour ${labour!=null?'$'+labour.toFixed(2):'—'}`,`Materials $${matCharged.toFixed(2)}${feeOn?' (incl. '+feePctLabel()+' purchasing)':''}`];
     if(accom)parts.push(`Accommodation $${(accom.total||0).toFixed(2)}`);
     breakdown=`<div class="breakdown">${parts.join(' &nbsp;+&nbsp; ')} &nbsp;=&nbsp; <strong>$${grand.toFixed(2)}</strong></div>`;
   } else {
@@ -4609,7 +4621,7 @@ function dlbBuildSheet(d,showCosts){
     if(showCosts){
       mFoot=`<tfoot>
         <tr><td colspan="2" class="r" style="color:#9a9a93;font-weight:500;">Materials (at cost)</td><td class="r" style="color:#2D2D2D;">$${matCost.toFixed(2)}</td></tr>
-        ${feeOn?`<tr><td colspan="2" class="r" style="color:#9a9a93;font-weight:500;">+ 10% purchasing charge</td><td class="r" style="color:#2D2D2D;">$${fee.toFixed(2)}</td></tr>`:''}
+        ${feeOn?`<tr><td colspan="2" class="r" style="color:#9a9a93;font-weight:500;">+ ${feePctLabel()} purchasing charge</td><td class="r" style="color:#2D2D2D;">$${fee.toFixed(2)}</td></tr>`:''}
         <tr><td colspan="2" class="r">Materials charged</td><td class="r">$${matCharged.toFixed(2)}</td></tr></tfoot>`;
     }
     matSec=`<div class="sec"><div class="sec-title">Materials</div><table><thead>${mHead}</thead><tbody>${mRows}</tbody>${mFoot}</table></div>`;
@@ -6117,20 +6129,41 @@ function removeReqByOption(name){
 }
 
 // ── Admin: company-wide defaults ──
-// Global default for the 10% materials purchasing charge. Per-docket ticks still
+// Global default for the materials purchasing charge. Per-docket ticks still
 // override it; it just sets the initial state on new dockets that have materials.
 function materialsFeeDefault(){return ldL('dlb_materials_fee_default')===true;}
+// Company-wide materials purchasing charge percentage (default 10%).
+function materialsFeePct(){const v=parseFloat(ldL('dlb_materials_fee_pct'));return (isNaN(v)||v<0)?0.10:v/100;}
+function feePctLabel(){const v=parseFloat(ldL('dlb_materials_fee_pct'));return ((isNaN(v)||v<0)?10:v)+'%';}
+// Default billing type for new admin dockets ('ch' chargeable | 'ow' own cost).
+function defaultBill(){return ldL('dlb_default_bill')==='ow'?'ow':'ch';}
 function renCompanyDefaults(){
   const card=document.getElementById('company-defaults-card');
   const isAdm=!!(CU&&CU.role==='admin');
   if(card)card.style.display=isAdm?'':'none';
   if(!isAdm)return;
   const cb=document.getElementById('def-materials-fee');if(cb)cb.checked=materialsFeeDefault();
+  const pctV=parseFloat(ldL('dlb_materials_fee_pct'));const pctInp=document.getElementById('def-materials-pct');
+  if(pctInp)pctInp.value=(isNaN(pctV)||pctV<0)?10:pctV;
+  const bs=document.getElementById('def-bill');if(bs)bs.value=defaultBill();
+  const lbl=document.getElementById('def-fee-pct-lbl');if(lbl)lbl.textContent=feePctLabel();
 }
+function _companyDefaultsSaved(){const ok=document.getElementById('company-defaults-ok');if(ok){ok.classList.remove('hidden');setTimeout(()=>ok.classList.add('hidden'),2000);}}
 function toggleMaterialsFeeDefault(on){
   if(!(CU&&CU.role==='admin'))return;
-  svL('dlb_materials_fee_default',!!on);
-  const ok=document.getElementById('company-defaults-ok');if(ok){ok.classList.remove('hidden');setTimeout(()=>ok.classList.add('hidden'),2000);}
+  svL('dlb_materials_fee_default',!!on);_companyDefaultsSaved();
+}
+function saveMaterialsPct(v){
+  if(!(CU&&CU.role==='admin'))return;
+  let n=parseFloat(v);if(isNaN(n)||n<0)n=10;if(n>100)n=100;
+  svL('dlb_materials_fee_pct',n);
+  const lbl=document.getElementById('def-fee-pct-lbl');if(lbl)lbl.textContent=feePctLabel();
+  const ndPct=document.getElementById('nd-fee-pct');if(ndPct)ndPct.textContent=feePctLabel();
+  _companyDefaultsSaved();
+}
+function saveDefaultBill(v){
+  if(!(CU&&CU.role==='admin'))return;
+  svL('dlb_default_bill',v==='ow'?'ow':'ch');_companyDefaultsSaved();
 }
 // ── Admin: who may resolve & re-submit a queried docket ──
 function renQueryResolveSettings(){
@@ -7931,6 +7964,7 @@ function updMaterialsTotal(){
     // leave whatever the admin has set. Reset when it disappears.
     if(showFee&&wasHidden&&cb)cb.checked=materialsFeeDefault();
     if(!showFee&&cb)cb.checked=false;
+    if(showFee){const ndPct=document.getElementById('nd-fee-pct');if(ndPct)ndPct.textContent=feePctLabel();}
   }
 }
 
