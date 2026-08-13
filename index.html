@@ -37,6 +37,35 @@ body{font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-seri
 .hidden{display:none!important;}
 .card{background:#fff;border:0.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:1rem 1.25rem;margin-bottom:12px;}
 .set-group{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9a958c;margin:20px 2px 8px;padding-bottom:5px;border-bottom:1px solid rgba(0,0,0,0.07);}
+/* Reconciliation */
+.rec-tgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+@media(max-width:700px){.rec-tgrid{grid-template-columns:1fr;}}
+.rec-tcard{background:#fff;border:.5px solid rgba(0,0,0,.1);border-radius:12px;padding:14px 16px;border-left:3px solid #ccc;}
+.rec-tcard.in{border-left-color:#185FA5;} .rec-tcard.out{border-left-color:#EF9F27;} .rec-tcard.var{border-left-color:#E24B4A;background:#FFF7F6;}
+.rec-tt{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#2D2D2D;margin-bottom:8px;}
+.rec-trow{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:3px 0;color:#666;}
+.rec-trow b{color:#2D2D2D;font-variant-numeric:tabular-nums;}
+.rec-trow.out{border-top:.5px solid rgba(0,0,0,.06);margin-top:4px;padding-top:6px;}
+.rec-card{background:#fff;border:.5px solid rgba(0,0,0,.1);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+.rec-card.done{background:#FbFdFb;border-color:#CDE9DC;}
+.rec-hd{padding:11px 14px;cursor:pointer;border-bottom:.5px solid rgba(0,0,0,.06);}
+.rec-hd>div:first-child{font-size:13.5px;font-weight:600;color:#2D2D2D;}
+.rec-hd-s{font-size:11px;color:#9a958c;margin-top:2px;}
+.rec-legs{display:grid;grid-template-columns:1fr 1fr;}
+@media(max-width:640px){.rec-legs{grid-template-columns:1fr;}}
+.rec-leg{padding:11px 14px;border-right:.5px solid rgba(0,0,0,.06);display:flex;flex-direction:column;gap:6px;}
+.rec-leg:last-child{border-right:none;}
+.rec-leg.sub{background:#FFFCF6;} .rec-leg.claim{background:#F7FAFD;}
+.rec-leg-t{font-size:12px;font-weight:700;color:#3a3a38;}
+.rec-who{font-weight:400;color:#9a958c;}
+.rec-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;}
+.rec-exp{font-size:13px;color:#444;font-variant-numeric:tabular-nums;}
+.rec-var{font-size:11px;color:#B23B34;background:#FBE3E1;border-radius:8px;padding:1px 6px;margin-left:4px;}
+.rec-leg-a{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.rec-btn{font-family:inherit;font-size:12px;font-weight:600;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid transparent;}
+.rec-btn.mark{background:#185FA5;color:#fff;} .rec-btn.paid{background:#1D9E75;color:#fff;}
+.rec-btn.undo{background:#fff;border-color:#ddd;color:#999;padding:6px 9px;}
+.rec-paid{font-size:12px;font-weight:700;color:#0F6E56;}
 /* Subscription plan tiers */
 .sub-plans{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 @media(max-width:720px){.sub-plans{grid-template-columns:1fr;}}
@@ -833,7 +862,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c46</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c47</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -853,6 +882,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <button class="nb hidden" id="n-ready" onclick="showTab('ready',this)"><i class="ti ti-clipboard-check" aria-hidden="true"></i> Ready to sign <span id="ready-count-badge" class="hidden" style="background:#EF9F27;color:#412402;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px;">0</span></button>
       <button class="nb" id="n2" onclick="showTab('md',this)"><i class="ti ti-files" aria-hidden="true"></i> My dockets</button>
       <button class="nb hidden" id="n3" onclick="showTab('ad',this)"><i class="ti ti-file-stack" aria-hidden="true"></i> All dockets</button>
+      <button class="nb hidden" id="n-reconcile" onclick="showTab('reconcile',this)"><i class="ti ti-arrows-left-right" aria-hidden="true"></i> Reconcile</button>
       <button class="nb hidden" id="n4" onclick="showTab('proj',this)"><i class="ti ti-building-community" aria-hidden="true"></i> Projects</button>
       <button class="nb hidden" id="n5" onclick="showTab('subs',this)"><i class="ti ti-tools" aria-hidden="true"></i> Subcontractors</button>
       <button class="nb hidden" id="n9" onclick="showTab('users',this)"><i class="ti ti-users" aria-hidden="true"></i> Users</button>
@@ -1635,6 +1665,24 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <thead id="ad-thead"><tr><th>#</th><th>Project</th><th>Date</th><th>Subcontractor</th><th>Client contact</th><th>Hrs</th><th id="ad-th-cost">Cost</th><th>Billing</th><th>Signature</th><th></th></tr></thead>
         <tbody id="adb"></tbody>
       </table></div></div>
+    </div>
+
+    <!-- RECONCILE (admin only) -->
+    <div id="t-reconcile" class="hidden">
+      <div class="rb"><p class="st" style="margin:0;">Reconcile</p></div>
+      <p style="font-size:12px;color:#888;margin:-8px 0 12px;">Approved day-labour dockets — track the <strong>sub's invoice to you</strong> (money out) and your <strong>claim to the client / backcharge</strong> (money in), and tick them off once paid.</p>
+      <div id="rec-filters" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;align-items:center;">
+        <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#9a958c;">Filter</span>
+        <select id="rec-proj" onchange="renReconcile()" style="font-size:12px;padding:4px 8px;border-radius:7px;border:.5px solid rgba(0,0,0,.16);"><option value="">All projects</option></select>
+        <select id="rec-range" onchange="renReconcile()" style="font-size:12px;padding:4px 8px;border-radius:7px;border:.5px solid rgba(0,0,0,.16);">
+          <option value="all">All time</option><option value="month">This month</option><option value="ytd">Year to date</option>
+        </select>
+        <select id="rec-status" onchange="renReconcile()" style="font-size:12px;padding:4px 8px;border-radius:7px;border:.5px solid rgba(0,0,0,.16);">
+          <option value="">All statuses</option><option value="open">Outstanding only</option><option value="done">Fully reconciled</option>
+        </select>
+      </div>
+      <div id="rec-totals"></div>
+      <div id="rec-list"></div>
     </div>
 
     <!-- PROJECTS -->
@@ -2514,7 +2562,7 @@ function setupUI(){
       +langSelectHTML('lang-switcher-a','font-size:12px;padding:4px 10px;border-radius:8px;border:0.5px solid rgba(0,0,0,0.15);background:#fff;color:#2D2D2D;cursor:pointer;flex-shrink:0;')
       +'</div>';
     setTimeout(()=>applyLang(localStorage.getItem('dlb_lang_'+CU.u)||'en'),80);
-    ['n3','n4','n5','n6','n7','n8','msc','mpend-card'].forEach(id=>document.getElementById(id).classList.remove('hidden'));
+    ['n3','n-reconcile','n4','n5','n6','n7','n8','msc','mpend-card'].forEach(id=>{const e=document.getElementById(id);if(e)e.classList.remove('hidden');});
     document.getElementById('n-ready').classList.remove('hidden');
     // Unified "Users" tab (add people + set access) for those who can allocate
     // access (owner + PM/CA). They manage workers there too, so the separate
@@ -2686,7 +2734,7 @@ function showTab(tab,btn){
   // All-dockets drill-down from an admin-dashboard box clears when the user
   // navigates to All dockets on their own (not via a box, which sets pending).
   if(tab==='ad'){if(window._adDashPending)window._adDashPending=false;else window._adDash=null;}
-  ['dash','nd','md','ad','proj','subs','clients','settings','rates','drafts','ready','users','contacts-sub','my-workers'].forEach(t=>{const el=document.getElementById('t-'+t);if(el)el.classList.add('hidden');});
+  ['dash','nd','md','ad','reconcile','proj','subs','clients','settings','rates','drafts','ready','users','contacts-sub','my-workers'].forEach(t=>{const el=document.getElementById('t-'+t);if(el)el.classList.add('hidden');});
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('act'));
   const tgt=document.getElementById('t-'+tab);if(tgt)tgt.classList.remove('hidden');
   if(btn)btn.classList.add('act');
@@ -2752,6 +2800,7 @@ function showTab(tab,btn){
   if(tab==='ready')renReady();
   if(tab==='rates'){renRatesSelects();renRatesTable();}
   if(tab==='users'){renUsersList();renWorkersTable();}
+  if(tab==='reconcile'){renReconcile();}
   if(tab==='contacts-sub'){renContactsSub();}
   if(tab==='my-workers'){renSubWorkers();}
   if(typeof renBottomNav==='function')renBottomNav();
@@ -9267,6 +9316,133 @@ function adxDrill(kind,supU){
   if(typeof renAD==='function')renAD();
 }
 function adxClearDrill(){window._adDash=null;if(typeof renAD==='function')renAD();}
+
+// ─── RECONCILIATION ───────────────────────────────────────────────────
+// Approved day-labour dockets: track the sub's invoice to us (money OUT) and
+// our claim to the client / backcharge to another sub (money IN). Manual
+// tracker — real accounting sync / paid status arrives with the backend.
+function recClientVal(d){const cr=getClientRate(d.pcode);const rate=(cr&&cr.length)?cr[0].std:null;return (rate&&d.hours)?Math.round(d.hours*rate*100)/100:(calcC(d)||0);}
+function recLegs(d){
+  const subIds=new Set((subs||[]).map(s=>s.u));
+  const out=subIds.has(d.createdBy)?{leg:'sub',expected:calcC(d)||0,status:d.subInvStatus||'none',amount:d.subInvAmount,ref:d.subInvRef,title:'Sub invoice',who:d.sub||'sub'}:null;
+  let inn=null;
+  if(d.bill==='ch')inn={leg:'claim',expected:recClientVal(d),status:d.claimStatus||'none',amount:d.claimAmount,ref:d.claimRef,title:'Client claim',who:'Client'};
+  else if(d.bill==='bc')inn={leg:'claim',expected:calcC(d)||0,status:d.claimStatus||'none',amount:d.claimAmount,ref:d.claimRef,title:'Backcharge',who:d.bcTarget||'other sub'};
+  return {out,inn};
+}
+function recDocs(){
+  const proj=(document.getElementById('rec-proj')||{}).value||'';
+  const range=(document.getElementById('rec-range')||{}).value||'all';
+  return (dockets||[]).filter(d=>{
+    if(d.approvalStatus!=='approved')return false;
+    if(isUpChainDocket(d))return false;
+    if(proj&&d.pcode!==proj)return false;
+    if(!adxInRange(d.date,range))return false;
+    return true;
+  });
+}
+function recFullyDone(d){
+  const {out,inn}=recLegs(d);
+  const legs=[out,inn].filter(Boolean);
+  if(!legs.length)return true;
+  return legs.every(l=>l.status==='paid');
+}
+function renReconcile(){
+  if(!(CU&&CU.role==='admin'))return;
+  const pf=document.getElementById('rec-proj');
+  if(pf&&pf.options.length<=1){pf.innerHTML='<option value="">All projects</option>'+projects.map(p=>`<option value="${esc(p.code)}">${esc(p.name)}</option>`).join('');}
+  const statusF=(document.getElementById('rec-status')||{}).value||'';
+  let list=recDocs();
+  if(statusF==='open')list=list.filter(d=>!recFullyDone(d));
+  else if(statusF==='done')list=list.filter(d=>recFullyDone(d));
+  // Totals across the (project/timeframe) filtered set, ignoring status filter
+  const all=recDocs();
+  const T={inExp:0,inDone:0,inPaid:0,inOut:0,outExp:0,outDone:0,outPaid:0,outOut:0,variance:0,varCount:0};
+  all.forEach(d=>{
+    const {out,inn}=recLegs(d);
+    [['in',inn],['out',out]].forEach(([k,l])=>{
+      if(!l)return;
+      const ex=l.expected||0, amt=(l.amount!=null?l.amount:ex);
+      if(k==='in'){T.inExp+=ex; if(l.status!=='none')T.inDone+=amt; if(l.status==='paid')T.inPaid+=amt; if(l.status==='none')T.inOut+=ex;}
+      else{T.outExp+=ex; if(l.status!=='none')T.outDone+=amt; if(l.status==='paid')T.outPaid+=amt; if(l.status==='none')T.outOut+=ex;}
+      if(l.status!=='none'&&l.amount!=null&&Math.abs(l.amount-ex)>0.005){T.variance+=(l.amount-ex);T.varCount++;}
+    });
+  });
+  const tEl=document.getElementById('rec-totals');
+  if(tEl)tEl.innerHTML=`<div class="rec-tgrid">
+    <div class="rec-tcard in"><div class="rec-tt"><svg width="16" height="16" viewBox="0 0 24 24" style="vertical-align:-3px"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Claims — money in</div>
+      <div class="rec-trow"><span>Expected</span><b>${fc(T.inExp)}</b></div>
+      <div class="rec-trow"><span>Invoiced / claimed</span><b>${fc(T.inDone)}</b></div>
+      <div class="rec-trow"><span>Paid</span><b style="color:#0F6E56;">${fc(T.inPaid)}</b></div>
+      <div class="rec-trow out"><span>Still to claim</span><b style="color:#B23B34;">${fc(T.inOut)}</b></div></div>
+    <div class="rec-tcard out"><div class="rec-tt"><svg width="16" height="16" viewBox="0 0 24 24" style="vertical-align:-3px"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Sub invoices — money out</div>
+      <div class="rec-trow"><span>Expected</span><b>${fc(T.outExp)}</b></div>
+      <div class="rec-trow"><span>Received</span><b>${fc(T.outDone)}</b></div>
+      <div class="rec-trow"><span>Paid</span><b style="color:#0F6E56;">${fc(T.outPaid)}</b></div>
+      <div class="rec-trow out"><span>Not yet invoiced</span><b style="color:#B23B34;">${fc(T.outOut)}</b></div></div>
+    ${T.varCount?`<div class="rec-tcard var"><div class="rec-tt" style="color:#B23B34;">⚠ Variances</div><div style="font-size:12px;color:#8A1F19;margin-top:6px;">${T.varCount} invoice${T.varCount!==1?'s':''} differ from the approved value by a total of <b>${(T.variance>=0?'+':'−')+fc(Math.abs(T.variance)).replace('$','$')}</b>.</div></div>`:''}
+  </div>`;
+  const wrap=document.getElementById('rec-list');
+  if(!wrap)return;
+  if(!list.length){wrap.innerHTML='<div class="card" style="text-align:center;color:#aaa;padding:24px;">No approved dockets match these filters yet. Dockets appear here once you approve them.</div>';return;}
+  wrap.innerHTML=list.map(d=>{
+    const {out,inn}=recLegs(d);
+    const done=recFullyDone(d);
+    const billLabel={ch:'Chargeable',bc:'Backcharge',ow:'Own cost'}[d.bill]||d.bill;
+    const legHtml=(l)=>{
+      if(!l)return '';
+      const ex=l.expected||0;
+      const varBadge=(l.status!=='none'&&l.amount!=null&&Math.abs(l.amount-ex)>0.005)?`<span class="rec-var">Δ ${(l.amount-ex>=0?'+':'−')+fc(Math.abs(l.amount-ex)).replace('$','$')}</span>`:'';
+      let body,acts;
+      if(l.status==='none'){
+        body=`<span class="rec-exp">Expected ${fc(ex)}</span>`;
+        acts=`<button class="rec-btn mark" onclick="recSetInvoiced('${d.id}','${l.leg}')">Mark ${l.leg==='sub'?'invoiced':'claimed'}</button>`;
+      }else{
+        const amt=l.amount!=null?l.amount:ex;
+        body=`<span class="rec-exp">${l.ref?('#'+esc(l.ref)+' · '):''}${fc(amt)} ${varBadge}</span>`;
+        if(l.status==='invoiced')acts=`<button class="rec-btn paid" onclick="recSetPaid('${d.id}','${l.leg}')">✓ Mark paid</button><button class="rec-btn undo" onclick="recReset('${d.id}','${l.leg}')" title="Undo">✕</button>`;
+        else acts=`<span class="rec-paid">✓ Paid</span><button class="rec-btn undo" onclick="recReset('${d.id}','${l.leg}')" title="Undo">✕</button>`;
+      }
+      const stCol=l.status==='paid'?'#1D9E75':(l.status==='invoiced'?'#185FA5':'#9a958c');
+      return `<div class="rec-leg ${l.leg}">
+        <div class="rec-leg-t"><span class="rec-dot" style="background:${stCol};"></span>${esc(l.title)} <span class="rec-who">· ${esc(l.who)}</span></div>
+        <div class="rec-leg-b">${body}</div>
+        <div class="rec-leg-a">${acts}</div>
+      </div>`;
+    };
+    return `<div class="rec-card${done?' done':''}">
+      <div class="rec-hd" onclick="vD('${d.id}')">
+        <div><span class="dn">#${d.id}</span> · ${esc(d.pname||d.pcode||'')} — ${esc(d.sub||'')}</div>
+        <div class="rec-hd-s">${fd(d.date)} · ${d.hours||0}h · ${billLabel}${done?' · <span style=\"color:#0F6E56;font-weight:700;\">✓ Reconciled</span>':''}</div>
+      </div>
+      <div class="rec-legs">${legHtml(out)}${legHtml(inn)}${(!out&&!inn)?'<div class="rec-leg"><div class="rec-leg-t">Own cost — nothing to claim or invoice.</div></div>':''}</div>
+    </div>`;
+  }).join('');
+}
+function recSetInvoiced(id,leg){
+  const d=dockets.find(x=>x.id===id);if(!d)return;
+  const {out,inn}=recLegs(d);const l=leg==='sub'?out:inn;if(!l)return;
+  const ref=prompt(leg==='sub'?'Sub invoice number / reference:':'Claim or invoice number to the client:','');
+  if(ref===null)return;
+  let amt=prompt('Amount (approved value is '+fc(l.expected||0)+'):',(l.expected||0).toFixed(2));
+  if(amt===null)return;
+  amt=parseFloat((''+amt).replace(/[^0-9.\-]/g,''));if(isNaN(amt))amt=l.expected||0;
+  const now=new Date().toISOString();
+  if(leg==='sub'){d.subInvRef=ref.trim();d.subInvAmount=amt;d.subInvDate=now;d.subInvStatus='invoiced';}
+  else{d.claimRef=ref.trim();d.claimAmount=amt;d.claimDate=now;d.claimStatus='invoiced';}
+  svL('v4_dock',dockets);renReconcile();
+}
+function recSetPaid(id,leg){
+  const d=dockets.find(x=>x.id===id);if(!d)return;
+  if(leg==='sub')d.subInvStatus='paid';else d.claimStatus='paid';
+  svL('v4_dock',dockets);renReconcile();
+}
+function recReset(id,leg){
+  const d=dockets.find(x=>x.id===id);if(!d)return;
+  if(leg==='sub'){d.subInvStatus='none';d.subInvRef='';d.subInvAmount=null;}
+  else{d.claimStatus='none';d.claimRef='';d.claimAmount=null;}
+  svL('v4_dock',dockets);renReconcile();
+}
 
 // A row in the Awaiting-approval folder with Approve / Query / Override actions
 function approvalRow(d){
