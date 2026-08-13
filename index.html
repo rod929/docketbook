@@ -355,6 +355,9 @@ body.role-worker #n1:hover,body.role-supervisor #n1:hover{background:#1a1a1a;}
 /* Highlighted "who is responsible" pills in the drilled list */
 .row-signwait{background:#FFFDF5;}
 .row-signwait:hover{background:#FFF9E6;}
+.days-out{display:inline-block;font-size:11px;font-weight:800;border-radius:20px;padding:3px 10px;margin:2px 4px 2px 0;white-space:nowrap;}
+.days-out.do-grey{background:#EEF2F6;color:#5A6B7B;} .days-out.do-slate{background:#E3EAF1;color:#3d4f60;}
+.days-out.do-amber{background:#FAEEDA;color:#854F0B;} .days-out.do-red{background:#FBE3E1;color:#B23B34;}
 .sig-need{display:inline-block;font-size:11.5px;font-weight:700;color:#8a5a12;background:#FBEFD9;border:1px solid #F0DDB2;border-radius:20px;padding:3px 10px;margin:2px 3px 2px 0;white-space:nowrap;}
 .sig-need.client{color:#0C447C;background:#E6F1FB;border-color:#B5D4F4;}
 .sig-need.warn{color:#B23B34;background:#FBE3E1;border-color:#E7B9B6;}
@@ -926,7 +929,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c51</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c52</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1691,6 +1694,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div class="rb"><p class="st" style="margin:0;" id="ad-title">All dockets</p><div style="display:flex;gap:6px;flex-wrap:wrap;" id="ad-actions"><button class="btn btn-s btn-csv" onclick="expCSV(true)">↓ CSV</button><button class="btn btn-s btn-pdf" onclick="expPDF(true)">↓ PDF</button><button class="btn btn-s" style="background:#1D9E75;color:#fff;border-color:#1D9E75;" id="btn-client-form" onclick="openClientForm()">📋 Client day labour form</button></div></div>
       <div id="ad-filters-admin" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
         <select id="fp" style="width:150px;" onchange="renAD()"><option value="">All projects</option></select>
+        <select id="fsv" style="width:150px;" onchange="renAD()"><option value="">All supervisors</option></select>
         <select id="fsb" style="width:150px;" onchange="renAD()"><option value="">All subcontractors</option></select>
         <select id="fb" style="width:140px;" onchange="renAD()"><option value="">All billing</option><option value="ch">Chargeable</option><option value="ow">Own cost</option><option value="bc">Backcharge</option></select>
         <select id="f-submitted" style="width:150px;" onchange="renAD()"><option value="">All submitted</option><option value="yes">✓ Submitted</option><option value="no">⏳ Not submitted</option></select>
@@ -2921,6 +2925,12 @@ function responsibleSigners(d){
 // Who needs to act on a docket, highlighted. Supervisor(s) for signing / bill
 // allocation / raising the client docket; the client contact for dockets
 // awaiting the client's signature.
+// A coloured "N days outstanding" badge (grey → amber → red as it ages).
+function daysOutBadge(d){
+  const n=(typeof docketAgeDays==='function')?docketAgeDays(d):0;
+  const cls=n>=14?'do-red':(n>=7?'do-amber':(n>=3?'do-slate':'do-grey'));
+  return `<span class="days-out ${cls}">${n===0?'today':n+' day'+(n!==1?'s':'')}</span>`;
+}
 function responsibleCell(d,kind){
   if(kind==='client_review'||kind==='client_admin_review'){
     const lbl=getContactLabel(d); // already HTML-escaped
@@ -3591,6 +3601,8 @@ function renAD(){
   const fsb=document.getElementById('fsb')?.value||'';
   const fb=document.getElementById('fb')?.value||'';
   const fsig=document.getElementById('fsig')?.value||'';
+  const fsv=document.getElementById('fsv')?.value||'';
+  const fsvUser=fsv?(users||[]).find(u=>u.u===fsv):null;
   // Admins see every docket; everyone else sees only their project dockets.
   const isAdm=CU&&CU.role==='admin';
   const adTitle=document.getElementById('ad-title');
@@ -3602,6 +3614,9 @@ function renAD(){
     if(fsig==='signed'&&!d.sig)return false;
     if(fsig==='pending'&&(d.sig||d.sigStatus))return false;
     if(fsig==='sent'&&(!d.sigStatus||d.sigStatus==='signed'))return false;
+    // Supervisor filter: signed by that supervisor, or they're allocated to
+    // the docket's project (so they're the responsible signer).
+    if(fsv&&!(d.signedBySupervisor===fsv||(fsvUser&&(fsvUser.projectAccess||[]).includes(d.pcode))))return false;
     return true;
   });
   const showMoney=CU&&CU.role==='admin';   // dollar values are admin-only (CLAUDE.md)
@@ -3680,7 +3695,9 @@ function renAD(){
   const submittedCount=chList.filter(d=>d.submittedToClient).length;
   const acs=document.getElementById('acs');
   if(acs){
-    if(showMoney&&fl.length>0){
+    // The $ summary boxes aren't useful on an operational drill-down (all $0),
+    // so hide them whenever we've arrived from a dashboard box.
+    if(showMoney&&fl.length>0&&!window._adDash){
       acs.style.display='grid';
       document.getElementById('ach').textContent='$'+ch.toFixed(2);
       document.getElementById('aow').textContent='$'+ow.toFixed(2);
@@ -3691,9 +3708,9 @@ function renAD(){
   }
   if(!fl.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:#aaa;padding:20px;">No dockets found</td></tr>';return;}
   const _whoKind=(window._adDash&&['await_sup_sig','await_bill','ready_client','client_review','client_admin_review'].includes(window._adDash.kind))?window._adDash.kind:'';
-  tb.innerHTML=fl.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;" class="${_whoKind?'row-signwait':''}"><td onclick="event.stopPropagation();"><input type='checkbox' class='docket-sel' value='${d.id}' onchange='updateBulkBar()' ${d.bill==='ch'?'':''}></td><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span>${d.refSubDocketId?`<br><span style="font-size:9px;color:#3C3489;cursor:pointer;" onclick="event.stopPropagation();vD('${d.refSubDocketId}')" title="View originating sub docket">↩ sub #${esc(d.refSubDocketId)}</span>`:''}</td><td>${projBadge(d.pcode)}</td><td>${fd(d.date)}</td><td>${esc(d.sub)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${d.hours}h</td>${showMoney?`<td>${fc(calcC(d))}</td>`:''}<td>${mdBilling(d)}</td><td>${_whoKind?responsibleCell(d,_whoKind):sigBadge(d)}</td><td><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td></tr>`).join('');
+  tb.innerHTML=fl.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;" class="${_whoKind?'row-signwait':''}"><td onclick="event.stopPropagation();"><input type='checkbox' class='docket-sel' value='${d.id}' onchange='updateBulkBar()' ${d.bill==='ch'?'':''}></td><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span>${d.refSubDocketId?`<br><span style="font-size:9px;color:#3C3489;cursor:pointer;" onclick="event.stopPropagation();vD('${d.refSubDocketId}')" title="View originating sub docket">↩ sub #${esc(d.refSubDocketId)}</span>`:''}</td><td>${projBadge(d.pcode)}</td><td>${fd(d.date)}</td><td>${esc(d.sub)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${d.hours}h</td>${showMoney?`<td>${fc(calcC(d))}</td>`:''}<td>${mdBilling(d)}</td><td>${_whoKind?(daysOutBadge(d)+' '+responsibleCell(d,_whoKind)):sigBadge(d)}</td><td><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td></tr>`).join('');
   const adTheadEl=document.getElementById('ad-thead');
-  if(adTheadEl){const last=adTheadEl.querySelector('th:nth-last-child(2)');if(last)last.textContent={await_sup_sig:'Needs signature by',await_bill:'To allocate by',ready_client:'To raise by',client_review:'Awaiting client',client_admin_review:'With client admin'}[_whoKind]||'Signature';}
+  if(adTheadEl){const last=adTheadEl.querySelector('th:nth-last-child(2)');if(last)last.textContent=_whoKind?'Days outstanding · responsible':'Signature';}
 }
 function renPS(workerFilter){
   const sel=document.getElementById('dp');if(!sel)return;
@@ -3732,6 +3749,8 @@ function renFD(){
   if(fp){fp.innerHTML='<option value="">All projects</option>';projects.forEach(p=>{const o=document.createElement('option');o.value=p.code;o.textContent=p.name;fp.appendChild(o);});}
   const fsb=document.getElementById('fsb');
   if(fsb){fsb.innerHTML='<option value="">All subcontractors</option>';subs.forEach(s=>{const o=document.createElement('option');o.value=s.u;o.textContent=s.name;fsb.appendChild(o);});}
+  const fsv=document.getElementById('fsv');
+  if(fsv){const cur=fsv.value;fsv.innerHTML='<option value="">All supervisors</option>'+(users||[]).filter(u=>u.role==='hc_supervisor').map(u=>`<option value="${esc(u.u)}">${esc(u.name||u.u)}</option>`).join('');if(cur)fsv.value=cur;}
 }
 function renPT(){
   const tb=document.getElementById('pb');if(!tb)return;
@@ -9422,7 +9441,7 @@ function adxDrill(kind,supU){
   const gv=id=>{const e=document.getElementById(id);return e?e.value:'';};
   window._adDash={kind,supU:supU||'',proj:gv('adx-proj'),range:gv('adx-range')||'all',from:gv('adx-from'),to:gv('adx-to')};
   window._adDashPending=true;
-  ['fp','fsb','fb','f-submitted','fsig'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  ['fp','fsv','fsb','fb','f-submitted','fsig'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   showTab('ad',document.getElementById('n3'));
   if(typeof renAD==='function')renAD();
 }
