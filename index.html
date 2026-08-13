@@ -37,6 +37,11 @@ body{font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-seri
 .hidden{display:none!important;}
 .card{background:#fff;border:0.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:1rem 1.25rem;margin-bottom:12px;}
 .set-group{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9a958c;margin:20px 2px 8px;padding-bottom:5px;border-bottom:1px solid rgba(0,0,0,0.07);}
+/* Settings → Setup hub tiles */
+.setup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;}
+.setup-tile{display:flex;flex-direction:column;align-items:center;gap:7px;padding:16px 8px;border:1px solid rgba(0,0,0,.1);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#2D2D2D;transition:background .1s,border-color .1s;}
+.setup-tile:hover{background:#f8f8f6;border-color:rgba(0,0,0,.18);}
+.setup-tile i{font-size:22px;color:#185FA5;}
 /* Reconciliation */
 .rec-tgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
 @media(max-width:700px){.rec-tgrid{grid-template-columns:1fr;}}
@@ -929,7 +934,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c55</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c56</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1844,7 +1849,24 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
     <!-- SETTINGS -->
     <div id="t-settings" class="hidden">
       <button class="btn btn-s" onclick="showTab('dash',document.getElementById('n0'))" style="margin-bottom:12px;">← Back to dashboard</button>
-      <p class="st">Company settings</p>
+      <p class="st">Settings</p>
+
+      <!-- SETUP HUB — the areas that used to sit in the top nav -->
+      <div class="set-group" id="set-group-setup" style="display:none;">Setup</div>
+      <div class="card" id="setup-hub" style="margin-top:4px;display:none;">
+        <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:#9a958c;margin:0 0 8px;">Jobs &amp; clients</p>
+        <div class="setup-grid">
+          <button class="setup-tile" onclick="showTab('proj',null)"><i class="ti ti-building-community" aria-hidden="true"></i><span>Projects</span></button>
+          <button class="setup-tile" onclick="showTab('clients',null)"><i class="ti ti-briefcase" aria-hidden="true"></i><span>Clients</span></button>
+        </div>
+        <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:#9a958c;margin:16px 0 8px;">People &amp; rates</p>
+        <div class="setup-grid">
+          <button class="setup-tile" onclick="openUsersArea()"><i class="ti ti-users" aria-hidden="true"></i><span>Users</span></button>
+          <button class="setup-tile" onclick="showTab('subs',null)"><i class="ti ti-tools" aria-hidden="true"></i><span>Subcontractors</span></button>
+          <button class="setup-tile" onclick="showTab('rates',null)"><i class="ti ti-currency-dollar" aria-hidden="true"></i><span>Rates</span></button>
+        </div>
+      </div>
+
       <div class="set-group">Company &amp; branding</div>
       <div class="card">
         <p style="font-size:13px;font-weight:500;margin-bottom:14px;">🏢 Company details</p>
@@ -2689,16 +2711,11 @@ function setupUI(){
       +langSelectHTML('lang-switcher-a','font-size:12px;padding:4px 10px;border-radius:8px;border:0.5px solid rgba(0,0,0,0.15);background:#fff;color:#2D2D2D;cursor:pointer;flex-shrink:0;')
       +'</div>';
     setTimeout(()=>applyLang(localStorage.getItem('dlb_lang_'+CU.u)||'en'),80);
-    ['n3','n-reconcile','n4','n5','n6','n7','n8','msc','mpend-card'].forEach(id=>{const e=document.getElementById(id);if(e)e.classList.remove('hidden');});
+    // Lean top nav: Projects / Subcontractors / Users / Rates / Clients now live
+    // inside Settings → Setup, so keep them off the top bar.
+    ['n3','n-reconcile','n7','msc','mpend-card'].forEach(id=>{const e=document.getElementById(id);if(e)e.classList.remove('hidden');});
     document.getElementById('n-ready').classList.remove('hidden');
-    // Unified "Users" tab (add people + set access) for those who can allocate
-    // access (owner + PM/CA). They manage workers there too, so the separate
-    // worker-roster nav is hidden for them; standard admins keep it.
-    const n9=document.getElementById('n9');
-    const canAlloc=canAllocateAccess(CU);
-    if(n9)n9.classList.toggle('hidden',!canAlloc);
-    const nMyW=document.getElementById('n-my-workers');
-    if(nMyW)nMyW.classList.toggle('hidden',canAlloc);
+    ['n4','n5','n6','n8','n9','n-my-workers'].forEach(id=>{const e=document.getElementById(id);if(e)e.classList.add('hidden');});
     document.getElementById('fin-panel').classList.remove('hidden');
     document.getElementById('signed-panel').classList.remove('hidden');
     document.getElementById('dash-admin').classList.remove('hidden');
@@ -6605,9 +6622,15 @@ function defaultBill(){return ldL('dlb_default_bill')==='ow'?'ow':'ch';}
 // admin-only too, so the headings would otherwise sit above nothing).
 function renSettingsGroups(){
   const isAdm=!!(CU&&CU.role==='admin');
-  ['set-group-defaults','set-group-alerts','set-group-team','set-group-data'].forEach(id=>{
+  ['set-group-defaults','set-group-alerts','set-group-team','set-group-data','set-group-setup','setup-hub'].forEach(id=>{
     const e=document.getElementById(id);if(e)e.style.display=isAdm?'':'none';
   });
+}
+// The Users area — access accounts for those who can allocate access, else the
+// worker roster (standard admins).
+function openUsersArea(){
+  if(typeof canAllocateAccess==='function'&&canAllocateAccess())showTab('users',null);
+  else showTab('my-workers',null);
 }
 // ─── PLAN CONFIG — edit these to change pricing/tiers in one place ─────
 // Flat monthly plans per COMPANY (not per docket/user). Prices are $/month
