@@ -929,7 +929,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c53</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c54</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1446,6 +1446,10 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       </div>
       <div id="nd-form-body">
       <div class="card">
+        <div id="for-worker-wrap" class="hidden" style="margin-bottom:10px;background:#F4F9FE;border:0.5px solid #C9DDF1;border-radius:10px;padding:11px 14px;">
+          <label style="font-size:13px;color:#0C447C;font-weight:500;margin:0 0 6px;display:block;">Create this docket for a worker <span style="font-size:11px;color:#5B7CA0;font-weight:400;">— it lands in their app so they can get it signed on site</span></label>
+          <select id="d-for-worker" onchange="onForWorkerChange()" style="width:100%;"><option value="">Myself</option></select>
+        </div>
         <div id="free-docket-wrap" class="hidden" style="grid-column:1/-1;margin-bottom:4px;">
           <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:#FFFBF5;border:0.5px solid #F2D9A8;border-radius:10px;padding:11px 14px;margin:0;">
             <input type="checkbox" id="free-docket" onchange="toggleFreeDocket(this.checked)" style="width:18px;height:18px;margin:0;flex-shrink:0;">
@@ -2842,6 +2846,7 @@ function showTab(tab,btn){
   if(tab==='nd'){
     renPS(CU&&CU.role==='worker');renClientSelects();lockSubClient();setCompanyField();loadReqByStaff();prefillReqBy();toggleSIField();uploadedPhotos=[];
     if(typeof initWorkersSection==='function')initWorkersSection();
+    if(typeof initForWorkerField==='function')initForWorkerField();
     // Free-docket option is admin-only; reset it each time the form opens
     const fdWrap=document.getElementById('free-docket-wrap');
     if(fdWrap)fdWrap.classList.toggle('hidden',!(CU&&CU.role==='admin'));
@@ -4049,7 +4054,16 @@ function submitD(){
   // name, not the person filling it out.
   const workerName=(CU&&CU.role==='worker')?currentWorkerName():((workersOnSite[0]&&workersOnSite[0].name)||'');
   const _isFree=!!window._freeDocket;
-  const d={id:String(dctr).padStart(4,'0'),pcode:_isFree?'':proj,pname:_isFree?'(No project)':(p?p.name:proj),freeDocket:_isFree,date,sub,reqBy,reqHow,siNumber,po:poNumber,photos,materials,materialsFee:(!!document.getElementById('nd-mat-fee')?.checked),accommodation,refSubDocketId:refId,signerRole,signerName,workerName,workersOnSite,startTime,finishTime,breakMins,hours:parseFloat(hrs),rate,cost,bill,bcTarget,desc,notes,supervisorNote:(window._reviewSupervisorNote||''),sig,sigStatus,signToken,sendEmail,sendSms,clientId,contactId,createdBy:CU.u,createdAt:new Date().toISOString()};
+  // Proxy creation: admin/supervisor can create a docket FOR a worker so it
+  // lands in that worker's app to get signed on site. createdBy becomes the
+  // worker; createdByProxy records who actually raised it.
+  let _createdBy=CU.u,_proxy=null;
+  const _forW=document.getElementById('d-for-worker');
+  if(_forW&&_forW.value&&(CU.role==='admin'||CU.role==='hc_supervisor')){
+    const _w=(workers||[]).find(x=>x.u===_forW.value);
+    if(_w){_createdBy=_w.u;_proxy=CU.u;}
+  }
+  const d={id:String(dctr).padStart(4,'0'),pcode:_isFree?'':proj,pname:_isFree?'(No project)':(p?p.name:proj),freeDocket:_isFree,date,sub,reqBy,reqHow,siNumber,po:poNumber,photos,materials,materialsFee:(!!document.getElementById('nd-mat-fee')?.checked),accommodation,refSubDocketId:refId,signerRole,signerName,workerName,workersOnSite,startTime,finishTime,breakMins,hours:parseFloat(hrs),rate,cost,bill,bcTarget,desc,notes,supervisorNote:(window._reviewSupervisorNote||''),sig,sigStatus,signToken,sendEmail,sendSms,clientId,contactId,createdBy:_createdBy,createdByProxy:_proxy,createdAt:new Date().toISOString()};
   dockets.push(d);dctr++;svD();
   window._deferBilling=false;
 
@@ -8119,6 +8133,29 @@ function currentWorkerTrade(){
 }
 
 // Build the first (primary) row for the logged-in worker, then any extras.
+// "Create this docket for a worker" — admin/supervisor make a docket that lands
+// in a chosen worker's app so they can get it physically signed on site (for
+// remote jobs where the supervisor can't attend and the client won't remote-sign).
+function initForWorkerField(){
+  const wrap=document.getElementById('for-worker-wrap');
+  const sel=document.getElementById('d-for-worker');
+  if(!wrap||!sel)return;
+  const canProxy=CU&&(CU.role==='admin'||CU.role==='hc_supervisor');
+  wrap.classList.toggle('hidden',!canProxy);
+  if(!canProxy){sel.value='';return;}
+  // Roster: for an admin, all Alerce workers; for a supervisor, workers on
+  // their projects (fall back to all if none are project-scoped).
+  let ws=(workers||[]);
+  sel.innerHTML='<option value="">Myself ('+esc(CU.name||'me')+')</option>'+ws.map(w=>`<option value="${esc(w.u)}">${esc(w.name)}${w.trade?' · '+esc(w.trade):''}</option>`).join('');
+  sel.value='';
+}
+function onForWorkerChange(){
+  const sel=document.getElementById('d-for-worker');if(!sel)return;
+  const w=(workers||[]).find(x=>x.u===sel.value);
+  // Prefill the primary worker row with the chosen worker's name.
+  const first=document.querySelector('#workers-list .wk-name');
+  if(first&&w)first.value=w.name;
+}
 function initWorkersSection(){
   workerRows=[];
   const list=document.getElementById('workers-list');
