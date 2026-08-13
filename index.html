@@ -245,12 +245,12 @@ body.role-worker #n1:hover,body.role-supervisor #n1:hover{background:#1a1a1a;}
 .fin-mini .mc .mv{font-size:15px;}
 .fin-mini .mc .ml{font-size:10px;}
 
-/* ── DESKTOP ADMIN DASHBOARD (v2 — cost-in vs cost-out) ── */
-#admin-desk{display:none;}                 /* shown on desktop only (rule below) */
-@media(min-width:769px){
-  #admin-desk{display:block;}
-  .admin-legacy-desk{display:none!important;}  /* new dash replaces old desktop panels */
-}
+/* ── ADMIN DASHBOARD (cost-in vs cost-out) — used at ALL widths now, so the
+   phone shows the same layout as the computer (stacked / big-box). ── */
+#admin-desk{display:block;}
+.admin-legacy-desk{display:none!important;}   /* replaced by #admin-desk everywhere */
+.admin-mobile{display:none!important;}         /* old compact mobile block retired */
+@media(max-width:560px){.admin-desk .adx-bar{flex-wrap:wrap;}}
 .admin-desk{--ad-line:rgba(0,0,0,.09);--ad-soft:#8b8880;}
 .admin-desk .adx-bar{display:flex;align-items:center;gap:9px;flex-wrap:nowrap;margin:2px 0 12px;}
 .admin-desk .adx-flabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ad-soft);flex-shrink:0;}
@@ -929,7 +929,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c52</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c53</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -2583,6 +2583,39 @@ function seedTrialData(){
       approvalStatus:'rejected',queriedByName:'Olivia Reed',queriedAt:_dn,queryNote:'Not authorised — no site instruction on record.',
       sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',createdBy:'hcsup2',createdAt:_dn});
     svL('v4_dock',dockets);svL('v4_ctr',dctr);svL('dlb_demo_extra_stamps',1);
+  }
+  // ── Demo dockets covering EVERY dashboard category (so the admin dashboard
+  // shows numbers in all boxes). Appended once; cleared with the sample data.
+  if((ldL('dlb_demo_ver')||0)<999 && !ldL('dlb_demo_allcats')){
+    const _t2=new Date().toISOString().split('T')[0];
+    const _ago=(n)=>{const d=new Date();d.setDate(d.getDate()-n);return d.toISOString();};
+    const _sg2=(p)=>'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="90"><path d="'+p+'" fill="none" stroke="#185FA5" stroke-width="3" stroke-linecap="round"/></svg>');
+    const _sig2=_sg2('M10 60 C36 18,60 74,88 42 S150 20,182 54 S214 66,230 46');
+    // Seed sub pay rates so the cost position shows real $ for these dockets.
+    if(!Array.isArray(rates))rates=[];
+    [['HV-T1','coastline',82],['HV-T1','paintco',85],['MAR-AP','tileco',92],['EAST-FO','plasterco',80]].forEach(([pc,su,std])=>{
+      if(!rates.find(r=>r.projCode===pc&&r.subU===su))rates.push({projCode:pc,subU:su,std,ot:std*1.5,updated:_t2});
+    });
+    svRates();
+    const _mk=(o)=>Object.assign({freeDocket:false,demoExtra:true,date:_t2,reqBy:'Site Manager',reqHow:'Site Instruction',siNumber:null,po:null,photos:[],materials:[],accommodation:null,refSubDocketId:null,signerRole:'hc_supervisor',signerName:'Dana Mills',workersOnSite:[],startTime:'07:00',finishTime:'15:00',breakMins:30,rate:0,cost:null,bcTarget:'',desc:'Sample docket.',notes:'',supervisorNote:'',sig:_sig2,sigStatus:'signed',signToken:null,signedAt:_ago(1),signedBySupervisor:'hcsup2',sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',createdAt:_ago(1)},o);
+    const _id=()=>{const s=String(dctr).padStart(4,'0');dctr++;return s;};
+    const wk=(name,h,tr)=>[{name,hours:h,start:'07:00',finish:'15:00',primary:true,trade:tr}];
+    dockets.push(
+      // Pending bill allocation (signed, no billing yet)
+      _mk({id:_id(),pcode:'HV-T1',pname:'Harbourview Tower — Stage 1',sub:'Coastline Painting',workerName:'Tom Reilly',workersOnSite:wk('Tom Reilly',8,'Painter'),hours:8,bill:'pending',desc:'First fix painting, level 5.',createdBy:'coastline'}),
+      // Review·Approve·Reject (awaiting my sign-off) — one 5 days overdue
+      _mk({id:_id(),pcode:'MAR-AP',pname:'Marina Apartments',sub:'Apex Tiling',workerName:'Dion Park',workersOnSite:wk('Dion Park',8,'Tiler'),hours:8,bill:'ch',approvalStatus:'awaiting',signedAt:_ago(5),createdAt:_ago(5),desc:'Floor tiling, tower lobby.',createdBy:'tileco'}),
+      _mk({id:_id(),pcode:'EAST-FO',pname:'Eastside Fitout',sub:'Smooth Set Plastering',workerName:'Grant Hughes',workersOnSite:wk('Grant Hughes',6,'Plasterer'),hours:6,bill:'ow',approvalStatus:'awaiting',signedAt:_ago(2),createdAt:_ago(2),desc:'Set-out and patch, level 1.',createdBy:'plasterco'}),
+      // Create client docket (chargeable + approved, not yet raised)
+      _mk({id:_id(),pcode:'HV-T1',pname:'Harbourview Tower — Stage 1',sub:'Coastline Painting',workerName:'Tom Reilly',workersOnSite:wk('Tom Reilly',9,'Painter'),hours:9,bill:'ch',approvalStatus:'approved',approvedByName:'Contracts Admin',approvedAt:_ago(1),submittedToClient:false,signedAt:_ago(3),createdAt:_ago(3),desc:'Second fix painting, level 6.',createdBy:'paintco'}),
+      // Approved backcharge (feeds cost position OUT)
+      _mk({id:_id(),pcode:'MAR-AP',pname:'Marina Apartments',sub:'Apex Tiling',workerName:'Dion Park',workersOnSite:wk('Dion Park',5,'Tiler'),hours:5,bill:'bc',bcTarget:'Coastline Painting',approvalStatus:'approved',approvedByName:'Contracts Admin',approvedAt:_ago(1),signedAt:_ago(4),createdAt:_ago(4),desc:'Remedial re-tile — backcharge.',createdBy:'tileco'}),
+      // Client — admin review (up-chain, client signed, awaiting their admin)
+      _mk({id:_id(),pcode:'HV-T1',pname:'Harbourview Tower — Stage 1',sub:'Coastline Painting',workerName:'Tom Reilly',workersOnSite:wk('Tom Reilly',9,'Painter'),hours:9,bill:'ch',refSubDocketId:'0001',signerRole:'client_supervisor',approvalStatus:'awaiting',signedAt:_ago(2),createdAt:_ago(2),desc:'Client copy — second fix painting.',createdBy:'hcsup2'}),
+      // Client — queried / rejected (up-chain, sent back by client)
+      _mk({id:_id(),pcode:'MAR-AP',pname:'Marina Apartments',sub:'Apex Tiling',workerName:'Dion Park',workersOnSite:wk('Dion Park',8,'Tiler'),hours:8,bill:'ch',refSubDocketId:'0002',signerRole:'client_supervisor',approvalStatus:'queried',queriedByName:'Olivia Reed',queriedAt:_ago(1),queryNote:'Rate query — confirm tiling rate.',signedAt:_ago(3),createdAt:_ago(3),desc:'Client copy — lobby tiling.',createdBy:'hcsup2'})
+    );
+    svL('v4_dock',dockets);svL('v4_ctr',dctr);svL('dlb_demo_allcats',1);
   }
   // One-time: the demo backcharge example needs to be Approved to show its stamp
   // (a backcharge isn't confirmed until admin approves the docket).
