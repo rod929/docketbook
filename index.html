@@ -36,6 +36,7 @@ body{font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-seri
 .app{max-width:960px;margin:0 auto;padding:1rem;}
 .hidden{display:none!important;}
 .card{background:#fff;border:0.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:1rem 1.25rem;margin-bottom:12px;}
+.set-group{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9a958c;margin:20px 2px 8px;padding-bottom:5px;border-bottom:1px solid rgba(0,0,0,0.07);}
 .rb{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
 label{font-size:12px;color:#666;display:block;margin-bottom:4px;}
 input,select,textarea{width:100%;font-size:13px;padding:8px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;color:#1a1a1a;outline:none;}
@@ -692,7 +693,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c37</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c38</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1549,6 +1550,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
     <div id="t-settings" class="hidden">
       <button class="btn btn-s" onclick="showTab('dash',document.getElementById('n0'))" style="margin-bottom:12px;">← Back to dashboard</button>
       <p class="st">Company settings</p>
+      <div class="set-group">Company &amp; branding</div>
       <div class="card">
         <p style="font-size:13px;font-weight:500;margin-bottom:14px;">🏢 Company details</p>
         <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;">
@@ -1582,6 +1584,11 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       </div>
 
       <div class="card" style="margin-top:4px;">
+        <p style="font-size:13px;font-weight:500;margin-bottom:10px;">👁 Preview</p>
+        <div id="settings-preview" style="border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:14px;background:#fafaf8;"></div>
+      </div>
+
+      <div class="card" style="margin-top:4px;">
         <p style="font-size:13px;font-weight:500;margin-bottom:4px;">✉️ Copies on signing</p>
         <p style="font-size:12px;color:#888;margin-bottom:14px;">Choose who receives a copy when a docket is signed. (Automatic sending is enabled once the cloud backend is live; until then these prepare a one-tap email.)</p>
 
@@ -1609,6 +1616,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         </div>
       </div>
 
+      <div class="set-group" id="set-group-defaults" style="display:none;">Docket defaults</div>
       <div class="card" id="company-defaults-card" style="margin-top:4px;display:none;">
         <p style="font-size:13px;font-weight:500;margin-bottom:4px;">⚙️ Company defaults <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
         <p style="font-size:12px;color:#888;margin-bottom:14px;">Company-wide defaults applied to new dockets. Individual dockets can still override them.</p>
@@ -1631,6 +1639,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <p style="font-size:11px;color:#aaa;margin:10px 0 0;">Note: saved on this device. Company-wide sync across everyone’s devices arrives with the cloud backend.</p>
       </div>
 
+      <div class="set-group" id="set-group-alerts" style="display:none;">Dashboard &amp; alerts</div>
       <div class="card" id="flash-settings-card" style="margin-top:4px;display:none;">
         <p style="font-size:13px;font-weight:500;margin-bottom:4px;">🔔 Dashboard alerts <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
         <p style="font-size:12px;color:#888;margin-bottom:14px;">Control when each supervisor dashboard box flashes for attention. “Flash after threshold” uses how many days the oldest item has been outstanding (counted from its queried / signed / received date).</p>
@@ -1648,6 +1657,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         </div>
       </div>
 
+      <div class="set-group" id="set-group-team" style="display:none;">Team &amp; workflow</div>
       <div class="card" id="reqby-settings-card" style="margin-top:4px;display:none;">
         <p style="font-size:13px;font-weight:500;margin-bottom:4px;">🧑‍💼 “Requested by” options <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
         <p style="font-size:12px;color:#888;margin-bottom:14px;">These appear as pick-list suggestions in the “Requested by” field when creating a docket. The four standard roles are always available; add any extra names or roles your team uses.</p>
@@ -1663,11 +1673,6 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <p style="font-size:11px;color:#aaa;margin:10px 0 0;">Note: saved on this device. Company-wide sync across everyone’s devices arrives with the cloud backend.</p>
       </div>
 
-      <div class="card" style="margin-top:4px;">
-        <p style="font-size:13px;font-weight:500;margin-bottom:10px;">👁 Preview</p>
-        <div id="settings-preview" style="border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:14px;background:#fafaf8;"></div>
-      </div>
-
       <div class="card" id="queryresolve-card" style="margin-top:4px;display:none;">
         <p style="font-size:13px;font-weight:500;margin-bottom:4px;">↩ Query responses <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
         <p style="font-size:12px;color:#888;margin-bottom:12px;">When a docket is queried, it needs a response (a note / photo) and re-submission. By default only <strong>admins</strong> can do this. Turn this on to let <strong>supervisors</strong> resolve &amp; re-submit queried dockets too.</p>
@@ -1678,6 +1683,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <div id="queryresolve-ok" class="ok hidden" style="margin-top:10px;">Saved.</div>
       </div>
 
+      <div class="set-group" id="set-group-data" style="display:none;">Data</div>
       <div class="card" id="sampledata-card" style="margin-top:4px;display:none;border-color:#F2D9A8;background:#FFFBF5;">
         <p style="font-size:13px;font-weight:500;margin-bottom:4px;">🧹 Sample data <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
         <p style="font-size:12px;color:#888;margin-bottom:12px;">The app ships with four demo dockets (under Apex Tiling and other sample subcontractors) so it isn’t empty while you explore. Remove them when you’re ready to work with real data only — <strong>anything you’ve created yourself is kept</strong>.</p>
@@ -2549,7 +2555,7 @@ function showTab(tab,btn){
   if(tab==='subs')renST();
   if(tab==='proj'){renPT();renClientSelects();}
   if(tab==='clients')renClientList();
-  if(tab==='settings'){loadSettingsForm();renSettingsPreview();renFlashSettings();renReqBySettings();renSampleDataCard();renQueryResolveSettings();renCompanyDefaults();}
+  if(tab==='settings'){loadSettingsForm();renSettingsPreview();renFlashSettings();renReqBySettings();renSampleDataCard();renQueryResolveSettings();renCompanyDefaults();renSettingsGroups();}
   if(tab==='drafts')renDrafts();
   if(tab==='ready')renReady();
   if(tab==='rates'){renRatesSelects();renRatesTable();}
@@ -6137,6 +6143,14 @@ function materialsFeePct(){const v=parseFloat(ldL('dlb_materials_fee_pct'));retu
 function feePctLabel(){const v=parseFloat(ldL('dlb_materials_fee_pct'));return ((isNaN(v)||v<0)?10:v)+'%';}
 // Default billing type for new admin dockets ('ch' chargeable | 'ow' own cost).
 function defaultBill(){return ldL('dlb_default_bill')==='ow'?'ow':'ch';}
+// Show the admin-only settings group headings only for admins (their cards are
+// admin-only too, so the headings would otherwise sit above nothing).
+function renSettingsGroups(){
+  const isAdm=!!(CU&&CU.role==='admin');
+  ['set-group-defaults','set-group-alerts','set-group-team','set-group-data'].forEach(id=>{
+    const e=document.getElementById(id);if(e)e.style.display=isAdm?'':'none';
+  });
+}
 function renCompanyDefaults(){
   const card=document.getElementById('company-defaults-card');
   const isAdm=!!(CU&&CU.role==='admin');
