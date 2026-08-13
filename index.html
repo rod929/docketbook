@@ -296,6 +296,10 @@ body.role-worker #n1:hover,body.role-supervisor #n1:hover{background:#1a1a1a;}
 .admin-desk .adx-fin-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
 @media(max-width:820px){.admin-desk .adx-fin-row{grid-template-columns:1fr;}}
 .admin-desk .adx-signoff.hero{border:1px solid #E2D6F3;border-left:5px solid #5B3B8C;background:#fff;margin-bottom:0;box-shadow:0 1px 4px rgba(45,45,45,.06);}
+@keyframes adxHeroFlash{0%,100%{box-shadow:0 1px 4px rgba(45,45,45,.06);border-left-color:#5B3B8C;}50%{box-shadow:0 0 0 4px rgba(91,59,140,.16),0 3px 14px rgba(91,59,140,.28);border-left-color:#7A4FB8;}}
+.admin-desk .adx-signoff.hero.flash{animation:adxHeroFlash 1.8s ease-in-out infinite;}
+@media(prefers-reduced-motion:reduce){.admin-desk .adx-signoff.hero.flash{animation:none;box-shadow:0 0 0 3px rgba(91,59,140,.2);}}
+.admin-desk .adx-overdue{font-size:11px;font-weight:700;color:#B23B34;background:#FBE3E1;border:1px solid #E7B9B6;border-radius:20px;padding:3px 10px;white-space:nowrap;}
 .admin-desk .adx-signoff.hero .adx-signoff-head h3{font-size:15px;letter-spacing:.02em;}
 .admin-desk .adx-signoff.hero .adx-approvals{grid-template-columns:1fr;margin-top:12px;}
 .admin-desk .adx-allclear{margin-top:12px;padding:18px;border-radius:12px;background:#F3FBF7;border:0.5px solid #C7E9D9;color:#0F6E56;font-size:13px;font-weight:600;text-align:center;}
@@ -879,7 +883,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c48</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c49</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -9193,10 +9197,13 @@ function renAdminDesk(){
     <div class="adx-finalise">
       <div class="adx-sec fin"><span class="adx-sec-ic"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#5B3B8C"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="adx-sec-t">For you to finalise</span><span class="adx-sec-note">${D.pendSign.length?'· action needed':'· all clear'}</span></div>
       <div class="adx-fin-row">
-        <div class="adx-card adx-signoff hero">
+        <div class="adx-card adx-signoff hero${D.pendSign.length?' flash':''}">
           <div class="adx-signoff-head">
             <h3 style="margin:0;color:#5B3B8C;">Review · Approve · Reject</h3>
-            <span class="adx-signoff-total" style="color:#5B3B8C;">${adxM(signTotal)}</span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              ${(D.pendSign.length&&signOldest)?`<span class="adx-overdue">⚠ ${signOldest} day${signOldest!==1?'s':''} overdue</span>`:''}
+              <span class="adx-signoff-total" style="color:#5B3B8C;">${adxM(signTotal)}</span>
+            </div>
           </div>
           <div class="adx-signoff-sub">${D.pendSign.length} subcontractor docket${D.pendSign.length!==1?'s':''} signed on site — awaiting your sign-off${signOldest?` · oldest ${signOldest} day${signOldest!==1?'s':''}`:''}</div>
           ${heroBody}
@@ -9304,7 +9311,7 @@ function renAdminDesk(){
 
   const kpiHost=document.getElementById('adx-kpis');
   if(kpiHost)kpiHost.innerHTML=alertBanner+sections;
-  host.innerHTML=heroCard+`<div class="adx-low">${pie}${supTable}</div>`+projTable;
+  host.innerHTML=heroCard+projTable+`<div class="adx-low">${pie}${supTable}</div>`;
 }
 // Cost position — IN (approved) / OUT (approved) / Balance, with the same
 // subcontractor (orange, down) and client (blue, up) icons as the dashboards.
