@@ -195,6 +195,62 @@ body.role-worker #n1:hover,body.role-supervisor #n1:hover{background:#1a1a1a;}
 .fin-mini .mc{padding:10px 8px;text-align:center;}
 .fin-mini .mc .mv{font-size:15px;}
 .fin-mini .mc .ml{font-size:10px;}
+
+/* ── DESKTOP ADMIN DASHBOARD (v2 — cost-in vs cost-out) ── */
+#admin-desk{display:none;}                 /* shown on desktop only (rule below) */
+@media(min-width:769px){
+  #admin-desk{display:block;}
+  .admin-legacy-desk{display:none!important;}  /* new dash replaces old desktop panels */
+}
+.admin-desk{--ad-line:rgba(0,0,0,.09);--ad-soft:#8b8880;}
+.admin-desk .adx-bar{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--ad-line);border-radius:14px;padding:12px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(30,26,20,.05);flex-wrap:wrap;gap:10px;}
+.admin-desk .adx-who b{font-size:17px;} .admin-desk .adx-who span{font-size:12px;color:var(--ad-soft);margin-left:6px;}
+.admin-desk .adx-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.admin-desk .adx-filters select,.admin-desk .adx-filters input[type=date]{font-size:13px;padding:8px 12px;border-radius:9px;border:.5px solid rgba(0,0,0,.16);background:#fff;color:#2D2D2D;font-family:inherit;}
+.admin-desk .adx-filters select{min-width:150px;}
+.admin-desk .adx-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+.admin-desk .adx-card{background:#fff;border:.5px solid var(--ad-line);border-radius:16px;box-shadow:0 1px 3px rgba(45,45,45,.05);padding:18px 20px;}
+.admin-desk .adx-card h3{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--ad-soft);margin-bottom:12px;}
+.admin-desk .adx-kpi{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.admin-desk .adx-kpi .v{font-size:44px;font-weight:800;line-height:1;}
+.admin-desk .adx-kpi .v.red{color:#E24B4A;} .admin-desk .adx-kpi .v.blue{color:#185FA5;} .admin-desk .adx-kpi .v.amber{color:#C7891A;}
+.admin-desk .adx-go{font-size:12px;color:#185FA5;font-weight:600;white-space:nowrap;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;}
+.admin-desk .adx-go:hover{text-decoration:underline;}
+.admin-desk .adx-clickable{cursor:pointer;transition:box-shadow .12s,transform .12s;}
+.admin-desk .adx-clickable:hover{box-shadow:0 3px 12px rgba(45,45,45,.12);transform:translateY(-1px);}
+.admin-desk .adx-sub{font-size:12px;color:var(--ad-soft);margin-top:8px;line-height:1.4;}
+.admin-desk .adx-age{font-size:11px;color:#9a7328;background:#FBEFD9;border:1px solid #F0DDB2;border-radius:20px;padding:3px 9px;display:inline-block;margin-top:8px;}
+.admin-desk .adx-hero{grid-column:1/-1;background:linear-gradient(180deg,#ffffff,#fbfaf7);}
+.admin-desk .adx-hrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:stretch;}
+.admin-desk .adx-money{padding:6px 0;}
+.admin-desk .adx-money .lab{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--ad-soft);}
+.admin-desk .adx-money .big{font-size:33px;font-weight:800;margin-top:4px;line-height:1;}
+.admin-desk .adx-money.inn .big{color:#B9770E;} .admin-desk .adx-money.out .big{color:#1D9E75;} .admin-desk .adx-money.net .big{color:#2D2D2D;}
+.admin-desk .adx-money .brk{font-size:12px;color:#666;margin-top:8px;line-height:1.7;}
+.admin-desk .adx-money .brk i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;}
+.admin-desk .adx-divv{border-left:1px solid var(--ad-line);padding-left:20px;}
+.admin-desk .adx-barwrap{grid-column:1/-1;margin-top:16px;}
+.admin-desk .adx-barlab{display:flex;justify-content:space-between;font-size:11px;color:var(--ad-soft);margin-bottom:5px;}
+.admin-desk .adx-stack{height:26px;border-radius:8px;overflow:hidden;display:flex;background:#eee;}
+.admin-desk .adx-stack .seg{height:100%;}
+.admin-desk .adx-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:#555;}
+.admin-desk .adx-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;}
+.admin-desk .adx-low{display:grid;grid-template-columns:1fr 1.3fr;gap:14px;margin-bottom:14px;}
+.admin-desk .adx-pierow{display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+.admin-desk .adx-plg{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;font-size:12.5px;color:#666;margin-bottom:8px;}
+.admin-desk .adx-plg i{width:11px;height:11px;border-radius:3px;} .admin-desk .adx-plg b{color:#2D2D2D;}
+.admin-desk table{width:100%;border-collapse:collapse;font-size:13px;}
+.admin-desk th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:#9a958c;font-weight:600;padding:8px;border-bottom:1px solid var(--ad-line);}
+.admin-desk th.r,.admin-desk td.r{text-align:right;}
+.admin-desk td{padding:10px 8px;border-bottom:1px solid rgba(0,0,0,.05);}
+.admin-desk tr:last-child td{border-bottom:none;}
+.admin-desk .adx-pill{display:inline-block;min-width:22px;text-align:center;font-weight:700;font-size:12px;border-radius:20px;padding:2px 8px;}
+.admin-desk .pn-amber{background:#FBEFD9;color:#8a5a12;} .admin-desk .pn-red{background:#FBE3E1;color:#B23B34;} .admin-desk .pn-slate{background:#EEF2F6;color:#41505E;} .admin-desk .pn-zero{background:#f3f2ef;color:#bbb;}
+.admin-desk .adx-rowlink{color:#185FA5;font-weight:600;font-size:12px;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;}
+.admin-desk .adx-rowlink:hover{text-decoration:underline;}
+.admin-desk .adx-nm{font-weight:600;}
+.admin-desk .adx-empty{color:#aaa;font-size:12.5px;padding:14px 4px;text-align:center;}
+@media(max-width:1000px){.admin-desk .adx-grid,.admin-desk .adx-hrow{grid-template-columns:1fr 1fr;}.admin-desk .adx-low{grid-template-columns:1fr;}}
 .tw{overflow-x:auto;}
 .ndock-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
 .ndock-tile{background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font-size:13px;font-weight:500;color:#2D2D2D;border:none;}
@@ -693,7 +749,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.11-c38</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c39</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -812,6 +868,32 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <button onclick="showTab('nd',document.getElementById('n1'))" style="width:100%;background:#EF9F27;color:#412402;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;">
           <i class="ti ti-plus" style="font-size:20px;" aria-hidden="true"></i> New docket
         </button>
+
+        <!-- ── DESKTOP ADMIN DASHBOARD (cost-in vs cost-out) — desktop only ── -->
+        <div id="admin-desk">
+          <div class="admin-desk">
+            <div class="adx-bar">
+              <div class="adx-who"><b id="adx-co">Company</b><span>· Admin dashboard</span></div>
+              <div class="adx-filters">
+                <select id="adx-proj" onchange="renAdminDesk()"><option value="">All projects</option></select>
+                <select id="adx-sup" onchange="renAdminDesk()"><option value="">All supervisors</option></select>
+                <select id="adx-range" onchange="adxRangeChange()">
+                  <option value="all" selected>All time</option>
+                  <option value="7d">Last 7 days</option>
+                  <option value="month">This month</option>
+                  <option value="ytd">Year to date</option>
+                  <option value="custom">Custom…</option>
+                </select>
+                <span id="adx-custom" class="hidden" style="gap:6px;align-items:center;">
+                  <input type="date" id="adx-from" onchange="renAdminDesk()">
+                  <input type="date" id="adx-to" onchange="renAdminDesk()">
+                </span>
+              </div>
+            </div>
+            <div id="adx-body"></div>
+          </div>
+        </div>
+
         <!-- Mobile quick nav — only items NOT already in the bottom nav
              (Dockets / Reports / Admin), styled to match the other dashboards. -->
         <div id="admin-mobile-nav" style="display:none;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
@@ -821,7 +903,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <button onclick="showTab('users',document.getElementById('n9'))" class="ndock-tile"><i class="ti ti-user" aria-hidden="true"></i>Users</button>
         </div>
         <!-- Summary tiles (all roles) -->
-        <div class="mg" style="margin-bottom:10px;">
+        <div class="mg admin-legacy-desk" style="margin-bottom:10px;">
           <div class="mc hide-mobile"><div class="mv" id="mp">0</div><div class="ml">Projects</div></div>
           <div class="mc"><div class="mv" id="md2">0</div><div class="ml">Dockets</div></div>
           <div class="mc"><div class="mv" id="mh">0h</div><div class="ml">Hours</div></div>
@@ -863,7 +945,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         </div>
 
       <!-- Admin financial breakdown panel -->
-      <div id="fin-panel" class="hidden" style="margin-bottom:14px;">
+      <div id="fin-panel" class="hidden admin-legacy-desk" style="margin-bottom:14px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
           <p style="font-size:13px;font-weight:500;margin:0;">💰 Financial summary</p>
           <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
@@ -930,7 +1012,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <span id="mbc" class="hidden"></span>
       </div>
       <!-- Signed dockets pending action panel (HC only) -->
-      <div id="signed-panel" class="hidden" style="margin-bottom:16px;">
+      <div id="signed-panel" class="hidden admin-legacy-desk" style="margin-bottom:16px;">
         <div class="rb" style="margin-bottom:8px;">
           <p class="st" style="margin:0;">✅ Signed dockets</p>
           <div style="display:flex;gap:6px;">
@@ -961,8 +1043,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         </div>
       </div>
 
-      <p class="st recent-table">Recent dockets</p>
-      <div class="card recent-table" style="padding:0;"><div class="tw"><table>
+      <p class="st recent-table admin-legacy-desk">Recent dockets</p>
+      <div class="card recent-table admin-legacy-desk" style="padding:0;"><div class="tw"><table>
         <thead><tr><th>#</th><th>Project</th><th>Date</th><th>Subcontractor</th><th>Start</th><th>Finish</th><th>Hrs</th><th>Req by</th><th>Sub cost</th><th>Client cost</th><th>Billing</th><th>Signature</th></tr></thead>
         <tbody id="rd"></tbody>
       </table></div></div>
@@ -1442,6 +1524,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <option value="rejected">Rejected</option>
         </select>
       </div>
+      <!-- Dashboard drill-down note (set when arriving from an admin-dashboard box) -->
+      <div id="ad-kpi-note"></div>
       <!-- Floating bulk action bar -->
       <div id="bulk-action-bar" class="hidden" style="background:#1a1a1a;color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:space-between;">
         <span style="font-size:13px;"><strong id="bulk-count">0</strong> dockets selected &nbsp;|&nbsp; <strong id="bulk-hrs">0h</strong> &nbsp;|&nbsp; Sub cost: <strong id="bulk-sub-cost">$0</strong> &nbsp;|&nbsp; Client charge: <strong id="bulk-cli-cost">$0</strong></span>
@@ -2494,6 +2578,9 @@ function showTab(tab,btn){
   // Opening My dockets clears any dashboard-box drill-down, unless we arrived
   // here from a box (supKpiOpen sets the pending flag).
   if(tab==='md'){if(window._mdKpiPending)window._mdKpiPending=false;else window._mdKpi='';}
+  // All-dockets drill-down from an admin-dashboard box clears when the user
+  // navigates to All dockets on their own (not via a box, which sets pending).
+  if(tab==='ad'){if(window._adDashPending)window._adDashPending=false;else window._adDash=null;}
   ['dash','nd','md','ad','proj','subs','clients','settings','rates','drafts','ready','users','contacts-sub','my-workers'].forEach(t=>{const el=document.getElementById('t-'+t);if(el)el.classList.add('hidden');});
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('act'));
   const tgt=document.getElementById('t-'+tab);if(tgt)tgt.classList.remove('hidden');
@@ -3106,6 +3193,7 @@ function updM(){
   mEl.textContent=(margin>=0?'+':'')+margin.toFixed(2);
   mEl.style.color=margin>=0?'#085041':'#E24B4A';
   renSignedPanel();
+  if(typeof renAdminDesk==='function')renAdminDesk();
 }
 
 // ─── RENDER TABLES ────────────────────────────────────────────────────
@@ -3306,6 +3394,27 @@ function renAD(){
     tb.innerHTML=list.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;"><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span></td><td>${projBadge(d.pcode)}</td><td style="max-width:140px;">${esc(d.sub||'—')}</td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${mdBilling(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td></tr>`).join('');
     return;
   }
+  // Admin-dashboard drill-down: an extra filter set when arriving from a box on
+  // the desktop admin dashboard. Shows a dismissable note + narrows the list.
+  const noteEl=document.getElementById('ad-kpi-note');
+  if(window._adDash){
+    const D=window._adDash;
+    fl=fl.filter(d=>{
+      if(D.proj&&d.pcode!==D.proj)return false;
+      if(!adxInRange(d.date,D.range||'all',D.from,D.to))return false;
+      if(D.supU&&!(d.createdBy===D.supU||d.signedBySupervisor===D.supU))return false;
+      if(D.kind==='pending_signoff')return d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting';
+      if(D.kind==='queried_rejected')return d.approvalStatus==='queried'||d.approvalStatus==='rejected';
+      if(D.kind==='sup')return ['awaiting_my_sig','needs_billing','queried'].includes(docketStatus(d));
+      return true;
+    });
+    if(noteEl){
+      const labels={pending_signoff:'Pending your final sign-off',queried_rejected:'Queried / rejected — awaiting resolution',sup:'Supervisor outstanding items'};
+      let extra='';
+      if(D.supU){const su=(users||[]).find(u=>u.u===D.supU);if(su)extra=' · '+esc(su.name);}
+      noteEl.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:#EAF2FB;border:0.5px solid #C9DDF1;border-radius:10px;padding:9px 14px;margin-bottom:12px;font-size:12.5px;color:#0C447C;"><span>Filtered from dashboard: <strong>${labels[D.kind]||'Dashboard filter'}</strong>${extra}</span><button onclick="adxClearDrill()" style="background:none;border:none;color:#185FA5;font-weight:600;cursor:pointer;font-size:12px;">✕ Clear</button></div>`;
+    }
+  } else if(noteEl){noteEl.innerHTML='';}
   const chList=fl.filter(d=>d.bill==='ch');
   const ch=chList.reduce((s,d)=>{const c=calcC(d);return s+(c||0);},0);
   const ow=fl.filter(d=>d.bill==='ow').reduce((s,d)=>{const c=calcC(d);return s+(c||0);},0);
@@ -8666,7 +8775,223 @@ function renAdminMobile(){
     }
   }
   renRecentList('admin-rd-list',(CU.role==='admin'?dockets:myD()),{money:isHC});
+  // Desktop admin dashboard (cost-in vs cost-out) — paints its own block.
+  if(typeof renAdminDesk==='function')renAdminDesk();
 }
+
+// ─── DESKTOP ADMIN DASHBOARD (cost-in vs cost-out) ────────────────────
+// Whole-dollar money format for the admin overview boxes.
+function adxM(v){return '$'+Math.round(v||0).toLocaleString('en-AU');}
+// Client-rate value of a chargeable docket (revenue), falling back to cost.
+function adxClientVal(d){
+  const cr=getClientRate(d.pcode);const rate=(cr&&cr.length)?cr[0].std:null;
+  return (rate&&d.hours)?Math.round(d.hours*rate*100)/100:(calcC(d)||0);
+}
+// Is a docket's date inside the selected timeframe?
+function adxInRange(ds,range,from,to){
+  if(!range||range==='all')return true;
+  const d=new Date(ds);if(isNaN(d))return true;
+  const now=new Date();
+  if(range==='7d'){const c=new Date(now);c.setDate(now.getDate()-7);return d>=c;}
+  if(range==='month'){return d>=new Date(now.getFullYear(),now.getMonth(),1);}
+  if(range==='ytd'){return d>=new Date(now.getFullYear(),0,1);}
+  if(range==='custom'){
+    if(from&&d<new Date(from))return false;
+    if(to){const t=new Date(to);t.setHours(23,59,59,999);if(d>t)return false;}
+    return true;
+  }
+  return true;
+}
+function adxRangeChange(){
+  const r=document.getElementById('adx-range');
+  const c=document.getElementById('adx-custom');
+  if(c){const on=(r&&r.value==='custom');c.classList.toggle('hidden',!on);c.style.display=on?'inline-flex':'none';}
+  renAdminDesk();
+}
+// Compute every figure the admin dashboard shows, honouring the top filters.
+function adxData(){
+  const gv=id=>{const e=document.getElementById(id);return e?e.value:'';};
+  const proj=gv('adx-proj'),supU=gv('adx-sup'),range=gv('adx-range')||'all',from=gv('adx-from'),to=gv('adx-to');
+  const attr=d=>!supU||d.createdBy===supU||d.signedBySupervisor===supU;
+  const base=dockets.filter(d=>(!proj||d.pcode===proj)&&attr(d)&&adxInRange(d.date,range,from,to));
+  const cost=d=>calcC(d)||0;
+  // Cost incurred = signed day-labour we received (not the up-chain client mirrors).
+  const recv=base.filter(d=>d.sig&&!isUpChainDocket(d));
+  const costIn=recv.reduce((s,d)=>s+cost(d),0);
+  const chAppr=recv.filter(d=>d.bill==='ch'&&d.approvalStatus==='approved');
+  const bcAppr=recv.filter(d=>d.bill==='bc'&&d.approvalStatus==='approved');
+  const chCost=chAppr.reduce((s,d)=>s+cost(d),0);
+  const bcCost=bcAppr.reduce((s,d)=>s+cost(d),0);
+  const recovered=chCost+bcCost;
+  const own=Math.max(0,costIn-recovered);
+  const chRev=chAppr.reduce((s,d)=>s+adxClientVal(d),0);
+  const margin=chRev-chCost;
+  const split={ch:0,bc:0,ow:0,un:0};
+  recv.forEach(d=>{if(d.bill==='ch')split.ch++;else if(d.bill==='bc')split.bc++;else if(d.bill==='ow')split.ow++;else split.un++;});
+  const supOut=base.filter(d=>['awaiting_my_sig','needs_billing','queried'].includes(docketStatus(d)));
+  const pendSign=base.filter(d=>d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting');
+  const qRej=base.filter(d=>d.approvalStatus==='queried'||d.approvalStatus==='rejected');
+  return {proj,supU,range,base,recv,costIn,chCost,bcCost,recovered,own,chRev,margin,split,supOut,pendSign,qRej};
+}
+// Oldest outstanding age (days) across a list — for the "⟳ oldest N days" chip.
+function adxOldest(list){return (list||[]).reduce((mx,d)=>{const a=docketAgeDays(d);return a>mx?a:mx;},0);}
+function adxAgeChip(list){
+  if(!list||!list.length)return '';
+  const n=adxOldest(list);
+  return `<div class="adx-age">⟳ oldest ${n===0?'today':(n+' day'+(n!==1?'s':''))}</div>`;
+}
+function renAdminDesk(){
+  if(!CU||CU.role!=='admin')return;
+  const host=document.getElementById('adx-body');if(!host)return;
+  // Company name in the bar
+  const co=document.getElementById('adx-co');
+  if(co)co.textContent=(typeof appSettings!=='undefined'&&appSettings&&appSettings.name)||'Company';
+  // Populate project + supervisor filters once (preserve current selection)
+  const pSel=document.getElementById('adx-proj');
+  if(pSel){const cur=pSel.value;const want='<option value="">All projects</option>'+projects.map(p=>`<option value="${esc(p.code)}">${esc(p.name)}</option>`).join('');if(pSel.innerHTML!==want){pSel.innerHTML=want;if(cur)pSel.value=cur;}}
+  const sSel=document.getElementById('adx-sup');
+  if(sSel){const cur=sSel.value;const sup=(users||[]).filter(u=>u.role==='hc_supervisor');const want='<option value="">All supervisors</option>'+sup.map(u=>`<option value="${esc(u.u)}">${esc(u.name||u.u)}</option>`).join('');if(sSel.innerHTML!==want){sSel.innerHTML=want;if(cur)sSel.value=cur;}}
+
+  const D=adxData();
+  const rangeLbl={all:'All time','7d':'Last 7 days',month:'This month',ytd:'Year to date',custom:'Custom range'}[D.range]||'All time';
+  const projLbl=D.proj?(projects.find(p=>p.code===D.proj)||{}).name||D.proj:'All projects';
+  const scopeLbl=`· ${esc(projLbl)} · ${rangeLbl}`;
+
+  // KPI strip
+  const kpi=`
+    <div class="adx-grid">
+      <div class="adx-card adx-clickable" onclick="adxScrollSup()">
+        <h3>Supervisor outstanding</h3>
+        <div class="adx-kpi"><div class="v amber">${D.supOut.length}</div><span class="adx-go">View by supervisor →</span></div>
+        <div class="adx-sub">Items your supervisors still have to complete (sign / bill-allocate / resolve).</div>
+        ${adxAgeChip(D.supOut)}
+      </div>
+      <div class="adx-card adx-clickable" onclick="adxDrill('pending_signoff')">
+        <h3>Pending my sign-off</h3>
+        <div class="adx-kpi"><div class="v blue">${D.pendSign.length}</div><span class="adx-go">Review &amp; approve →</span></div>
+        <div class="adx-sub">Signed &amp; billed dockets awaiting your final approval.</div>
+        ${adxAgeChip(D.pendSign)}
+      </div>
+      <div class="adx-card adx-clickable" onclick="adxDrill('queried_rejected')">
+        <h3>Queried / rejected</h3>
+        <div class="adx-kpi"><div class="v red">${D.qRej.length}</div><span class="adx-go">Open →</span></div>
+        <div class="adx-sub">Sent back — awaiting resolution &amp; re-submission.</div>
+        ${adxAgeChip(D.qRej)}
+      </div>
+
+      <div class="adx-card adx-hero">
+        <h3>Cost position <span style="font-weight:600;color:#c0bdb5;text-transform:none;letter-spacing:0;">${scopeLbl}</span></h3>
+        ${adxHero(D)}
+      </div>
+    </div>`;
+
+  // Pie (billing split) + supervisor workload
+  const total=D.recv.length;
+  const segs=[
+    {label:'Chargeable',value:D.split.ch,color:'#1D9E75'},
+    {label:'Backcharge',value:D.split.bc,color:'#8A1F4B'},
+    {label:'Own cost',value:D.split.ow,color:'#185FA5'},
+    {label:'Unallocated',value:D.split.un,color:'#9a9a93'}
+  ];
+  const pie=`
+    <div class="adx-card">
+      <h3>Subcontractor dockets — billing split</h3>
+      ${total?`<div class="adx-pierow">${anlDonut(segs.filter(s=>s.value>0),total)}
+        <div style="flex:1;min-width:150px;">${segs.map(s=>`<div class="adx-plg"><i style="background:${s.color};"></i><span>${s.label}</span><b>${s.value} · ${Math.round(s.value/total*100)}%</b></div>`).join('')}</div></div>`
+        :`<div class="adx-empty">No signed subcontractor dockets in this view yet.</div>`}
+    </div>`;
+
+  const sup=(users||[]).filter(u=>u.role==='hc_supervisor').map(u=>{
+    const ds=D.base.filter(d=>d.createdBy===u.u||d.signedBySupervisor===u.u);
+    const aw=ds.filter(d=>docketStatus(d)==='awaiting_my_sig').length;
+    const bl=ds.filter(d=>docketStatus(d)==='needs_billing').length;
+    const qr=ds.filter(d=>d.approvalStatus==='queried').length;
+    return {u,name:u.name||u.u,aw,bl,qr,total:aw+bl+qr};
+  }).filter(r=>r.total>0).sort((a,b)=>b.total-a.total);
+  const pill=(n,cls)=>`<span class="adx-pill ${n?cls:'pn-zero'}">${n}</span>`;
+  const supTable=`
+    <div class="adx-card" id="adx-sup-table">
+      <h3>Supervisor workload — outstanding</h3>
+      ${sup.length?`<table><thead><tr><th>Supervisor</th><th class="r">Awaiting sign</th><th class="r">Bill alloc.</th><th class="r">Queried</th><th></th></tr></thead><tbody>
+        ${sup.map(r=>`<tr><td class="adx-nm">${esc(r.name)}</td><td class="r">${pill(r.aw,'pn-amber')}</td><td class="r">${pill(r.bl,'pn-amber')}</td><td class="r">${pill(r.qr,'pn-red')}</td><td class="r"><button class="adx-rowlink" onclick="adxDrill('sup','${esc(r.u.u)}')">View →</button></td></tr>`).join('')}
+      </tbody></table>`:`<div class="adx-empty">🎉 No outstanding supervisor items in this view.</div>`}
+    </div>`;
+
+  // By-project cost table
+  const cost=d=>calcC(d)||0;
+  const prows=projects.filter(p=>!D.proj||p.code===D.proj).map(p=>{
+    const rc=D.recv.filter(d=>d.pcode===p.code);
+    const ci=rc.reduce((s,d)=>s+cost(d),0);
+    const cc=rc.filter(d=>d.bill==='ch'&&d.approvalStatus==='approved').reduce((s,d)=>s+cost(d),0);
+    const bc=rc.filter(d=>d.bill==='bc'&&d.approvalStatus==='approved').reduce((s,d)=>s+cost(d),0);
+    const ow=Math.max(0,ci-cc-bc);
+    return {name:p.name,ci,cc,bc,ow};
+  }).filter(r=>r.ci>0).sort((a,b)=>b.ci-a.ci);
+  const projTable=`
+    <div class="adx-card">
+      <h3>By project — cost position</h3>
+      ${prows.length?`<table><thead><tr><th>Project</th><th class="r">Cost in</th><th class="r">Chargeable (appr.)</th><th class="r">Backcharge</th><th class="r">Own cost</th></tr></thead><tbody>
+        ${prows.map(r=>`<tr><td class="adx-nm">${esc(r.name)}</td><td class="r">${adxM(r.ci)}</td><td class="r" style="color:#1D9E75;">${adxM(r.cc)}</td><td class="r" style="color:#8A1F4B;">${adxM(r.bc)}</td><td class="r" style="color:#C7891A;">${adxM(r.ow)}</td></tr>`).join('')}
+      </tbody></table>`:`<div class="adx-empty">No signed day-labour cost in this view yet.</div>`}
+    </div>`;
+
+  host.innerHTML=kpi+`<div class="adx-low">${pie}${supTable}</div>`+projTable;
+}
+// The cost-in vs cost-out hero body (three figures + comparison bar).
+function adxHero(D){
+  const ci=D.costIn;
+  const pctCh=ci?Math.round(D.chCost/ci*100):0;
+  const pctBc=ci?Math.round(D.bcCost/ci*100):0;
+  const pctOw=ci?Math.max(0,100-pctCh-pctBc):0;
+  const recPct=ci?Math.round(D.recovered/ci*100):0;
+  const ownPctTxt=ci?(Math.round(D.own/ci*100)+'% of cost in'):'—';
+  return `
+    <div class="adx-hrow">
+      <div class="adx-money inn">
+        <div class="lab">Coming in — day labour</div>
+        <div class="big">${adxM(ci)}</div>
+        <div class="brk">Committed cost of signed dockets<br>(what we owe out).</div>
+      </div>
+      <div class="adx-money out adx-divv">
+        <div class="lab">Recovered — going out</div>
+        <div class="big">${adxM(D.recovered)}</div>
+        <div class="brk">
+          <i style="background:#1D9E75;"></i>Chargeable to client (approved) &nbsp;<b>${adxM(D.chCost)}</b><br>
+          <i style="background:#8A1F4B;"></i>Backcharged to other subs &nbsp;<b>${adxM(D.bcCost)}</b>
+          ${D.chRev>0?`<br><span style="color:#9a958c;">Billed to client at client rate ${adxM(D.chRev)} · est. margin ${adxM(D.margin)}</span>`:''}
+        </div>
+      </div>
+      <div class="adx-money net adx-divv">
+        <div class="lab">Own cost — not yet recovered</div>
+        <div class="big">${adxM(D.own)}</div>
+        <div class="brk">Cost in, not yet approved to client / on our own cost.<br><span style="color:#B23B34;">${ownPctTxt}</span></div>
+      </div>
+      <div class="adx-barwrap">
+        <div class="adx-barlab"><span>Cost in ${adxM(ci)}</span><span>Recovered ${recPct}% · Own cost ${100-recPct}%</span></div>
+        <div class="adx-stack">
+          ${pctCh?`<div class="seg" style="width:${pctCh}%;background:#1D9E75;" title="Chargeable to client"></div>`:''}
+          ${pctBc?`<div class="seg" style="width:${pctBc}%;background:#8A1F4B;" title="Backcharge"></div>`:''}
+          ${pctOw?`<div class="seg" style="width:${pctOw}%;background:#C7891A;" title="Own cost"></div>`:''}
+        </div>
+        <div class="adx-legend">
+          <span><i style="background:#1D9E75;"></i>Chargeable to client (approved)</span>
+          <span><i style="background:#8A1F4B;"></i>Backcharge to subs</span>
+          <span><i style="background:#C7891A;"></i>Own cost (not yet recovered)</span>
+        </div>
+      </div>
+    </div>`;
+}
+function adxScrollSup(){const el=document.getElementById('adx-sup-table');if(el)el.scrollIntoView({behavior:'smooth',block:'center'});}
+// Drill from a dashboard box into All dockets, carrying the current filters.
+function adxDrill(kind,supU){
+  const gv=id=>{const e=document.getElementById(id);return e?e.value:'';};
+  window._adDash={kind,supU:supU||'',proj:gv('adx-proj'),range:gv('adx-range')||'all',from:gv('adx-from'),to:gv('adx-to')};
+  window._adDashPending=true;
+  ['fp','fsb','fb','f-submitted','fsig'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  showTab('ad',document.getElementById('n3'));
+  if(typeof renAD==='function')renAD();
+}
+function adxClearDrill(){window._adDash=null;if(typeof renAD==='function')renAD();}
 
 // A row in the Awaiting-approval folder with Approve / Query / Override actions
 function approvalRow(d){
