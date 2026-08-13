@@ -139,9 +139,14 @@ body.review-open #sup-fab-wrap{display:none!important;}
 header{background:#fff;border-bottom:0.5px solid rgba(0,0,0,0.1);padding:12px 1rem;display:flex;justify-content:space-between;align-items:center;}
 .logo{font-size:16px;font-weight:600;color:#185FA5;letter-spacing:-0.3px;}
 .nav{display:flex;gap:6px;padding:12px 0 10px;border-bottom:0.5px solid rgba(0,0,0,0.1);margin-bottom:16px;flex-wrap:wrap;}
-.nb{font-size:13px;padding:6px 11px;border-radius:8px;cursor:pointer;border:none;background:transparent;color:#666;display:inline-block;white-space:nowrap;}
+.nb{font-size:13px;padding:6px 11px;border-radius:8px;cursor:pointer;border:none;background:transparent;color:#666;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
 .nb.act{background:#f0f0ee;color:#1a1a1a;font-weight:500;}
 .nb:hover{background:#f0f0ee;}
+.nb i{font-size:16px;color:#8a8a86;}
+.nb.act i{color:#185FA5;}
+/* Admins get a New-docket button on their dashboard + All dockets covers their
+   list, so drop the duplicate New-docket / My-dockets nav items for admins. */
+body.role-admin #n1,body.role-admin #n2{display:none!important;}
 .nav::-webkit-scrollbar{display:none;}
 /* Mobile nav — hide all nav buttons, show role-based dashboard instead */
 @media(max-width:768px){
@@ -209,11 +214,16 @@ body.role-worker #n1:hover,body.role-supervisor #n1:hover{background:#1a1a1a;}
 .admin-desk .adx-filters select,.admin-desk .adx-filters input[type=date]{font-size:13px;padding:8px 12px;border-radius:9px;border:.5px solid rgba(0,0,0,.16);background:#fff;color:#2D2D2D;font-family:inherit;}
 .admin-desk .adx-filters select{min-width:150px;}
 .admin-desk .adx-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+.admin-desk .adx-kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:14px;margin-bottom:14px;}
 .admin-desk .adx-card{background:#fff;border:.5px solid var(--ad-line);border-radius:16px;box-shadow:0 1px 3px rgba(45,45,45,.05);padding:18px 20px;}
 .admin-desk .adx-card h3{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--ad-soft);margin-bottom:12px;}
 .admin-desk .adx-kpi{display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .admin-desk .adx-kpi .v{font-size:44px;font-weight:800;line-height:1;}
-.admin-desk .adx-kpi .v.red{color:#E24B4A;} .admin-desk .adx-kpi .v.blue{color:#185FA5;} .admin-desk .adx-kpi .v.amber{color:#C7891A;}
+.admin-desk .adx-kpi .v.red{color:#E24B4A;} .admin-desk .adx-kpi .v.blue{color:#185FA5;} .admin-desk .adx-kpi .v.amber{color:#C7891A;} .admin-desk .adx-kpi .v.green{color:#1D9E75;} .admin-desk .adx-kpi .v.slate{color:#5A6B7B;}
+.admin-desk .adx-mdet{font-size:10px;color:#185FA5;font-weight:600;text-transform:none;letter-spacing:0;margin-left:5px;opacity:0;transition:opacity .12s;}
+.admin-desk .adx-money.adx-clickable:hover .adx-mdet{opacity:1;}
+.admin-desk .adx-money.adx-clickable{border-radius:10px;}
+.admin-desk .adx-money.adx-clickable:hover{background:rgba(24,95,165,.05);}
 .admin-desk .adx-go{font-size:12px;color:#185FA5;font-weight:600;white-space:nowrap;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;}
 .admin-desk .adx-go:hover{text-decoration:underline;}
 .admin-desk .adx-clickable{cursor:pointer;transition:box-shadow .12s,transform .12s;}
@@ -749,7 +759,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c39</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c40</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -761,20 +771,20 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
   <div class="app">
     <div id="rban" class="rban hidden"></div>
     <div class="nav" style="overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap;scrollbar-width:none;">
-      <button class="nb act" id="n0" onclick="showTab('dash',this)">🏠 Dashboard</button>
-      <button class="nb" id="n1" onclick="showTab('nd',this)">+ New docket</button>
-      <button class="nb" id="n-contacts-sub" onclick="showTab('contacts-sub',this)">👥 Contacts</button>
-      <button class="nb" id="n-my-workers" onclick="showTab('my-workers',this)">👷 My workers</button>
-      <button class="nb" id="n-drafts" onclick="showTab('drafts',this)">✏️ Drafts <span id="draft-count-badge"  class="hidden" style="background:#E24B4A;color:#fff;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;margin-left:4px;">0</span></button>
-      <button class="nb hidden" id="n-ready" onclick="showTab('ready',this)">📋 Ready to sign <span id="ready-count-badge" class="hidden" style="background:#EF9F27;color:#412402;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px;">0</span></button>
-      <button class="nb" id="n2" onclick="showTab('md',this)">My dockets</button>
-      <button class="nb hidden" id="n3" onclick="showTab('ad',this)">All dockets</button>
-      <button class="nb hidden" id="n4" onclick="showTab('proj',this)">Projects</button>
-      <button class="nb hidden" id="n5" onclick="showTab('subs',this)">Subcontractors</button>
-      <button class="nb hidden" id="n9" onclick="showTab('users',this)">👤 Users</button>
-      <button class="nb hidden" id="n8" onclick="showTab('rates',this)">💲 Rates</button>
-      <button class="nb hidden" id="n6" onclick="showTab('clients',this)">👥 Clients</button>
-      <button class="nb hidden" id="n7" onclick="showTab('settings',this)">⚙️ Settings</button>
+      <button class="nb act" id="n0" onclick="showTab('dash',this)"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</button>
+      <button class="nb" id="n1" onclick="showTab('nd',this)"><i class="ti ti-plus" aria-hidden="true"></i> New docket</button>
+      <button class="nb" id="n-contacts-sub" onclick="showTab('contacts-sub',this)"><i class="ti ti-address-book" aria-hidden="true"></i> Contacts</button>
+      <button class="nb" id="n-my-workers" onclick="showTab('my-workers',this)"><i class="ti ti-users" aria-hidden="true"></i> Users</button>
+      <button class="nb" id="n-drafts" onclick="showTab('drafts',this)"><i class="ti ti-pencil" aria-hidden="true"></i> Drafts <span id="draft-count-badge"  class="hidden" style="background:#E24B4A;color:#fff;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;margin-left:4px;">0</span></button>
+      <button class="nb hidden" id="n-ready" onclick="showTab('ready',this)"><i class="ti ti-clipboard-check" aria-hidden="true"></i> Ready to sign <span id="ready-count-badge" class="hidden" style="background:#EF9F27;color:#412402;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px;">0</span></button>
+      <button class="nb" id="n2" onclick="showTab('md',this)"><i class="ti ti-files" aria-hidden="true"></i> My dockets</button>
+      <button class="nb hidden" id="n3" onclick="showTab('ad',this)"><i class="ti ti-file-stack" aria-hidden="true"></i> All dockets</button>
+      <button class="nb hidden" id="n4" onclick="showTab('proj',this)"><i class="ti ti-building-community" aria-hidden="true"></i> Projects</button>
+      <button class="nb hidden" id="n5" onclick="showTab('subs',this)"><i class="ti ti-tools" aria-hidden="true"></i> Subcontractors</button>
+      <button class="nb hidden" id="n9" onclick="showTab('users',this)"><i class="ti ti-shield-lock" aria-hidden="true"></i> Access</button>
+      <button class="nb hidden" id="n8" onclick="showTab('rates',this)"><i class="ti ti-currency-dollar" aria-hidden="true"></i> Rates</button>
+      <button class="nb hidden" id="n6" onclick="showTab('clients',this)"><i class="ti ti-briefcase" aria-hidden="true"></i> Clients</button>
+      <button class="nb hidden" id="n7" onclick="showTab('settings',this)"><i class="ti ti-settings" aria-hidden="true"></i> Settings</button>
     </div>
 
     <!-- DASHBOARD -->
@@ -900,7 +910,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <button onclick="showTab('proj',document.getElementById('n4'))" class="ndock-tile"><i class="ti ti-building" aria-hidden="true"></i>Projects</button>
           <button onclick="showTab('subs',document.getElementById('n5'))" class="ndock-tile"><i class="ti ti-users" aria-hidden="true"></i>Subcontractors</button>
           <button onclick="showTab('clients',document.getElementById('n6'))" class="ndock-tile"><i class="ti ti-address-book" aria-hidden="true"></i>Clients</button>
-          <button onclick="showTab('users',document.getElementById('n9'))" class="ndock-tile"><i class="ti ti-user" aria-hidden="true"></i>Users</button>
+          <button onclick="showTab('users',document.getElementById('n9'))" class="ndock-tile"><i class="ti ti-shield-lock" aria-hidden="true"></i>Access</button>
         </div>
         <!-- Summary tiles (all roles) -->
         <div class="mg admin-legacy-desk" style="margin-bottom:10px;">
@@ -1915,7 +1925,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 
     <!-- USERS -->
     <div id="t-users" class="hidden">
-      <div class="rb"><p class="st" style="margin:0;">Site users</p><button class="btn btn-p btn-s" onclick="togF('auf')">+ Add user</button></div>
+      <div class="rb"><p class="st" style="margin:0;">User access</p><button class="btn btn-p btn-s" onclick="togF('auf')">+ Add user</button></div>
 
       <div id="auf" class="card hidden" style="margin-bottom:12px;">
         <p style="font-size:13px;font-weight:500;margin-bottom:12px;">New site user</p>
@@ -2007,7 +2017,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
     <!-- MY WORKERS (Subcontractor view) -->
     <div id="t-my-workers" class="hidden">
       <div class="rb" style="margin-bottom:12px;">
-        <p class="st" style="margin:0;">👷 My workers</p>
+        <p class="st" style="margin:0;">Users</p>
         <button class="btn btn-p btn-s" onclick="togF('sub-awf')">+ Add worker</button>
       </div>
 
@@ -2405,6 +2415,7 @@ function setupUI(){
   document.getElementById('un').textContent=CU.name;
   const ub=document.getElementById('ub'),rb=document.getElementById('rban');
   if(r==='admin'){
+    document.body.className='role-admin';
     const tier=adminTierOf(CU);
     ub.textContent=adminTierLabel(tier);ub.className='badge bi';
     const tierBlurb={owner:'Main Administrator — full access and allocates access for all staff.',pmca:'PM / Contracts Admin — final docket sign-off, plus allocate workers and admins.',std:'Administrator — view, create, and manage; allocate workers.'}[tier]||'';
@@ -3406,10 +3417,15 @@ function renAD(){
       if(D.kind==='pending_signoff')return d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting';
       if(D.kind==='queried_rejected')return d.approvalStatus==='queried'||d.approvalStatus==='rejected';
       if(D.kind==='sup')return ['awaiting_my_sig','needs_billing','queried'].includes(docketStatus(d));
+      if(D.kind==='new_received')return d.sig&&!isUpChainDocket(d)&&docketAgeDays(d)<=2;
+      if(D.kind==='client_review')return isUpChainDocket(d)&&!d.sig;
+      if(D.kind==='cost_in')return d.sig&&!isUpChainDocket(d);
+      if(D.kind==='recovered')return d.sig&&!isUpChainDocket(d)&&(d.bill==='ch'||d.bill==='bc')&&d.approvalStatus==='approved';
+      if(D.kind==='own_cost')return d.sig&&!isUpChainDocket(d)&&!((d.bill==='ch'||d.bill==='bc')&&d.approvalStatus==='approved');
       return true;
     });
     if(noteEl){
-      const labels={pending_signoff:'Pending your final sign-off',queried_rejected:'Queried / rejected — awaiting resolution',sup:'Supervisor outstanding items'};
+      const labels={pending_signoff:'Pending your final sign-off',queried_rejected:'Queried / rejected — awaiting resolution',sup:'Supervisor outstanding items',new_received:'New — just received (last 2 days)',client_review:'Pending client review',cost_in:'Cost coming in — signed day labour',recovered:'Recovered — chargeable & backcharge (approved)',own_cost:'Own cost — not yet recovered'};
       let extra='';
       if(D.supU){const su=(users||[]).find(u=>u.u===D.supU);if(su)extra=' · '+esc(su.name);}
       noteEl.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:#EAF2FB;border:0.5px solid #C9DDF1;border-radius:10px;padding:9px 14px;margin-bottom:12px;font-size:12.5px;color:#0C447C;"><span>Filtered from dashboard: <strong>${labels[D.kind]||'Dashboard filter'}</strong>${extra}</span><button onclick="adxClearDrill()" style="background:none;border:none;color:#185FA5;font-weight:600;cursor:pointer;font-size:12px;">✕ Clear</button></div>`;
@@ -4893,9 +4909,9 @@ const LANGS={
     phEmailRecipient:'auto-filled from contact or enter manually',
     phMobile:'auto-filled from contact or enter manually',
     phOptMsg:'e.g. Hi John, please find attached today\'s docket for your signature.',
-    navContacts:'👥 Contacts',
-    navDrafts:'✏️ Drafts',
-    navMyWorkers:'👷 My workers',
+    navContacts:'Contacts',
+    navDrafts:'Drafts',
+    navMyWorkers:'Users',
     reqBy:'Requested by',
     method:'Method',
     photos:'Photos',
@@ -4966,9 +4982,9 @@ const LANGS={
     phEmailRecipient:'从联系人自动填写或手动输入',
     phMobile:'从联系人自动填写或手动输入',
     phOptMsg:'例如：您好，请查看并签署今日工单。',
-    navContacts:'👥 联系人',
-    navDrafts:'✏️ 草稿',
-    navMyWorkers:'👷 我的工人',
+    navContacts:'联系人',
+    navDrafts:'草稿',
+    navMyWorkers:'用户',
     reqBy:'请求人',
     method:'方式',
     photos:'照片',
@@ -5039,9 +5055,9 @@ const LANGS={
     phEmailRecipient:'Se completa desde el contacto o ingrese manualmente',
     phMobile:'Se completa desde el contacto o ingrese manualmente',
     phOptMsg:'Ej: Hola Juan, por favor firme la orden de trabajo de hoy.',
-    navContacts:'👥 Contactos',
-    navDrafts:'✏️ Borradores',
-    navMyWorkers:'👷 Mis trabajadores',
+    navContacts:'Contactos',
+    navDrafts:'Borradores',
+    navMyWorkers:'Usuarios',
     reqBy:'Solicitado por',
     method:'Método',
     photos:'Fotos',
@@ -5112,9 +5128,9 @@ const LANGS={
     phEmailRecipient:'يُملأ تلقائيًا من جهة الاتصال أو أدخله يدويًا',
     phMobile:'يُملأ تلقائيًا من جهة الاتصال أو أدخله يدويًا',
     phOptMsg:'مثال: مرحبًا، يرجى الاطلاع على سند اليوم وتوقيعه.',
-    navContacts:'👥 جهات الاتصال',
-    navDrafts:'✏️ المسودات',
-    navMyWorkers:'👷 عمالي',
+    navContacts:'جهات الاتصال',
+    navDrafts:'المسودات',
+    navMyWorkers:'المستخدمون',
     reqBy:'طُلب بواسطة',
     method:'الطريقة',
     photos:'الصور',
@@ -5317,14 +5333,14 @@ function applyLang(lang){
   // Banner - don\'t overwrite, keeps lang switcher intact
   // Nav labels
   const n2b=document.getElementById('n2');if(n2b)n2b.innerHTML=t.myDockets;
-  const nContacts=document.getElementById('n-contacts-sub');if(nContacts)nContacts.innerHTML=t.navContacts;
+  const nContacts=document.getElementById('n-contacts-sub');if(nContacts)nContacts.innerHTML='<i class="ti ti-address-book" aria-hidden="true"></i> '+t.navContacts;
   const nDrafts=document.getElementById('n-drafts');
   if(nDrafts){
     const badge=document.getElementById('draft-count-badge');
     const badgeHTML=badge?badge.outerHTML:'';
-    nDrafts.innerHTML=t.navDrafts+' '+badgeHTML;
+    nDrafts.innerHTML='<i class="ti ti-pencil" aria-hidden="true"></i> '+t.navDrafts+' '+badgeHTML;
   }
-  const nMyWorkers=document.getElementById('n-my-workers');if(nMyWorkers)nMyWorkers.innerHTML=t.navMyWorkers;
+  const nMyWorkers=document.getElementById('n-my-workers');if(nMyWorkers)nMyWorkers.innerHTML='<i class="ti ti-users" aria-hidden="true"></i> '+t.navMyWorkers;
   // Form section labels
   document.querySelectorAll('#t-nd label').forEach(lbl=>{
     const txt=lbl.childNodes[0]?.textContent?.trim();
@@ -8831,14 +8847,20 @@ function adxData(){
   const supOut=base.filter(d=>['awaiting_my_sig','needs_billing','queried'].includes(docketStatus(d)));
   const pendSign=base.filter(d=>d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting');
   const qRej=base.filter(d=>d.approvalStatus==='queried'||d.approvalStatus==='rejected');
-  return {proj,supU,range,base,recv,costIn,chCost,bcCost,recovered,own,chRev,margin,split,supOut,pendSign,qRej};
+  // Just received = day-labour dockets signed in the last 2 days (the cashflow
+  // early-warning — a new committed cost just landed).
+  const newRecv=recv.filter(d=>docketAgeDays(d)<=2);
+  // Pending client review = client (up-chain) dockets sent up but not yet signed
+  // off by the client above us.
+  const clientReview=base.filter(d=>isUpChainDocket(d)&&!d.sig);
+  return {proj,supU,range,base,recv,costIn,chCost,bcCost,recovered,own,chRev,margin,split,supOut,pendSign,qRej,newRecv,clientReview};
 }
 // Oldest outstanding age (days) across a list — for the "⟳ oldest N days" chip.
 function adxOldest(list){return (list||[]).reduce((mx,d)=>{const a=docketAgeDays(d);return a>mx?a:mx;},0);}
 function adxAgeChip(list){
   if(!list||!list.length)return '';
   const n=adxOldest(list);
-  return `<div class="adx-age">⟳ oldest ${n===0?'today':(n+' day'+(n!==1?'s':''))}</div>`;
+  return `<div class="adx-age">oldest ${n===0?'today':(n+' day'+(n!==1?'s':''))}</div>`;
 }
 function renAdminDesk(){
   if(!CU||CU.role!=='admin')return;
@@ -8857,12 +8879,18 @@ function renAdminDesk(){
   const projLbl=D.proj?(projects.find(p=>p.code===D.proj)||{}).name||D.proj:'All projects';
   const scopeLbl=`· ${esc(projLbl)} · ${rangeLbl}`;
 
-  // KPI strip
+  // KPI strip — five boxes across the docket lifecycle
   const kpi=`
-    <div class="adx-grid">
+    <div class="adx-kgrid">
+      <div class="adx-card adx-clickable" onclick="adxDrill('new_received')">
+        <h3>New — just received</h3>
+        <div class="adx-kpi"><div class="v green">${D.newRecv.length}</div><span class="adx-go">Open →</span></div>
+        <div class="adx-sub">Day-labour dockets signed in the last 2 days — a fresh committed cost.</div>
+        ${adxAgeChip(D.newRecv)}
+      </div>
       <div class="adx-card adx-clickable" onclick="adxScrollSup()">
         <h3>Supervisor outstanding</h3>
-        <div class="adx-kpi"><div class="v amber">${D.supOut.length}</div><span class="adx-go">View by supervisor →</span></div>
+        <div class="adx-kpi"><div class="v amber">${D.supOut.length}</div><span class="adx-go">By supervisor →</span></div>
         <div class="adx-sub">Items your supervisors still have to complete (sign / bill-allocate / resolve).</div>
         ${adxAgeChip(D.supOut)}
       </div>
@@ -8872,17 +8900,22 @@ function renAdminDesk(){
         <div class="adx-sub">Signed &amp; billed dockets awaiting your final approval.</div>
         ${adxAgeChip(D.pendSign)}
       </div>
+      <div class="adx-card adx-clickable" onclick="adxDrill('client_review')">
+        <h3>Pending client review</h3>
+        <div class="adx-kpi"><div class="v slate">${D.clientReview.length}</div><span class="adx-go">Open →</span></div>
+        <div class="adx-sub">Client dockets sent up — awaiting the builder / client's sign-off.</div>
+        ${adxAgeChip(D.clientReview)}
+      </div>
       <div class="adx-card adx-clickable" onclick="adxDrill('queried_rejected')">
         <h3>Queried / rejected</h3>
         <div class="adx-kpi"><div class="v red">${D.qRej.length}</div><span class="adx-go">Open →</span></div>
         <div class="adx-sub">Sent back — awaiting resolution &amp; re-submission.</div>
         ${adxAgeChip(D.qRej)}
       </div>
-
-      <div class="adx-card adx-hero">
-        <h3>Cost position <span style="font-weight:600;color:#c0bdb5;text-transform:none;letter-spacing:0;">${scopeLbl}</span></h3>
-        ${adxHero(D)}
-      </div>
+    </div>
+    <div class="adx-card adx-hero">
+      <h3>Cost position <span style="font-weight:600;color:#c0bdb5;text-transform:none;letter-spacing:0;">${scopeLbl}</span></h3>
+      ${adxHero(D)}
     </div>`;
 
   // Pie (billing split) + supervisor workload
@@ -8914,7 +8947,7 @@ function renAdminDesk(){
       <h3>Supervisor workload — outstanding</h3>
       ${sup.length?`<table><thead><tr><th>Supervisor</th><th class="r">Awaiting sign</th><th class="r">Bill alloc.</th><th class="r">Queried</th><th></th></tr></thead><tbody>
         ${sup.map(r=>`<tr><td class="adx-nm">${esc(r.name)}</td><td class="r">${pill(r.aw,'pn-amber')}</td><td class="r">${pill(r.bl,'pn-amber')}</td><td class="r">${pill(r.qr,'pn-red')}</td><td class="r"><button class="adx-rowlink" onclick="adxDrill('sup','${esc(r.u.u)}')">View →</button></td></tr>`).join('')}
-      </tbody></table>`:`<div class="adx-empty">🎉 No outstanding supervisor items in this view.</div>`}
+      </tbody></table>`:`<div class="adx-empty">No outstanding supervisor items in this view.</div>`}
     </div>`;
 
   // By-project cost table
@@ -8947,13 +8980,13 @@ function adxHero(D){
   const ownPctTxt=ci?(Math.round(D.own/ci*100)+'% of cost in'):'—';
   return `
     <div class="adx-hrow">
-      <div class="adx-money inn">
-        <div class="lab">Coming in — day labour</div>
+      <div class="adx-money inn adx-clickable" onclick="adxDrill('cost_in')">
+        <div class="lab">Coming in — day labour <span class="adx-mdet">Details →</span></div>
         <div class="big">${adxM(ci)}</div>
         <div class="brk">Committed cost of signed dockets<br>(what we owe out).</div>
       </div>
-      <div class="adx-money out adx-divv">
-        <div class="lab">Recovered — going out</div>
+      <div class="adx-money out adx-divv adx-clickable" onclick="adxDrill('recovered')">
+        <div class="lab">Recovered — going out <span class="adx-mdet">Details →</span></div>
         <div class="big">${adxM(D.recovered)}</div>
         <div class="brk">
           <i style="background:#1D9E75;"></i>Chargeable to client (approved) &nbsp;<b>${adxM(D.chCost)}</b><br>
@@ -8961,8 +8994,8 @@ function adxHero(D){
           ${D.chRev>0?`<br><span style="color:#9a958c;">Billed to client at client rate ${adxM(D.chRev)} · est. margin ${adxM(D.margin)}</span>`:''}
         </div>
       </div>
-      <div class="adx-money net adx-divv">
-        <div class="lab">Own cost — not yet recovered</div>
+      <div class="adx-money net adx-divv adx-clickable" onclick="adxDrill('own_cost')">
+        <div class="lab">Own cost — not yet recovered <span class="adx-mdet">Details →</span></div>
         <div class="big">${adxM(D.own)}</div>
         <div class="brk">Cost in, not yet approved to client / on our own cost.<br><span style="color:#B23B34;">${ownPctTxt}</span></div>
       </div>
