@@ -282,18 +282,35 @@ body.role-worker #n1:hover,body.role-supervisor #n1:hover{background:#1a1a1a;}
 .admin-desk .adx-ft.green .ftv{color:#0F6E56;} .admin-desk .adx-ft.amber .ftv{color:#9a6a12;}
 .admin-desk .adx-ft .ftl{font-size:11px;color:var(--ad-soft);text-transform:uppercase;letter-spacing:.04em;margin-top:4px;}
 /* Sectioned admin dashboard (finalise / subcontractor / client) */
-.admin-desk .adx-sec{display:flex;align-items:center;gap:9px;margin:20px 2px 10px;}
+.admin-desk .adx-sec{display:flex;align-items:center;gap:10px;margin:22px 2px 12px;}
 .admin-desk .adx-sec:first-child{margin-top:2px;}
 .admin-desk .adx-sec-ic{flex-shrink:0;display:flex;}
-.admin-desk .adx-sec>span:last-child{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;}
-.admin-desk .adx-sec.fin>span:last-child{color:#5B3B8C;}
-.admin-desk .adx-sec.sub>span:last-child{color:#B9770E;}
-.admin-desk .adx-sec.cli>span:last-child{color:#0C447C;}
+.admin-desk .adx-sec-t{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;}
+.admin-desk .adx-sec-note{font-size:11px;font-weight:700;text-transform:none;letter-spacing:0;color:#9a958c;}
+.admin-desk .adx-sec.fin .adx-sec-t{color:#5B3B8C;} .admin-desk .adx-sec.fin .adx-sec-note{color:#8a6cb8;}
+.admin-desk .adx-sec.sub .adx-sec-t{color:#B9770E;}
+.admin-desk .adx-sec.cli .adx-sec-t{color:#0C447C;}
+/* Finalise stands out — tinted, bordered panel */
+.admin-desk .adx-finalise{background:linear-gradient(180deg,#FBF9FF,#F4EFFB);border:1px solid #E2D6F3;border-radius:18px;padding:6px 16px 18px;margin-bottom:22px;box-shadow:0 3px 18px rgba(91,59,140,.10);}
+.admin-desk .adx-finalise .adx-sec{margin-top:12px;}
 .admin-desk .adx-fin-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
 @media(max-width:820px){.admin-desk .adx-fin-row{grid-template-columns:1fr;}}
-.admin-desk .adx-signoff.hero{border-left:4px solid #5B3B8C;background:linear-gradient(180deg,#fff,#faf7ff);margin-bottom:0;}
+.admin-desk .adx-signoff.hero{border:1px solid #E2D6F3;border-left:5px solid #5B3B8C;background:#fff;margin-bottom:0;box-shadow:0 1px 4px rgba(45,45,45,.06);}
+.admin-desk .adx-signoff.hero .adx-signoff-head h3{font-size:15px;letter-spacing:.02em;}
 .admin-desk .adx-signoff.hero .adx-approvals{grid-template-columns:1fr;margin-top:12px;}
-.admin-desk .adx-allclear{margin-top:12px;padding:16px;border-radius:10px;background:#F3FBF7;border:0.5px solid #C7E9D9;color:#0F6E56;font-size:13px;font-weight:500;text-align:center;}
+.admin-desk .adx-allclear{margin-top:12px;padding:18px;border-radius:12px;background:#F3FBF7;border:0.5px solid #C7E9D9;color:#0F6E56;font-size:13px;font-weight:600;text-align:center;}
+/* Polished section boxes — colored accent, hover lift */
+.admin-desk .adx-box{border-left:4px solid var(--c,#bbb);padding:15px 18px 16px;display:flex;flex-direction:column;}
+.admin-desk .adx-box h3{margin-bottom:10px;}
+.admin-desk .adx-box .adx-kpi{margin-top:auto;}
+.admin-desk .adx-box .adx-kpi .v{color:var(--c,#2D2D2D);}
+.admin-desk .adx-box .adx-go{color:var(--c,#185FA5);opacity:.9;}
+/* Highlighted "who is responsible" pills in the drilled list */
+.row-signwait{background:#FFFDF5;}
+.row-signwait:hover{background:#FFF9E6;}
+.sig-need{display:inline-block;font-size:11.5px;font-weight:700;color:#8a5a12;background:#FBEFD9;border:1px solid #F0DDB2;border-radius:20px;padding:3px 10px;margin:2px 3px 2px 0;white-space:nowrap;}
+.sig-need.client{color:#0C447C;background:#E6F1FB;border-color:#B5D4F4;}
+.sig-need.warn{color:#B23B34;background:#FBE3E1;border-color:#E7B9B6;}
 /* IN / OUT / Balance boxes */
 .admin-desk .adx-iorow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
 .admin-desk .adx-io{border:.5px solid var(--ad-line);border-radius:12px;padding:16px 18px;background:#fff;}
@@ -862,7 +879,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c47</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c48</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -2848,6 +2865,33 @@ function sigBadge(d){
   if(d.sigStatus==='sent_sms')return'<span class="badge bsent">💬 SMS sent</span>';
   return'<span class="badge bpend">⏳ Pending</span>';
 }
+// Supervisor(s) responsible to sign a docket = HC supervisors allocated to its
+// project. Used to highlight who needs to act on awaiting-signature dockets.
+function responsibleSigners(d){
+  if(!d||!d.pcode)return[];
+  return (users||[]).filter(u=>u.role==='hc_supervisor'&&(u.projectAccess||[]).includes(d.pcode)).map(u=>u.name||u.u);
+}
+// Who needs to act on a docket, highlighted. Supervisor(s) for signing / bill
+// allocation / raising the client docket; the client contact for dockets
+// awaiting the client's signature.
+function responsibleCell(d,kind){
+  if(kind==='client_review'||kind==='client_admin_review'){
+    const lbl=getContactLabel(d); // already HTML-escaped
+    const ic=kind==='client_admin_review'?'🏢':'✍';
+    if(lbl&&lbl!=='—')return `<span class="sig-need client">${ic} ${lbl}</span>`;
+    return `<span class="sig-need warn">⚠ No client contact set</span>`;
+  }
+  let names;
+  if(kind==='await_bill'||kind==='ready_client'){
+    if(d.signedBySupervisor){const u=(users||[]).find(x=>x.u===d.signedBySupervisor);names=u?[u.name||u.u]:[];}
+    if(!names||!names.length)names=responsibleSigners(d);
+  }else{
+    names=responsibleSigners(d);
+  }
+  if(!names||!names.length)return `<span class="sig-need warn">⚠ No supervisor on this project</span>`;
+  const ic={await_bill:'💲',ready_client:'📤'}[kind]||'✍';
+  return names.map(n=>`<span class="sig-need">${ic} ${esc(n)}</span>`).join(' ');
+}
 // Project colour badge — each project gets a stable colour (same project = same
 // colour everywhere), from a palette chosen to steer clear of the status colours
 // (green=signed, amber=pending, red/maroon=queried, purple=backcharge, blue=info).
@@ -3570,10 +3614,13 @@ function renAD(){
       if(D.kind==='await_sup_sig')return docketStatus(d)==='awaiting_my_sig';
       if(D.kind==='await_bill')return docketStatus(d)==='needs_billing';
       if(D.kind==='ready_client')return !isUpChainDocket(d)&&d.bill==='ch'&&d.approvalStatus==='approved'&&!d.submittedToClient;
+      if(D.kind==='queried_sub')return !isUpChainDocket(d)&&(d.approvalStatus==='queried'||d.approvalStatus==='rejected');
+      if(D.kind==='queried_client')return isUpChainDocket(d)&&(d.approvalStatus==='queried'||d.approvalStatus==='rejected');
+      if(D.kind==='client_admin_review')return isUpChainDocket(d)&&d.sig&&d.approvalStatus==='awaiting';
       return true;
     });
     if(noteEl){
-      const labels={pending_signoff:'Pending your final sign-off',queried_rejected:'Queried / rejected — awaiting resolution',sup:'Supervisor outstanding items',new_received:'New — just received (last 2 days)',client_review:'Pending client review',cost_in:'Cost coming in — signed day labour',recovered:'Recovered — chargeable & backcharge (approved)',own_cost:'Own cost — not yet recovered',in_approved:'In (approved) — day labour from subs',out_approved:'Out (approved) — chargeable to client + backcharge',await_sup_sig:'Awaiting supervisor signature',await_bill:'Awaiting bill allocation',ready_client:'Ready to send to client'};
+      const labels={pending_signoff:'Pending your final sign-off',queried_rejected:'Queried / rejected — awaiting resolution',sup:'Supervisor outstanding items',new_received:'New — just received (last 2 days)',client_review:'Pending client review',cost_in:'Cost coming in — signed day labour',recovered:'Recovered — chargeable & backcharge (approved)',own_cost:'Own cost — not yet recovered',in_approved:'In (approved) — day labour from subs',out_approved:'Out (approved) — chargeable to client + backcharge',await_sup_sig:'Awaiting supervisor signature',await_bill:'Awaiting bill allocation',ready_client:'Create client docket — chargeable & approved',queried_sub:'Queried / rejected — subcontractor dockets',queried_client:'Queried / rejected by the client',client_admin_review:'With the client’s admin to approve'};
       let extra='';
       if(D.supU){const su=(users||[]).find(u=>u.u===D.supU);if(su)extra=' · '+esc(su.name);}
       noteEl.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:#EAF2FB;border:0.5px solid #C9DDF1;border-radius:10px;padding:9px 14px;margin-bottom:12px;font-size:12.5px;color:#0C447C;"><span>Filtered from dashboard: <strong>${labels[D.kind]||'Dashboard filter'}</strong>${extra}</span><button onclick="adxClearDrill()" style="background:none;border:none;color:#185FA5;font-weight:600;cursor:pointer;font-size:12px;">✕ Clear</button></div>`;
@@ -3596,7 +3643,10 @@ function renAD(){
     } else acs.style.display='none';
   }
   if(!fl.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:#aaa;padding:20px;">No dockets found</td></tr>';return;}
-  tb.innerHTML=fl.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;"><td onclick="event.stopPropagation();"><input type='checkbox' class='docket-sel' value='${d.id}' onchange='updateBulkBar()' ${d.bill==='ch'?'':''}></td><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span>${d.refSubDocketId?`<br><span style="font-size:9px;color:#3C3489;cursor:pointer;" onclick="event.stopPropagation();vD('${d.refSubDocketId}')" title="View originating sub docket">↩ sub #${esc(d.refSubDocketId)}</span>`:''}</td><td>${projBadge(d.pcode)}</td><td>${fd(d.date)}</td><td>${esc(d.sub)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${d.hours}h</td>${showMoney?`<td>${fc(calcC(d))}</td>`:''}<td>${mdBilling(d)}</td><td>${sigBadge(d)}</td><td><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td></tr>`).join('');
+  const _whoKind=(window._adDash&&['await_sup_sig','await_bill','ready_client','client_review','client_admin_review'].includes(window._adDash.kind))?window._adDash.kind:'';
+  tb.innerHTML=fl.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;" class="${_whoKind?'row-signwait':''}"><td onclick="event.stopPropagation();"><input type='checkbox' class='docket-sel' value='${d.id}' onchange='updateBulkBar()' ${d.bill==='ch'?'':''}></td><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span>${d.refSubDocketId?`<br><span style="font-size:9px;color:#3C3489;cursor:pointer;" onclick="event.stopPropagation();vD('${d.refSubDocketId}')" title="View originating sub docket">↩ sub #${esc(d.refSubDocketId)}</span>`:''}</td><td>${projBadge(d.pcode)}</td><td>${fd(d.date)}</td><td>${esc(d.sub)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${d.hours}h</td>${showMoney?`<td>${fc(calcC(d))}</td>`:''}<td>${mdBilling(d)}</td><td>${_whoKind?responsibleCell(d,_whoKind):sigBadge(d)}</td><td><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td></tr>`).join('');
+  const adTheadEl=document.getElementById('ad-thead');
+  if(adTheadEl){const last=adTheadEl.querySelector('th:nth-last-child(2)');if(last)last.textContent={await_sup_sig:'Needs signature by',await_bill:'To allocate by',ready_client:'To raise by',client_review:'Awaiting client',client_admin_review:'With client admin'}[_whoKind]||'Signature';}
 }
 function renPS(workerFilter){
   const sel=document.getElementById('dp');if(!sel)return;
@@ -9090,6 +9140,10 @@ function adxData(){
   const awaitSupSig=base.filter(d=>docketStatus(d)==='awaiting_my_sig');
   const awaitBill=base.filter(d=>docketStatus(d)==='needs_billing');
   const readyClient=recv.filter(d=>d.bill==='ch'&&d.approvalStatus==='approved'&&!d.submittedToClient);
+  // Sub-side queries (finalise section) vs client-side pipeline (client section)
+  const qRejSub=base.filter(d=>!isUpChainDocket(d)&&(d.approvalStatus==='queried'||d.approvalStatus==='rejected'));
+  const clientAdminReview=base.filter(d=>isUpChainDocket(d)&&d.sig&&d.approvalStatus==='awaiting');
+  const clientQueried=base.filter(d=>isUpChainDocket(d)&&(d.approvalStatus==='queried'||d.approvalStatus==='rejected'));
   const clientApproved=base.filter(d=>isUpChainDocket(d)&&d.sig);
   const clientRejected=base.filter(d=>isUpChainDocket(d)&&d.approvalStatus==='rejected');
   // Simple IN / OUT / Balance position — approved only.
@@ -9099,7 +9153,7 @@ function adxData(){
   const inApproved=recv.filter(d=>d.approvalStatus==='approved').reduce((s,d)=>s+cost(d),0);
   const outApproved=chRev+bcCost;
   const balance=outApproved-inApproved;
-  return {proj,supU,range,base,recv,costIn,chCost,bcCost,recovered,own,chRev,margin,split,supOut,pendSign,qRej,newRecv,clientReview,subCostAll,chargeableAll,marginAll,approvalQueue,inApproved,outApproved,balance,awaitSupSig,awaitBill,readyClient,clientApproved,clientRejected};
+  return {proj,supU,range,base,recv,costIn,chCost,bcCost,recovered,own,chRev,margin,split,supOut,pendSign,qRej,newRecv,clientReview,subCostAll,chargeableAll,marginAll,approvalQueue,inApproved,outApproved,balance,awaitSupSig,awaitBill,readyClient,clientApproved,clientRejected,qRejSub,clientAdminReview,clientQueried};
 }
 // Oldest outstanding age (days) across a list — for the "⟳ oldest N days" chip.
 function adxOldest(list){return (list||[]).reduce((mx,d)=>{const a=docketAgeDays(d);return a>mx?a:mx;},0);}
@@ -9134,63 +9188,37 @@ function renAdminDesk(){
   const heroBody=(canApprove&&D.pendSign.length)
     ? `<div class="adx-approvals">${D.pendSign.map(d=>approvalRow(d)).join('')}</div>`
     : `<div class="adx-allclear">✓ All caught up — nothing awaiting your sign-off.</div>`;
+  const box=(kind,color,count,title,sub,go)=>`<div class="adx-card adx-box adx-clickable" style="--c:${color};" onclick="adxDrill('${kind}')"><h3>${title}</h3><div class="adx-kpi"><div class="v">${count}</div><span class="adx-go">${go||'Open →'}</span></div><div class="adx-sub">${sub}</div></div>`;
   const finaliseSection=`
-    <div class="adx-sec fin"><span class="adx-sec-ic"><svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#5B3B8C"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>For you to finalise</span></div>
-    <div class="adx-fin-row">
-      <div class="adx-card adx-signoff hero">
-        <div class="adx-signoff-head">
-          <h3 style="margin:0;color:#5B3B8C;">Review · Approve · Reject</h3>
-          <span class="adx-signoff-total" style="color:#5B3B8C;">${adxM(signTotal)}</span>
+    <div class="adx-finalise">
+      <div class="adx-sec fin"><span class="adx-sec-ic"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#5B3B8C"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="adx-sec-t">For you to finalise</span><span class="adx-sec-note">${D.pendSign.length?'· action needed':'· all clear'}</span></div>
+      <div class="adx-fin-row">
+        <div class="adx-card adx-signoff hero">
+          <div class="adx-signoff-head">
+            <h3 style="margin:0;color:#5B3B8C;">Review · Approve · Reject</h3>
+            <span class="adx-signoff-total" style="color:#5B3B8C;">${adxM(signTotal)}</span>
+          </div>
+          <div class="adx-signoff-sub">${D.pendSign.length} subcontractor docket${D.pendSign.length!==1?'s':''} signed on site — awaiting your sign-off${signOldest?` · oldest ${signOldest} day${signOldest!==1?'s':''}`:''}</div>
+          ${heroBody}
         </div>
-        <div class="adx-signoff-sub">${D.pendSign.length} subcontractor docket${D.pendSign.length!==1?'s':''} signed on site — awaiting your sign-off${signOldest?` · oldest ${signOldest} day${signOldest!==1?'s':''}`:''}</div>
-        ${heroBody}
-      </div>
-      <div class="adx-card adx-clickable" onclick="adxDrill('queried_rejected')">
-        <h3>Queried / rejected</h3>
-        <div class="adx-kpi"><div class="v red">${D.qRej.length}</div><span class="adx-go">Open →</span></div>
-        <div class="adx-sub">Sent back — awaiting the sub to resolve &amp; re-submit.</div>
-        ${adxAgeChip(D.qRej)}
+        ${box('queried_sub','#E24B4A',D.qRejSub.length,'Queried / rejected','Sent back — awaiting the sub to resolve &amp; re-submit.')}
       </div>
     </div>`;
   // Section 2: SUBCONTRACTOR — costs coming in (supervisor tasks).
   const subSection=`
-    <div class="adx-sec sub"><span class="adx-sec-ic"><svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span>Subcontractor — costs coming in</span></div>
+    <div class="adx-sec sub"><span class="adx-sec-ic"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span class="adx-sec-t">Subcontractor — costs coming in</span></div>
     <div class="adx-kgrid">
-      <div class="adx-card adx-clickable" onclick="adxDrill('await_sup_sig')">
-        <h3>Awaiting supervisor signature</h3>
-        <div class="adx-kpi"><div class="v amber">${D.awaitSupSig.length}</div><span class="adx-go">Open →</span></div>
-        <div class="adx-sub">On site with a supervisor to sign — not a committed cost yet.</div>
-      </div>
-      <div class="adx-card adx-clickable" onclick="adxDrill('await_bill')">
-        <h3>Awaiting bill allocation</h3>
-        <div class="adx-kpi"><div class="v amber">${D.awaitBill.length}</div><span class="adx-go">Open →</span></div>
-        <div class="adx-sub">Signed — needs a chargeable / backcharge / own-cost tag.</div>
-      </div>
-      <div class="adx-card adx-clickable" onclick="adxScrollSup()">
-        <h3>By supervisor</h3>
-        <div class="adx-kpi"><div class="v slate">${D.supOut.length}</div><span class="adx-go">View breakdown →</span></div>
-        <div class="adx-sub">All outstanding items grouped per supervisor.</div>
-      </div>
+      ${box('await_sup_sig','#C7891A',D.awaitSupSig.length,'Awaiting supervisor signature','On site with a supervisor to sign — not a committed cost yet.')}
+      ${box('await_bill','#C7891A',D.awaitBill.length,'Awaiting bill allocation','Signed — needs a chargeable / backcharge / own-cost tag.')}
     </div>`;
   // Section 3: CLIENT — going up the chain.
   const cliSection=`
-    <div class="adx-sec cli"><span class="adx-sec-ic"><svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span>Client — going up the chain</span></div>
+    <div class="adx-sec cli"><span class="adx-sec-ic"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span class="adx-sec-t">Client — going up the chain</span></div>
     <div class="adx-kgrid">
-      <div class="adx-card adx-clickable" onclick="adxDrill('ready_client')">
-        <h3>Ready to send to client</h3>
-        <div class="adx-kpi"><div class="v red">${D.readyClient.length}</div><span class="adx-go">Open →</span></div>
-        <div class="adx-sub">Chargeable &amp; approved — raise the client docket.</div>
-      </div>
-      <div class="adx-card adx-clickable" onclick="adxDrill('client_review')">
-        <h3>Awaiting client signature</h3>
-        <div class="adx-kpi"><div class="v blue">${D.clientReview.length}</div><span class="adx-go">Open →</span></div>
-        <div class="adx-sub">Sent up — waiting on the builder / client to sign.</div>
-      </div>
-      <div class="adx-card">
-        <h3>Client decisions</h3>
-        <div class="adx-kpi"><div class="v slate">${D.clientApproved.length} / ${D.clientRejected.length}</div></div>
-        <div class="adx-sub">Approved / rejected by the client this period.</div>
-      </div>
+      ${box('ready_client','#E24B4A',D.readyClient.length,'Create client docket','Chargeable &amp; approved — raise the client docket.')}
+      ${box('client_review','#185FA5',D.clientReview.length,'Pending client signature','Sent up — waiting on the builder / client to sign.')}
+      ${box('client_admin_review','#5A6B7B',D.clientAdminReview.length,'Admin review','Client signed — with their admin / PM to approve.')}
+      ${box('queried_client','#E24B4A',D.clientQueried.length,'Queried / rejected','Client sent it back — needs your attention.')}
     </div>`;
   const sections=finaliseSection+subSection+cliSection;
   // Cost position (financial) — mounted BELOW the filter bar.
