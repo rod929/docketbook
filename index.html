@@ -805,7 +805,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c43</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c44</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1729,6 +1729,39 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div class="card" style="margin-top:4px;">
         <p style="font-size:13px;font-weight:500;margin-bottom:10px;">👁 Preview</p>
         <div id="settings-preview" style="border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:14px;background:#fafaf8;"></div>
+      </div>
+
+      <!-- SUBSCRIPTION & BILLING (Main Administrator only) -->
+      <div class="set-group" id="set-group-billing" style="display:none;">Subscription &amp; billing</div>
+      <div class="card" id="subscription-card" style="margin-top:4px;display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;">
+          <p style="font-size:13px;font-weight:500;margin:0;">Your Docketbook subscription</p>
+          <span id="sub-status" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#E1F5EE;color:#0F6E56;">Active</span>
+        </div>
+        <p style="font-size:12px;color:#888;margin:4px 0 14px;">Docketbook is billed <strong>$80 / month per subcontractor</strong>, each including up to 50 signed dockets a month.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;" id="sub-tiles">
+          <div class="mc" style="border-left:3px solid #185FA5;text-align:left;padding:12px 14px;"><div class="mv" id="sub-subs" style="color:#185FA5;">0</div><div class="ml">Active subcontractors</div></div>
+          <div class="mc" style="border-left:3px solid #EF9F27;text-align:left;padding:12px 14px;"><div class="mv" id="sub-dockets" style="color:#B9770E;">0</div><div class="ml" id="sub-dockets-lbl">Dockets this month</div></div>
+          <div class="mc" style="border-left:3px solid #1D9E75;background:#f0fdf9;text-align:left;padding:12px 14px;"><div class="mv" id="sub-est" style="color:#0F6E56;">$0</div><div class="ml" style="color:#0F6E56;">Est. this month</div></div>
+        </div>
+
+        <div style="background:#fafaf8;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:5px 0;border-bottom:0.5px solid rgba(0,0,0,0.06);"><span style="color:#888;">Plan</span><span style="font-weight:500;">Per-subcontractor · $80/mo each</span></div>
+          <div style="display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:5px 0;border-bottom:0.5px solid rgba(0,0,0,0.06);"><span style="color:#888;">Included dockets</span><span style="font-weight:500;" id="sub-allowance">— / month</span></div>
+          <div style="display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:5px 0;border-bottom:0.5px solid rgba(0,0,0,0.06);"><span style="color:#888;">Next invoice</span><span style="font-weight:500;color:#aaa;">Set up billing to schedule</span></div>
+          <div style="display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:5px 0;"><span style="color:#888;">Payment method</span><span style="font-weight:500;color:#aaa;">Not set</span></div>
+        </div>
+
+        <div class="fg" style="margin-bottom:8px;">
+          <div class="s2"><label>Billing contact email</label><input type="email" id="sub-bill-email" placeholder="accounts@yourcompany.com.au"></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-p btn-s" onclick="saveBillingEmail()">Save billing email</button>
+          <button class="btn btn-s" onclick="alert('Card payments and automatic invoicing go live with the cloud backend. For now, contact Alerce to arrange billing.')" style="opacity:0.9;">Add payment method</button>
+          <span id="sub-bill-ok" class="ok hidden" style="margin:0;">Saved.</span>
+        </div>
+        <p style="font-size:11px;color:#9a958c;margin:12px 0 0;line-height:1.5;">Usage above is metered live from your dockets. Card payments, automatic invoicing and invoice history become active once the Docketbook cloud backend is connected — until then this is your running estimate.</p>
       </div>
 
       <div class="card" style="margin-top:4px;">
@@ -2684,7 +2717,7 @@ function showTab(tab,btn){
   if(tab==='subs')renST();
   if(tab==='proj'){renPT();renClientSelects();}
   if(tab==='clients')renClientList();
-  if(tab==='settings'){loadSettingsForm();renSettingsPreview();renFlashSettings();renReqBySettings();renSampleDataCard();renQueryResolveSettings();renCompanyDefaults();renSettingsGroups();}
+  if(tab==='settings'){loadSettingsForm();renSettingsPreview();renFlashSettings();renReqBySettings();renSampleDataCard();renQueryResolveSettings();renCompanyDefaults();renSettingsGroups();renSubscription();}
   if(tab==='drafts')renDrafts();
   if(tab==='ready')renReady();
   if(tab==='rates'){renRatesSelects();renRatesTable();}
@@ -6308,6 +6341,33 @@ function renSettingsGroups(){
   ['set-group-defaults','set-group-alerts','set-group-team','set-group-data'].forEach(id=>{
     const e=document.getElementById(id);if(e)e.style.display=isAdm?'':'none';
   });
+}
+// Subscription & billing — Main Administrator (owner) only. Usage is metered
+// live from the dockets; payments/invoicing are backend features.
+function renSubscription(){
+  const show=!!(CU&&CU.role==='admin'&&isOwner());
+  const grp=document.getElementById('set-group-billing');if(grp)grp.style.display=show?'':'none';
+  const card=document.getElementById('subscription-card');if(card)card.style.display=show?'':'none';
+  if(!show)return;
+  const nSubs=(subs||[]).length;
+  const PRICE=80, ALLOW=50;
+  // Dockets dated in the current calendar month
+  const now=new Date();const y=now.getFullYear(),m=now.getMonth();
+  const thisMonth=(dockets||[]).filter(d=>{const dt=new Date(d.date);return !isNaN(dt)&&dt.getFullYear()===y&&dt.getMonth()===m;}).length;
+  const est=nSubs*PRICE;
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set('sub-subs',nSubs);
+  set('sub-dockets',thisMonth);
+  set('sub-dockets-lbl','Dockets this month'+(nSubs?` (of ${nSubs*ALLOW} incl.)`:''));
+  set('sub-est','$'+est.toLocaleString('en-AU'));
+  set('sub-allowance',nSubs?(nSubs*ALLOW)+' / month ('+ALLOW+' × '+nSubs+' subs)':'50 per subcontractor');
+  const be=document.getElementById('sub-bill-email');
+  if(be&&!be.value){be.value=ldL('dlb_billing_email')||(appSettings&&appSettings.email)||'';}
+}
+function saveBillingEmail(){
+  const be=document.getElementById('sub-bill-email');if(!be)return;
+  svL('dlb_billing_email',be.value.trim());
+  const ok=document.getElementById('sub-bill-ok');if(ok){ok.classList.remove('hidden');setTimeout(()=>ok.classList.add('hidden'),2000);}
 }
 function renCompanyDefaults(){
   const card=document.getElementById('company-defaults-card');
