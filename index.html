@@ -934,7 +934,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c56</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c57</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -2355,20 +2355,54 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 </div>
 
 <!-- WEEKLY SUMMARY MODAL -->
-<div id="weekly-modal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1120;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow:auto;">
-  <div style="background:#fff;border-radius:16px;max-width:640px;width:100%;padding:20px 22px;box-shadow:0 10px 40px rgba(0,0,0,.25);margin:auto;">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:4px;">
-      <p style="font-size:15px;font-weight:700;margin:0;">📋 Weekly summary</p>
-      <button class="btn btn-s" onclick="closeWeekly()">✕ Close</button>
+<div id="weekly-modal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1120;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow:auto;">
+  <div style="background:#f4f3f0;border-radius:18px;max-width:600px;width:100%;box-shadow:0 12px 48px rgba(0,0,0,.3);margin:auto;overflow:hidden;">
+    <!-- email-style header -->
+    <div style="background:#2D2D2D;padding:18px 22px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+      <div>
+        <div style="font-size:16px;font-weight:800;color:#fff;letter-spacing:.01em;" id="weekly-title">Weekly summary</div>
+        <div id="weekly-sub" style="font-size:12px;color:#c9c6c0;margin-top:3px;"></div>
+      </div>
+      <button onclick="closeWeekly()" style="background:rgba(255,255,255,.12);border:0;color:#fff;font-size:13px;border-radius:8px;padding:6px 11px;cursor:pointer;flex-shrink:0;">✕</button>
     </div>
-    <p id="weekly-sub" style="font-size:12px;color:#888;margin:0 0 12px;"></p>
-    <pre id="weekly-body" style="white-space:pre-wrap;font-family:inherit;font-size:13px;line-height:1.55;background:#fafaf8;border:0.5px solid rgba(0,0,0,.1);border-radius:10px;padding:14px 16px;max-height:52vh;overflow:auto;margin:0;"></pre>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center;">
-      <button class="btn btn-p btn-s" onclick="emailWeekly()">📧 Email this summary</button>
-      <button class="btn btn-s" onclick="copyWeekly()">Copy text</button>
-      <span id="weekly-copied" class="ok hidden" style="margin:0;">Copied.</span>
+    <!-- rich preview -->
+    <div id="weekly-rich" style="padding:16px 18px;max-height:56vh;overflow:auto;"></div>
+    <!-- actions + schedule -->
+    <div style="padding:0 18px 18px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;">
+        <button class="btn btn-p btn-s" onclick="emailWeekly()"><i class="ti ti-mail" aria-hidden="true"></i> Email this summary</button>
+        <button class="btn btn-s" onclick="copyWeekly()">Copy text</button>
+        <span id="weekly-copied" class="ok hidden" style="margin:0;">Copied.</span>
+      </div>
+      <!-- automated schedule card -->
+      <div style="background:#fff;border:0.5px solid rgba(0,0,0,.1);border-radius:12px;padding:14px 16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div style="font-size:13px;font-weight:700;">Automatic weekly email</div>
+          <input type="checkbox" id="weekly-auto" onchange="saveWeeklyCfg()" style="width:20px;height:20px;margin:0;flex-shrink:0;cursor:pointer;">
+        </div>
+        <div id="weekly-sched-fields" style="margin-top:10px;">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+            <div style="flex:1;min-width:120px;">
+              <label style="font-size:11px;color:#888;display:block;margin-bottom:3px;">Send every</label>
+              <select id="weekly-day" onchange="saveWeeklyCfg()" style="width:100%;padding:8px 10px;border:0.5px solid rgba(0,0,0,.18);border-radius:9px;font-size:13px;background:#fff;">
+                <option value="1">Monday morning</option>
+                <option value="2">Tuesday morning</option>
+                <option value="3">Wednesday morning</option>
+                <option value="4">Thursday morning</option>
+                <option value="5">Friday morning</option>
+                <option value="6">Saturday morning</option>
+                <option value="0">Sunday morning</option>
+              </select>
+            </div>
+            <div style="flex:1.4;min-width:160px;">
+              <label style="font-size:11px;color:#888;display:block;margin-bottom:3px;">Send to</label>
+              <input id="weekly-to" type="text" onchange="saveWeeklyCfg()" placeholder="you@company.com" style="width:100%;padding:8px 10px;border:0.5px solid rgba(0,0,0,.18);border-radius:9px;font-size:13px;">
+            </div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:#9a958c;margin:10px 0 0;line-height:1.5;">Your schedule is saved. Actual hands-off delivery (this summary landing in the inbox each week without anyone tapping send) switches on with the cloud backend. Until then, use <b>Email this summary</b> above to send it now.</p>
+      </div>
     </div>
-    <p style="font-size:11px;color:#9a958c;margin:12px 0 0;line-height:1.5;">Automatic weekly send (e.g. every Monday morning) switches on with the cloud backend. For now this opens a pre-filled email you can send to yourself or the team.</p>
   </div>
 </div>
 
@@ -9566,11 +9600,12 @@ function adxClearDrill(){window._adDash=null;if(typeof renAD==='function')renAD(
 // A plain-text digest of outstanding tasks. Admin gets their own tasks plus
 // each supervisor's; supervisors get their own. Auto-send is a backend job;
 // for now it builds a one-tap pre-filled email.
-function buildWeeklyText(){
-  if(!CU)return'';
+// Structured weekly-summary data: one shape drives both the pretty HTML
+// preview and the plain-text email/copy so they never drift apart.
+function buildWeeklyData(){
+  if(!CU)return null;
   const co=(typeof appSettings!=='undefined'&&appSettings&&appSettings.name)||'Docketbook';
   const money=v=>'$'+Math.round(v||0).toLocaleString('en-AU');
-  const L=[];
   if(CU.role==='admin'){
     const all=dockets||[];
     const pendSign=all.filter(d=>d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting');
@@ -9580,61 +9615,144 @@ function buildWeeklyText(){
     const readyClient=all.filter(d=>!isUpChainDocket(d)&&d.bill==='ch'&&d.approvalStatus==='approved'&&!d.submittedToClient);
     const clientReview=all.filter(d=>isUpChainDocket(d)&&!d.sig);
     const clientQ=all.filter(d=>isUpChainDocket(d)&&(d.approvalStatus==='queried'||d.approvalStatus==='rejected'));
-    L.push(co+' — Weekly summary');
-    L.push('');
-    L.push('FOR YOU TO FINALISE');
-    L.push('  • Awaiting your final sign-off: '+pendSign.length+(pendSign.length?('  ('+money(signTotal)+(oldest?', oldest '+oldest+' day'+(oldest!==1?'s':''):'')+')'):''));
-    L.push('  • Queried / rejected (subcontractor): '+qRejSub.length);
-    L.push('  • Chargeable & approved — client dockets to raise: '+readyClient.length);
-    L.push('  • Client dockets awaiting client signature: '+clientReview.length);
-    L.push('  • Client queried / rejected: '+clientQ.length);
-    L.push('');
-    L.push('SUPERVISOR OUTSTANDING');
     const sups=(users||[]).filter(u=>u.role==='hc_supervisor');
-    let any=false;
+    const supRows=[];
     sups.forEach(u=>{
       const ds=all.filter(d=>d.createdBy===u.u||d.signedBySupervisor===u.u||(u.projectAccess||[]).includes(d.pcode));
       const aw=ds.filter(d=>docketStatus(d)==='awaiting_my_sig').length;
       const bl=ds.filter(d=>docketStatus(d)==='needs_billing').length;
       const qr=ds.filter(d=>d.approvalStatus==='queried').length;
-      if(aw+bl+qr>0){any=true;L.push('  • '+(u.name||u.u)+' — awaiting signature: '+aw+', bill allocation: '+bl+', queried: '+qr);}
+      if(aw+bl+qr>0)supRows.push({name:(u.name||u.u),aw:aw,bl:bl,qr:qr});
     });
-    if(!any)L.push('  • All supervisors are up to date.');
-  } else {
-    const mine=(typeof myD==='function')?myD():[];
-    const awaitSig=mine.filter(d=>docketStatus(d)==='awaiting_my_sig').length;
-    const awaitBill=mine.filter(d=>docketStatus(d)==='needs_billing').length;
-    const queried=mine.filter(d=>d.approvalStatus==='queried').length;
-    const awaitClient=mine.filter(d=>isUpChainDocket(d)&&!d.sig).length;
-    L.push(co+' — Your weekly summary');
-    L.push('');
-    L.push('YOUR OUTSTANDING TASKS');
-    L.push('  • Awaiting your signature (on site): '+awaitSig);
-    L.push('  • Awaiting bill allocation: '+awaitBill);
-    L.push('  • Queried by admin — to resolve: '+queried);
-    L.push('  • Client dockets awaiting client signature: '+awaitClient);
+    return {
+      role:'admin',company:co,
+      title:co+' — Weekly summary',
+      sub:'Your outstanding tasks, plus each supervisor’s.',
+      sections:[
+        {label:'For you to finalise',color:'#EF9F27',
+         items:[
+           {icon:'ti-gavel',text:'Awaiting your final sign-off',count:pendSign.length,extra:pendSign.length?(money(signTotal)+(oldest?' · oldest '+oldest+'d':'')):''},
+           {icon:'ti-arrow-back-up',text:'Queried / rejected (subcontractor)',count:qRejSub.length},
+           {icon:'ti-send',text:'Chargeable & approved — client dockets to raise',count:readyClient.length},
+         ]},
+        {label:'Client — up the chain',color:'#185FA5',
+         items:[
+           {icon:'ti-signature',text:'Client dockets awaiting client signature',count:clientReview.length},
+           {icon:'ti-alert-triangle',text:'Client queried / rejected',count:clientQ.length},
+         ]},
+        {label:'Supervisor outstanding',color:'#1D9E75',
+         supRows:supRows}
+      ]
+    };
   }
-  L.push('');
+  const mine=(typeof myD==='function')?myD():[];
+  const awaitSig=mine.filter(d=>docketStatus(d)==='awaiting_my_sig').length;
+  const awaitBill=mine.filter(d=>docketStatus(d)==='needs_billing').length;
+  const queried=mine.filter(d=>d.approvalStatus==='queried').length;
+  const awaitClient=mine.filter(d=>isUpChainDocket(d)&&!d.sig).length;
+  return {
+    role:'sup',company:co,
+    title:co+' — Your weekly summary',
+    sub:'Your outstanding tasks this week.',
+    sections:[
+      {label:'Your outstanding tasks',color:'#EF9F27',
+       items:[
+         {icon:'ti-signature',text:'Awaiting your signature (on site)',count:awaitSig},
+         {icon:'ti-cash',text:'Awaiting bill allocation',count:awaitBill},
+         {icon:'ti-arrow-back-up',text:'Queried by admin — to resolve',count:queried},
+         {icon:'ti-building',text:'Client dockets awaiting client signature',count:awaitClient},
+       ]}
+    ]
+  };
+}
+// Plain-text (used for the mailto body + Copy text — mailto can't carry HTML).
+function buildWeeklyText(){
+  const D=buildWeeklyData();if(!D)return'';
+  const L=[D.title,''];
+  D.sections.forEach(sec=>{
+    L.push(sec.label.toUpperCase());
+    if(sec.supRows){
+      if(!sec.supRows.length)L.push('  • All supervisors are up to date.');
+      else sec.supRows.forEach(r=>L.push('  • '+r.name+' — awaiting signature: '+r.aw+', bill allocation: '+r.bl+', queried: '+r.qr));
+    } else (sec.items||[]).forEach(it=>L.push('  • '+it.text+': '+it.count+(it.extra?('  ('+it.extra+')'):'')));
+    L.push('');
+  });
   L.push('— Docketbook');
   return L.join('\n');
 }
+// Pretty HTML preview for the modal.
+function renderWeeklyHTML(){
+  const D=buildWeeklyData();if(!D)return'';
+  const H=[];
+  D.sections.forEach(sec=>{
+    H.push('<div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:'+sec.color+';margin:2px 0 8px;display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:'+sec.color+';display:inline-block;"></span>'+sec.label+'</div>');
+    H.push('<div style="background:#fff;border:0.5px solid rgba(0,0,0,.1);border-radius:12px;overflow:hidden;margin-bottom:16px;">');
+    if(sec.supRows){
+      if(!sec.supRows.length){
+        H.push('<div style="padding:14px 16px;font-size:13px;color:#1D9E75;">✓ All supervisors are up to date.</div>');
+      } else sec.supRows.forEach((r,i)=>{
+        H.push('<div style="padding:11px 16px;'+(i?'border-top:0.5px solid rgba(0,0,0,.07);':'')+'">'
+          +'<div style="font-size:13.5px;font-weight:700;margin-bottom:4px;">'+esc(r.name)+'</div>'
+          +'<div style="display:flex;gap:6px;flex-wrap:wrap;">'
+          +weeklyChip('Sign',r.aw)+weeklyChip('Bill',r.bl)+weeklyChip('Queried',r.qr)
+          +'</div></div>');
+      });
+    } else (sec.items||[]).forEach((it,i)=>{
+      const hot=it.count>0;
+      H.push('<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;'+(i?'border-top:0.5px solid rgba(0,0,0,.07);':'')+'">'
+        +'<div style="width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:'+(hot?'#FBEFD9':'#f2f1ee')+';color:'+(hot?sec.color:'#b7b3ab')+';"><i class="ti '+it.icon+'" style="font-size:16px;" aria-hidden="true"></i></div>'
+        +'<div style="flex:1;min-width:0;"><div style="font-size:13.5px;font-weight:'+(hot?'600':'400')+';color:'+(hot?'#2D2D2D':'#8b8880')+';">'+it.text+'</div>'
+        +(it.extra?('<div style="font-size:11.5px;color:#8b8880;margin-top:1px;">'+esc(it.extra)+'</div>'):'')+'</div>'
+        +'<div style="min-width:28px;text-align:center;font-size:18px;font-weight:800;color:'+(hot?sec.color:'#cfccc4')+';">'+it.count+'</div>'
+        +'</div>');
+    });
+    H.push('</div>');
+  });
+  return H.join('');
+}
+function weeklyChip(label,n){
+  const hot=n>0;
+  return '<span style="font-size:11px;font-weight:700;border-radius:20px;padding:2px 10px;background:'+(hot?'#FBEFD9':'#f2f1ee')+';color:'+(hot?'#8a5a12':'#b7b3ab')+';border:0.5px solid '+(hot?'#F0DDB2':'rgba(0,0,0,.06)')+';">'+label+' '+n+'</span>';
+}
+// ── weekly schedule config (saved locally; true auto-send needs the backend) ──
+function weeklyCfg(){try{return JSON.parse(ldL('dlb_weekly_cfg')||'{}')||{};}catch(e){return{};}}
+function saveWeeklyCfg(){
+  const cfg={
+    auto:!!(document.getElementById('weekly-auto')||{}).checked,
+    day:(document.getElementById('weekly-day')||{}).value||'1',
+    to:((document.getElementById('weekly-to')||{}).value||'').trim()
+  };
+  svL('dlb_weekly_cfg',JSON.stringify(cfg));
+  const f=document.getElementById('weekly-sched-fields');if(f)f.style.opacity=cfg.auto?'1':'.5';
+}
+function loadWeeklyCfg(){
+  const cfg=weeklyCfg();
+  const a=document.getElementById('weekly-auto');if(a)a.checked=!!cfg.auto;
+  const d=document.getElementById('weekly-day');if(d)d.value=cfg.day||'1';
+  const t=document.getElementById('weekly-to');
+  if(t){const ud=(typeof getUserData==='function')?getUserData():null;t.value=cfg.to||(ud&&ud.email)||(appSettings&&appSettings.email)||'';}
+  const f=document.getElementById('weekly-sched-fields');if(f)f.style.opacity=cfg.auto?'1':'.5';
+}
 function openWeeklySummary(){
   if(!CU)return;
-  const be=document.getElementById('weekly-body');if(be)be.textContent=buildWeeklyText();
-  const sub=document.getElementById('weekly-sub');
-  if(sub)sub.textContent=(CU.role==='admin')?'Your outstanding tasks, plus each supervisor’s.':'Your outstanding tasks this week.';
+  const D=buildWeeklyData();
+  const t=document.getElementById('weekly-title');if(t&&D)t.textContent=D.title;
+  const sub=document.getElementById('weekly-sub');if(sub&&D)sub.textContent=D.sub;
+  const rich=document.getElementById('weekly-rich');if(rich)rich.innerHTML=renderWeeklyHTML();
+  loadWeeklyCfg();
   const m=document.getElementById('weekly-modal');if(m)m.classList.remove('hidden');
 }
 function closeWeekly(){const m=document.getElementById('weekly-modal');if(m)m.classList.add('hidden');}
 function emailWeekly(){
+  const cfg=weeklyCfg();
   const ud=(typeof getUserData==='function')?getUserData():null;
-  const to=(ud&&ud.email)||(appSettings&&appSettings.email)||'';
+  const to=cfg.to||(ud&&ud.email)||(appSettings&&appSettings.email)||'';
   const subject=((appSettings&&appSettings.name)||'Docketbook')+' — weekly summary';
-  const body=document.getElementById('weekly-body').textContent;
+  const body=buildWeeklyText();
   window.location.href='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
 }
 function copyWeekly(){
-  const body=document.getElementById('weekly-body').textContent;
+  const body=buildWeeklyText();
   try{if(navigator.clipboard)navigator.clipboard.writeText(body);}catch(e){}
   const ok=document.getElementById('weekly-copied');if(ok){ok.classList.remove('hidden');setTimeout(()=>ok.classList.add('hidden'),1500);}
 }
