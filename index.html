@@ -929,7 +929,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c54</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c55</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -968,9 +968,12 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div id="dash-supervisor" class="hidden">
         <div id="sup-scroll-area">
           <!-- Per-user layout toggle: Compact (4-up) vs Big boxes (2-up, fills screen) -->
-          <div class="dash-view-seg" id="dash-view-seg">
-            <button id="dv-compact" onclick="setDashView('compact')"><i class="ti ti-layout-grid" aria-hidden="true"></i> Compact</button>
-            <button id="dv-big" onclick="setDashView('big')"><i class="ti ti-layout-board" aria-hidden="true"></i> Big boxes</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-s" style="white-space:nowrap;" onclick="openWeeklySummary()"><i class="ti ti-mail" aria-hidden="true"></i> Weekly summary</button>
+            <div class="dash-view-seg" id="dash-view-seg" style="margin:2px 2px 8px;">
+              <button id="dv-compact" onclick="setDashView('compact')"><i class="ti ti-layout-grid" aria-hidden="true"></i> Compact</button>
+              <button id="dv-big" onclick="setDashView('big')"><i class="ti ti-layout-board" aria-hidden="true"></i> Big boxes</button>
+            </div>
           </div>
           <!-- CLIENT — dockets going up the chain to the client -->
           <div class="sv2-sec-head sec-client"><span class="sv2-sec-ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" style="display:block"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span id="sv2h-client">Client</span></div>
@@ -1068,6 +1071,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
                   <input type="date" id="adx-to" onchange="renAdminDesk()">
                 </span>
               </div>
+              <button class="btn btn-s" style="margin-left:auto;white-space:nowrap;" onclick="openWeeklySummary()"><i class="ti ti-mail" aria-hidden="true"></i> Weekly summary</button>
             </div>
             <div id="adx-body"></div>
           </div>
@@ -2325,6 +2329,24 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <button id="btn-delete-docket" class="btn btn-s btn-d hidden" onclick="deleteDocket()">🗑 Delete docket</button>
       <button class="btn btn-s" onclick="closeMod()">Close</button>
     </div>
+  </div>
+</div>
+
+<!-- WEEKLY SUMMARY MODAL -->
+<div id="weekly-modal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1120;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow:auto;">
+  <div style="background:#fff;border-radius:16px;max-width:640px;width:100%;padding:20px 22px;box-shadow:0 10px 40px rgba(0,0,0,.25);margin:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:4px;">
+      <p style="font-size:15px;font-weight:700;margin:0;">📋 Weekly summary</p>
+      <button class="btn btn-s" onclick="closeWeekly()">✕ Close</button>
+    </div>
+    <p id="weekly-sub" style="font-size:12px;color:#888;margin:0 0 12px;"></p>
+    <pre id="weekly-body" style="white-space:pre-wrap;font-family:inherit;font-size:13px;line-height:1.55;background:#fafaf8;border:0.5px solid rgba(0,0,0,.1);border-radius:10px;padding:14px 16px;max-height:52vh;overflow:auto;margin:0;"></pre>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center;">
+      <button class="btn btn-p btn-s" onclick="emailWeekly()">📧 Email this summary</button>
+      <button class="btn btn-s" onclick="copyWeekly()">Copy text</button>
+      <span id="weekly-copied" class="ok hidden" style="margin:0;">Copied.</span>
+    </div>
+    <p style="font-size:11px;color:#9a958c;margin:12px 0 0;line-height:1.5;">Automatic weekly send (e.g. every Monday morning) switches on with the cloud backend. For now this opens a pre-filled email you can send to yourself or the team.</p>
   </div>
 </div>
 
@@ -9516,6 +9538,83 @@ function adxDrill(kind,supU){
   if(typeof renAD==='function')renAD();
 }
 function adxClearDrill(){window._adDash=null;if(typeof renAD==='function')renAD();}
+
+// ─── WEEKLY SUMMARY ───────────────────────────────────────────────────
+// A plain-text digest of outstanding tasks. Admin gets their own tasks plus
+// each supervisor's; supervisors get their own. Auto-send is a backend job;
+// for now it builds a one-tap pre-filled email.
+function buildWeeklyText(){
+  if(!CU)return'';
+  const co=(typeof appSettings!=='undefined'&&appSettings&&appSettings.name)||'Docketbook';
+  const money=v=>'$'+Math.round(v||0).toLocaleString('en-AU');
+  const L=[];
+  if(CU.role==='admin'){
+    const all=dockets||[];
+    const pendSign=all.filter(d=>d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting');
+    const signTotal=pendSign.reduce((s,d)=>s+(calcC(d)||0),0);
+    const oldest=pendSign.reduce((mx,d)=>{const a=(typeof docketAgeDays==='function')?docketAgeDays(d):0;return a>mx?a:mx;},0);
+    const qRejSub=all.filter(d=>!isUpChainDocket(d)&&(d.approvalStatus==='queried'||d.approvalStatus==='rejected'));
+    const readyClient=all.filter(d=>!isUpChainDocket(d)&&d.bill==='ch'&&d.approvalStatus==='approved'&&!d.submittedToClient);
+    const clientReview=all.filter(d=>isUpChainDocket(d)&&!d.sig);
+    const clientQ=all.filter(d=>isUpChainDocket(d)&&(d.approvalStatus==='queried'||d.approvalStatus==='rejected'));
+    L.push(co+' — Weekly summary');
+    L.push('');
+    L.push('FOR YOU TO FINALISE');
+    L.push('  • Awaiting your final sign-off: '+pendSign.length+(pendSign.length?('  ('+money(signTotal)+(oldest?', oldest '+oldest+' day'+(oldest!==1?'s':''):'')+')'):''));
+    L.push('  • Queried / rejected (subcontractor): '+qRejSub.length);
+    L.push('  • Chargeable & approved — client dockets to raise: '+readyClient.length);
+    L.push('  • Client dockets awaiting client signature: '+clientReview.length);
+    L.push('  • Client queried / rejected: '+clientQ.length);
+    L.push('');
+    L.push('SUPERVISOR OUTSTANDING');
+    const sups=(users||[]).filter(u=>u.role==='hc_supervisor');
+    let any=false;
+    sups.forEach(u=>{
+      const ds=all.filter(d=>d.createdBy===u.u||d.signedBySupervisor===u.u||(u.projectAccess||[]).includes(d.pcode));
+      const aw=ds.filter(d=>docketStatus(d)==='awaiting_my_sig').length;
+      const bl=ds.filter(d=>docketStatus(d)==='needs_billing').length;
+      const qr=ds.filter(d=>d.approvalStatus==='queried').length;
+      if(aw+bl+qr>0){any=true;L.push('  • '+(u.name||u.u)+' — awaiting signature: '+aw+', bill allocation: '+bl+', queried: '+qr);}
+    });
+    if(!any)L.push('  • All supervisors are up to date.');
+  } else {
+    const mine=(typeof myD==='function')?myD():[];
+    const awaitSig=mine.filter(d=>docketStatus(d)==='awaiting_my_sig').length;
+    const awaitBill=mine.filter(d=>docketStatus(d)==='needs_billing').length;
+    const queried=mine.filter(d=>d.approvalStatus==='queried').length;
+    const awaitClient=mine.filter(d=>isUpChainDocket(d)&&!d.sig).length;
+    L.push(co+' — Your weekly summary');
+    L.push('');
+    L.push('YOUR OUTSTANDING TASKS');
+    L.push('  • Awaiting your signature (on site): '+awaitSig);
+    L.push('  • Awaiting bill allocation: '+awaitBill);
+    L.push('  • Queried by admin — to resolve: '+queried);
+    L.push('  • Client dockets awaiting client signature: '+awaitClient);
+  }
+  L.push('');
+  L.push('— Docketbook');
+  return L.join('\n');
+}
+function openWeeklySummary(){
+  if(!CU)return;
+  const be=document.getElementById('weekly-body');if(be)be.textContent=buildWeeklyText();
+  const sub=document.getElementById('weekly-sub');
+  if(sub)sub.textContent=(CU.role==='admin')?'Your outstanding tasks, plus each supervisor’s.':'Your outstanding tasks this week.';
+  const m=document.getElementById('weekly-modal');if(m)m.classList.remove('hidden');
+}
+function closeWeekly(){const m=document.getElementById('weekly-modal');if(m)m.classList.add('hidden');}
+function emailWeekly(){
+  const ud=(typeof getUserData==='function')?getUserData():null;
+  const to=(ud&&ud.email)||(appSettings&&appSettings.email)||'';
+  const subject=((appSettings&&appSettings.name)||'Docketbook')+' — weekly summary';
+  const body=document.getElementById('weekly-body').textContent;
+  window.location.href='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+}
+function copyWeekly(){
+  const body=document.getElementById('weekly-body').textContent;
+  try{if(navigator.clipboard)navigator.clipboard.writeText(body);}catch(e){}
+  const ok=document.getElementById('weekly-copied');if(ok){ok.classList.remove('hidden');setTimeout(()=>ok.classList.add('hidden'),1500);}
+}
 
 // ─── RECONCILIATION ───────────────────────────────────────────────────
 // Approved day-labour dockets: track the sub's invoice to us (money OUT) and
