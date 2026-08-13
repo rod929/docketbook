@@ -37,6 +37,21 @@ body{font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-seri
 .hidden{display:none!important;}
 .card{background:#fff;border:0.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:1rem 1.25rem;margin-bottom:12px;}
 .set-group{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9a958c;margin:20px 2px 8px;padding-bottom:5px;border-bottom:1px solid rgba(0,0,0,0.07);}
+/* Subscription plan tiers */
+.sub-plans{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+@media(max-width:720px){.sub-plans{grid-template-columns:1fr;}}
+.sub-plan-card{position:relative;border:1px solid rgba(0,0,0,0.12);border-radius:14px;padding:16px 16px 18px;background:#fff;display:flex;flex-direction:column;gap:6px;}
+.sub-plan-card.on{border-color:#1D9E75;box-shadow:0 0 0 2px rgba(29,158,117,0.18);}
+.sub-plan-card.pop{border-color:#EF9F27;}
+.sub-plan-card.pop.on{border-color:#1D9E75;}
+.sub-plan-pop{position:absolute;top:-10px;left:16px;background:#EF9F27;color:#412402;font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;}
+.sub-plan-name{font-size:15px;font-weight:800;color:#2D2D2D;}
+.sub-plan-price{font-size:26px;font-weight:800;color:#185FA5;line-height:1;}
+.sub-plan-price span{font-size:12px;font-weight:500;color:#8b8880;}
+.sub-plan-blurb{font-size:12px;color:#888;margin-bottom:4px;}
+.sub-plan-feat{list-style:none;margin:4px 0 12px;padding:0;flex:1;}
+.sub-plan-feat li{font-size:12.5px;color:#3a3a38;padding:4px 0 4px 20px;position:relative;line-height:1.35;}
+.sub-plan-feat li::before{content:"✓";position:absolute;left:0;color:#1D9E75;font-weight:800;}
 .rb{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
 label{font-size:12px;color:#666;display:block;margin-bottom:4px;}
 input,select,textarea{width:100%;font-size:13px;padding:8px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;color:#1a1a1a;outline:none;}
@@ -805,7 +820,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c44</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c45</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1735,22 +1750,24 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div class="set-group" id="set-group-billing" style="display:none;">Subscription &amp; billing</div>
       <div class="card" id="subscription-card" style="margin-top:4px;display:none;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;">
-          <p style="font-size:13px;font-weight:500;margin:0;">Your Docketbook subscription</p>
+          <p style="font-size:13px;font-weight:500;margin:0;">Your Docketbook plan</p>
           <span id="sub-status" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#E1F5EE;color:#0F6E56;">Active</span>
         </div>
-        <p style="font-size:12px;color:#888;margin:4px 0 14px;">Docketbook is billed <strong>$80 / month per subcontractor</strong>, each including up to 50 signed dockets a month.</p>
+        <p style="font-size:12px;color:#888;margin:4px 0 4px;">Flat monthly plans per company — not per docket, not per user. Every plan includes <strong>unlimited dockets &amp; photos</strong>.</p>
+        <p style="font-size:11px;color:#b98a2a;background:#FFFBF0;border:0.5px solid #F0E0B8;border-radius:8px;padding:7px 10px;margin:8px 0 14px;">Prices below are indicative placeholders while we finalise pricing — not yet locked in.</p>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;" id="sub-tiles">
-          <div class="mc" style="border-left:3px solid #185FA5;text-align:left;padding:12px 14px;"><div class="mv" id="sub-subs" style="color:#185FA5;">0</div><div class="ml">Active subcontractors</div></div>
-          <div class="mc" style="border-left:3px solid #EF9F27;text-align:left;padding:12px 14px;"><div class="mv" id="sub-dockets" style="color:#B9770E;">0</div><div class="ml" id="sub-dockets-lbl">Dockets this month</div></div>
-          <div class="mc" style="border-left:3px solid #1D9E75;background:#f0fdf9;text-align:left;padding:12px 14px;"><div class="mv" id="sub-est" style="color:#0F6E56;">$0</div><div class="ml" style="color:#0F6E56;">Est. this month</div></div>
-        </div>
+        <!-- Current plan banner -->
+        <div id="sub-current" style="margin-bottom:14px;"></div>
 
-        <div style="background:#fafaf8;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 14px;margin-bottom:12px;">
-          <div style="display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:5px 0;border-bottom:0.5px solid rgba(0,0,0,0.06);"><span style="color:#888;">Plan</span><span style="font-weight:500;">Per-subcontractor · $80/mo each</span></div>
-          <div style="display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:5px 0;border-bottom:0.5px solid rgba(0,0,0,0.06);"><span style="color:#888;">Included dockets</span><span style="font-weight:500;" id="sub-allowance">— / month</span></div>
-          <div style="display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:5px 0;border-bottom:0.5px solid rgba(0,0,0,0.06);"><span style="color:#888;">Next invoice</span><span style="font-weight:500;color:#aaa;">Set up billing to schedule</span></div>
-          <div style="display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:5px 0;"><span style="color:#888;">Payment method</span><span style="font-weight:500;color:#aaa;">Not set</span></div>
+        <!-- Plan tiers (rendered from config so prices are easy to change) -->
+        <div id="sub-plans" class="sub-plans"></div>
+
+        <p id="sub-gst" style="font-size:11px;color:#888;margin:10px 0 0;"></p>
+
+        <!-- Client access note -->
+        <div style="display:flex;align-items:flex-start;gap:9px;background:#F4F9FE;border:0.5px solid #C9DDF1;border-radius:10px;padding:10px 12px;margin:12px 0;">
+          <span style="flex-shrink:0;margin-top:1px;"><svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+          <span style="font-size:12px;color:#0C447C;line-height:1.5;"><strong>Client access is always free.</strong> The party above you (builder, developer, owner or larger sub who signs) gets a free dashboard to see incoming costs and sign/approve dockets — they're never billed.</span>
         </div>
 
         <div class="fg" style="margin-bottom:8px;">
@@ -1758,10 +1775,10 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
           <button class="btn btn-p btn-s" onclick="saveBillingEmail()">Save billing email</button>
-          <button class="btn btn-s" onclick="alert('Card payments and automatic invoicing go live with the cloud backend. For now, contact Alerce to arrange billing.')" style="opacity:0.9;">Add payment method</button>
+          <button class="btn btn-s" onclick="alert('Card payments are handled by Stripe once the Docketbook cloud backend is connected. For now your plan choice is saved, but no card is charged.')" style="opacity:0.9;">Add payment method</button>
           <span id="sub-bill-ok" class="ok hidden" style="margin:0;">Saved.</span>
         </div>
-        <p style="font-size:11px;color:#9a958c;margin:12px 0 0;line-height:1.5;">Usage above is metered live from your dockets. Card payments, automatic invoicing and invoice history become active once the Docketbook cloud backend is connected — until then this is your running estimate.</p>
+        <p style="font-size:11px;color:#9a958c;margin:12px 0 0;line-height:1.5;">Choosing a plan here saves your selection. <strong>No card is charged yet</strong> — real payments and invoices go live with the Docketbook cloud backend (via Stripe).</p>
       </div>
 
       <div class="card" style="margin-top:4px;">
@@ -6342,27 +6359,62 @@ function renSettingsGroups(){
     const e=document.getElementById(id);if(e)e.style.display=isAdm?'':'none';
   });
 }
-// Subscription & billing — Main Administrator (owner) only. Usage is metered
-// live from the dockets; payments/invoicing are backend features.
+// ─── PLAN CONFIG — edit these to change pricing/tiers in one place ─────
+// Flat monthly plans per COMPANY (not per docket/user). Prices are $/month
+// placeholders; GST_MODE is 'plus' (shown "+ GST") or 'inc' ("inc. GST").
+const DLB_GST_MODE='plus';
+const DLB_PLANS=[
+  {id:'solo',name:'Solo',price:29,blurb:'Sole traders, no staff',
+   features:['Docket → sign → docket-to-invoice','1 user','Unlimited dockets &amp; photos']},
+  {id:'team',name:'Team',price:79,blurb:'Small subs with a crew',popular:true,
+   features:['Full role system &amp; approval flow','Cross-company signing + dashboards','Up to ~10 users','Unlimited dockets &amp; photos']},
+  {id:'business',name:'Business',price:149,blurb:'Larger subs',
+   features:['Everything in Team','More users &amp; projects','Priority support','Integrations (later)','Unlimited dockets &amp; photos']}
+];
+function planOf(){return ldL('dlb_plan')||'team';}
+function planById(id){return DLB_PLANS.find(p=>p.id===id)||DLB_PLANS[1];}
+// Subscription & billing — Main Administrator (owner) only. Plan selection is
+// stored locally; real card payment (Stripe) arrives with the backend.
 function renSubscription(){
   const show=!!(CU&&CU.role==='admin'&&isOwner());
   const grp=document.getElementById('set-group-billing');if(grp)grp.style.display=show?'':'none';
   const card=document.getElementById('subscription-card');if(card)card.style.display=show?'':'none';
   if(!show)return;
-  const nSubs=(subs||[]).length;
-  const PRICE=80, ALLOW=50;
-  // Dockets dated in the current calendar month
-  const now=new Date();const y=now.getFullYear(),m=now.getMonth();
-  const thisMonth=(dockets||[]).filter(d=>{const dt=new Date(d.date);return !isNaN(dt)&&dt.getFullYear()===y&&dt.getMonth()===m;}).length;
-  const est=nSubs*PRICE;
-  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  set('sub-subs',nSubs);
-  set('sub-dockets',thisMonth);
-  set('sub-dockets-lbl','Dockets this month'+(nSubs?` (of ${nSubs*ALLOW} incl.)`:''));
-  set('sub-est','$'+est.toLocaleString('en-AU'));
-  set('sub-allowance',nSubs?(nSubs*ALLOW)+' / month ('+ALLOW+' × '+nSubs+' subs)':'50 per subcontractor');
+  const gstTxt=DLB_GST_MODE==='inc'?'inc. GST':'+ GST';
+  const cur=planOf();
+  const cp=planById(cur);
+  // Current-plan banner
+  const curEl=document.getElementById('sub-current');
+  if(curEl)curEl.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:linear-gradient(180deg,#F7FAFD,#EAF2FB);border:0.5px solid #C9DDF1;border-radius:10px;padding:12px 14px;">
+    <div><div style="font-size:12px;color:#5B7CA0;text-transform:uppercase;letter-spacing:.05em;font-weight:700;">Current plan</div>
+      <div style="font-size:16px;font-weight:800;color:#0C447C;">${cp.name} — $${cp.price}/mo <span style="font-size:12px;font-weight:500;color:#5B7CA0;">${gstTxt}</span></div></div>
+    <span style="font-size:11px;color:#5B7CA0;">${esc(cp.blurb)}</span>
+  </div>`;
+  // Plan tier cards
+  const wrap=document.getElementById('sub-plans');
+  if(wrap)wrap.innerHTML=DLB_PLANS.map(p=>{
+    const on=p.id===cur;
+    return `<div class="sub-plan-card${on?' on':''}${p.popular?' pop':''}">
+      ${p.popular?'<span class="sub-plan-pop">Most popular</span>':''}
+      <div class="sub-plan-name">${p.name}</div>
+      <div class="sub-plan-price">$${p.price}<span>/mo ${gstTxt}</span></div>
+      <div class="sub-plan-blurb">${esc(p.blurb)}</div>
+      <ul class="sub-plan-feat">${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
+      <button class="btn ${on?'btn-s':'btn-p btn-s'}" ${on?'disabled':''} onclick="setPlan('${p.id}')" style="width:100%;${on?'background:#E1F5EE;color:#0F6E56;border:none;':''}">${on?'✓ Current plan':'Choose '+p.name}</button>
+    </div>`;
+  }).join('');
+  const gstEl=document.getElementById('sub-gst');
+  if(gstEl)gstEl.textContent='All prices are in AUD, '+(DLB_GST_MODE==='inc'?'GST inclusive':'plus GST')+'. Solo can upgrade to Team or Business at any time as you grow.';
   const be=document.getElementById('sub-bill-email');
   if(be&&!be.value){be.value=ldL('dlb_billing_email')||(appSettings&&appSettings.email)||'';}
+}
+function setPlan(id){
+  if(!(CU&&CU.role==='admin'&&isOwner()))return;
+  if(!planById(id))return;
+  svL('dlb_plan',id);
+  renSubscription();
+  const ok=document.getElementById('sub-bill-ok');
+  if(ok){ok.textContent='Plan set to '+planById(id).name+'.';ok.classList.remove('hidden');setTimeout(()=>{ok.classList.add('hidden');ok.textContent='Saved.';},2500);}
 }
 function saveBillingEmail(){
   const be=document.getElementById('sub-bill-email');if(!be)return;
