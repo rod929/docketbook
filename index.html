@@ -255,7 +255,28 @@ body.role-worker #n1:hover,body.role-supervisor #n1:hover{background:#1a1a1a;}
 #admin-desk{display:block;}
 .admin-legacy-desk{display:none!important;}   /* replaced by #admin-desk everywhere */
 .admin-mobile{display:none!important;}         /* old compact mobile block retired */
-@media(max-width:560px){.admin-desk .adx-bar{flex-wrap:wrap;}}
+.admin-desk .adx-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+@media(max-width:560px){
+  .admin-desk .adx-bar{flex-wrap:wrap;}
+  /* Let grid cells shrink below their content min-content so nothing widens the page */
+  .admin-desk .adx-fin-row>*,.admin-desk .adx-pgrid>*,.admin-desk .adx-low>*,.admin-desk .adx-grid>*{min-width:0;}
+  /* Supervisor & Client portals: 2-up compact boxes so 3 items = 2 rows, not 3 */
+  .admin-desk .adx-portal.sup .adx-pgrid,.admin-desk .adx-portal.cli .adx-pgrid{grid-template-columns:1fr 1fr;gap:10px;}
+  .admin-desk .adx-portal.sup .adx-pbox,.admin-desk .adx-portal.cli .adx-pbox{min-height:0;padding:13px 13px;}
+  .admin-desk .adx-portal.sup .adx-pbox .v,.admin-desk .adx-portal.cli .adx-pbox .v{font-size:30px;}
+  .admin-desk .adx-portal.sup .adx-pbox .bt,.admin-desk .adx-portal.cli .adx-pbox .bt{font-size:11px;}
+  .admin-desk .adx-portal.sup .adx-pbox .s,.admin-desk .adx-portal.cli .adx-pbox .s{display:none;}
+  .admin-desk .adx-portal.sup .adx-pbox .go,.admin-desk .adx-portal.cli .adx-pbox .go{font-size:11px;}
+  /* Finalise hero: let the title / total / overdue badge stack instead of overflow */
+  .admin-desk .adx-signoff.hero .adx-signoff-head h3{font-size:14px;}
+  .admin-desk .adx-signoff-total{font-size:20px;}
+  /* Data tables never widen the page — shrink, ellipsis the name, scroll if still tight */
+  .admin-desk .adx-card table{font-size:11.5px;}
+  .admin-desk th{font-size:9px;padding:7px 4px;}
+  .admin-desk td{padding:8px 4px;}
+  .admin-desk .adx-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:104px;}
+  .admin-desk .adx-approvals button{min-width:0!important;}
+}
 .admin-desk{--ad-line:rgba(0,0,0,.09);--ad-soft:#8b8880;}
 .admin-desk .adx-bar{display:flex;align-items:center;gap:9px;flex-wrap:nowrap;margin:2px 0 12px;}
 .admin-desk .adx-flabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ad-soft);flex-shrink:0;}
@@ -934,7 +955,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c57</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c58</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -9489,9 +9510,9 @@ function renAdminDesk(){
   const supTable=`
     <div class="adx-card" id="adx-sup-table">
       <h3>Supervisor workload — outstanding</h3>
-      ${sup.length?`<table><thead><tr><th>Supervisor</th><th class="r">Awaiting sign</th><th class="r">Bill alloc.</th><th class="r">Queried</th><th></th></tr></thead><tbody>
+      ${sup.length?`<div class="adx-scroll"><table><thead><tr><th>Supervisor</th><th class="r">Awaiting sign</th><th class="r">Bill alloc.</th><th class="r">Queried</th><th></th></tr></thead><tbody>
         ${sup.map(r=>`<tr><td class="adx-nm">${esc(r.name)}</td><td class="r">${pill(r.aw,'pn-amber')}</td><td class="r">${pill(r.bl,'pn-amber')}</td><td class="r">${pill(r.qr,'pn-red')}</td><td class="r"><button class="adx-rowlink" onclick="adxDrill('sup','${esc(r.u.u)}')">View →</button></td></tr>`).join('')}
-      </tbody></table>`:`<div class="adx-empty">No outstanding supervisor items in this view.</div>`}
+      </tbody></table></div>`:`<div class="adx-empty">No outstanding supervisor items in this view.</div>`}
     </div>`;
 
   // By-project comparison — IN vs OUT (approved) per project, table + bar graph.
@@ -9520,9 +9541,9 @@ function renAdminDesk(){
         <span class="adx-pg-legend"><i class="in"></i>In &nbsp;<i class="out"></i>Out</span>
       </div>
       ${prows.length?`<div class="adx-pgraph">${graph}</div>
-      <table style="margin-top:6px;"><thead><tr><th>Project</th><th class="r">In (approved)</th><th class="r">Out (approved)</th><th class="r">Balance</th></tr></thead><tbody>
+      <div class="adx-scroll"><table style="margin-top:6px;"><thead><tr><th>Project</th><th class="r">In (appr.)</th><th class="r">Out (appr.)</th><th class="r">Balance</th></tr></thead><tbody>
         ${prows.map(r=>`<tr><td class="adx-nm">${esc(r.name)}</td><td class="r" style="color:#B9770E;">${adxM(r.pin)}</td><td class="r" style="color:#185FA5;">${adxM(r.pout)}</td><td class="r" style="color:${r.bal>=0?'#1D9E75':'#E24B4A'};font-weight:700;">${(r.bal>=0?'+':'−')}$${Math.round(Math.abs(r.bal)).toLocaleString('en-AU')}</td></tr>`).join('')}
-      </tbody></table>`:`<div class="adx-empty">No project cost in this view yet.</div>`}
+      </tbody></table></div>`:`<div class="adx-empty">No project cost in this view yet.</div>`}
     </div>`;
 
   // Alert banner — new dockets landed for the admin's final sign-off.
