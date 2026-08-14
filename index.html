@@ -1025,7 +1025,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c72</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c73</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -2478,6 +2478,15 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       </div>
     </div>
 
+    <!-- Send to client (chargeable Received docket, signed, not yet raised up-chain) -->
+    <div id="vd-send-client" class="hidden" style="border:1px solid #C9DDF1;border-left:4px solid #185FA5;background:linear-gradient(180deg,#F7FAFE,#EAF2FB);border-radius:12px;padding:14px 16px;margin-top:14px;">
+      <div style="font-size:14px;font-weight:700;color:#0C447C;display:flex;align-items:center;gap:8px;">
+        <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Send to client
+      </div>
+      <p style="font-size:11.5px;color:#476381;margin:5px 0 12px;line-height:1.5;">Raises the linked <b>Sent</b> docket for the builder/client above. On the next screen you'll get their supervisor to sign it — <b>in person</b>, or by <b>sending a signing link</b>.</p>
+      <button class="btn btn-s btn-p" style="background:#185FA5;border-color:#185FA5;font-weight:600;" onclick="createClientDocket()">↑ Raise client docket →</button>
+    </div>
     <!-- Admin final decision (subcontractor docket signed & billed, awaiting sign-off) -->
     <div id="vd-approve-actions" class="hidden" style="border-top:0.5px solid rgba(0,0,0,0.08);padding-top:14px;margin-top:14px;">
       <div style="font-size:12px;font-weight:700;color:#5B3B8C;margin-bottom:8px;">Your decision</div>
@@ -4986,14 +4995,15 @@ function vD(id){
     slb.classList.add('hidden');
     resendBtn.classList.add('hidden');
   }
-  // Show create client docket button for chargeable dockets (admin/supervisor/manager/hc_supervisor)
+  // "Send to client" block — a chargeable Received docket, signed, not yet raised
+  // up-chain. Replaces the old plain "Create client docket" footer button.
   const cdBtn=document.getElementById('btn-create-client-docket');
-  if(cdBtn){
+  if(cdBtn)cdBtn.classList.add('hidden'); // superseded by the block below
+  const scWrap=document.getElementById('vd-send-client');
+  if(scWrap){
     const canCreate=CU&&(CU.role==='admin'||CU.role==='manager'||CU.role==='supervisor'||CU.role==='hc_supervisor');
-    const isChargeable=d.bill==='ch';
-    const alreadyMirrored=!!dockets.find(x=>x.refSubDocketId===d.id);
-    // Only offer once the docket is signed and not already mirrored
-    cdBtn.classList.toggle('hidden',!(canCreate&&isChargeable&&d.sig&&!alreadyMirrored));
+    const eligible=canCreate&&d.bill==='ch'&&d.sig&&!isUpChainDocket(d)&&!dockets.find(x=>x.refSubDocketId===d.id);
+    scWrap.classList.toggle('hidden',!eligible);
   }
   // Show delete button for admin only
   const delBtn=document.getElementById('btn-delete-docket');
