@@ -1025,7 +1025,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c69</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c70</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1767,8 +1767,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div class="rb"><p class="st" style="margin:0;" id="md-title">My dockets</p><div style="display:flex;gap:6px;"><button class="btn btn-s" id="md-btn-dash" onclick="showTab('dash',document.getElementById('n0'))" style="background:#EF9F27;color:#412402;border:none;font-weight:600;">← Dashboard</button><button class="btn btn-s btn-csv" onclick="expCSV(false)">↓ CSV</button><button class="btn btn-s btn-pdf" onclick="expPDF(false)">↓ PDF</button></div></div>
       <div class="sv2-seg" id="md-type-seg" style="margin-bottom:12px;">
         <button id="md-type-all" class="on" onclick="setMdType('')">All</button>
-        <button id="md-type-client" onclick="setMdType('client')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-client-t">Client</span></button>
-        <button id="md-type-sub" onclick="setMdType('sub')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-sub-t">Subcontractor</span></button>
+        <button id="md-type-client" onclick="setMdType('client')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-client-t">Sent</span></button>
+        <button id="md-type-sub" onclick="setMdType('sub')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-sub-t">Received</span></button>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
         <select id="md-proj-filter" style="max-width:200px;" onchange="renMD()"><option value="">All projects</option></select>
@@ -1809,8 +1809,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div id="ad-filters-sup" class="hidden" style="gap:10px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
         <div class="sv2-seg" id="ad-type-seg">
           <button id="ad-type-all" class="on" onclick="setAdType('')">All</button>
-          <button id="ad-type-client" onclick="setAdType('client')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Client</button>
-          <button id="ad-type-sub" onclick="setAdType('sub')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Subcontractor</button>
+          <button id="ad-type-client" onclick="setAdType('client')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Sent</button>
+          <button id="ad-type-sub" onclick="setAdType('sub')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Received</button>
         </div>
         <select id="ad-sup-proj" style="max-width:200px;" onchange="renAD()"><option value="">All projects</option></select>
       </div>
@@ -3869,7 +3869,9 @@ const DL_TABS=[
   {k:'problem',t:'Queried / rejected',m:d=>dlBucket(d)==='queried'||dlBucket(d)==='rejected'},
 ];
 function dlProjTag(code){return '<span class="dl-ptag">'+esc(code||'—')+'</span>';}
-function dlDir(d){return '<span class="dl-dir">'+(isUpChainDocket(d)?'↑':'↓')+'</span>';}
+// Coloured circle-arrow (blue up = sent/client, orange down = received/sub) —
+// the same marker used elsewhere in the app.
+function dlDir(d){return docketTypeIcon(d)+' ';}
 function dlStatusHTML(d){const s=dlStatusInfo(d);return '<span class="dl-st '+s.cls+'"><i></i>'+s.text+'</span>';}
 function dlBillText(d){
   if(!d.bill||d.bill==='pending')return '<span style="color:#b6b2aa;">Pending billing</span>';
@@ -4786,7 +4788,7 @@ function vD(id){
   document.getElementById('mb').innerHTML=`
     <div class="vd-sheet-head ${isUpChainDocket(d)?'vd-client':'vd-sub'}">
       <div class="vd-head-top"><div class="vd-co">${esc(_headCo)}</div><div class="vd-brand">Day Labour<br>Docket</div></div>
-      <div class="vd-numstrip"><div><div class="vd-num-lab">Docket</div><div class="vd-num">#${esc(d.id)}</div></div><div style="display:flex;align-items:center;gap:8px;"><span class="vd-typetag">${isUpChainDocket(d)?'Client':'Subcontractor'}</span>${statusBadge(d)}</div></div>
+      <div class="vd-numstrip"><div><div class="vd-num-lab">Docket</div><div class="vd-num">#${esc(d.id)}</div></div><div style="display:flex;align-items:center;gap:8px;"><span class="vd-typetag">${isUpChainDocket(d)?'Sent':'Received'}</span>${statusBadge(d)}</div></div>
     </div>
     ${d.approvalStatus==='approved'
       ? renderQueryStatus(d)+docketStamp(d)
@@ -5621,7 +5623,7 @@ const LANGS={
     wStart:'Start', wFinish:'Finish', wHours:'Hours', wFilledBy:'Filled out by', wWorker:'Worker', wNameOpt:'(name optional)',
     speakBtn:'Speak', listening:'● Listening… tap to stop',
     fillDetails:'Fill in the details below', workersHelper:'The worker filling out this docket is listed first. Add anyone else who worked on the same task.', applicableWord:'Applicable',
-    mdDash:'Dashboard', mdAll:'All', mdClientSent:'Client', mdSubReceived:'Subcontractor', mdFilters:'Filters:', mdAllProjects:'All projects',
+    mdDash:'Dashboard', mdAll:'All', mdClientSent:'Sent', mdSubReceived:'Received', mdFilters:'Filters:', mdAllProjects:'All projects',
     mdsAll:'All statuses', mdsNeedSig:'Needs my signature', mdsAwaitClient:'Pending signature', mdsNeedBill:'Needs billing', mdsReady:'Signed · ready to send', mdsQueried:'Queried', mdsPending:'Pending admin review', mdsRejected:'Rejected', mdsSigned:'Signed (all)',
     mdcProject:'Project', mdcDate:'Date', mdcHrs:'Hrs', mdcCost:'Cost', mdcBilling:'Billing', mdcCompany:'Company', mdcContact:'Client contact', mdcStatus:'Status',
     svHeroLab:'Subcontractor docket signed & chargeable', svHeroSub:'Tap to create a client docket',
@@ -5694,7 +5696,7 @@ const LANGS={
     wStart:'开始', wFinish:'结束', wHours:'工时', wFilledBy:'填写人', wWorker:'工人', wNameOpt:'（姓名可选）',
     speakBtn:'语音', listening:'● 正在聆听…点击停止',
     fillDetails:'请填写以下详细信息', workersHelper:'填写此工单的工人排在第一位。请添加参与同一任务的其他人。', applicableWord:'适用',
-    mdDash:'仪表板', mdAll:'全部', mdClientSent:'客户', mdSubReceived:'分包商', mdFilters:'筛选：', mdAllProjects:'所有项目',
+    mdDash:'仪表板', mdAll:'全部', mdClientSent:'已发送', mdSubReceived:'已接收', mdFilters:'筛选：', mdAllProjects:'所有项目',
     mdsAll:'所有状态', mdsNeedSig:'需要我签名', mdsAwaitClient:'等待签名', mdsNeedBill:'需要计费', mdsReady:'已签名 · 可发送', mdsQueried:'有疑问', mdsPending:'等待管理审核', mdsRejected:'已拒绝', mdsSigned:'已签名（全部）',
     mdcProject:'项目', mdcDate:'日期', mdcHrs:'工时', mdcCost:'成本', mdcBilling:'计费', mdcCompany:'公司', mdcContact:'客户联系人', mdcStatus:'状态',
     svHeroLab:'分包商工单已签字且可计费', svHeroSub:'点击创建客户工单',
@@ -5767,7 +5769,7 @@ const LANGS={
     wStart:'Inicio', wFinish:'Fin', wHours:'Horas', wFilledBy:'Rellenado por', wWorker:'Trabajador', wNameOpt:'(nombre opcional)',
     speakBtn:'Hablar', listening:'● Escuchando… toca para parar',
     fillDetails:'Complete los detalles a continuación', workersHelper:'El trabajador que completa este parte aparece primero. Añada a cualquier otra persona que trabajó en la misma tarea.', applicableWord:'Aplicable',
-    mdDash:'Panel', mdAll:'Todos', mdClientSent:'Cliente', mdSubReceived:'Subcontratista', mdFilters:'Filtros:', mdAllProjects:'Todos los proyectos',
+    mdDash:'Panel', mdAll:'Todos', mdClientSent:'Enviado', mdSubReceived:'Recibido', mdFilters:'Filtros:', mdAllProjects:'Todos los proyectos',
     mdsAll:'Todos los estados', mdsNeedSig:'Necesita mi firma', mdsAwaitClient:'Firma pendiente', mdsNeedBill:'Necesita facturación', mdsReady:'Firmada · lista para enviar', mdsQueried:'Consultada', mdsPending:'Pendiente de revisión', mdsRejected:'Rechazada', mdsSigned:'Firmada (todas)',
     mdcProject:'Proyecto', mdcDate:'Fecha', mdcHrs:'Horas', mdcCost:'Coste', mdcBilling:'Facturación', mdcCompany:'Empresa', mdcContact:'Contacto del cliente', mdcStatus:'Estado',
     svHeroLab:'Parte del subcontratista firmado y facturable', svHeroSub:'Toque para crear un parte de cliente',
@@ -5840,7 +5842,7 @@ const LANGS={
     wStart:'البداية', wFinish:'النهاية', wHours:'الساعات', wFilledBy:'مُعبّأ بواسطة', wWorker:'عامل', wNameOpt:'(الاسم اختياري)',
     speakBtn:'تحدّث', listening:'● جارٍ الاستماع… اضغط للإيقاف',
     fillDetails:'أدخل التفاصيل أدناه', workersHelper:'العامل الذي يعبّئ هذا السند يُدرَج أولاً. أضِف أي شخص آخر عمل في المهمة نفسها.', applicableWord:'ينطبق',
-    mdDash:'لوحة التحكم', mdAll:'الكل', mdClientSent:'العميل', mdSubReceived:'المقاول من الباطن', mdFilters:'التصفية:', mdAllProjects:'كل المشاريع',
+    mdDash:'لوحة التحكم', mdAll:'الكل', mdClientSent:'مُرسَل', mdSubReceived:'مُستَلَم', mdFilters:'التصفية:', mdAllProjects:'كل المشاريع',
     mdsAll:'كل الحالات', mdsNeedSig:'بحاجة لتوقيعي', mdsAwaitClient:'بانتظار التوقيع', mdsNeedBill:'بحاجة للفوترة', mdsReady:'موقّع · جاهز للإرسال', mdsQueried:'استفسار', mdsPending:'بانتظار مراجعة الإدارة', mdsRejected:'مرفوض', mdsSigned:'موقّع (الكل)',
     mdcProject:'المشروع', mdcDate:'التاريخ', mdcHrs:'ساعات', mdcCost:'التكلفة', mdcBilling:'الفوترة', mdcCompany:'الشركة', mdcContact:'جهة اتصال العميل', mdcStatus:'الحالة',
     svHeroLab:'سند مقاول موقّع وقابل للفوترة', svHeroSub:'اضغط لإنشاء سند العميل',
