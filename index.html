@@ -1025,7 +1025,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c73</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c74</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -4023,7 +4023,7 @@ function renAD(){
   const adThead=document.getElementById('ad-thead');
   if(adThead){
     adThead.innerHTML=isAdm
-      ? `<tr><th>#</th><th>Project</th><th>Date</th><th>Subcontractor</th><th>Client contact</th><th>Hrs</th><th id="ad-th-cost">Cost</th><th>Billing</th><th>Signature</th><th></th></tr>`
+      ? `<tr><th></th><th>#</th><th>Project</th><th>Date</th><th>Subcontractor</th><th>Client contact</th><th>Hrs</th><th id="ad-th-cost">Cost</th><th>Billing</th><th>Status</th><th></th></tr>`
       : `<tr><th>#</th><th>Project</th><th>Company</th><th>Date</th><th>Hrs</th><th>Billing</th><th>Status</th><th></th></tr>`;
   }
   if(!isAdm){
@@ -4121,9 +4121,9 @@ function renAD(){
   }
   if(!fl.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:#aaa;padding:20px;">No dockets found</td></tr>';return;}
   const _whoKind=(window._adDash&&['await_sup_sig','await_bill','ready_client','client_review','client_admin_review'].includes(window._adDash.kind))?window._adDash.kind:'';
-  tb.innerHTML=fl.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;" class="${_whoKind?'row-signwait':''}"><td onclick="event.stopPropagation();"><input type='checkbox' class='docket-sel' value='${d.id}' onchange='updateBulkBar()' ${d.bill==='ch'?'':''}></td><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span>${d.refSubDocketId?`<br><span style="font-size:9px;color:#3C3489;cursor:pointer;" onclick="event.stopPropagation();vD('${d.refSubDocketId}')" title="View originating sub docket">↩ sub #${esc(d.refSubDocketId)}</span>`:''}</td><td>${projBadge(d.pcode)}</td><td>${fd(d.date)}</td><td>${esc(d.sub)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${d.hours}h</td>${showMoney?`<td>${fc(calcC(d))}</td>`:''}<td>${mdBilling(d)}</td><td>${_whoKind?(daysOutBadge(d)+' '+responsibleCell(d,_whoKind)):sigBadge(d)}</td><td><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td></tr>`).join('');
+  tb.innerHTML=fl.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;" class="${_whoKind?'row-signwait':''}"><td onclick="event.stopPropagation();"><input type='checkbox' class='docket-sel' value='${d.id}' onchange='updateBulkBar()'></td><td class="dl-no">${docketTypeIcon(d)} #${d.id}${d.refSubDocketId?`<br><span style="font-size:9px;color:#3C3489;cursor:pointer;font-weight:400;" onclick="event.stopPropagation();vD('${d.refSubDocketId}')" title="View originating received docket">↩ from #${esc(d.refSubDocketId)}</span>`:''}</td><td>${dlProjTag(d.pcode)}</td><td class="dl-muted">${fd(d.date)}</td><td>${esc(d.sub)}</td><td style="max-width:120px;">${getContactLabel(d)}</td><td>${d.hours}h</td>${showMoney?`<td>${fc(calcC(d))}</td>`:''}<td>${dlBillText(d)}</td><td>${_whoKind?(daysOutBadge(d)+' '+responsibleCell(d,_whoKind)):dlStatusHTML(d)}</td><td class="r"><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td></tr>`).join('');
   const adTheadEl=document.getElementById('ad-thead');
-  if(adTheadEl){const last=adTheadEl.querySelector('th:nth-last-child(2)');if(last)last.textContent=_whoKind?'Days outstanding · responsible':'Signature';}
+  if(adTheadEl){const last=adTheadEl.querySelector('th:nth-last-child(2)');if(last)last.textContent=_whoKind?'Days outstanding · responsible':'Status';}
 }
 function renPS(workerFilter){
   const sel=document.getElementById('dp');if(!sel)return;
@@ -4949,7 +4949,7 @@ function vD(id){
           Backcharge
         </button>
       </div>
-      ${!d.sig?`<p style="font-size:11px;color:#aaa;margin-top:8px;text-align:center;">🔒 Awaiting signature before billing can be set</p>`:(billingLocked(d)?`<p style="font-size:11px;color:#8a5a12;margin-top:8px;text-align:center;background:#FBEFD9;border-radius:8px;padding:7px 10px;">🔒 Billing locked — this docket has gone to the client. It can be changed only if the client rejects it.</p>`:'')}
+      ${!d.sig?`<p style="font-size:11px;color:#aaa;margin-top:8px;text-align:center;">🔒 Awaiting signature before billing can be set</p>`:(billingLocked(d)?`<p style="font-size:11px;color:#8a5a12;margin-top:8px;text-align:center;background:#FBEFD9;border-radius:8px;padding:7px 10px;">🔒 Billing locked — a docket's billing is fixed once it's approved, queried, or sent to the client.</p>`:'')}
       ${d.bill==='bc'&&d.bcTarget?`<p style="font-size:12px;color:#5B21B6;margin-top:8px;">Backcharge to: <strong>${esc(d.bcTarget)}</strong></p>`:''}
       ${(CU&&CU.role==='admin'&&d.bill==='bc'&&d.sig&&d.bcTarget&&d.approvalStatus==='approved')?`<div style="margin-top:8px;"><button class="btn btn-s" style="border-color:#8A1F4B;color:#8A1F4B;font-weight:600;" onclick="forwardBackchargeNotice('${d.id}')">📨 Forward backcharge notice</button>${d.bcNoticeSent?`<span style="font-size:11px;color:#1D9E75;margin-left:8px;">✓ Notice sent ${fd(d.bcNoticeSent.slice(0,10))}</span>`:''}</div>`:''}
     </div>`:''}`;
@@ -6582,7 +6582,7 @@ function billingLocked(d){
 function assignBilling(docketId, newBill){
   const d=dockets.find(x=>x.id===docketId);
   if(!d)return;
-  if(billingLocked(d)){alert('This docket has gone to the client, so its billing is locked. It can be changed only if the client rejects it.');return;}
+  if(billingLocked(d)){alert('Billing is locked — a docket\'s billing is fixed once it\'s approved, queried, or sent to the client.');return;}
   if(newBill==='bc'){
     pickBackchargeTarget(function(name){d.bcTarget=name;_finishAssignBilling(d,docketId,newBill);},d.bcTarget);
     return;
@@ -10817,7 +10817,7 @@ function setPendingBilling(id,type){
 function applyPendingBilling(id,type){
   const d=dockets.find(x=>x.id===id);
   if(!d)return;
-  if(billingLocked(d)){alert('This docket has gone to the client, so its billing is locked. It can be changed only if the client rejects it.');return;}
+  if(billingLocked(d)){alert('Billing is locked — a docket\'s billing is fixed once it\'s approved, queried, or sent to the client.');return;}
   if(type==='tbc'){
     d.bill='pending';           // still needs a decision — stays in the folder
     d.billTbc=true;             // but consciously flagged "to be confirmed"
