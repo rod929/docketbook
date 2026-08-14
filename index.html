@@ -994,7 +994,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c65</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c66</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1515,8 +1515,14 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div id="nd-form-body">
       <div class="card">
         <div id="for-worker-wrap" class="hidden" style="margin-bottom:10px;background:#F4F9FE;border:0.5px solid #C9DDF1;border-radius:10px;padding:11px 14px;">
-          <label style="font-size:13px;color:#0C447C;font-weight:500;margin:0 0 6px;display:block;">Create this docket for a worker <span style="font-size:11px;color:#5B7CA0;font-weight:400;">— it lands in their app so they can get it signed on site</span></label>
-          <select id="d-for-worker" onchange="onForWorkerChange()" style="width:100%;"><option value="">Myself</option></select>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin:0;">
+            <input type="checkbox" id="for-worker-toggle" onchange="toggleForWorker(this.checked)" style="width:18px;height:18px;margin:1px 0 0;flex-shrink:0;">
+            <span style="font-size:13px;color:#0C447C;font-weight:500;">Create this docket for a worker? <span style="font-size:11px;color:#5B7CA0;font-weight:400;display:block;margin-top:1px;">It lands in their app so they can get it signed on site. Leave unticked to create it as normal.</span></span>
+          </label>
+          <div id="for-worker-pick" class="hidden" style="margin-top:9px;">
+            <label style="font-size:12px;color:#0C447C;font-weight:500;margin:0 0 4px;display:block;">Which worker?</label>
+            <select id="d-for-worker" onchange="onForWorkerChange()" style="width:100%;"><option value="">— Select worker —</option></select>
+          </div>
         </div>
         <div id="free-docket-wrap" class="hidden" style="grid-column:1/-1;margin-bottom:4px;">
           <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:#FFFBF5;border:0.5px solid #F2D9A8;border-radius:10px;padding:11px 14px;margin:0;">
@@ -8398,15 +8404,26 @@ function currentWorkerTrade(){
 function initForWorkerField(){
   const wrap=document.getElementById('for-worker-wrap');
   const sel=document.getElementById('d-for-worker');
+  const tog=document.getElementById('for-worker-toggle');
+  const pick=document.getElementById('for-worker-pick');
   if(!wrap||!sel)return;
   const canProxy=CU&&(CU.role==='admin'||CU.role==='hc_supervisor');
   wrap.classList.toggle('hidden',!canProxy);
+  if(tog)tog.checked=false;
+  if(pick)pick.classList.add('hidden');
   if(!canProxy){sel.value='';return;}
   // Roster: for an admin, all Alerce workers; for a supervisor, workers on
   // their projects (fall back to all if none are project-scoped).
   let ws=(workers||[]);
-  sel.innerHTML='<option value="">Myself ('+esc(CU.name||'me')+')</option>'+ws.map(w=>`<option value="${esc(w.u)}">${esc(w.name)}${w.trade?' · '+esc(w.trade):''}</option>`).join('');
+  sel.innerHTML='<option value="">— Select worker —</option>'+ws.map(w=>`<option value="${esc(w.u)}">${esc(w.name)}${w.trade?' · '+esc(w.trade):''}</option>`).join('');
   sel.value='';
+}
+// Yes/No: only reveal the worker picker when the admin/supervisor says yes.
+function toggleForWorker(on){
+  const pick=document.getElementById('for-worker-pick');
+  if(pick)pick.classList.toggle('hidden',!on);
+  const sel=document.getElementById('d-for-worker');
+  if(sel&&!on){sel.value='';onForWorkerChange();}
 }
 function onForWorkerChange(){
   const sel=document.getElementById('d-for-worker');if(!sel)return;
