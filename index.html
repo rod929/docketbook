@@ -356,6 +356,9 @@ body.role-worker #n1:hover,body.role-supervisor #n1:hover{background:#1a1a1a;}
 .admin-desk .adx-overdue{font-size:11px;font-weight:700;color:#B23B34;background:#FBE3E1;border:1px solid #E7B9B6;border-radius:20px;padding:3px 10px;white-space:nowrap;}
 .admin-desk .adx-signoff.hero .adx-signoff-head h3{font-size:15px;letter-spacing:.02em;}
 .admin-desk .adx-signoff.hero .adx-approvals{grid-template-columns:1fr;margin-top:12px;}
+/* Finalise portal right column — Queried/rejected + Ready-to-invoice, stacked */
+.admin-desk .adx-fin-side{display:flex;flex-direction:column;gap:14px;min-width:0;}
+.admin-desk .adx-fin-side .adx-pbox{flex:0 0 auto;}
 .admin-desk .adx-allclear{margin-top:12px;padding:18px;border-radius:12px;background:#F3FBF7;border:0.5px solid #C7E9D9;color:#0F6E56;font-size:13px;font-weight:600;text-align:center;}
 /* Inbox — compact Supervisor / Client rows */
 .admin-desk .adx-inbox{padding:4px 0 6px;}
@@ -975,7 +978,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c63</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c64</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1014,8 +1017,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div id="dash-supervisor" class="hidden">
         <div id="sup-scroll-area">
           <!-- Per-user layout toggle: Compact (4-up) vs Big boxes (2-up, fills screen) -->
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
-            <button class="btn btn-s" style="white-space:nowrap;" onclick="openWeeklySummary()"><i class="ti ti-mail" aria-hidden="true"></i> Weekly summary</button>
+          <div style="display:flex;justify-content:flex-end;align-items:center;gap:8px;flex-wrap:wrap;">
             <div class="dash-view-seg" id="dash-view-seg" style="margin:2px 2px 8px;">
               <button id="dv-compact" onclick="setDashView('compact')"><i class="ti ti-layout-grid" aria-hidden="true"></i> Compact</button>
               <button id="dv-big" onclick="setDashView('big')"><i class="ti ti-layout-board" aria-hidden="true"></i> Big boxes</button>
@@ -2771,6 +2773,24 @@ function seedTrialData(){
     if(bcDemo){bcDemo.approvalStatus='approved';bcDemo.approvedByName='Contracts Admin';bcDemo.approvedAt=new Date().toISOString();svL('v4_dock',dockets);}
     svL('dlb_demo_bc_approved',1);
   }
+  // One-time: seed a "client approved → ready to invoice" example (a NEW approved
+  // chargeable sub docket + its approved CLIENT docket) so the finalise section's
+  // "ready to invoice" call-to-action has data to show — without disturbing the
+  // existing "Create client docket" example.
+  if(!ldL('dlb_demo_ri')){
+    const tmpl=dockets.find(x=>x.demoExtra&&x.bill==='ch'&&x.approvalStatus==='approved'&&!isUpChainDocket(x));
+    if(tmpl){
+      let ctr=parseInt(ldL('v4_ctr')||(dockets.length+1),10);
+      const subId=String(ctr).padStart(4,'0');ctr++;
+      const cliId=String(ctr).padStart(4,'0');ctr++;
+      const now=new Date().toISOString();
+      const subDkt=Object.assign({},tmpl,{id:subId,pcode:'EAST-FO',pname:'Eastside Fitout',sub:'Smooth Set Plastering',workerName:'Grant Hughes',workersOnSite:[{name:'Grant Hughes',hours:7,start:'07:00',finish:'15:00',primary:true,trade:'Plasterer'}],hours:7,bill:'ch',approvalStatus:'approved',approvedByName:'Contracts Admin',approvedAt:now,claimStatus:'none',subInvStatus:'none',submittedToClient:true,refSubDocketId:null,signerRole:'hc_supervisor',desc:'Level 2 set-out — chargeable.',createdBy:'plasterco',demoExtra:true});
+      const cliDkt=Object.assign({},subDkt,{id:cliId,refSubDocketId:subId,signerRole:'client_supervisor',approvalStatus:'approved',approvedByName:'Olivia Reed',approvedAt:now,desc:'Client copy — level 2 set-out (client approved).',createdBy:'hcsup2'});
+      dockets.push(subDkt,cliDkt);
+      svL('v4_ctr',ctr);svL('v4_dock',dockets);
+    }
+    svL('dlb_demo_ri',1);
+  }
 }
 
 // ─── AUTH ─────────────────────────────────────────────────────────────
@@ -2837,12 +2857,16 @@ function setupUI(){
       +langOptsS
       +'</select></div>';
     setTimeout(()=>applyLang(savedLangS),80);
-    // HC Supervisor sees: dashboard, all dockets for assigned projects
+    // HC Supervisor sees exactly 4 nav options: Dashboard · My dockets ·
+    // Project dockets · Drafts (plus the New docket button). Everything else
+    // (Ready to sign, Invoicing, Contacts, Users, admin setup, weekly summary)
+    // is an admin function — hide it explicitly so nothing leaks in from a
+    // previous session on the same browser.
     document.getElementById('mpend-card').classList.remove('hidden');
-    document.getElementById('n3').classList.remove('hidden');
+    ['n0','n1','n2','n3','n-drafts'].forEach(id=>{const e=document.getElementById(id);if(e)e.classList.remove('hidden');});
     document.getElementById('n3').textContent='Project dockets';
-    document.getElementById('n-drafts').classList.remove('hidden');
-    document.getElementById('n-ready').classList.remove('hidden');
+    ['n-ready','n-reconcile','n-contacts-sub','n-my-workers','n4','n5','n6','n7','n8','n9']
+      .forEach(id=>{const e=document.getElementById(id);if(e)e.classList.add('hidden');});
   } else if(r==='user'||r==='supervisor'||r==='manager'){
     const roleLabels={'user':'Site user','supervisor':'Supervisor','manager':'Manager'};
     ub.textContent=roleLabels[r]||'User';ub.className='badge bs';
@@ -2946,7 +2970,7 @@ function doLogout(){
   document.getElementById('ma').classList.add('hidden');
   document.getElementById('ls').classList.remove('hidden');
   document.getElementById('lu').value='';document.getElementById('lp').value='';
-  ['n3','n4','n5','n6','n7','n8','n9','n-contacts-sub','n-my-workers','n-ready','msc','mpend-card'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  ['n3','n4','n5','n6','n7','n8','n9','n-contacts-sub','n-my-workers','n-ready','n-reconcile','msc','mpend-card'].forEach(id=>document.getElementById(id).classList.add('hidden'));
   document.getElementById('fin-panel').classList.add('hidden');
   document.getElementById('rban').classList.add('hidden');
   document.getElementById('dsb').readOnly=false;
@@ -9437,7 +9461,12 @@ function adxData(){
   // Section boxes — grouped like the supervisor dashboard.
   const awaitSupSig=base.filter(d=>docketStatus(d)==='awaiting_my_sig');
   const awaitBill=base.filter(d=>docketStatus(d)==='needs_billing');
-  const readyClient=recv.filter(d=>d.bill==='ch'&&d.approvalStatus==='approved'&&!d.submittedToClient);
+  // A chargeable sub docket's linked CLIENT docket has been approved by the client.
+  const clientDktApproved=(d)=>(dockets||[]).some(x=>x.refSubDocketId===d.id&&x.approvalStatus==='approved');
+  // Still to CREATE a client docket = approved chargeable, no client docket raised yet.
+  const readyClient=recv.filter(d=>d.bill==='ch'&&d.approvalStatus==='approved'&&!d.submittedToClient&&!(dockets||[]).some(x=>x.refSubDocketId===d.id));
+  // Ready to INVOICE the client = client approved it, not yet invoiced/claimed.
+  const readyInvoice=recv.filter(d=>d.bill==='ch'&&d.approvalStatus==='approved'&&(d.claimStatus||'none')==='none'&&clientDktApproved(d));
   // Sub-side queries (finalise section) vs client-side pipeline (client section)
   const qRejSub=base.filter(d=>!isUpChainDocket(d)&&(d.approvalStatus==='queried'||d.approvalStatus==='rejected'));
   const clientAdminReview=base.filter(d=>isUpChainDocket(d)&&d.sig&&d.approvalStatus==='awaiting');
@@ -9451,7 +9480,7 @@ function adxData(){
   const inApproved=recv.filter(d=>d.approvalStatus==='approved').reduce((s,d)=>s+cost(d),0);
   const outApproved=chRev+bcCost;
   const balance=outApproved-inApproved;
-  return {proj,supU,range,base,recv,costIn,chCost,bcCost,recovered,own,chRev,margin,split,supOut,pendSign,qRej,newRecv,clientReview,subCostAll,chargeableAll,marginAll,approvalQueue,inApproved,outApproved,balance,awaitSupSig,awaitBill,readyClient,clientApproved,clientRejected,qRejSub,clientAdminReview,clientQueried};
+  return {proj,supU,range,base,recv,costIn,chCost,bcCost,recovered,own,chRev,margin,split,supOut,pendSign,qRej,newRecv,clientReview,subCostAll,chargeableAll,marginAll,approvalQueue,inApproved,outApproved,balance,awaitSupSig,awaitBill,readyClient,readyInvoice,clientApproved,clientRejected,qRejSub,clientAdminReview,clientQueried};
 }
 // Oldest outstanding age (days) across a list — for the "⟳ oldest N days" chip.
 function adxOldest(list){return (list||[]).reduce((mx,d)=>{const a=docketAgeDays(d);return a>mx?a:mx;},0);}
@@ -9490,6 +9519,7 @@ function renAdminDesk(){
     return s;
   },0);
   const signOldest=adxOldest(D.pendSign);
+  const readyInvoiceVal=D.readyInvoice.reduce((s,d)=>s+(adxClientVal(d)||0),0);
   const heroBody=(canApprove&&D.pendSign.length)
     ? `<div class="adx-approvals">${D.pendSign.map(d=>approvalRow(d)).join('')}</div>`
     : `<div class="adx-allclear">✓ All caught up — nothing awaiting your sign-off.</div>`;
@@ -9515,13 +9545,20 @@ function renAdminDesk(){
           <div class="adx-signoff-sub">${D.pendSign.length} subcontractor docket${D.pendSign.length!==1?'s':''} signed on site — awaiting your sign-off${signOldest?` · oldest ${signOldest} day${signOldest!==1?'s':''}`:''}</div>
           ${heroBody}
         </div>
-        <div class="adx-pbox tall" style="--c:#E24B4A;" onclick="adxDrill('queried_sub')">
-          <div class="bt">Queried / rejected</div>
-          <div class="brow"><div class="v">${D.qRejSub.length}</div><div class="go">Open →</div></div>
-          <div class="s">Sent back — awaiting the sub to resolve &amp; re-submit.</div>
-          <div class="adx-qmini">
-            <div class="adx-qmini-h">Last 7 days</div>
-            ${q7.length?q7.map(qLine).join(''):'<div class="adx-ib-empty">Nothing sent back in the last 7 days.</div>'}
+        <div class="adx-fin-side">
+          <div class="adx-pbox tall" style="--c:#E24B4A;" onclick="adxDrill('queried_sub')">
+            <div class="bt">Queried / rejected</div>
+            <div class="brow"><div class="v">${D.qRejSub.length}</div><div class="go">Open →</div></div>
+            <div class="s">Sent back — awaiting the sub to resolve &amp; re-submit.</div>
+            <div class="adx-qmini">
+              <div class="adx-qmini-h">Last 7 days</div>
+              ${q7.length?q7.map(qLine).join(''):'<div class="adx-ib-empty">Nothing sent back in the last 7 days.</div>'}
+            </div>
+          </div>
+          <div class="adx-pbox" style="--c:#0F8A6A;" onclick="showTab('reconcile',document.getElementById('n-reconcile'))">
+            <div class="bt">Client approved · ready to invoice</div>
+            <div class="brow"><div class="v">${D.readyInvoice.length}</div><div class="go">Invoice →</div></div>
+            <div class="s">${D.readyInvoice.length?adxM(readyInvoiceVal)+' to bill the client — they’ve approved these.':'Nothing waiting to invoice.'}</div>
           </div>
         </div>
       </div>
@@ -9548,9 +9585,12 @@ function renAdminDesk(){
     </div>`;
   // Section 4: INVOICING — approved dockets not yet invoiced/claimed (outstanding).
   let invToClaim=0,invToClaimN=0,invToInvoice=0,invToInvoiceN=0;
+  const _cliOK=(d)=>(dockets||[]).some(x=>x.refSubDocketId===d.id&&x.approvalStatus==='approved');
   (dockets||[]).filter(d=>d.approvalStatus==='approved'&&!isUpChainDocket(d)).forEach(d=>{
     const legs=recLegs(d);
-    if(legs.inn&&legs.inn.status==='none'){invToClaim+=legs.inn.expected||0;invToClaimN++;}
+    // Claim (money in): only outstanding once the client has approved a chargeable
+    // docket (backcharge has no client, so it counts as soon as it's approved).
+    if(legs.inn&&legs.inn.status==='none'&&(d.bill!=='ch'||_cliOK(d))){invToClaim+=legs.inn.expected||0;invToClaimN++;}
     if(legs.out&&legs.out.status==='none'){invToInvoice+=legs.out.expected||0;invToInvoiceN++;}
   });
   const invOutstanding=invToClaimN+invToInvoiceN;
