@@ -890,8 +890,11 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .dl-card .l2{font-size:11.5px;color:#8a877f;margin-top:4px;display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
 .dl-card .l3{margin-top:8px;}
 @media(max-width:720px){
-  #t-md .tw,#t-ad .tw{display:none;}
-  #t-md .dl-cards,#t-ad .dl-cards{display:block;}
+  #t-md .tw{display:none;}
+  #t-md .dl-cards{display:block;}
+  /* Project dockets: card view only for the supervisor list (admin keeps its table + bulk tools) */
+  body:not(.role-admin) #t-ad .tw{display:none;}
+  body:not(.role-admin) #t-ad .dl-cards{display:block;}
 }
 .sv2-anl-filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px;}
 .sv2-anl-filters select,.sv2-anl-filters input{font-size:12px;padding:6px 8px;border-radius:8px;border:0.5px solid rgba(0,0,0,0.15);background:#fff;color:#2D2D2D;font-family:inherit;max-width:150px;}
@@ -1026,7 +1029,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c67</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c68</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1807,15 +1810,15 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <select id="f-submitted" style="width:150px;" onchange="renAD()"><option value="">All submitted</option><option value="yes">✓ Submitted</option><option value="no">⏳ Not submitted</option></select>
         <select id="fsig" style="width:140px;" onchange="renAD()"><option value="">All signatures</option><option value="signed">Signed</option><option value="pending">Pending</option><option value="sent">Sent</option></select>
       </div>
-      <div id="ad-filters-sup" class="hidden" style="gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+      <div id="ad-filters-sup" class="hidden" style="gap:10px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
+        <div class="sv2-seg" id="ad-type-seg">
+          <button id="ad-type-all" class="on" onclick="setAdType('')">All</button>
+          <button id="ad-type-client" onclick="setAdType('client')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Client</button>
+          <button id="ad-type-sub" onclick="setAdType('sub')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Subcontractor</button>
+        </div>
         <select id="ad-sup-proj" style="max-width:200px;" onchange="renAD()"><option value="">All projects</option></select>
-        <select id="ad-sup-status" style="width:210px;" onchange="renAD()">
-          <option value="">All statuses</option>
-          <option value="approved">Approved</option>
-          <option value="pending">Pending (review / queried)</option>
-          <option value="rejected">Rejected</option>
-        </select>
       </div>
+      <div id="ad-tabs" class="dl-tabs hidden"></div>
       <!-- Dashboard drill-down note (set when arriving from an admin-dashboard box) -->
       <div id="ad-kpi-note"></div>
       <!-- Floating bulk action bar -->
@@ -1836,10 +1839,13 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <div class="cc" style="background:#EDE9FE;border:0.5px solid #C4B5FD;"><div class="ccv" id="abc" style="color:#5B21B6;">$0</div><div class="ccl" style="color:#7C3AED;">↩ Backcharge</div></div>
         <div class="cc" style="background:#E6F1FB;border:0.5px solid #B5D4F4;"><div class="ccv" id="a-submitted" style="color:#185FA5;">0/0</div><div class="ccl" style="color:#185FA5;">✓ Submitted to client</div></div>
       </div>
-      <div class="card" style="padding:0;"><div class="tw"><table>
-        <thead id="ad-thead"><tr><th>#</th><th>Project</th><th>Date</th><th>Subcontractor</th><th>Client contact</th><th>Hrs</th><th id="ad-th-cost">Cost</th><th>Billing</th><th>Signature</th><th></th></tr></thead>
-        <tbody id="adb"></tbody>
-      </table></div></div>
+      <div class="card" style="padding:0;">
+        <div class="tw"><table>
+          <thead id="ad-thead"><tr><th>#</th><th>Project</th><th>Date</th><th>Subcontractor</th><th>Client contact</th><th>Hrs</th><th id="ad-th-cost">Cost</th><th>Billing</th><th>Signature</th><th></th></tr></thead>
+          <tbody id="adb"></tbody>
+        </table></div>
+        <div id="adc" class="dl-cards"></div>
+      </div>
     </div>
 
     <!-- INVOICING (admin only) -->
@@ -3966,6 +3972,14 @@ function renMD(){
   if(cardsEl)cardsEl.innerHTML=dlCards(rows,money);
 }
 function setMdTab(k){window._mdTab=k;renMD();}
+function setAdTab(k){window._adTab=k;renAD();}
+function setAdType(t){
+  window._adType=t;
+  [['ad-type-all',''],['ad-type-client','client'],['ad-type-sub','sub']].forEach(([id,v])=>{
+    const b=document.getElementById(id);if(b)b.classList.toggle('on',v===t);
+  });
+  renAD();
+}
 function renAD(){
   const tb=document.getElementById('adb');if(!tb)return;
   const fp=document.getElementById('fp')?.value||'';
@@ -4006,8 +4020,13 @@ function renAD(){
       : `<tr><th>#</th><th>Project</th><th>Company</th><th>Date</th><th>Hrs</th><th>Billing</th><th>Status</th><th></th></tr>`;
   }
   if(!isAdm){
-    // Clean supervisor list — mirrors My dockets, money-free, whole-project scope.
-    // Populate the project filter once from the supervisor's own project dockets.
+    // Clean supervisor list — refined layout (tabs + dot statuses), money-free,
+    // whole-project scope. Hide EVERY admin-only element first (money rule) so
+    // nothing leaks in from a prior admin session on the same browser.
+    const acsEl=document.getElementById('acs');if(acsEl)acsEl.style.display='none';
+    const bulkEl=document.getElementById('bulk-action-bar');if(bulkEl)bulkEl.classList.add('hidden');
+    const noteS=document.getElementById('ad-kpi-note');if(noteS)noteS.innerHTML='';
+    // Populate the project filter once.
     const spSel=document.getElementById('ad-sup-proj');
     if(spSel&&spSel.options.length<=1){
       const seen={};const opts=[];
@@ -4015,16 +4034,32 @@ function renAD(){
       spSel.innerHTML='<option value="">All projects</option>'+opts.join('');
     }
     const sp=spSel?spSel.value:'';
-    const ss=document.getElementById('ad-sup-status')?.value||'';
     let list=fl;
     if(sp)list=list.filter(d=>d.pcode===sp);
-    if(ss==='approved')list=list.filter(d=>d.approvalStatus==='approved');
-    else if(ss==='rejected')list=list.filter(d=>d.approvalStatus==='rejected');
-    else if(ss==='pending')list=list.filter(d=>d.approvalStatus==='awaiting'||d.approvalStatus==='queried');
-    if(!list.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:#aaa;padding:20px;">No dockets match these filters</td></tr>';return;}
-    tb.innerHTML=list.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;"><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span></td><td>${projBadge(d.pcode)}</td><td style="max-width:140px;">${esc(d.sub||'—')}</td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${mdBilling(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td></tr>`).join('');
+    // Subcontractor / Client type segment.
+    const at=window._adType||'';
+    if(at==='client')list=list.filter(isUpChainDocket);
+    else if(at==='sub')list=list.filter(d=>!isUpChainDocket(d));
+    // Status tabs.
+    const atab=window._adTab||'all';
+    const atdef=DL_TABS.find(t=>t.k===atab)||DL_TABS[0];
+    const rows=list.filter(atdef.m);
+    const tabsEl=document.getElementById('ad-tabs');
+    if(tabsEl){tabsEl.classList.remove('hidden');tabsEl.innerHTML=dlTabsHTML('setAdTab',list,atab);}
+    const cardsEl=document.getElementById('adc');
+    if(!rows.length){
+      const msg=(atab!=='all'||sp||at)?'No dockets in this view':'No dockets yet';
+      tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:#aaa;padding:20px;">'+msg+'</td></tr>';
+      if(cardsEl)cardsEl.innerHTML='<div style="text-align:center;color:#aaa;padding:22px;font-size:13px;">'+msg+'</div>';
+      return;
+    }
+    tb.innerHTML=dlTableRows(rows,false);
+    if(cardsEl)cardsEl.innerHTML=dlCards(rows,false);
     return;
   }
+  // Admin path — hide the supervisor-only tabs/cards, keep the full table + tools.
+  {const at=document.getElementById('ad-tabs');if(at)at.classList.add('hidden');
+   const ac=document.getElementById('adc');if(ac)ac.innerHTML='';}
   // Admin-dashboard drill-down: an extra filter set when arriving from a box on
   // the desktop admin dashboard. Shows a dismissable note + narrows the list.
   const noteEl=document.getElementById('ad-kpi-note');
