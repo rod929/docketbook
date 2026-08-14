@@ -423,6 +423,11 @@ body.role-worker #n1:hover,body.role-supervisor #n1:hover{background:#1a1a1a;}
 .admin-desk .adx-signoff{margin-bottom:14px;border-left:3px solid #185FA5;}
 .admin-desk .adx-signoff-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;}
 .admin-desk .adx-signoff-total{font-size:23px;font-weight:800;color:#185FA5;}
+.admin-desk .adx-signoff-figs{display:flex;align-items:center;gap:14px;margin:8px 0 6px;flex-wrap:wrap;}
+.admin-desk .adx-fig{display:flex;flex-direction:column;gap:1px;}
+.admin-desk .adx-fig-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#9a958c;}
+.admin-desk .adx-fig-v{font-size:23px;font-weight:800;line-height:1.05;}
+.admin-desk .adx-fig-arrow{font-size:18px;color:#c7c2d6;font-weight:700;align-self:flex-end;padding-bottom:3px;}
 .admin-desk .adx-signoff-sub{font-size:12px;color:#5A6B7B;margin:2px 0 12px;}
 .admin-desk .adx-approvals{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 @media(max-width:820px){.admin-desk .adx-approvals{grid-template-columns:1fr;}.admin-desk .adx-fintiles{grid-template-columns:1fr;}}
@@ -955,7 +960,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c59</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c60</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -2364,6 +2369,17 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       </div>
     </div>
 
+    <!-- Admin final decision (subcontractor docket signed & billed, awaiting sign-off) -->
+    <div id="vd-approve-actions" class="hidden" style="border-top:0.5px solid rgba(0,0,0,0.08);padding-top:14px;margin-top:14px;">
+      <div style="font-size:12px;font-weight:700;color:#5B3B8C;margin-bottom:8px;">Your decision</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-s" style="flex:2;min-width:120px;background:#1D9E75;color:#fff;border-color:#1D9E75;font-weight:600;" onclick="approveFromModal()">✓ Approve</button>
+        <button class="btn btn-s" style="flex:1;min-width:90px;border:1.5px solid #E0A800;color:#8A6D00;font-weight:600;" onclick="queryFromModal()">⚠ Query</button>
+        <button class="btn btn-s" style="flex:1;min-width:90px;border:1.5px solid #E0908C;color:#B23B34;font-weight:600;" onclick="rejectFromModal()">⛔ Reject</button>
+      </div>
+      <p style="font-size:11px;color:#9a958c;margin:8px 0 0;line-height:1.5;">Query or Reject sends it back with a note so the subcontractor knows what to fix.</p>
+    </div>
+
     <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
       <button id="btn-pdf-main" class="btn btn-p btn-s" onclick="printD()">🖨 Download PDF</button>
       <button id="btn-client-copy" class="btn btn-s hidden" onclick="printClientCopy()">📄 Client copy (no $)</button>
@@ -3124,10 +3140,15 @@ const STATUS_META={
   awaiting_my_sig:{label:'✍️ Needs my signature',bg:'#FCEFD6',fg:'#96631A'},
   needs_billing:{label:'💲 Needs billing',bg:'#FCEFD6',fg:'#96631A'},
   chargeable_ready:{label:'✓ Signed · ready to send',bg:'#DCF3EB',fg:'#0F6E56'},
+  pending_review:{label:'⏳ Pending approval',bg:'#EDE7F7',fg:'#5B3B8C'},
   signed:{label:'✓ Signed',bg:'#DCF3EB',fg:'#0F6E56'}
 };
+// A signed + billed docket that hasn't been approved/queried yet is awaiting the
+// admin's final decision — show "Pending approval", not "ready to send".
+function pendingAdminDecision(d){return !!(d&&d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting');}
 function statusBadge(d){
-  const m=STATUS_META[docketStatus(d)]||STATUS_META.signed;
+  const key=pendingAdminDecision(d)?'pending_review':docketStatus(d);
+  const m=STATUS_META[key]||STATUS_META.signed;
   return'<span class="badge" style="background:'+m.bg+';color:'+m.fg+';">'+m.label+'</span>';
 }
 // Docket-view "outstanding" strip: a FILLED status pill + an OUTLINE ageing
@@ -3142,9 +3163,10 @@ function vdStatusStrip(d){
     awaiting_my_sig:['✍️ Needs my signature','#F4B13C','#4a2c02','#C7891A'],
     needs_billing:['💲 Pending bill allocation','#F4B13C','#4a2c02','#C7891A'],
     chargeable_ready:['✓ Ready to send','#1D9E75','#fff','#1D9E75'],
+    pending_review:['⏳ Pending your approval','#5B3B8C','#fff','#5B3B8C'],
     signed:['✓ Signed','#1D9E75','#fff','#1D9E75']
   };
-  const m=map[docketStatus(d)]||map.signed;
+  const m=map[pendingAdminDecision(d)?'pending_review':docketStatus(d)]||map.signed;
   const since=((d.approvalStatus==='queried'||d.approvalStatus==='rejected')&&d.queriedAt)||(d.sig&&d.signedAt)||d.createdAt;
   let age='';
   if(since){
@@ -4735,7 +4757,10 @@ function vD(id){
   const stcDate=document.getElementById('submitted-date');
   const notSubWrap=document.getElementById('not-submitted-wrap');
   const notSubReason=document.getElementById('not-submitted-reason');
-  const showSTC=CU&&(CU.role==='sub'||(CU.role==='admin'&&d.bill==='ch'));
+  // "Submitted to client" only makes sense on an actual CLIENT (up-chain) docket.
+  // A subcontractor docket is never sent to the client — if chargeable, a separate
+  // client docket is created instead — so don't show the box there.
+  const showSTC=CU&&CU.role==='admin'&&isUpChainDocket(d)&&d.bill==='ch';
   if(stcWrap){
     stcWrap.classList.toggle('hidden',!showSTC);
     if(showSTC){
@@ -4746,6 +4771,11 @@ function vD(id){
       notSubReason.value=d.notSubmittedReason||'';
     }
   }
+
+  // Admin final decision — Approve / Query / Reject, shown only for a subcontractor
+  // docket that's signed, billed and still awaiting the admin's sign-off.
+  const apWrap=document.getElementById('vd-approve-actions');
+  if(apWrap)apWrap.classList.toggle('hidden',!(canApproveDockets()&&!isUpChainDocket(d)&&pendingAdminDecision(d)));
 
   document.getElementById('dm').classList.add('show');
 }
@@ -9420,6 +9450,13 @@ function renAdminDesk(){
   // inline Approve/Query/Reject) plus a Queried/rejected companion box.
   const canApprove=canApproveDockets();
   const signTotal=D.pendSign.reduce((s,d)=>s+(calcC(d)||0),0);
+  // Potential recovery (money IN) once approved: chargeable at CLIENT rate,
+  // backcharge recovered at cost from another sub, own-cost recovers nothing.
+  const signRecovery=D.pendSign.reduce((s,d)=>{
+    if(d.bill==='ch')return s+(adxClientVal(d)||0);
+    if(d.bill==='bc')return s+(calcC(d)||0);
+    return s;
+  },0);
   const signOldest=adxOldest(D.pendSign);
   const heroBody=(canApprove&&D.pendSign.length)
     ? `<div class="adx-approvals">${D.pendSign.map(d=>approvalRow(d)).join('')}</div>`
@@ -9436,10 +9473,12 @@ function renAdminDesk(){
         <div class="adx-card adx-signoff hero${D.pendSign.length?' flash':''}">
           <div class="adx-signoff-head">
             <h3 style="margin:0;color:#5B3B8C;">Review · Approve · Reject</h3>
-            <div style="display:flex;align-items:center;gap:8px;">
-              ${(D.pendSign.length&&signOldest)?`<span class="adx-overdue">⚠ ${signOldest} day${signOldest!==1?'s':''} overdue</span>`:''}
-              <span class="adx-signoff-total" style="color:#5B3B8C;">${adxM(signTotal)}</span>
-            </div>
+            ${(D.pendSign.length&&signOldest)?`<span class="adx-overdue">⚠ ${signOldest} day${signOldest!==1?'s':''} overdue</span>`:''}
+          </div>
+          <div class="adx-signoff-figs">
+            <div class="adx-fig"><span class="adx-fig-l">Cost to approve</span><span class="adx-fig-v" style="color:#5B3B8C;">${adxM(signTotal)}</span></div>
+            <div class="adx-fig-arrow">→</div>
+            <div class="adx-fig"><span class="adx-fig-l">Potential recovery</span><span class="adx-fig-v" style="color:#1D9E75;">${adxM(signRecovery)}</span></div>
           </div>
           <div class="adx-signoff-sub">${D.pendSign.length} subcontractor docket${D.pendSign.length!==1?'s':''} signed on site — awaiting your sign-off${signOldest?` · oldest ${signOldest} day${signOldest!==1?'s':''}`:''}</div>
           ${heroBody}
@@ -10558,6 +10597,10 @@ function approveDocket(id){
   if(typeof showCorrectDashboard==='function')showCorrectDashboard();
   if(typeof renAD==='function')renAD();
 }
+// ── Approve / Query / Reject invoked from inside the open docket modal ──
+function approveFromModal(){const id=curDock&&curDock.id;if(!id)return;approveDocket(id);closeMod();}
+function queryFromModal(){const id=curDock&&curDock.id;if(!id)return;closeMod();queryDocket(id);}
+function rejectFromModal(){const id=curDock&&curDock.id;if(!id)return;closeMod();rejectDocket(id);}
 
 // ─── QUERY / REJECT (client admin sends a docket back with reasons) ────
 const QUERY_REASONS=['Provide more photos','Clarify hours worked','Not in scope','Wrong rate','Missing details','Duplicate docket'];
