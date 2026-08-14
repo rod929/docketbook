@@ -861,6 +861,38 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-seg{display:inline-flex;background:#efeeea;border-radius:9px;padding:2px;}
 .sv2-seg button{border:none;background:transparent;font-family:inherit;font-size:12px;font-weight:600;color:#777;padding:5px 13px;border-radius:7px;cursor:pointer;}
 .sv2-seg button.on{background:#fff;color:#2D2D2D;box-shadow:0 1px 2px rgba(0,0,0,0.1);}
+/* Coloured Subcontractor / Client segment on the list pages */
+#md-type-seg button.on#md-type-sub,#ad-type-seg button.on#ad-type-sub{background:#EF9F27;color:#412402;}
+#md-type-seg button.on#md-type-client,#ad-type-seg button.on#ad-type-client{background:#185FA5;color:#fff;}
+/* ── Refined docket list (My dockets / Project dockets) — list pages only ── */
+.dl-tabs{display:flex;gap:2px;overflow-x:auto;border-bottom:1px solid rgba(0,0,0,.08);margin-bottom:10px;}
+.dl-tabs button{border:0;background:none;font-family:inherit;font-size:12.5px;color:#8a877f;padding:10px 12px;cursor:pointer;position:relative;white-space:nowrap;font-weight:600;}
+.dl-tabs button:hover{color:#23221f;}
+.dl-tabs button .c{font-size:11px;color:#b6b2aa;margin-left:5px;}
+.dl-tabs button.on{color:#23221f;}
+.dl-tabs button.on::after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:2px;background:#23221f;border-radius:2px;}
+.dl-ptag{display:inline-block;font-size:11px;font-weight:600;color:#6b6862;background:#f0efec;border-radius:6px;padding:2px 8px;letter-spacing:.02em;}
+.dl-no{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.dl-dir{color:#b6b2aa;font-size:11px;margin-right:1px;}
+.dl-muted{color:#8a877f;}
+.dl-st{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#23221f;white-space:nowrap;}
+.dl-st i{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dl-st.done{color:#0f6e56;} .dl-st.done i{background:#1D9E75;}
+.dl-st.wait{color:#8a5a12;} .dl-st.wait i{background:#C7891A;}
+.dl-st.review{color:#455563;} .dl-st.review i{background:#5A6B7B;}
+.dl-st.problem{color:#a4302a;} .dl-st.problem i{background:#D5473F;}
+.dl-st.draft{color:#8a877f;} .dl-st.draft i{background:#b6b2aa;}
+.dl-cards{display:none;}
+.dl-card{display:block;padding:13px 15px;border-top:1px solid rgba(0,0,0,.05);cursor:pointer;}
+.dl-card:first-child{border-top:0;}
+.dl-card:hover{background:#faf9f7;}
+.dl-card .l1{font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.dl-card .l2{font-size:11.5px;color:#8a877f;margin-top:4px;display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
+.dl-card .l3{margin-top:8px;}
+@media(max-width:720px){
+  #t-md .tw,#t-ad .tw{display:none;}
+  #t-md .dl-cards,#t-ad .dl-cards{display:block;}
+}
 .sv2-anl-filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px;}
 .sv2-anl-filters select,.sv2-anl-filters input{font-size:12px;padding:6px 8px;border-radius:8px;border:0.5px solid rgba(0,0,0,0.15);background:#fff;color:#2D2D2D;font-family:inherit;max-width:150px;}
 .sv2-anl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
@@ -994,7 +1026,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c66</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c67</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1740,13 +1772,6 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <button id="md-type-sub" onclick="setMdType('sub')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-sub-t">Subcontractor</span></button>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
-        <label style="font-size:13px;font-weight:600;color:#555;" id="md-filters-label">Filters:</label>
-        <select id="md-status-filter" style="width:200px;" onchange="mdClearKpi();renMD()">
-          <option value="">All statuses</option>
-          <option value="approved">Approved</option>
-          <option value="pending">Pending (review / queried)</option>
-          <option value="rejected">Rejected</option>
-        </select>
         <select id="md-proj-filter" style="max-width:200px;" onchange="renMD()"><option value="">All projects</option></select>
         <select id="md-range-filter" style="width:150px;" onchange="mdRangeChange()">
           <option value="all">All time</option>
@@ -1761,10 +1786,14 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         </span>
       </div>
       <div id="md-kpi-note" class="hidden" style="margin:0 0 10px;display:flex;align-items:center;flex-wrap:wrap;gap:4px;background:#F4F8FC;border:0.5px solid #D6E4F2;border-radius:8px;padding:6px 10px;"></div>
-      <div class="card" style="padding:0;"><div class="tw"><table class="sticky-first">
-        <thead><tr><th>#</th><th id="th-md-proj">Project</th><th id="th-md-company">Company</th><th id="th-md-date">Date</th><th id="th-md-hrs">Hrs</th><th id="th-md-cost">Cost</th><th id="th-md-billing">Billing</th><th id="th-md-status">Status</th><th></th></tr></thead>
-        <tbody id="mdb"></tbody>
-      </table></div></div>
+      <div id="md-tabs" class="dl-tabs"></div>
+      <div class="card" style="padding:0;">
+        <div class="tw"><table class="sticky-first">
+          <thead><tr><th>#</th><th id="th-md-proj">Project</th><th id="th-md-company">Company</th><th id="th-md-date">Date</th><th id="th-md-hrs">Hrs</th><th id="th-md-billing">Billing</th><th id="th-md-status">Status</th><th></th></tr></thead>
+          <tbody id="mdb"></tbody>
+        </table></div>
+        <div id="mdc" class="dl-cards"></div>
+      </div>
     </div>
 
     <!-- ALL DOCKETS -->
@@ -3799,6 +3828,75 @@ function translateMyDockets(t){
   if(rg){const m={'all':t.svRangeAll,'7d':t.svR7,'month':t.svRMonth,'ytd':t.svRYTD,'custom':t.svRCustom};for(const o of rg.options){if(m[o.value])o.textContent=m[o.value];}}
   set('th-md-proj',t.mdcProject);set('th-md-date',t.mdcDate);set('th-md-hrs',t.mdcHrs);set('th-md-cost',t.mdcCost);set('th-md-billing',t.mdcBilling);set('th-md-company',t.mdcCompany);set('th-md-status',t.mdcStatus);
 }
+// ── Shared refined-list helpers (My dockets / Project dockets) ──
+// One workflow bucket per docket, used for the status tabs + status chip.
+function dlBucket(d){
+  if(d.approvalStatus==='rejected')return 'rejected';
+  if(d.approvalStatus==='queried')return 'queried';
+  if(d.approvalStatus==='approved')return 'approved';
+  const s=docketStatus(d);
+  if(s==='awaiting_my_sig')return 'needsig';
+  if(s==='awaiting_client')return 'awaitclient';
+  if(s==='needs_billing')return 'needbill';
+  if(typeof pendingAdminDecision==='function'&&pendingAdminDecision(d))return 'pending';
+  return 'signed';
+}
+function dlStatusInfo(d){
+  const b=dlBucket(d);
+  const ready=(d.bill==='ch'&&d.approvalStatus==='approved')?'':'';
+  const M={
+    needsig:['wait','Needs signature'],
+    awaitclient:['review','Awaiting client signature'],
+    needbill:['wait','Needs billing'],
+    signed:['done', d.bill==='ch'&&!d.approvalStatus?'Signed · ready to send':'Signed'],
+    pending:['review','Pending approval'],
+    approved:['done','Approved'],
+    queried:['problem','Queried'],
+    rejected:['problem','Rejected'],
+  };
+  const m=M[b]||['draft','Draft'];
+  return {cls:m[0],text:m[1]};
+}
+const DL_TABS=[
+  {k:'all',t:'All',m:()=>true},
+  {k:'needsig',t:'Needs signature',m:d=>dlBucket(d)==='needsig'},
+  {k:'needbill',t:'Needs billing',m:d=>dlBucket(d)==='needbill'},
+  {k:'signed',t:'Signed',m:d=>dlBucket(d)==='signed'||dlBucket(d)==='awaitclient'},
+  {k:'pending',t:'Pending approval',m:d=>dlBucket(d)==='pending'},
+  {k:'approved',t:'Approved',m:d=>dlBucket(d)==='approved'},
+  {k:'problem',t:'Queried / rejected',m:d=>dlBucket(d)==='queried'||dlBucket(d)==='rejected'},
+];
+function dlProjTag(code){return '<span class="dl-ptag">'+esc(code||'—')+'</span>';}
+function dlDir(d){return '<span class="dl-dir">'+(isUpChainDocket(d)?'↑':'↓')+'</span>';}
+function dlStatusHTML(d){const s=dlStatusInfo(d);return '<span class="dl-st '+s.cls+'"><i></i>'+s.text+'</span>';}
+function dlBillText(d){
+  if(!d.bill||d.bill==='pending')return '<span style="color:#b6b2aa;">Pending billing</span>';
+  const L={ch:'Chargeable',bc:'Backcharge',ow:'Own cost'}[d.bill]||d.bill;
+  return esc(L)+((d.bill==='bc'&&d.bcTarget)?' <span style="color:#b6b2aa;">· '+esc(d.bcTarget)+'</span>':'');
+}
+function dlTabsHTML(fn,base,cur){
+  return DL_TABS.map(t=>{const c=t.k==='all'?base.length:base.filter(t.m).length;return `<button class="${cur===t.k?'on':''}" onclick="${fn}('${t.k}')">${t.t}<span class="c">${c}</span></button>`;}).join('');
+}
+function dlTableRows(list,money){
+  return list.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;">
+    <td class="dl-no">${dlDir(d)}#${d.id}</td>
+    <td>${dlProjTag(d.pcode)}</td>
+    <td>${esc(d.sub||'—')}</td>
+    <td class="dl-muted">${fd(d.date)}</td>
+    <td>${d.hours?d.hours+'h':'—'}</td>
+    ${money?`<td>${calcC(d)!=null?fc(calcC(d)):'<span class="dl-muted" style="font-size:11px;">—</span>'}</td>`:''}
+    <td>${dlBillText(d)}</td>
+    <td>${dlStatusHTML(d)}</td>
+    <td class="r"><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td>
+  </tr>`).join('');
+}
+function dlCards(list,money){
+  return list.map(d=>`<div class="dl-card" onclick="vD('${d.id}')">
+    <div class="l1">${dlDir(d)}#${d.id} <span>${esc(d.sub||'—')}</span></div>
+    <div class="l2">${dlProjTag(d.pcode)} ${fd(d.date)} · ${d.hours||0}h · ${dlBillText(d)}${money&&calcC(d)!=null?' · '+fc(calcC(d)):''}</div>
+    <div class="l3">${dlStatusHTML(d)}</div>
+  </div>`).join('');
+}
 function renMD(){
   const tb=document.getElementById('mdb');if(!tb)return;
   // A supervisor's "My dockets" = only the dockets they created or signed
@@ -3810,15 +3908,7 @@ function renMD(){
   const tf=window._mdType||'';
   if(tf==='client')src=src.filter(isUpChainDocket);
   else if(tf==='sub')src=src.filter(d=>!isUpChainDocket(d));
-  const sf=document.getElementById('md-status-filter')?.value||'';
-  if(sf){
-    // Simplified to the post-submission outcomes: approved / rejected / pending
-    // (pending = awaiting admin review OR queried). Everything else is surfaced
-    // by the dashboard outstanding boxes.
-    if(sf==='approved')src=src.filter(d=>d.approvalStatus==='approved');
-    else if(sf==='rejected')src=src.filter(d=>d.approvalStatus==='rejected');
-    else if(sf==='pending')src=src.filter(d=>d.approvalStatus==='awaiting'||d.approvalStatus==='queried');
-  }
+  // (Status is now chosen via the tabs below — see window._mdTab.)
   // Dashboard box drill-down (granular category). Shows a dismissable note.
   const kpi=window._mdKpi||'';
   {
@@ -3858,9 +3948,24 @@ function renMD(){
       return true;
     });
   }
-  if(!src.length){tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:#aaa;padding:20px;">'+((sf||pf||tf||rv!=='all')?'No dockets match these filters':'No dockets yet')+'</td></tr>';return;}
-  tb.innerHTML=src.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;"><td><span class="md-tic">${docketTypeIcon(d)}</span> <span class="dn">#${d.id}</span></td><td>${projBadge(d.pcode)}</td><td style="max-width:140px;">${esc(d.sub||'—')}</td><td>${fd(d.date)}</td><td>${d.hours}h</td><td>${CU&&CU.role==='admin'?fc(calcC(d)):'—'}</td><td>${mdBilling(d)}</td><td>${statusBadge(d)}</td><td><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td></tr>`).join('');
+  // Status tabs sit above the table; the active tab filters the visible rows.
+  const base=src;
+  const tab=window._mdTab||'all';
+  const tdef=DL_TABS.find(t=>t.k===tab)||DL_TABS[0];
+  const rows=base.filter(tdef.m);
+  const tabsEl=document.getElementById('md-tabs');if(tabsEl)tabsEl.innerHTML=dlTabsHTML('setMdTab',base,tab);
+  const cardsEl=document.getElementById('mdc');
+  const money=!!(CU&&CU.role==='admin');
+  if(!rows.length){
+    const msg=(tab!=='all'||pf||tf||rv!=='all')?'No dockets in this view':'No dockets yet';
+    tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:#aaa;padding:20px;">'+msg+'</td></tr>';
+    if(cardsEl)cardsEl.innerHTML='<div style="text-align:center;color:#aaa;padding:22px;font-size:13px;">'+msg+'</div>';
+    return;
+  }
+  tb.innerHTML=dlTableRows(rows,money);
+  if(cardsEl)cardsEl.innerHTML=dlCards(rows,money);
 }
+function setMdTab(k){window._mdTab=k;renMD();}
 function renAD(){
   const tb=document.getElementById('adb');if(!tb)return;
   const fp=document.getElementById('fp')?.value||'';
