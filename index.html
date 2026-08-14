@@ -2587,7 +2587,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 
 <script>
 // ─── DATA ────────────────────────────────────────────────────────────
-const ADM={u:'admin',p:'admin123',role:'admin',name:'Admin',adminTier:'owner'};
+const ADM={u:'admin',p:'admin123',role:'admin',name:'Rod',adminTier:'owner'};
 const STF={u:'user',p:'user123',role:'user',name:'Site User'};
 const DSUBS=[{u:'sub1',p:'sub123',name:'Demo Sub Co',trade:'General Labour',rate:85,otRate:127.50}];
 const DWORKERS=[{u:'jsmith',p:'work123',name:'John Smith',trade:'Labourer',parentSub:null,projectAccess:[],allProjects:true}];
@@ -2923,7 +2923,7 @@ function setupUI(){
     document.body.className='role-admin';
     const tier=adminTierOf(CU);
     ub.textContent=adminTierLabel(tier);ub.className='badge bi';
-    const tierBlurb={owner:'Main Administrator — full access and allocates access for all staff.',pmca:'PM / Contracts Admin — final docket sign-off, plus allocate workers and admins.',std:'Administrator — view, create, and manage; allocate workers.'}[tier]||'';
+    const tierBlurb={owner:'Full access — allocates access for all staff.',pmca:'Final docket sign-off, plus allocate workers and admins.',std:'View, create, and manage; allocate workers.'}[tier]||'';
     rb.className='rban adm';
     rb.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;width:100%;">'
       +'<span style="min-width:0;"><strong>'+esc(adminTierLabel(tier))+'</strong> — '+tierBlurb+'</span>'
