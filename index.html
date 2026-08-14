@@ -960,7 +960,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c60</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c61</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -2379,6 +2379,11 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       </div>
       <p style="font-size:11px;color:#9a958c;margin:8px 0 0;line-height:1.5;">Query or Reject sends it back with a note so the subcontractor knows what to fix.</p>
     </div>
+    <!-- Undo a decision already made (wrong button pressed earlier) -->
+    <div id="vd-undo-decision" class="hidden" style="border-top:0.5px solid rgba(0,0,0,0.08);padding-top:12px;margin-top:14px;">
+      <button class="btn btn-s" style="border:1.5px solid #5B3B8C;color:#5B3B8C;font-weight:600;" onclick="undoDecisionFromModal()">↺ Undo this decision (reopen for review)</button>
+      <p style="font-size:11px;color:#9a958c;margin:7px 0 0;line-height:1.5;">Puts the docket back to <b>Pending approval</b> and cancels the alert sent to the subcontractor.</p>
+    </div>
 
     <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
       <button id="btn-pdf-main" class="btn btn-p btn-s" onclick="printD()">🖨 Download PDF</button>
@@ -2441,6 +2446,13 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       </div>
     </div>
   </div>
+</div>
+
+<!-- UNDO TOAST (after Approve / Query / Reject) -->
+<div id="action-toast" class="hidden" style="position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1200;background:#2D2D2D;color:#fff;border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 30px rgba(0,0,0,.32);max-width:92vw;">
+  <span id="action-toast-msg" style="font-size:13.5px;line-height:1.35;"></span>
+  <button id="action-toast-undo" style="background:#EF9F27;color:#2D2D2D;border:0;border-radius:8px;padding:7px 15px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;">↺ Undo</button>
+  <button onclick="hideActionToast()" aria-label="Dismiss" style="background:none;border:0;color:#c9c6c0;font-size:16px;cursor:pointer;line-height:1;">✕</button>
 </div>
 
 <!-- SIGNING PAGE -->
@@ -4776,6 +4788,10 @@ function vD(id){
   // docket that's signed, billed and still awaiting the admin's sign-off.
   const apWrap=document.getElementById('vd-approve-actions');
   if(apWrap)apWrap.classList.toggle('hidden',!(canApproveDockets()&&!isUpChainDocket(d)&&pendingAdminDecision(d)));
+  // Undo option — a decision has already been made and can be reversed.
+  const unWrap=document.getElementById('vd-undo-decision');
+  const decided=['approved','queried','rejected'].includes(d.approvalStatus);
+  if(unWrap)unWrap.classList.toggle('hidden',!(canApproveDockets()&&!isUpChainDocket(d)&&decided));
 
   document.getElementById('dm').classList.add('show');
 }
@@ -10596,11 +10612,60 @@ function approveDocket(id){
     msg:'✓ Docket #'+d.id+' ('+(d.pname||d.pcode||'(no project)')+') approved — ready to invoice.'});
   if(typeof showCorrectDashboard==='function')showCorrectDashboard();
   if(typeof renAD==='function')renAD();
+  showActionToast('✓ Docket #'+d.id+' approved.',d.id);
 }
 // ── Approve / Query / Reject invoked from inside the open docket modal ──
 function approveFromModal(){const id=curDock&&curDock.id;if(!id)return;approveDocket(id);closeMod();}
 function queryFromModal(){const id=curDock&&curDock.id;if(!id)return;closeMod();queryDocket(id);}
 function rejectFromModal(){const id=curDock&&curDock.id;if(!id)return;closeMod();rejectDocket(id);}
+
+// ── Undo an Approve / Query / Reject (in case the wrong button was pressed) ──
+// Remove the alert(s) this decision pushed to the submitter / supervisor.
+function removeNoticesFor(docketId,types){
+  const all=ldL('dlb_notify')||{};let changed=false;
+  Object.keys(all).forEach(u=>{
+    const before=(all[u]||[]).length;
+    all[u]=(all[u]||[]).filter(n=>!(n.docketId===docketId&&types.includes(n.type)));
+    if(all[u].length!==before)changed=true;
+  });
+  if(changed)svL('dlb_notify',all);
+}
+function undoDecision(id){
+  const d=dockets.find(x=>x.id===id);if(!d)return;
+  const was=d.approvalStatus;
+  if(was!=='approved'&&was!=='queried'&&was!=='rejected')return; // nothing to undo
+  // Roll the docket back to "awaiting your approval" and clear the decision.
+  d.approvalStatus='awaiting';
+  d.approvedBy=null;d.approvedByName=null;d.approvedAt=null;d.invoiceReady=false;
+  d.queriedBy=null;d.queriedByName=null;d.queriedAt=null;d.queryReasons=[];d.queryNote='';d.queryType=null;
+  // Drop the query/reject entry this decision just added to the thread.
+  if(Array.isArray(d.queryThread)&&d.queryThread.length&&(was==='queried'||was==='rejected')){
+    const last=d.queryThread[d.queryThread.length-1];
+    if(last&&(last.type==='query'||last.type==='reject'))d.queryThread.pop();
+  }
+  removeNoticesFor(id,['approved','queried','rejected']);
+  svL('v4_dock',dockets);
+  hideActionToast();
+  if(typeof showCorrectDashboard==='function')showCorrectDashboard();
+  if(typeof renAD==='function')renAD();
+  if(typeof renInvoiceNotices==='function')renInvoiceNotices();
+  showActionToast('Decision undone — docket #'+id+' is back to pending.',null);
+}
+let _actionToastTimer=null;
+function showActionToast(msg,undoId){
+  const t=document.getElementById('action-toast');if(!t)return;
+  const m=document.getElementById('action-toast-msg');if(m)m.textContent=msg;
+  const u=document.getElementById('action-toast-undo');
+  if(u){
+    if(undoId){u.style.display='';u.onclick=()=>undoDecision(undoId);}
+    else{u.style.display='none';u.onclick=null;}
+  }
+  t.classList.remove('hidden');
+  if(_actionToastTimer)clearTimeout(_actionToastTimer);
+  _actionToastTimer=setTimeout(hideActionToast,undoId?9000:4000);
+}
+function hideActionToast(){const t=document.getElementById('action-toast');if(t)t.classList.add('hidden');if(_actionToastTimer){clearTimeout(_actionToastTimer);_actionToastTimer=null;}}
+function undoDecisionFromModal(){const id=curDock&&curDock.id;if(!id)return;closeMod();undoDecision(id);}
 
 // ─── QUERY / REJECT (client admin sends a docket back with reasons) ────
 const QUERY_REASONS=['Provide more photos','Clarify hours worked','Not in scope','Wrong rate','Missing details','Duplicate docket'];
@@ -10661,6 +10726,7 @@ function submitQueryModal(){
   if(typeof showCorrectDashboard==='function')showCorrectDashboard();
   if(typeof renAD==='function')renAD();
   if(typeof renInvoiceNotices==='function')renInvoiceNotices();
+  showActionToast((isReject?'⛔ Docket #'+d.id+' rejected.':'⚠ Docket #'+d.id+' queried.'),d.id);
 }
 
 // ─── RESOLVE & RE-SUBMIT (our side answers the query) ─────────────────
