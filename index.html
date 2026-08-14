@@ -42,6 +42,22 @@ body{font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-seri
 .setup-tile{display:flex;flex-direction:column;align-items:center;gap:7px;padding:16px 8px;border:1px solid rgba(0,0,0,.1);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#2D2D2D;transition:background .1s,border-color .1s;}
 .setup-tile:hover{background:#f8f8f6;border-color:rgba(0,0,0,.18);}
 .setup-tile i{font-size:22px;color:#185FA5;}
+/* Settings — sidebar (categories) + panel layout */
+.set-shell{display:flex;gap:20px;align-items:flex-start;}
+.set-sidebar{flex:0 0 216px;background:#fff;border:0.5px solid rgba(0,0,0,.1);border-radius:14px;padding:10px;position:sticky;top:12px;}
+.set-side-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#9a958c;padding:8px 10px 10px;}
+.set-side-item{display:block;width:100%;text-align:left;background:none;border:0;border-radius:9px;padding:10px 12px;font-family:inherit;font-size:13.5px;color:#2D2D2D;cursor:pointer;margin-bottom:2px;line-height:1.3;}
+.set-side-item:hover{background:#f5f4f1;}
+.set-side-item.on{background:#EF9F27;color:#412402;font-weight:700;}
+.set-main{flex:1;min-width:0;}
+.set-main .set-panel-h{font-size:20px;font-weight:700;color:#2D2D2D;margin:2px 0 14px;padding-bottom:12px;border-bottom:0.5px solid rgba(0,0,0,.1);}
+.set-main .set-group{display:none;}
+@media(max-width:760px){
+  .set-shell{flex-direction:column;}
+  .set-sidebar{position:static;width:100%;flex:none;display:flex;flex-wrap:wrap;gap:5px;}
+  .set-side-title{width:100%;padding:2px 4px 4px;}
+  .set-side-item{width:auto;font-size:12.5px;padding:7px 12px;border:0.5px solid rgba(0,0,0,.12);margin:0;}
+}
 /* Reconciliation */
 .rec-tgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
 @media(max-width:700px){.rec-tgrid{grid-template-columns:1fr;}}
@@ -978,7 +994,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c64</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c65</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1893,7 +1909,21 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
     <div id="t-settings" class="hidden">
       <button class="btn btn-s" onclick="showTab('dash',document.getElementById('n0'))" style="margin-bottom:12px;">← Back to dashboard</button>
       <p class="st">Settings</p>
+      <div class="set-shell">
+        <nav class="set-sidebar" id="set-sidebar">
+          <div class="set-side-title">Company settings</div>
+          <button class="set-side-item" id="setnav-company" data-cat="company" onclick="openSetCat('company')">Company details</button>
+          <button class="set-side-item" id="setnav-setup" data-cat="setup" onclick="openSetCat('setup')">Setup — projects, users, rates</button>
+          <button class="set-side-item" id="setnav-billing" data-cat="billing" onclick="openSetCat('billing')">Plan &amp; billing</button>
+          <button class="set-side-item" id="setnav-signing" data-cat="signing" onclick="openSetCat('signing')">Copies on signing</button>
+          <button class="set-side-item" id="setnav-defaults" data-cat="defaults" onclick="openSetCat('defaults')">Docket defaults</button>
+          <button class="set-side-item" id="setnav-alerts" data-cat="alerts" onclick="openSetCat('alerts')">Dashboard &amp; alerts</button>
+          <button class="set-side-item" id="setnav-team" data-cat="team" onclick="openSetCat('team')">Team &amp; workflow</button>
+          <button class="set-side-item" id="setnav-data" data-cat="data" onclick="openSetCat('data')">Data</button>
+        </nav>
+        <div class="set-main">
 
+      <section class="set-panel" data-cat="setup"><h2 class="set-panel-h">Setup</h2>
       <!-- SETUP HUB — the areas that used to sit in the top nav -->
       <div class="set-group" id="set-group-setup" style="display:none;">Setup</div>
       <div class="card" id="setup-hub" style="margin-top:4px;display:none;">
@@ -1911,6 +1941,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         </div>
       </div>
 
+      </section>
+
+      <section class="set-panel" data-cat="company"><h2 class="set-panel-h">Company details</h2>
       <div class="set-group">Company &amp; branding</div>
       <div class="card">
         <p style="font-size:13px;font-weight:500;margin-bottom:14px;">🏢 Company details</p>
@@ -1949,6 +1982,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <div id="settings-preview" style="border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:14px;background:#fafaf8;"></div>
       </div>
 
+      </section>
+
+      <section class="set-panel" data-cat="billing"><h2 class="set-panel-h">Plan &amp; billing</h2>
       <!-- SUBSCRIPTION & BILLING (Main Administrator only) -->
       <div class="set-group" id="set-group-billing" style="display:none;">Subscription &amp; billing</div>
       <div class="card" id="subscription-card" style="margin-top:4px;display:none;">
@@ -1984,6 +2020,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <p style="font-size:11px;color:#9a958c;margin:12px 0 0;line-height:1.5;">Choosing a plan here saves your selection. <strong>No card is charged yet</strong> — real payments and invoices go live with the Docketbook cloud backend (via Stripe).</p>
       </div>
 
+      </section>
+
+      <section class="set-panel" data-cat="signing"><h2 class="set-panel-h">Copies on signing</h2>
       <div class="card" style="margin-top:4px;">
         <p style="font-size:13px;font-weight:500;margin-bottom:4px;">✉️ Copies on signing</p>
         <p style="font-size:12px;color:#888;margin-bottom:14px;">Choose who receives a copy when a docket is signed. (Automatic sending is enabled once the cloud backend is live; until then these prepare a one-tap email.)</p>
@@ -2012,6 +2051,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         </div>
       </div>
 
+      </section>
+
+      <section class="set-panel" data-cat="defaults"><h2 class="set-panel-h">Docket defaults</h2>
       <div class="set-group" id="set-group-defaults" style="display:none;">Docket defaults</div>
       <div class="card" id="company-defaults-card" style="margin-top:4px;display:none;">
         <p style="font-size:13px;font-weight:500;margin-bottom:4px;">⚙️ Company defaults <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
@@ -2035,6 +2077,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <p style="font-size:11px;color:#aaa;margin:10px 0 0;">Note: saved on this device. Company-wide sync across everyone’s devices arrives with the cloud backend.</p>
       </div>
 
+      </section>
+
+      <section class="set-panel" data-cat="alerts"><h2 class="set-panel-h">Dashboard &amp; alerts</h2>
       <div class="set-group" id="set-group-alerts" style="display:none;">Dashboard &amp; alerts</div>
       <div class="card" id="flash-settings-card" style="margin-top:4px;display:none;">
         <p style="font-size:13px;font-weight:500;margin-bottom:4px;">🔔 Dashboard alerts <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
@@ -2053,6 +2098,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         </div>
       </div>
 
+      </section>
+
+      <section class="set-panel" data-cat="team"><h2 class="set-panel-h">Team &amp; workflow</h2>
       <div class="set-group" id="set-group-team" style="display:none;">Team &amp; workflow</div>
       <div class="card" id="reqby-settings-card" style="margin-top:4px;display:none;">
         <p style="font-size:13px;font-weight:500;margin-bottom:4px;">🧑‍💼 “Requested by” options <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
@@ -2079,6 +2127,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <div id="queryresolve-ok" class="ok hidden" style="margin-top:10px;">Saved.</div>
       </div>
 
+      </section>
+
+      <section class="set-panel" data-cat="data"><h2 class="set-panel-h">Data</h2>
       <div class="set-group" id="set-group-data" style="display:none;">Data</div>
       <div class="card" id="sampledata-card" style="margin-top:4px;display:none;border-color:#F2D9A8;background:#FFFBF5;">
         <p style="font-size:13px;font-weight:500;margin-bottom:4px;">🧹 Sample data <span style="font-size:11px;color:#aaa;font-weight:400;">— admin only</span></p>
@@ -2087,7 +2138,10 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <button class="btn" onclick="clearSampleData()" style="background:#fff;border:1px solid #c0403a;color:#c0403a;font-weight:600;">Clear sample dockets</button>
         <div id="sampledata-ok" class="ok hidden" style="margin-top:10px;">Sample dockets removed.</div>
       </div>
+      </section>
 
+        </div><!-- /.set-main -->
+      </div><!-- /.set-shell -->
     </div>
 
 
@@ -3063,7 +3117,7 @@ function showTab(tab,btn){
   if(tab==='subs')renST();
   if(tab==='proj'){renPT();renClientSelects();}
   if(tab==='clients')renClientList();
-  if(tab==='settings'){loadSettingsForm();renSettingsPreview();renFlashSettings();renReqBySettings();renSampleDataCard();renQueryResolveSettings();renCompanyDefaults();renSettingsGroups();renSubscription();}
+  if(tab==='settings'){loadSettingsForm();renSettingsPreview();renFlashSettings();renReqBySettings();renSampleDataCard();renQueryResolveSettings();renCompanyDefaults();renSettingsGroups();renSubscription();initSettingsNav();}
   if(tab==='drafts')renDrafts();
   if(tab==='ready')renReady();
   if(tab==='rates'){renRatesSelects();renRatesTable();}
@@ -6766,6 +6820,24 @@ function renSettingsGroups(){
   ['set-group-defaults','set-group-alerts','set-group-team','set-group-data','set-group-setup','setup-hub'].forEach(id=>{
     const e=document.getElementById(id);if(e)e.style.display=isAdm?'':'none';
   });
+  // Sidebar categories — admin sees the setup/defaults/alerts/team/data areas.
+  ['setnav-company','setnav-signing','setnav-setup','setnav-defaults','setnav-alerts','setnav-team','setnav-data'].forEach(id=>{
+    const e=document.getElementById(id);if(e)e.style.display=isAdm?'':'none';
+  });
+  // (Plan & billing is owner-only — toggled by renSubscription.)
+}
+// Settings categories: show one panel at a time, driven by the sidebar.
+let _curSetCat='company';
+function openSetCat(cat){
+  _curSetCat=cat;
+  document.querySelectorAll('#t-settings .set-panel').forEach(p=>p.classList.toggle('hidden',p.getAttribute('data-cat')!==cat));
+  document.querySelectorAll('#set-sidebar .set-side-item').forEach(b=>b.classList.toggle('on',b.getAttribute('data-cat')===cat));
+}
+function initSettingsNav(){
+  const items=[...document.querySelectorAll('#set-sidebar .set-side-item')].filter(b=>b.style.display!=='none');
+  const visCats=items.map(b=>b.getAttribute('data-cat'));
+  const cat=visCats.includes(_curSetCat)?_curSetCat:(visCats[0]||'company');
+  openSetCat(cat);
 }
 // The Users area — access accounts for those who can allocate access, else the
 // worker roster (standard admins).
@@ -6793,6 +6865,7 @@ function renSubscription(){
   const show=!!(CU&&CU.role==='admin'&&isOwner());
   const grp=document.getElementById('set-group-billing');if(grp)grp.style.display=show?'':'none';
   const card=document.getElementById('subscription-card');if(card)card.style.display=show?'':'none';
+  const navB=document.getElementById('setnav-billing');if(navB)navB.style.display=show?'':'none';
   if(!show)return;
   const gstTxt=DLB_GST_MODE==='inc'?'inc. GST':'+ GST';
   const cur=planOf();
