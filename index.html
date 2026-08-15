@@ -59,6 +59,29 @@ body{font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-seri
   .set-side-item{width:auto;font-size:12.5px;padding:7px 12px;border:0.5px solid rgba(0,0,0,.12);margin:0;}
 }
 /* Reconciliation */
+/* Docket matching (reconciliation) */
+.rec-msec{margin-bottom:18px;}
+.rec-mhead{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#2D2D2D;margin-bottom:8px;}
+.rec-mhead span{color:#9a958c;font-weight:600;letter-spacing:0;text-transform:none;}
+.rec-mallclear{background:#F3FBF7;border:.5px solid #C7E9D9;color:#0F6E56;border-radius:12px;padding:14px 16px;font-size:13px;font-weight:600;}
+.rec-mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:760px){.rec-mgrid{grid-template-columns:1fr;}}
+.rec-mcard{background:#fff;border:.5px solid rgba(0,0,0,.1);border-radius:12px;padding:13px 15px;border-left:3px solid #ccc;}
+.rec-mcard.warn{border-left-color:#B9770E;} .rec-mcard.orph{border-left-color:#D24A44;}
+.rec-mhd{display:flex;align-items:center;gap:8px;}
+.rec-mic{font-size:14px;}
+.rec-mt{font-size:12.5px;font-weight:700;color:#2D2D2D;flex:1;}
+.rec-mcount{font-size:16px;font-weight:800;color:#2D2D2D;}
+.rec-mcard.warn .rec-mcount{color:#B9770E;} .rec-mcard.orph .rec-mcount{color:#D24A44;}
+.rec-msub{font-size:11px;color:#8a877f;line-height:1.45;margin:4px 0 8px;}
+.rec-mbody{display:flex;flex-direction:column;}
+.rec-mrow{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:.5px solid rgba(0,0,0,.06);cursor:pointer;font-size:12px;}
+.rec-mrow:hover .rec-mnm{text-decoration:underline;}
+.rec-mrow .dn{font-weight:700;white-space:nowrap;}
+.rec-mnm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rec-mmeta{color:#9a958c;white-space:nowrap;font-size:11px;}
+.rec-mgo{color:#17568C;font-weight:700;white-space:nowrap;font-size:11px;}
+.rec-mempty{font-size:12px;color:#1D9E75;padding:4px 0;}
 .rec-tgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
 @media(max-width:700px){.rec-tgrid{grid-template-columns:1fr;}}
 .rec-tcard{background:#fff;border:.5px solid rgba(0,0,0,.1);border-radius:12px;padding:14px 16px;border-left:3px solid #ccc;}
@@ -1030,7 +1053,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c77</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c78</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1864,6 +1887,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <option value="">All statuses</option><option value="open">Outstanding only</option><option value="done">Fully reconciled</option>
         </select>
       </div>
+      <div id="rec-match"></div>
       <div id="rec-totals"></div>
       <div id="rec-list"></div>
     </div>
@@ -10186,10 +10210,39 @@ function recFullyDone(d){
   if(!legs.length)return true;
   return legs.every(l=>l.status==='paid');
 }
+function renRecMatch(){
+  const host=document.getElementById('rec-match');if(!host)return;
+  const proj=(document.getElementById('rec-proj')||{}).value||'';
+  const range=(document.getElementById('rec-range')||{}).value||'all';
+  const inScope=d=>(!proj||d.pcode===proj)&&adxInRange(d.date,range);
+  const hasSent=d=>(dockets||[]).some(y=>y.refSubDocketId===d.id);
+  // Chargeable Received dockets, signed, with NO Sent docket raised = money that
+  // may never reach the client. Orphan Sent dockets = source Received docket gone.
+  const missing=(dockets||[]).filter(d=>!isUpChainDocket(d)&&inScope(d)&&d.bill==='ch'&&d.sig&&!hasSent(d));
+  const orphans=(dockets||[]).filter(d=>isUpChainDocket(d)&&inScope(d)&&d.refSubDocketId&&!(dockets||[]).some(y=>y.id===d.refSubDocketId));
+  const row=(d,meta)=>`<div class="rec-mrow" onclick="vD('${d.id}')"><span class="dn">#${esc(d.id)}</span><span class="rec-mnm">${esc(d.pname||d.pcode||'')} — ${esc(d.sub||'')}</span><span class="rec-mmeta">${fd(d.date)} · ${d.hours||0}h${meta?' · '+meta:''}</span><span class="rec-mgo">Open →</span></div>`;
+  const sub=(cls,ic,title,note,items,empty)=>`
+    <div class="rec-mcard ${cls}">
+      <div class="rec-mhd"><span class="rec-mic">${ic}</span><span class="rec-mt">${title}</span><span class="rec-mcount">${items.length}</span></div>
+      <div class="rec-msub">${note}</div>
+      ${items.length?`<div class="rec-mbody">${items.map(d=>row(d,d.bill==='ch'?'Chargeable':'')).join('')}</div>`:`<div class="rec-mempty">${empty}</div>`}
+    </div>`;
+  const clean=!missing.length&&!orphans.length;
+  host.innerHTML=`
+    <div class="rec-msec">
+      <div class="rec-mhead">Docket matching <span>· Received ↔ Sent reconciliation</span></div>
+      ${clean?`<div class="rec-mallclear">✓ All matched — every chargeable Received docket has a Sent docket, and every Sent docket has its source. Nothing missing up the chain.</div>`
+        :`<div class="rec-mgrid">
+          ${sub('warn','⚠','Not yet raised to the client','Chargeable Received dockets that are signed but not yet sent up — potential income not yet claimed.',missing,'None — all chargeable received dockets have been raised.')}
+          ${sub('orph','⛓','Sent dockets missing their source','Sent dockets whose original Received docket cannot be found (deleted?).',orphans,'None — every sent docket links to a received one.')}
+        </div>`}
+    </div>`;
+}
 function renReconcile(){
   if(!(CU&&CU.role==='admin'))return;
   const pf=document.getElementById('rec-proj');
   if(pf&&pf.options.length<=1){pf.innerHTML='<option value="">All projects</option>'+projects.map(p=>`<option value="${esc(p.code)}">${esc(p.name)}</option>`).join('');}
+  renRecMatch();
   const statusF=(document.getElementById('rec-status')||{}).value||'';
   let list=recDocs();
   if(statusF==='open')list=list.filter(d=>!recFullyDone(d));
