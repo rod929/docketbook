@@ -1056,7 +1056,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c85</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c86</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -4605,6 +4605,9 @@ function saveVdSign(id){
   d.sigStatus='signed';
   d.signToken=null;
   d.signedAt=new Date().toISOString();
+  // Capture any supervisor note added at signing (billing hint for the office,
+  // e.g. "backcharge to the plumber"). Money-free, so it respects the money rule.
+  {const noteEl=document.getElementById('vd-sup-note');if(noteEl)d.supervisorNote=noteEl.value.trim();}
   // If a supervisor (or admin) is signing a docket that belongs to a DIFFERENT
   // company, route it into the Pending-billing folder for them + company admin.
   const myCompany=(appSettings.name||'').toLowerCase();
@@ -5082,6 +5085,10 @@ function vD(id){
       <strong>${isSubDocket?'Sign this subcontractor docket':(alreadySent?'Sign on site instead':'Sign on screen now')}</strong>
       <p style="margin:4px 0 8px;font-size:12px;">${isSubDocket?'This docket was sent to you by '+esc(d.sub||'the subcontractor')+' to sign. Capture your signature below, then set the billing.':'Get the client or supervisor to sign here directly.'}</p>
       <div class="sig-wrap"><canvas id="vd-sign-canvas" style="width:100%;height:180px;border:2px solid #17568C;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas><div id="vd-sign-lock" class="sig-lock" onclick="armSig('vd-sign-lock')"><span>✍️ Tap here to sign<small>pad is locked until you tap</small></span></div></div>
+      ${!isUpChainDocket(d)?`<div style="margin-top:10px;">
+        <label style="font-size:11px;color:#854F0B;text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:4px;">Supervisor note <span style="text-transform:none;color:#8a877f;font-weight:400;">(optional — for the office)</span></label>
+        <textarea id="vd-sup-note" placeholder="e.g. to be backcharged to the plumber" style="width:100%;min-height:52px;font-size:13px;">${esc(d.supervisorNote||'')}</textarea>
+      </div>`:''}
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
         <button class="btn btn-s" onclick="clearVdSign()">Clear</button>
         <button class="btn btn-s btn-p" style="background:#1D9E75;border-color:#1D9E75;" onclick="saveVdSign('${d.id}')">✓ Save signature</button>
@@ -5218,6 +5225,10 @@ function showSignForm(d){
         <button class="btn btn-s" onclick="clrRemoteSig()">Clear</button>
         <span id="remote-ss" style="font-size:12px;color:#aaa;">No signature yet</span>
       </div>
+      ${!isUpChainDocket(d)?`<div style="margin-top:12px;">
+        <label style="font-size:11px;color:#854F0B;text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:4px;">Supervisor note <span style="text-transform:none;color:#8a877f;font-weight:400;">(optional — for the office)</span></label>
+        <textarea id="remote-sup-note" placeholder="e.g. to be backcharged to the plumber" style="width:100%;min-height:52px;font-size:13px;">${esc(d.supervisorNote||'')}</textarea>
+      </div>`:''}
     </div>
     <div id="sign-err" class="err hidden" style="margin-bottom:8px;"></div>
     <div style="display:flex;gap:10px;">
@@ -5259,6 +5270,9 @@ function submitRemoteSig(dockId,token){
   d.signToken=null;
   d.signedAt=new Date().toISOString();
   d.signedLater=true;
+  // Capture any supervisor note added on the signing page (billing hint for the
+  // office, e.g. "backcharge to the plumber"). Money-free.
+  {const noteEl=document.getElementById('remote-sup-note');if(noteEl)d.supervisorNote=noteEl.value.trim();}
   // Signed after the fact (not on site), so billing was never chosen. Keep the
   // docket in the pending-billing flow and prompt whoever submitted it to pick
   // chargeable / backcharge / own cost — same decision the on-site flow forces.
