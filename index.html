@@ -1056,7 +1056,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c88</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c89</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -2924,6 +2924,21 @@ function seedTrialData(){
       svL('v4_ctr',ctr);svL('v4_dock',dockets);
     }
     svL('dlb_demo_ri',1);
+  }
+  // One-time: a couple of UNSIGNED received dockets so the sign-on-site flow can
+  // be tried end to end (open → sign on the pad → prompted for a note → set
+  // billing). Re-seed on demand by bumping the key below.
+  if(!ldL('dlb_demo_signtest_v2')){
+    let ctr=parseInt(ldL('v4_ctr')||(dockets.length+1),10);
+    const nid=()=>{const s=String(ctr).padStart(4,'0');ctr++;return s;};
+    const _td=new Date().toISOString().slice(0,10);
+    const base={freeDocket:false,demoExtra:true,date:_td,reqBy:'Site Manager',reqHow:'Site Instruction',siNumber:null,po:null,photos:[],materials:[],accommodation:null,refSubDocketId:null,signerRole:'hc_supervisor',signerName:'',startTime:'07:00',finishTime:'15:00',breakMins:30,rate:0,cost:null,bcTarget:'',notes:'',supervisorNote:'',sig:null,sigStatus:'pending',sendEmail:'',sendSms:'',clientId:'ctrial',contactId:'ctc1',createdAt:new Date().toISOString()};
+    const mkw=(h)=>[{name:'',hours:h,start:'07:00',finish:'15:00',primary:true,trade:''}];
+    dockets.push(
+      Object.assign({},base,{id:nid(),pcode:'MAR-AP',pname:'Marina Apartments',sub:'Apex Tiling',hours:8,workersOnSite:mkw(8),bill:'pending',desc:'TEST — floor tiling, ready to sign on site.',signToken:'testtok-a',createdBy:'tileco'}),
+      Object.assign({},base,{id:nid(),pcode:'HV-T1',pname:'Harbourview Tower — Stage 1',sub:'Coastline Painting',hours:9,workersOnSite:mkw(9),bill:'pending',desc:'TEST — first fix painting, ready to sign on site.',signToken:'testtok-b',createdBy:'coastline'})
+    );
+    svL('v4_ctr',ctr);svL('v4_dock',dockets);svL('dlb_demo_signtest_v2',1);
   }
 }
 
