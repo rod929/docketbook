@@ -1056,7 +1056,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c84</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c85</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -3120,6 +3120,9 @@ function doLogout(){
 function initApp(){
   load();loadSettings();loadRates();loadCRates();loadUsers();loadDrafts();loadReady();
   seedTrialData();
+  // A client (up-chain) docket is always chargeable — heal any left on 'pending'
+  // billing (e.g. created before this rule) so they don't sit in Pending billing.
+  {let _fixB=false;(dockets||[]).forEach(d=>{if(isUpChainDocket(d)&&(!d.bill||d.bill==='pending')){d.bill='ch';_fixB=true;}});if(_fixB)svL('v4_dock',dockets);}
   ensureSettingsClientExists();
   setDD();initSig();setBill('ch');setSigMethod('onsite');
   renPS();renClientSelects();updM();renRD();renPT();renAD();renMD();renST();renClientList();renFD();applySettingsToHeader();lockSubClient();loadReqByStaff();updDraftBadge();updReadyBadge();initVoiceButtons();
@@ -4926,22 +4929,21 @@ function vD(id){
       ${d.supervisorNote?`<div style="grid-column:span 2"><span style="color:#854F0B;font-size:11px;display:block;margin-bottom:2px;">Supervisor note</span>${esc(d.supervisorNote)}</div>`:''}
       ${(()=>{
         const ws=d.workersOnSite||[];
-        const primaryName=d.workerName||(ws[0]&&ws[0].name)||'';
-        if(!ws.length&&!primaryName)return'';
-        if(ws.length<=1){
-          // Single worker docket — just show who filled it out. Names are optional,
-          // so a blank name shows as "Worker 1" rather than the worker's real name.
-          const disp=primaryName||'Worker 1';
-          return `<div style="grid-column:span 2"><span class="vdk">Filled out by</span><strong>${esc(disp)}</strong>${ws[0]&&ws[0].trade?` <span style="color:#aaa;font-weight:400;font-size:12px;">· ${esc(ws[0].trade)}</span>`:''}</div>`;
-        }
-        const totalH=ws.reduce((s,w)=>s+(parseFloat(w.hours)||0),0);
-        const rows=ws.map((w,i)=>{
+        // Who filled the docket out (supervisor on a client docket; else the worker).
+        const filledBy=d.workerName||(ws[0]&&ws[0].name)||'';
+        // The crew who did the labour — ALWAYS listed (unnamed → "Worker N"), even
+        // for a single worker. Fall back to one row from the docket hours if there
+        // is no crew array (older dockets).
+        const crew=ws.length?ws:(d.hours?[{name:filledBy,hours:d.hours,trade:(ws[0]&&ws[0].trade)||'',primary:true}]:[]);
+        if(!crew.length&&!filledBy)return'';
+        const filledRow=filledBy?`<div style="grid-column:span 2"><span class="vdk">Filled out by</span><strong>${esc(filledBy)}</strong></div>`:'';
+        const totalH=crew.reduce((s,w)=>s+(parseFloat(w.hours)||0),0);
+        const rows=crew.map((w,i)=>{
           const nm=w.name&&w.name.trim()?esc(w.name):('Worker '+(i+1));
-          const flag=w.primary?' <span class="badge bs" style="font-size:10px;">filled out</span>':'';
-          return`<tr><td style="padding:4px 6px;">${nm}${flag}</td><td style="padding:4px 6px;color:#888;">${w.trade?esc(w.trade):'—'}</td><td style="padding:4px 6px;text-align:right;">${w.hours?w.hours+'h':'—'}</td></tr>`;
+          return`<tr><td style="padding:4px 6px;">${nm}</td><td style="padding:4px 6px;color:#888;">${w.trade?esc(w.trade):'—'}</td><td style="padding:4px 6px;text-align:right;">${w.hours?w.hours+'h':'—'}</td></tr>`;
         }).join('');
-        return`<div style="grid-column:span 2">
-          <span style="color:#888;font-size:11px;display:block;margin-bottom:6px;">Workers on site (${ws.length})</span>
+        return`${filledRow}<div style="grid-column:span 2">
+          <span style="color:#888;font-size:11px;display:block;margin-bottom:6px;">Workers on site (${crew.length})</span>
           <table style="width:100%;font-size:12px;border-collapse:collapse;">
             <thead><tr><th style="text-align:left;color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);">Worker</th><th style="text-align:left;color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);">Trade</th><th style="text-align:right;color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);">Hours</th></tr></thead>
             <tbody>${rows}</tbody>
@@ -5026,7 +5028,7 @@ function vD(id){
         ?`<img src="${d.sig}" style="width:100%;border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;max-height:110px;object-fit:contain;background:#f9f9f9;">${d.signerName?`<p style="font-size:12px;color:#2D2D2D;margin-top:6px;text-align:center;">Signed by <strong>${esc(d.signerName)}</strong></p>`:''}`
         :'<span style="color:#aaa;font-size:12px;">Not signed yet</span>'}
     </div>
-    ${CU&&CU.role!=='sub'?`
+    ${CU&&CU.role!=='sub'&&!isUpChainDocket(d)?`
     <div style="border-top:0.5px solid rgba(0,0,0,0.1);padding-top:12px;margin-top:12px;">
       <p style="font-size:12px;font-weight:500;color:#1a1a1a;margin-bottom:10px;">Billing type</p>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -5061,19 +5063,23 @@ function vD(id){
     // (signerRole 'client') keep the send-for-signature option.
     const _sr=d.signerRole||'';
     const isSubDocket=(_sr==='hc'||_sr==='hc_supervisor')&&!d.refSubDocketId;
+    // Has the signing link already gone out? If so, note it and offer a re-send.
+    const alreadySent=(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms');
+    const sentNote=alreadySent?`<div style="background:#E7F3EC;border:0.5px solid #BFE3CE;border-radius:8px;padding:8px 10px;font-size:12px;color:#0F6E56;margin-bottom:10px;">✅ Signing link already ${d.sigStatus==='sent_sms'?'texted':'emailed'}${d.sendEmail?' to <strong>'+esc(d.sendEmail)+'</strong>':''}. Re-send it below, or get them to sign on screen now.</div>`:'';
     const sendBlock=isSubDocket?'':`
       <div style="margin-top:12px;padding-top:10px;border-top:0.5px solid rgba(0,0,0,0.1);">
-        <strong>Or send for signature</strong>
+        <strong>${alreadySent?'Re-send for signature':'Or send for signature'}</strong>
         <p style="margin:4px 0 8px;font-size:12px;">Email the signing link to the client or supervisor.</p>
         <input type="email" id="send-link-email" value="${esc(presetEmail)}" placeholder="recipient@company.com" style="margin-bottom:8px;">
-        <button class="btn btn-s btn-p" style="width:100%;" onclick="emailSignLink('${d.id}','${d.signToken}')">📧 Email signing link</button>
+        <button class="btn btn-s btn-p" style="width:100%;" onclick="emailSignLink('${d.id}','${d.signToken}')">📧 ${alreadySent?'Re-send signing link':'Email signing link'}</button>
         <div style="margin-top:8px;">
           <a href="${signLink}" target="_blank" style="color:#17568C;word-break:break-all;font-size:11px;">${signLink}</a>
           <button class="btn btn-s" style="margin-top:6px;display:block;" onclick="copyLink('${signLink}')">📋 Copy link</button>
         </div>
       </div>`;
     slb.innerHTML=`<div style="background:#E6F1FB;border-radius:8px;padding:12px 14px;font-size:13px;color:#0A3A66;">
-      <strong>${isSubDocket?'Sign this subcontractor docket':'Sign on screen now'}</strong>
+      ${sentNote}
+      <strong>${isSubDocket?'Sign this subcontractor docket':(alreadySent?'Sign on site instead':'Sign on screen now')}</strong>
       <p style="margin:4px 0 8px;font-size:12px;">${isSubDocket?'This docket was sent to you by '+esc(d.sub||'the subcontractor')+' to sign. Capture your signature below, then set the billing.':'Get the client or supervisor to sign here directly.'}</p>
       <div class="sig-wrap"><canvas id="vd-sign-canvas" style="width:100%;height:180px;border:2px solid #17568C;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas><div id="vd-sign-lock" class="sig-lock" onclick="armSig('vd-sign-lock')"><span>✍️ Tap here to sign<small>pad is locked until you tap</small></span></div></div>
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
@@ -11664,11 +11670,14 @@ function submitFromReview(){
   }
   err.classList.add('hidden');
 
-  // Defer billing to the internal Pending billing folder — never on the signing
-  // screen. Mark the docket pending so the office assigns chargeable / backcharge
-  // / own cost afterwards.
-  bill='pending';
-  window._deferBilling=true;
+  // Received dockets defer billing to the internal Pending billing folder — the
+  // office assigns chargeable / backcharge / own cost after signing. But a CLIENT
+  // (up-chain) docket is chargeable by definition, so never defer its billing.
+  if(window._refSubDocketId){
+    bill='ch';window._deferBilling=false;
+  } else {
+    bill='pending';window._deferBilling=true;
+  }
 
   // Copy sig data to main form fields then submit
   // Override sigMethod + sigHas for submitD
