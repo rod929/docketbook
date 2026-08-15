@@ -913,6 +913,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .dl-card .l1{font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
 .dl-card .l2{font-size:11.5px;color:#8a877f;margin-top:4px;display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
 .dl-card .l3{margin-top:8px;}
+.dl-sup{font-size:12px;color:#476381;font-weight:600;white-space:nowrap;}
+.dl-card .l-sup{margin-top:5px;}
+.dl-supchip{display:inline-block;font-size:11px;font-weight:600;color:#476381;background:#EAF2FB;border:.5px solid #C9DDF1;border-radius:20px;padding:2px 9px;}
 @media(max-width:720px){
   #t-md .tw{display:none;}
   #t-md .dl-cards{display:block;}
@@ -1053,7 +1056,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c78</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c79</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -3920,11 +3923,21 @@ function dlBillText(d){
 function dlTabsHTML(fn,base,cur){
   return DL_TABS.map(t=>{const c=t.k==='all'?base.length:base.filter(t.m).length;return `<button class="${cur===t.k?'on':''}" onclick="${fn}('${t.k}')">${t.t}<span class="c">${c}</span></button>`;}).join('');
 }
-function dlTableRows(list,money){
+// The supervisor responsible for a docket: who signed it, else who created it if
+// they're a supervisor, else the supervisor(s) allocated to its project.
+function docketSupName(d){
+  const uid=d.signedBySupervisor||(()=>{const u=(users||[]).find(x=>x.u===d.createdBy&&x.role==='hc_supervisor');return u&&u.u;})();
+  if(uid){const u=(users||[]).find(x=>x.u===uid);if(u)return esc(u.name||u.u);}
+  const sups=(users||[]).filter(u=>u.role==='hc_supervisor'&&(u.projectAccess||[]).includes(d.pcode));
+  if(sups.length)return esc(sups.map(s=>s.name||s.u).join(', '));
+  return '<span class="dl-muted">—</span>';
+}
+function dlTableRows(list,money,showSup){
   return list.map(d=>`<tr onclick="vD('${d.id}')" style="cursor:pointer;">
     <td class="dl-no">${dlDir(d)}#${d.id}</td>
     <td>${dlProjTag(d.pcode)}</td>
     <td>${esc(d.sub||'—')}</td>
+    ${showSup?`<td class="dl-sup">${docketSupName(d)}</td>`:''}
     <td class="dl-muted">${fd(d.date)}</td>
     <td>${d.hours?d.hours+'h':'—'}</td>
     ${money?`<td>${calcC(d)!=null?fc(calcC(d)):'<span class="dl-muted" style="font-size:11px;">—</span>'}</td>`:''}
@@ -3933,10 +3946,11 @@ function dlTableRows(list,money){
     <td class="r"><button class="btn btn-s btn-view" onclick="event.stopPropagation();vD('${d.id}')">View</button></td>
   </tr>`).join('');
 }
-function dlCards(list,money){
+function dlCards(list,money,showSup){
   return list.map(d=>`<div class="dl-card" onclick="vD('${d.id}')">
     <div class="l1">${dlDir(d)}#${d.id} <span>${esc(d.sub||'—')}</span></div>
     <div class="l2">${dlProjTag(d.pcode)} ${fd(d.date)} · ${d.hours||0}h · ${dlBillText(d)}${money&&calcC(d)!=null?' · '+fc(calcC(d)):''}</div>
+    ${showSup?`<div class="l-sup"><span class="dl-supchip">👤 ${docketSupName(d)}</span></div>`:''}
     <div class="l3">${dlStatusHTML(d)}</div>
   </div>`).join('');
 }
@@ -4054,7 +4068,7 @@ function renAD(){
   if(adThead){
     adThead.innerHTML=isAdm
       ? `<tr><th></th><th>#</th><th>Project</th><th>Date</th><th>Subcontractor</th><th>Client contact</th><th>Hrs</th><th id="ad-th-cost">Cost</th><th>Billing</th><th>Status</th><th></th></tr>`
-      : `<tr><th>#</th><th>Project</th><th>Company</th><th>Date</th><th>Hrs</th><th>Billing</th><th>Status</th><th></th></tr>`;
+      : `<tr><th>#</th><th>Project</th><th>Company</th><th>Supervisor</th><th>Date</th><th>Hrs</th><th>Billing</th><th>Status</th><th></th></tr>`;
   }
   if(!isAdm){
     // Clean supervisor list — refined layout (tabs + dot statuses), money-free,
@@ -4090,8 +4104,8 @@ function renAD(){
       if(cardsEl)cardsEl.innerHTML='<div style="text-align:center;color:#aaa;padding:22px;font-size:13px;">'+msg+'</div>';
       return;
     }
-    tb.innerHTML=dlTableRows(rows,false);
-    if(cardsEl)cardsEl.innerHTML=dlCards(rows,false);
+    tb.innerHTML=dlTableRows(rows,false,true);
+    if(cardsEl)cardsEl.innerHTML=dlCards(rows,false,true);
     return;
   }
   // Admin path — hide the supervisor-only tabs/cards, keep the full table + tools.
