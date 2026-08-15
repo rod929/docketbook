@@ -868,6 +868,12 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-box.sv2-flash .sv2-bv{color:#C0392B;}
 .sv2-box.sv2-flash .sv2-bl{color:#8A1F19;}
 @media(prefers-reduced-motion:reduce){.sv2-box.sv2-flash{animation:none;}}
+/* Neutral filled flash — routine "action needed" boxes (my signature / bill
+   allocation) draw the eye when outstanding, without Create's red urgency. */
+.sv2-box.sv2-flash-neutral{background:#EDF0F4;border:1.5px solid #64748B;animation:sv2BoxFlash 1.25s ease-in-out infinite;}
+.sv2-box.sv2-flash-neutral .sv2-bv{color:#475569;}
+.sv2-box.sv2-flash-neutral .sv2-bl{color:#475569;}
+@media(prefers-reduced-motion:reduce){.sv2-box.sv2-flash-neutral{animation:none;}}
 /* Days-outstanding ageing line — pinned to the bottom of every box so they all
    line up at the same height regardless of how many lines the label takes. */
 .sv2-age{font-size:9.5px;font-weight:600;color:#9a9a93;line-height:1;margin-top:auto;padding-top:6px;}
@@ -1056,7 +1062,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c93</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c94</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1114,8 +1120,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <!-- SUBCONTRACTOR — day-labour dockets received from our subcontractors -->
           <div class="sv2-sec-head sec-sub"><span class="sv2-sec-ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" style="display:block"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span id="sv2h-sub">Subcontractor</span></div>
           <div class="sv2-boxrow">
-            <div class="sv2-box sv2-b-red" onclick="supKpiOpen('awaiting_my_sig','sub')"><div class="sv2-bv" id="sv2b-sign">0</div><div class="sv2-bl" id="sv2l-sign">Awaiting my signature</div></div>
-            <div class="sv2-box sv2-b-amber" onclick="supKpiOpen('needs_billing','sub')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl" id="sv2l-bill">Awaiting bill allocation</div></div>
+            <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('awaiting_my_sig','sub')"><div class="sv2-bv" id="sv2b-sign">0</div><div class="sv2-bl" id="sv2l-sign">Awaiting my signature</div></div>
+            <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('needs_billing','sub')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl" id="sv2l-bill">Awaiting bill allocation</div></div>
             <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried','sub')"><div class="sv2-bv" id="sv2b-inq">0</div><div class="sv2-bl" id="sv2l-inq">Queried by admin</div></div>
             <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('pending_review','sub')"><div class="sv2-bv" id="sv2b-inp">0</div><div class="sv2-bl" id="sv2l-inp">Pending admin review</div></div>
           </div>
@@ -10684,7 +10690,7 @@ function renSupAnalytics(){
 // admin review never flash (they're the admin's job, not the supervisor's).
 const DEFAULT_FLASH_CFG={thresholdDays:2,boxes:{
   create:'instant', cAwait:'delayed', cQ:'never', cP:'never',
-  subSign:'delayed', subBill:'delayed', subQ:'never', subP:'never'
+  subSign:'instant', subBill:'instant', subQ:'never', subP:'never'
 }};
 function getFlashCfg(){
   try{const s=JSON.parse(localStorage.getItem('dlb_flash_cfg')||'null');
@@ -10853,7 +10859,7 @@ function renSupervisorDash(){
   // Paint a box: value + zero-dim + config-driven flash + bottom ageing line.
   const cfg=getFlashCfg();
   const thr=(cfg.thresholdDays!=null?cfg.thresholdDays:2);
-  const setBox=(valId,list,key,{flashFill=false}={})=>{
+  const setBox=(valId,list,key,{flashFill=false,neutral=false}={})=>{
     const e=document.getElementById(valId);if(!e)return;
     const n=list.length;
     e.textContent=n;
@@ -10866,8 +10872,14 @@ function renSupervisorDash(){
       if(mode==='instant')flashOn=true;
       else if(mode==='delayed')flashOn=(days!=null&&days>=thr);
     }
-    // Create uses the filled red treatment; every other box a coloured border.
-    if(flashFill){b.classList.toggle('sv2-flash',flashOn);b.classList.remove('sv2-hot');}
+    // Create uses the filled RED treatment; my-signature / bill-allocation use a
+    // filled NEUTRAL flash; every other box a coloured border.
+    if(flashFill){
+      const fc=neutral?'sv2-flash-neutral':'sv2-flash';
+      b.classList.toggle(fc,flashOn);
+      b.classList.remove(neutral?'sv2-flash':'sv2-flash-neutral');
+      b.classList.remove('sv2-hot');
+    }
     else{b.classList.toggle('sv2-hot',flashOn);}
     // Ageing line (create/reuse the .sv2-age element, pinned to the bottom)
     let age=b.querySelector('.sv2-age');
@@ -10876,7 +10888,7 @@ function renSupervisorDash(){
       age.innerHTML=ageText(days);
     } else if(age){age.innerHTML='';}
   };
-  setBox('sv2b-sign',subSignL,'subSign');setBox('sv2b-bill',subBillL,'subBill');setBox('sv2b-inq',subQL,'subQ');setBox('sv2b-inp',subPL,'subP');
+  setBox('sv2b-sign',subSignL,'subSign',{flashFill:true,neutral:true});setBox('sv2b-bill',subBillL,'subBill',{flashFill:true,neutral:true});setBox('sv2b-inq',subQL,'subQ');setBox('sv2b-inp',subPL,'subP');
   setBox('sv2b-create',cCreateL,'create',{flashFill:true});setBox('sv2b-await',cAwaitL,'cAwait');setBox('sv2b-outq',cQL,'cQ');setBox('sv2b-outp',cPL,'cP');
 
   // ── Analytics (billing split + client approval) ──
