@@ -1056,7 +1056,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c86</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c87</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -4605,9 +4605,6 @@ function saveVdSign(id){
   d.sigStatus='signed';
   d.signToken=null;
   d.signedAt=new Date().toISOString();
-  // Capture any supervisor note added at signing (billing hint for the office,
-  // e.g. "backcharge to the plumber"). Money-free, so it respects the money rule.
-  {const noteEl=document.getElementById('vd-sup-note');if(noteEl)d.supervisorNote=noteEl.value.trim();}
   // If a supervisor (or admin) is signing a docket that belongs to a DIFFERENT
   // company, route it into the Pending-billing folder for them + company admin.
   const myCompany=(appSettings.name||'').toLowerCase();
@@ -4626,13 +4623,20 @@ function saveVdSign(id){
   if(typeof showCorrectDashboard==='function')showCorrectDashboard();
   // Distribute copies per Company-setup settings (signer record copy + admin alerts)
   if(typeof distributeSignedCopies==='function')distributeSignedCopies(d);
-  if(crossCompany){
-    // Signed after being sent (not on the spot) — auto-ask how to bill it.
-    setTimeout(()=>promptPostSignBilling(d.id),250);
-  } else {
-    // Otherwise keep the existing same-company up-chain mirror offer
-    maybePromptUpchainMirror(d);
-  }
+  // The billing / up-chain-mirror follow-up, run AFTER the supervisor note prompt.
+  const followup=()=>{
+    if(crossCompany){
+      // Signed after being sent (not on the spot) — auto-ask how to bill it.
+      setTimeout(()=>promptPostSignBilling(d.id),250);
+    } else {
+      // Otherwise keep the existing same-company up-chain mirror offer
+      maybePromptUpchainMirror(d);
+    }
+  };
+  // As soon as a RECEIVED docket is signed, prompt the supervisor for an optional
+  // note for the office (e.g. "backcharge to the plumber"), then run the follow-up.
+  if(!isUpChainDocket(d)){promptSupNote(d.id,followup);}
+  else{followup();}
 }
 
 // Per Company-setup, prepare copies when a docket is signed.
@@ -5085,10 +5089,7 @@ function vD(id){
       <strong>${isSubDocket?'Sign this subcontractor docket':(alreadySent?'Sign on site instead':'Sign on screen now')}</strong>
       <p style="margin:4px 0 8px;font-size:12px;">${isSubDocket?'This docket was sent to you by '+esc(d.sub||'the subcontractor')+' to sign. Capture your signature below, then set the billing.':'Get the client or supervisor to sign here directly.'}</p>
       <div class="sig-wrap"><canvas id="vd-sign-canvas" style="width:100%;height:180px;border:2px solid #17568C;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas><div id="vd-sign-lock" class="sig-lock" onclick="armSig('vd-sign-lock')"><span>✍️ Tap here to sign<small>pad is locked until you tap</small></span></div></div>
-      ${!isUpChainDocket(d)?`<div style="margin-top:10px;">
-        <label style="font-size:11px;color:#854F0B;text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:4px;">Supervisor note <span style="text-transform:none;color:#8a877f;font-weight:400;">(optional — for the office)</span></label>
-        <textarea id="vd-sup-note" placeholder="e.g. to be backcharged to the plumber" style="width:100%;min-height:52px;font-size:13px;">${esc(d.supervisorNote||'')}</textarea>
-      </div>`:''}
+      ${!isUpChainDocket(d)?`<p style="font-size:11px;color:#8a877f;margin-top:8px;">After signing you can add a note for the office (e.g. a billing hint).</p>`:''}
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
         <button class="btn btn-s" onclick="clearVdSign()">Clear</button>
         <button class="btn btn-s btn-p" style="background:#1D9E75;border-color:#1D9E75;" onclick="saveVdSign('${d.id}')">✓ Save signature</button>
@@ -11015,6 +11016,31 @@ function promptPostSignBilling(id){
   document.getElementById('postsign-billing-modal').classList.remove('hidden');
 }
 function closePsb(){document.getElementById('postsign-billing-modal').classList.add('hidden');_psbId=null;}
+
+// ── Post-sign supervisor note prompt. Fires right after a received docket is
+// signed; captures an optional money-free note for the office, then runs the
+// caller's follow-up (billing / up-chain mirror). Money-rule safe: text only.
+let _snId=null,_snNext=null;
+function promptSupNote(id,next){
+  _snId=id;_snNext=(typeof next==='function')?next:null;
+  const d=dockets.find(x=>x.id===id);
+  const ta=document.getElementById('signnote-text');
+  if(ta)ta.value=(d&&d.supervisorNote)||'';
+  document.getElementById('signnote-modal').classList.remove('hidden');
+  if(ta)setTimeout(()=>ta.focus(),80);
+}
+function _closeSupNote(){
+  document.getElementById('signnote-modal').classList.add('hidden');
+  const n=_snNext;_snId=null;_snNext=null;
+  if(typeof n==='function')setTimeout(n,150);
+}
+function saveSupNote(){
+  const d=dockets.find(x=>x.id===_snId);
+  const ta=document.getElementById('signnote-text');
+  if(d&&ta){d.supervisorNote=ta.value.trim();svL('v4_dock',dockets);if(typeof renMD==='function')renMD();if(typeof renAD==='function')renAD();}
+  _closeSupNote();
+}
+function skipSupNote(){_closeSupNote();}
 function psbPick(type){
   if(type==='bc'){document.getElementById('psb-bc-wrap').classList.remove('hidden');return;}
   const id=_psbId;closePsb();
@@ -11848,6 +11874,19 @@ document.addEventListener('change',function(e){
     </div>
     <p style="font-size:11px;color:#999;margin:14px 0 0;">TBC leaves it in your Pending billing folder for action later.</p>
     <div style="margin-top:14px;text-align:right;"><button class="btn btn-s" onclick="closePsb()">Decide later</button></div>
+  </div>
+</div>
+
+<!-- Post-sign supervisor note prompt (received dockets) -->
+<div id="signnote-modal" class="hidden" style="position:fixed;inset:0;z-index:1115;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;">
+  <div style="background:#fff;border-radius:14px;max-width:440px;width:100%;padding:1.4rem;box-shadow:0 10px 40px rgba(0,0,0,0.2);margin:2.5rem auto;">
+    <p style="font-size:17px;font-weight:600;color:#1D9E75;margin:0 0 4px;">✓ Signed</p>
+    <p style="font-size:13px;color:#555;margin:0 0 12px;">Add a note for the office? <span style="color:#999;">(optional)</span></p>
+    <textarea id="signnote-text" placeholder="e.g. to be backcharged to the plumber" style="width:100%;min-height:72px;font-size:14px;padding:11px;border-radius:10px;"></textarea>
+    <div style="display:flex;gap:10px;margin-top:14px;">
+      <button class="btn btn-s" style="flex:1;" onclick="skipSupNote()">Skip</button>
+      <button class="btn btn-p" style="flex:1;background:#1D9E75;border-color:#1D9E75;" onclick="saveSupNote()">Save note</button>
+    </div>
   </div>
 </div>
 
