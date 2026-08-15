@@ -690,6 +690,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 @media(min-width:769px){
   body.role-worker #dash-worker{padding-bottom:192px;}
   body.role-supervisor #dash-supervisor{padding-bottom:192px;}
+  /* No bottom nav on desktop, so sit the New docket bar flush to the screen bottom */
+  body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap,
+  body.role-worker:not(.nd-fullpage) #wk-fab-wrap{bottom:0;}
 }
 /* Supervisor dashboard — tighten vertical rhythm so the Breakdown pie sits
    higher on a phone: smaller banner, less gap under the header, tighter
@@ -826,6 +829,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-bar-fill{height:100%;border-radius:6px;min-width:3px;transition:width .3s ease;}
 /* Two rows of outstanding-count boxes (subcontractor row / client row) */
 .sv2-sec-head{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:800;color:#2D2D2D;text-transform:uppercase;letter-spacing:0.08em;margin:10px 2px 11px;}
+.sv2-sec-note{font-size:11.5px;color:#8a877f;line-height:1.5;margin:8px 2px 2px;}
+.sv2-sec-note b{color:#2D2D2D;font-weight:700;}
 .sv2-sec-ic{font-size:20px;line-height:1;}
 .sv2-boxrow{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:22px;}
 .sv2-box{background:#fff;border:0.5px solid rgba(0,0,0,0.09);border-radius:14px;padding:17px 6px 15px;text-align:center;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,0.04);display:flex;flex-direction:column;align-items:center;gap:8px;min-height:112px;}
@@ -1025,7 +1030,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c76</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c77</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1078,6 +1083,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried')"><div class="sv2-bv" id="sv2b-outq">0</div><div class="sv2-bl" id="sv2l-outq">Queried by admin</div></div>
             <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('pending_review')"><div class="sv2-bv" id="sv2b-outp">0</div><div class="sv2-bl" id="sv2l-outp">Pending admin review</div></div>
           </div>
+          <p class="sv2-sec-note"><b>Create docket</b> raises a Sent docket to the client — from a chargeable <b>Received</b> docket you've signed. Then get it signed in person or send a link; the next boxes track it up the chain.</p>
 
           <!-- SUBCONTRACTOR — day-labour dockets received from our subcontractors -->
           <div class="sv2-sec-head sec-sub"><span class="sv2-sec-ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" style="display:block"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span id="sv2h-sub">Subcontractor</span></div>
