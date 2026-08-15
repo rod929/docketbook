@@ -1056,7 +1056,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c82</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c83</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -3342,6 +3342,10 @@ function statusBadge(d){
 // already shows the approved banner there).
 function vdStatusStrip(d){
   if(!d||d.approvalStatus==='approved')return'';
+  // "Pending approval" is the ADMIN's (PM/CA) final sign-off. Word it from the
+  // reader's point of view: "your approval" only if this user is the approver,
+  // otherwise "admin approval" so a supervisor/worker isn't told it's theirs.
+  const pendLabel=(typeof canApproveDockets==='function'&&canApproveDockets())?'⏳ Pending your approval':'⏳ Awaiting admin approval';
   const map={
     rejected:['⛔ Rejected','#D24A44','#fff','#D24A44'],
     queried:['⚠ Queried','#D24A44','#fff','#D24A44'],
@@ -3349,7 +3353,7 @@ function vdStatusStrip(d){
     awaiting_my_sig:['✍️ Needs my signature','#F4B13C','#4a2c02','#C7891A'],
     needs_billing:['💲 Pending bill allocation','#F4B13C','#4a2c02','#C7891A'],
     chargeable_ready:['✓ Ready to send','#1D9E75','#fff','#1D9E75'],
-    pending_review:['⏳ Pending your approval','#5B3B8C','#fff','#5B3B8C'],
+    pending_review:[pendLabel,'#5B3B8C','#fff','#5B3B8C'],
     signed:['✓ Signed','#1D9E75','#fff','#1D9E75']
   };
   const m=map[pendingAdminDecision(d)?'pending_review':docketStatus(d)]||map.signed;
