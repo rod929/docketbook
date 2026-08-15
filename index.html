@@ -41,7 +41,7 @@ body{font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-seri
 .setup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;}
 .setup-tile{display:flex;flex-direction:column;align-items:center;gap:7px;padding:16px 8px;border:1px solid rgba(0,0,0,.1);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#2D2D2D;transition:background .1s,border-color .1s;}
 .setup-tile:hover{background:#f8f8f6;border-color:rgba(0,0,0,.18);}
-.setup-tile i{font-size:22px;color:#185FA5;}
+.setup-tile i{font-size:22px;color:#17568C;}
 /* Settings — sidebar (categories) + panel layout */
 .set-shell{display:flex;gap:20px;align-items:flex-start;}
 .set-sidebar{flex:0 0 216px;background:#fff;border:0.5px solid rgba(0,0,0,.1);border-radius:14px;padding:10px;position:sticky;top:12px;}
@@ -62,7 +62,7 @@ body{font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-seri
 .rec-tgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
 @media(max-width:700px){.rec-tgrid{grid-template-columns:1fr;}}
 .rec-tcard{background:#fff;border:.5px solid rgba(0,0,0,.1);border-radius:12px;padding:14px 16px;border-left:3px solid #ccc;}
-.rec-tcard.in{border-left-color:#185FA5;} .rec-tcard.out{border-left-color:#EF9F27;} .rec-tcard.var{border-left-color:#E24B4A;background:#FFF7F6;}
+.rec-tcard.in{border-left-color:#17568C;} .rec-tcard.out{border-left-color:#EF9F27;} .rec-tcard.var{border-left-color:#D24A44;background:#FFF7F6;}
 .rec-tt{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#2D2D2D;margin-bottom:8px;}
 .rec-trow{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:3px 0;color:#666;}
 .rec-trow b{color:#2D2D2D;font-variant-numeric:tabular-nums;}
@@ -84,7 +84,7 @@ body{font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-seri
 .rec-var{font-size:11px;color:#B23B34;background:#FBE3E1;border-radius:8px;padding:1px 6px;margin-left:4px;}
 .rec-leg-a{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
 .rec-btn{font-family:inherit;font-size:12px;font-weight:600;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid transparent;}
-.rec-btn.mark{background:#185FA5;color:#fff;} .rec-btn.paid{background:#1D9E75;color:#fff;}
+.rec-btn.mark{background:#17568C;color:#fff;} .rec-btn.paid{background:#1D9E75;color:#fff;}
 .rec-btn.undo{background:#fff;border-color:#ddd;color:#999;padding:6px 9px;}
 .rec-paid{font-size:12px;font-weight:700;color:#0F6E56;}
 /* Subscription plan tiers */
@@ -96,7 +96,7 @@ body{font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-seri
 .sub-plan-card.pop.on{border-color:#1D9E75;}
 .sub-plan-pop{position:absolute;top:-10px;left:16px;background:#EF9F27;color:#412402;font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;}
 .sub-plan-name{font-size:15px;font-weight:800;color:#2D2D2D;}
-.sub-plan-price{font-size:26px;font-weight:800;color:#185FA5;line-height:1;}
+.sub-plan-price{font-size:26px;font-weight:800;color:#17568C;line-height:1;}
 .sub-plan-price span{font-size:12px;font-weight:500;color:#8b8880;}
 .sub-plan-blurb{font-size:12px;color:#888;margin-bottom:4px;}
 .sub-plan-feat{list-style:none;margin:4px 0 12px;padding:0;flex:1;}
@@ -105,7 +105,7 @@ body{font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-seri
 .rb{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
 label{font-size:12px;color:#666;display:block;margin-bottom:4px;}
 input,select,textarea{width:100%;font-size:13px;padding:8px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;color:#1a1a1a;outline:none;}
-input:focus,select:focus,textarea:focus{border-color:#185FA5;box-shadow:0 0 0 2px rgba(24,95,165,0.15);}
+input:focus,select:focus,textarea:focus{border-color:#17568C;box-shadow:0 0 0 2px rgba(24,95,165,0.15);}
 textarea{resize:vertical;min-height:60px;}
 /* ── New Docket form: larger inputs for easy mobile tapping ── */
 #t-nd input,#t-nd select,#t-nd textarea{font-size:17px;padding:18px 16px;border-radius:10px;}
@@ -168,12 +168,12 @@ body.review-open #sup-fab-wrap{display:none!important;}
 .rbill-btn{padding:14px 10px;border-radius:10px;border:2px solid rgba(0,0,0,0.12);background:#fff;color:#1a1a1a;font-size:14px;font-weight:500;cursor:pointer;text-align:center;}
 .rbill-btn:hover{border-color:#1D9E75;}
 .rbill-btn.active{border-color:#1D9E75;background:#1D9E75;color:#fff;}
-#t-nd .field-error{border:2px solid #E24B4A!important;background:#FCEBEB;}
+#t-nd .field-error{border:2px solid #D24A44!important;background:#FCEBEB;}
 .btn{font-size:13px;padding:7px 14px;border-radius:8px;cursor:pointer;border:0.5px solid rgba(0,0,0,0.2);background:transparent;color:#1a1a1a;}
 .btn:hover{background:#f0f0ee;}
-.btn-p{background:#185FA5;color:#fff;border-color:#185FA5;}
-.btn-p:hover{background:#0C447C;}
-.btn-d{color:#E24B4A;border-color:#E24B4A;}
+.btn-p{background:#17568C;color:#fff;border-color:#17568C;}
+.btn-p:hover{background:#0A3A66;}
+.btn-d{color:#D24A44;border-color:#D24A44;}
 .btn-d:hover{background:#FCEBEB;}
 .btn-s{padding:4px 10px;font-size:12px;}
 .btn-grn{background:#1D9E75;color:#fff;border-color:#1D9E75;}
@@ -182,13 +182,13 @@ body.review-open #sup-fab-wrap{display:none!important;}
    together nicely next to the orange Dashboard button. */
 .btn-csv{background:#E4F3EC;color:#1D7A5F;border:1px solid #C4E6D6;}
 .btn-csv:hover{background:#D7EDE1;}
-.btn-pdf{background:#E6F1FB;color:#185FA5;border:1px solid #C7DEF3;}
+.btn-pdf{background:#E6F1FB;color:#17568C;border:1px solid #C7DEF3;}
 .btn-pdf:hover{background:#D8E8F8;}
 /* Soft-grey row "View" button — reads as tappable without adding a competing colour */
 .btn-view{background:#f0efec;border:none;color:#3a3a38;font-weight:600;}
 .btn-view:hover{background:#e6e4df;}
 .badge{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:500;display:inline-block;}
-.bi{background:#E6F1FB;color:#0C447C;}
+.bi{background:#E6F1FB;color:#0A3A66;}
 .bs{background:#E1F5EE;color:#085041;}
 .bw{background:#FAEEDA;color:#633806;}
 .bsub{background:#EEEDFE;color:#3C3489;}
@@ -202,13 +202,13 @@ body.review-open #sup-fab-wrap{display:none!important;}
 .mv{font-size:20px;font-weight:500;}
 .ml{font-size:11px;color:#888;margin-top:2px;}
 header{background:#fff;border-bottom:0.5px solid rgba(0,0,0,0.1);padding:12px 1rem;display:flex;justify-content:space-between;align-items:center;}
-.logo{font-size:16px;font-weight:600;color:#185FA5;letter-spacing:-0.3px;}
+.logo{font-size:16px;font-weight:600;color:#17568C;letter-spacing:-0.3px;}
 .nav{display:flex;gap:6px;padding:12px 0 10px;border-bottom:0.5px solid rgba(0,0,0,0.1);margin-bottom:16px;flex-wrap:wrap;}
 .nb{font-size:13px;padding:6px 11px;border-radius:8px;cursor:pointer;border:none;background:transparent;color:#666;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
 .nb.act{background:#f0f0ee;color:#1a1a1a;font-weight:500;}
 .nb:hover{background:#f0f0ee;}
 .nb i{font-size:16px;color:#8a8a86;}
-.nb.act i{color:#185FA5;}
+.nb.act i{color:#17568C;}
 /* Admins get a New-docket button on their dashboard + All dockets covers their
    list, so drop the duplicate New-docket / My-dockets nav items for admins. */
 body.role-admin #n1,body.role-admin #n2{display:none!important;}
@@ -231,7 +231,7 @@ body.role-worker #n1,body.role-supervisor #n1{display:none!important;}
   #bottom-nav.hidden{display:none!important;}
   #bottom-nav .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 2px 6px;font-size:9px;color:#999;background:none;border:none;cursor:pointer;letter-spacing:0.02em;}
   #bottom-nav .bn-item i{font-size:18px;}
-  #bottom-nav .bn-item.on{color:#185FA5;font-weight:600;}
+  #bottom-nav .bn-item.on{color:#17568C;font-weight:600;}
   body.has-bottomnav .app{padding-bottom:62px;}
   body.nd-fullpage #bottom-nav{display:none!important;}
   /* Mobile admin: hide dense desktop panels, show compact block */
@@ -301,12 +301,12 @@ body.role-worker #n1,body.role-supervisor #n1{display:none!important;}
 .admin-desk .adx-card h3{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--ad-soft);margin-bottom:12px;}
 .admin-desk .adx-kpi{display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .admin-desk .adx-kpi .v{font-size:44px;font-weight:800;line-height:1;}
-.admin-desk .adx-kpi .v.red{color:#E24B4A;} .admin-desk .adx-kpi .v.blue{color:#185FA5;} .admin-desk .adx-kpi .v.amber{color:#C7891A;} .admin-desk .adx-kpi .v.green{color:#1D9E75;} .admin-desk .adx-kpi .v.slate{color:#5A6B7B;}
-.admin-desk .adx-mdet{font-size:10px;color:#185FA5;font-weight:600;text-transform:none;letter-spacing:0;margin-left:5px;opacity:0;transition:opacity .12s;}
+.admin-desk .adx-kpi .v.red{color:#D24A44;} .admin-desk .adx-kpi .v.blue{color:#17568C;} .admin-desk .adx-kpi .v.amber{color:#C7891A;} .admin-desk .adx-kpi .v.green{color:#1D9E75;} .admin-desk .adx-kpi .v.slate{color:#5A6B7B;}
+.admin-desk .adx-mdet{font-size:10px;color:#17568C;font-weight:600;text-transform:none;letter-spacing:0;margin-left:5px;opacity:0;transition:opacity .12s;}
 .admin-desk .adx-money.adx-clickable:hover .adx-mdet{opacity:1;}
 .admin-desk .adx-money.adx-clickable{border-radius:10px;}
 .admin-desk .adx-money.adx-clickable:hover{background:rgba(24,95,165,.05);}
-.admin-desk .adx-go{font-size:12px;color:#185FA5;font-weight:600;white-space:nowrap;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;}
+.admin-desk .adx-go{font-size:12px;color:#17568C;font-weight:600;white-space:nowrap;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;}
 .admin-desk .adx-go:hover{text-decoration:underline;}
 .admin-desk .adx-clickable{cursor:pointer;transition:box-shadow .12s,transform .12s;}
 .admin-desk .adx-clickable:hover{box-shadow:0 3px 12px rgba(45,45,45,.12);transform:translateY(-1px);}
@@ -314,9 +314,9 @@ body.role-worker #n1,body.role-supervisor #n1{display:none!important;}
 .admin-desk .adx-age{font-size:11px;color:#9a7328;background:#FBEFD9;border:1px solid #F0DDB2;border-radius:20px;padding:3px 9px;display:inline-block;margin-top:8px;}
 .admin-desk .adx-hero{grid-column:1/-1;background:linear-gradient(180deg,#ffffff,#fbfaf7);}
 .admin-desk .adx-fintiles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:18px;}
-.admin-desk .adx-ft{background:#fff;border:.5px solid var(--ad-line);border-radius:12px;padding:11px 14px;border-left:3px solid #185FA5;}
+.admin-desk .adx-ft{background:#fff;border:.5px solid var(--ad-line);border-radius:12px;padding:11px 14px;border-left:3px solid #17568C;}
 .admin-desk .adx-ft.green{border-left-color:#1D9E75;} .admin-desk .adx-ft.amber{border-left-color:#C7891A;background:#FFFBF5;}
-.admin-desk .adx-ft .ftv{font-size:23px;font-weight:800;color:#185FA5;line-height:1;}
+.admin-desk .adx-ft .ftv{font-size:23px;font-weight:800;color:#17568C;line-height:1;}
 .admin-desk .adx-ft.green .ftv{color:#0F6E56;} .admin-desk .adx-ft.amber .ftv{color:#9a6a12;}
 .admin-desk .adx-ft .ftl{font-size:11px;color:var(--ad-soft);text-transform:uppercase;letter-spacing:.04em;margin-top:4px;}
 /* Sectioned admin dashboard (finalise / subcontractor / client) */
@@ -327,7 +327,7 @@ body.role-worker #n1,body.role-supervisor #n1{display:none!important;}
 .admin-desk .adx-sec-note{font-size:11px;font-weight:700;text-transform:none;letter-spacing:0;color:#9a958c;}
 .admin-desk .adx-sec.fin .adx-sec-t{color:#5B3B8C;} .admin-desk .adx-sec.fin .adx-sec-note{color:#8a6cb8;}
 .admin-desk .adx-sec.sub .adx-sec-t{color:#B9770E;}
-.admin-desk .adx-sec.cli .adx-sec-t{color:#0C447C;}
+.admin-desk .adx-sec.cli .adx-sec-t{color:#0A3A66;}
 /* Portal panels — each section tinted & bordered so it groups cleanly */
 .admin-desk .adx-portal{border:1px solid var(--pb);border-radius:18px;padding:4px 16px 18px;margin-bottom:16px;background:linear-gradient(180deg,var(--pg1),var(--pg2));box-shadow:0 2px 14px rgba(45,45,45,.05);}
 .admin-desk .adx-portal.fin{--pb:#E2D6F3;--pg1:#FBF9FF;--pg2:#F4EFFB;box-shadow:0 3px 18px rgba(91,59,140,.10);}
@@ -361,8 +361,8 @@ body.role-worker #n1,body.role-supervisor #n1{display:none!important;}
 .admin-desk .adx-fin-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
 @media(max-width:820px){.admin-desk .adx-fin-row{grid-template-columns:1fr;}}
 .admin-desk .adx-signoff.hero{border:1px solid #E2D6F3;border-left:5px solid #5B3B8C;background:#fff;margin-bottom:0;box-shadow:0 1px 4px rgba(45,45,45,.06);}
-@keyframes adxHeroFlash{0%,100%{box-shadow:0 1px 4px rgba(45,45,45,.06);border-left-color:#E24B4A;}50%{box-shadow:0 0 0 4px rgba(226,75,74,.22),0 3px 16px rgba(226,75,74,.4);border-left-color:#E24B4A;}}
-.admin-desk .adx-signoff.hero{border-left-color:#E24B4A;}
+@keyframes adxHeroFlash{0%,100%{box-shadow:0 1px 4px rgba(45,45,45,.06);border-left-color:#D24A44;}50%{box-shadow:0 0 0 4px rgba(226,75,74,.22),0 3px 16px rgba(226,75,74,.4);border-left-color:#D24A44;}}
+.admin-desk .adx-signoff.hero{border-left-color:#D24A44;}
 .admin-desk .adx-signoff.hero.flash{animation:adxHeroFlash 1.4s ease-in-out infinite;}
 @media(prefers-reduced-motion:reduce){.admin-desk .adx-signoff.hero.flash{animation:none;box-shadow:0 0 0 3px rgba(91,59,140,.2);}}
 .admin-desk .adx-overdue{font-size:11px;font-weight:700;color:#B23B34;background:#FBE3E1;border:1px solid #E7B9B6;border-radius:20px;padding:3px 10px;white-space:nowrap;}
@@ -375,7 +375,7 @@ body.role-worker #n1,body.role-supervisor #n1{display:none!important;}
 /* Inbox — compact Supervisor / Client rows */
 .admin-desk .adx-inbox{padding:4px 0 6px;}
 .admin-desk .adx-ib-head{display:flex;align-items:center;gap:8px;padding:14px 18px 8px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;}
-.admin-desk .adx-ib-head.sup{color:#B9770E;} .admin-desk .adx-ib-head.cli{color:#0C447C;}
+.admin-desk .adx-ib-head.sup{color:#B9770E;} .admin-desk .adx-ib-head.cli{color:#0A3A66;}
 .admin-desk .adx-ib-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
 .admin-desk .adx-ib-row{display:flex;align-items:center;gap:12px;padding:12px 18px;border-top:1px solid var(--ad-line);cursor:pointer;transition:background .1s;}
 .admin-desk .adx-ib-row:hover{background:#faf9f6;}
@@ -384,7 +384,7 @@ body.role-worker #n1,body.role-supervisor #n1{display:none!important;}
 .admin-desk .adx-ib-lab .l1{font-size:13.5px;font-weight:600;}
 .admin-desk .adx-ib-lab .l2{font-size:11.5px;color:var(--ad-soft);margin-top:1px;}
 .admin-desk .adx-ib-who{font-size:11px;font-weight:700;color:#8a5a12;background:#FBEFD9;border:1px solid #F0DDB2;border-radius:20px;padding:2px 9px;white-space:nowrap;}
-.admin-desk .adx-ib-who.cl{color:#0C447C;background:#E6F1FB;border-color:#B5D4F4;}
+.admin-desk .adx-ib-who.cl{color:#0A3A66;background:#E6F1FB;border-color:#B5D4F4;}
 .admin-desk .adx-ib-cnt{min-width:26px;text-align:center;font-size:19px;font-weight:800;color:var(--c);}
 .admin-desk .adx-ib-cnt.zero{color:#cbc8c1;}
 .admin-desk .adx-ib-chev{color:#c7c4bd;font-size:17px;}
@@ -404,7 +404,7 @@ body.role-worker #n1,body.role-supervisor #n1{display:none!important;}
 .admin-desk .adx-box h3{margin-bottom:10px;}
 .admin-desk .adx-box .adx-kpi{margin-top:auto;}
 .admin-desk .adx-box .adx-kpi .v{color:var(--c,#2D2D2D);}
-.admin-desk .adx-box .adx-go{color:var(--c,#185FA5);opacity:.9;}
+.admin-desk .adx-box .adx-go{color:var(--c,#17568C);opacity:.9;}
 /* Highlighted "who is responsible" pills in the drilled list */
 .row-signwait{background:#FFFDF5;}
 .row-signwait:hover{background:#FFF9E6;}
@@ -412,7 +412,7 @@ body.role-worker #n1,body.role-supervisor #n1{display:none!important;}
 .days-out.do-grey{background:#EEF2F6;color:#5A6B7B;} .days-out.do-slate{background:#E3EAF1;color:#3d4f60;}
 .days-out.do-amber{background:#FAEEDA;color:#854F0B;} .days-out.do-red{background:#FBE3E1;color:#B23B34;}
 .sig-need{display:inline-block;font-size:11.5px;font-weight:700;color:#8a5a12;background:#FBEFD9;border:1px solid #F0DDB2;border-radius:20px;padding:3px 10px;margin:2px 3px 2px 0;white-space:nowrap;}
-.sig-need.client{color:#0C447C;background:#E6F1FB;border-color:#B5D4F4;}
+.sig-need.client{color:#0A3A66;background:#E6F1FB;border-color:#B5D4F4;}
 .sig-need.warn{color:#B23B34;background:#FBE3E1;border-color:#E7B9B6;}
 /* IN / OUT / Balance boxes */
 .admin-desk .adx-iorow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
@@ -424,12 +424,12 @@ body.role-worker #n1,body.role-supervisor #n1{display:none!important;}
 .admin-desk .adx-io-ic svg{display:block;}
 .admin-desk .adx-io-lab{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ad-soft);}
 .admin-desk .adx-io-big{font-size:34px;font-weight:800;line-height:1;}
-.admin-desk .adx-io.in .adx-io-big{color:#B9770E;} .admin-desk .adx-io.out .adx-io-big{color:#185FA5;}
-.admin-desk .adx-io-big.pos{color:#0F6E56;} .admin-desk .adx-io-big.neg{color:#E24B4A;}
+.admin-desk .adx-io.in .adx-io-big{color:#B9770E;} .admin-desk .adx-io.out .adx-io-big{color:#17568C;}
+.admin-desk .adx-io-big.pos{color:#0F6E56;} .admin-desk .adx-io-big.neg{color:#D24A44;}
 .admin-desk .adx-io-sub{font-size:12px;color:#666;margin-top:9px;line-height:1.5;}
 @media(max-width:820px){.admin-desk .adx-iorow{grid-template-columns:1fr;}}
 /* Sign-off alert banner */
-.admin-desk .adx-alert{display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,#FEF6F5,#FBE7E5);border:1px solid #F1C7C4;border-left:4px solid #E24B4A;border-radius:12px;padding:12px 16px;margin-bottom:14px;cursor:pointer;transition:box-shadow .12s;}
+.admin-desk .adx-alert{display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,#FEF6F5,#FBE7E5);border:1px solid #F1C7C4;border-left:4px solid #D24A44;border-radius:12px;padding:12px 16px;margin-bottom:14px;cursor:pointer;transition:box-shadow .12s;}
 .admin-desk .adx-alert:hover{box-shadow:0 3px 12px rgba(226,75,74,.18);}
 @keyframes adxAlertFlash{0%,100%{box-shadow:0 1px 4px rgba(226,75,74,.06);}50%{box-shadow:0 0 0 4px rgba(226,75,74,.20),0 3px 14px rgba(226,75,74,.34);}}
 .admin-desk .adx-alert.flash{animation:adxAlertFlash 1.4s ease-in-out infinite;}
@@ -440,19 +440,19 @@ body.role-worker #n1,body.role-supervisor #n1{display:none!important;}
 /* Project comparison graph */
 .admin-desk .adx-pg-legend{font-size:11px;color:var(--ad-soft);}
 .admin-desk .adx-pg-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:0;margin:0 3px;}
-.admin-desk .adx-pg-legend i.in{background:#EF9F27;} .admin-desk .adx-pg-legend i.out{background:#185FA5;}
+.admin-desk .adx-pg-legend i.in{background:#EF9F27;} .admin-desk .adx-pg-legend i.out{background:#17568C;}
 .admin-desk .adx-pgraph{margin:12px 0 4px;display:flex;flex-direction:column;gap:12px;}
 .admin-desk .adx-pg-row{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;}
 .admin-desk .adx-pg-name{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .admin-desk .adx-pg-bars{display:flex;flex-direction:column;gap:5px;}
 .admin-desk .adx-pg-track{display:flex;align-items:center;gap:8px;}
 .admin-desk .adx-pg-bar{height:14px;border-radius:4px;min-width:2px;transition:width .3s;}
-.admin-desk .adx-pg-bar.in{background:#EF9F27;} .admin-desk .adx-pg-bar.out{background:#185FA5;}
+.admin-desk .adx-pg-bar.in{background:#EF9F27;} .admin-desk .adx-pg-bar.out{background:#17568C;}
 .admin-desk .adx-pg-val{font-size:11px;color:#666;font-variant-numeric:tabular-nums;}
 @media(max-width:600px){.admin-desk .adx-pg-row{grid-template-columns:1fr;gap:4px;}}
-.admin-desk .adx-signoff{margin-bottom:14px;border-left:3px solid #185FA5;}
+.admin-desk .adx-signoff{margin-bottom:14px;border-left:3px solid #17568C;}
 .admin-desk .adx-signoff-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;}
-.admin-desk .adx-signoff-total{font-size:23px;font-weight:800;color:#185FA5;}
+.admin-desk .adx-signoff-total{font-size:23px;font-weight:800;color:#17568C;}
 .admin-desk .adx-signoff-figs{display:flex;align-items:center;gap:14px;margin:8px 0 6px;flex-wrap:wrap;}
 .admin-desk .adx-fig{display:flex;flex-direction:column;gap:1px;}
 .admin-desk .adx-fig-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#9a958c;}
@@ -487,7 +487,7 @@ body.role-worker #n1,body.role-supervisor #n1{display:none!important;}
 .admin-desk tr:last-child td{border-bottom:none;}
 .admin-desk .adx-pill{display:inline-block;min-width:22px;text-align:center;font-weight:700;font-size:12px;border-radius:20px;padding:2px 8px;}
 .admin-desk .pn-amber{background:#FBEFD9;color:#8a5a12;} .admin-desk .pn-red{background:#FBE3E1;color:#B23B34;} .admin-desk .pn-slate{background:#EEF2F6;color:#41505E;} .admin-desk .pn-zero{background:#f3f2ef;color:#bbb;}
-.admin-desk .adx-rowlink{color:#185FA5;font-weight:600;font-size:12px;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;}
+.admin-desk .adx-rowlink{color:#17568C;font-weight:600;font-size:12px;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;}
 .admin-desk .adx-rowlink:hover{text-decoration:underline;}
 .admin-desk .adx-nm{font-weight:600;}
 .admin-desk .adx-empty{color:#aaa;font-size:12.5px;padding:14px 4px;text-align:center;}
@@ -513,11 +513,11 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
    "Tap here to sign", so a stray touch or scroll can't leave a stray mark. */
 .sig-wrap{position:relative;}
 .sig-lock{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;background:rgba(240,240,238,0.92);border-radius:10px;cursor:pointer;z-index:4;}
-.sig-lock span{background:#185FA5;color:#fff;font-weight:600;font-size:14px;padding:10px 18px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.18);line-height:1.25;}
+.sig-lock span{background:#17568C;color:#fff;font-weight:600;font-size:14px;padding:10px 18px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.18);line-height:1.25;}
 .sig-lock small{display:block;font-weight:400;font-size:10.5px;opacity:0.85;margin-top:3px;}
-.err{color:#E24B4A;font-size:12px;margin-top:4px;}
+.err{color:#D24A44;font-size:12px;margin-top:4px;}
 .ok{background:#E1F5EE;color:#085041;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;}
-.info-box{background:#E6F1FB;color:#0C447C;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;}
+.info-box{background:#E6F1FB;color:#0A3A66;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;}
 .st{font-size:15px;font-weight:500;margin-bottom:14px;}
 /* Docket view (opened from a list) — clearer, larger, calmer typography */
 .vd-grid{font-size:14.5px;line-height:1.45;color:#2D2D2D;}
@@ -535,9 +535,9 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 .vd-numstrip .vd-num-lab{font-size:9px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;}
 .vd-numstrip .vd-num{font-size:18px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;}
 /* client (sent up) = blue */
-.vd-sheet-head.vd-client .vd-head-top{background:#185FA5;}
-.vd-sheet-head.vd-client .vd-numstrip{background:#E6F1FB;border-bottom-color:#185FA5;}
-.vd-sheet-head.vd-client .vd-num{color:#0C447C;} .vd-sheet-head.vd-client .vd-num-lab{color:#0C447C;}
+.vd-sheet-head.vd-client .vd-head-top{background:#17568C;}
+.vd-sheet-head.vd-client .vd-numstrip{background:#E6F1FB;border-bottom-color:#17568C;}
+.vd-sheet-head.vd-client .vd-num{color:#0A3A66;} .vd-sheet-head.vd-client .vd-num-lab{color:#0A3A66;}
 /* subcontractor (received) = orange */
 .vd-sheet-head.vd-sub .vd-head-top{background:#B9770E;}
 .vd-sheet-head.vd-sub .vd-numstrip{background:#FAEEDA;border-bottom-color:#EF9F27;}
@@ -555,7 +555,7 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 .vd-rows > div:nth-child(even){border-left:1px solid #f1eee8;}  /* column divider */
 .vd-rows .vdk{margin-bottom:1px;}
 .vd-rows > div[style*="span 2"]{grid-column:1/-1;border-left:none;}
-.vd-sheet-head.vd-client .vd-typetag{background:#185FA5;}
+.vd-sheet-head.vd-client .vd-typetag{background:#17568C;}
 .vd-sheet-head.vd-sub .vd-typetag{background:#B9770E;}
 /* Docket stamps — Backcharge (solid ink slab) + Rejected (double-border) */
 .vd-stamp-wrap{display:flex;justify-content:center;margin:2px 0 12px;}
@@ -572,7 +572,7 @@ canvas.sc{display:block;width:100%;height:110px;cursor:crosshair;touch-action:no
 .s3{grid-column:span 3;}
 .dn{font-size:12.5px;color:#141414;font-family:monospace;font-weight:700;letter-spacing:0.02em;}
 .rban{padding:8px 14px;border-radius:8px;font-size:12px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.rban.adm{background:#E6F1FB;color:#0C447C;}
+.rban.adm{background:#E6F1FB;color:#0A3A66;}
 .rban.usr{background:#E1F5EE;color:#085041;}
 .rban.sub{background:#EEEDFE;color:#3C3489;}
 /* Worker banner — mockup dark header look */
@@ -597,14 +597,14 @@ body.role-supervisor .rban select{border:1px solid #F0DDB2;}
 .cc.ch .ccl{color:#0F6E56;font-size:11px;margin-top:2px;}.cc.ow .ccl{color:#854F0B;font-size:11px;margin-top:2px;}
 .sig-method-box{border:0.5px solid rgba(0,0,0,0.12);border-radius:10px;padding:12px 14px;margin-top:8px;background:#fafaf8;}
 .sig-tab{display:inline-block;padding:6px 14px;font-size:12px;border-radius:6px;cursor:pointer;border:0.5px solid rgba(0,0,0,0.15);margin-right:6px;margin-bottom:8px;}
-.sig-tab.active{background:#185FA5;color:#fff;border-color:#185FA5;}
+.sig-tab.active{background:#17568C;color:#fff;border-color:#17568C;}
 /* Review page signature-method buttons — orange */
 #rtab-onsite,#rtab-email,#rtab-sms{background:#EF9F27;color:#412402;border:none;font-weight:600;padding:10px 16px;font-size:13px;border-radius:8px;}
 #rtab-onsite.active,#rtab-email.active,#rtab-sms.active{background:#2D2D2D;color:#EF9F27;}
 .contact-row{display:flex;gap:8px;align-items:center;padding:8px 10px;border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;margin-bottom:6px;background:#fafaf8;}
 .contact-row:hover{background:#f0f0ee;}
 .send-result{border-radius:8px;padding:10px 14px;font-size:13px;margin-top:8px;}
-.send-result.email{background:#E6F1FB;color:#0C447C;}
+.send-result.email{background:#E6F1FB;color:#0A3A66;}
 .send-result.sms{background:#E8F5E9;color:#1B5E20;}
 /* Sign page */
 #sign-page{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#f5f5f3;z-index:2000;overflow-y:auto;}
@@ -723,7 +723,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
   body.dashbig.role-supervisor .sv2-age{position:absolute;left:0;right:0;bottom:9px;margin-top:0;padding-top:0;}
   /* Bolder, colour-coded section headings */
   body.dashbig.role-supervisor .sv2-sec-head{font-size:14.5px;font-weight:800;padding:8px 13px;border-radius:10px;margin:8px 2px 7px;letter-spacing:0.06em;}
-  body.dashbig.role-supervisor .sv2-sec-head.sec-client{background:#E6F1FB;color:#0C447C;border-left:4px solid #185FA5;}
+  body.dashbig.role-supervisor .sv2-sec-head.sec-client{background:#E6F1FB;color:#0A3A66;border-left:4px solid #17568C;}
   body.dashbig.role-supervisor .sv2-sec-head.sec-sub{background:#FDF1DD;color:#8a530a;border-left:4px solid #EF9F27;}
   body.dashbig.role-supervisor .sv2-sec-head .sv2-sec-ic{font-size:19px;}
 }
@@ -735,7 +735,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 #dash-worker .wk-sc-drafts,#dash-supervisor .wk-sc-drafts{background:#FFFBF5;}
 #dash-worker .wk-sc-drafts .wk-sv,#dash-supervisor .wk-sc-drafts .wk-sv{color:#EF9F27;}
 #dash-worker .wk-sc-sent,#dash-supervisor .wk-sc-sent{background:#E6F1FB;}
-#dash-worker .wk-sc-sent .wk-sv,#dash-supervisor .wk-sc-sent .wk-sv{color:#185FA5;}
+#dash-worker .wk-sc-sent .wk-sv,#dash-supervisor .wk-sc-sent .wk-sv{color:#17568C;}
 #dash-worker .wk-sc-signed,#dash-supervisor .wk-sc-signed{background:#E1F5EE;}
 #dash-worker .wk-sc-signed .wk-sv,#dash-supervisor .wk-sc-signed .wk-sv{color:#1D9E75;}
 #dash-worker .ndock-tile,#dash-supervisor .ndock-tile{background:#FAEEDA;border:none;border-radius:12px;padding:18px 8px;font-size:15px;font-weight:600;color:#633806;gap:8px;}
@@ -746,7 +746,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 #dash-worker .rdl-s,#dash-supervisor .rdl-s{font-size:12px;}
 /* ── Supervisor dashboard v2 (urgency-ordered, mockup v2) ── */
 .sv-hero{position:relative;display:flex;align-items:center;gap:12px;border-radius:16px;padding:18px 16px;margin-bottom:14px;cursor:pointer;overflow:hidden;animation:svHeroFlash 1.3s ease-in-out infinite;}
-.sv-hero-red{background:linear-gradient(135deg,#F0685E,#E24B4A);box-shadow:0 4px 16px rgba(226,75,74,0.45);}
+.sv-hero-red{background:linear-gradient(135deg,#F0685E,#D24A44);box-shadow:0 4px 16px rgba(226,75,74,0.45);}
 .sv-hero-orange{background:linear-gradient(135deg,#EF9F27,#E5891A);box-shadow:0 4px 16px rgba(239,159,39,0.45);}
 @keyframes svHeroFlash{0%,100%{filter:brightness(1);}50%{filter:brightness(1.14);}}
 .sv-hero-content{flex:1;color:#fff;position:relative;z-index:2;min-width:0;}
@@ -765,7 +765,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv-sbox .sv-lab{font-size:12px;margin-top:6px;font-weight:500;line-height:1.35;}
 .sv-sbox .sv-arrow{position:absolute;top:14px;right:14px;font-size:14px;opacity:0.5;}
 .sv-sbox-2{background:#FBFCFE;border-color:#C9DDF1;}
-.sv-sbox-2 .sv-num,.sv-sbox-2 .sv-lab{color:#185FA5;}
+.sv-sbox-2 .sv-num,.sv-sbox-2 .sv-lab{color:#17568C;}
 .sv-sbox-3{background:#FBE6E6;border-color:#F2C6C6;}
 .sv-sbox-3 .sv-num,.sv-sbox-3 .sv-lab{color:#A4271F;}
 .sv-divider{height:1px;background:rgba(0,0,0,0.07);margin:6px 0 14px;}
@@ -781,7 +781,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv-sc-hot{background:#FDEBCF!important;border:1.5px solid #EF9F27!important;animation:svTilePulse 1.6s ease-in-out infinite;}
 @keyframes svTilePulse{0%{box-shadow:0 0 0 0 rgba(239,159,39,0.45);}70%{box-shadow:0 0 0 7px rgba(239,159,39,0);}100%{box-shadow:0 0 0 0 rgba(239,159,39,0);}}
 .sv-sc-s{background:#E1F5EE;} .sv-sc-s .sv-v{color:#1D9E75;}
-.sv-sc-t{background:#E6F1FB;} .sv-sc-t .sv-v{color:#185FA5;}
+.sv-sc-t{background:#E6F1FB;} .sv-sc-t .sv-v{color:#17568C;}
 .sv-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
 .sv-ndock{background:#FAEEDA;border:none;border-radius:12px;padding:16px 8px;font-size:14px;font-weight:600;color:#633806;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;}
 .sv-ndock .sv-ic{font-size:20px;}
@@ -791,7 +791,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-kpi:active{transform:scale(0.97);}
 .sv2-kpi .sv2-v{font-size:23px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;color:#2D2D2D;}
 .sv2-kpi .sv2-l{font-size:10px;color:#777;margin-top:6px;font-weight:600;line-height:1.2;}
-.sv2-k-sign .sv2-v{color:#E24B4A;} .sv2-k-bill .sv2-v{color:#C7891A;} .sv2-k-client .sv2-v{color:#185FA5;} .sv2-k-query .sv2-v{color:#A4271F;}
+.sv2-k-sign .sv2-v{color:#D24A44;} .sv2-k-bill .sv2-v{color:#C7891A;} .sv2-k-client .sv2-v{color:#17568C;} .sv2-k-query .sv2-v{color:#A4271F;}
 .sv2-kpi.sv2-hot{box-shadow:0 0 0 2px #EF9F27;background:#FFFBF5;}
 .sv2-folder{margin-bottom:20px;}
 .sv2-fhead{display:flex;align-items:center;gap:8px;margin-bottom:2px;}
@@ -832,7 +832,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-box:active{transform:scale(0.97);}
 .sv2-bv{font-size:30px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;color:#2D2D2D;}
 .sv2-bl{font-size:10.5px;color:#777;font-weight:600;line-height:1.25;}
-.sv2-b-red .sv2-bv{color:#E24B4A;} .sv2-b-amber .sv2-bv{color:#C7891A;} .sv2-b-blue .sv2-bv{color:#185FA5;} .sv2-b-maroon .sv2-bv{color:#A4271F;} .sv2-b-slate .sv2-bv{color:#5A6B7B;}
+.sv2-b-red .sv2-bv{color:#D24A44;} .sv2-b-amber .sv2-bv{color:#C7891A;} .sv2-b-blue .sv2-bv{color:#17568C;} .sv2-b-maroon .sv2-bv{color:#A4271F;} .sv2-b-slate .sv2-bv{color:#5A6B7B;}
 .sv2-box.sv2-zero{opacity:0.5;}
 .sv2-box.sv2-zero .sv2-bv{color:#bdbcb6;}
 @keyframes sv2BoxFlash{0%,100%{box-shadow:0 0 0 0 rgba(226,75,74,0.55);}50%{box-shadow:0 0 0 5px rgba(226,75,74,0);}}
@@ -846,7 +846,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-age i{font-size:11px;vertical-align:-1px;}
 /* Non-zero boxes (except Create) flash a border in their own colour. Create
    keeps the filled+flashing treatment above. */
-.sv2-b-red{--hot:#E24B4A;} .sv2-b-amber{--hot:#C7891A;} .sv2-b-blue{--hot:#185FA5;} .sv2-b-maroon{--hot:#A4271F;} .sv2-b-slate{--hot:#5A6B7B;}
+.sv2-b-red{--hot:#D24A44;} .sv2-b-amber{--hot:#C7891A;} .sv2-b-blue{--hot:#17568C;} .sv2-b-maroon{--hot:#A4271F;} .sv2-b-slate{--hot:#5A6B7B;}
 @keyframes sv2HotFlash{0%{box-shadow:0 0 0 0 var(--hot);}70%{box-shadow:0 0 0 6px transparent;}100%{box-shadow:0 0 0 0 transparent;}}
 .sv2-box.sv2-hot{border:1.5px solid var(--hot);animation:sv2HotFlash 1.5s ease-in-out infinite;}
 @media(prefers-reduced-motion:reduce){.sv2-box.sv2-hot{animation:none;}}
@@ -859,7 +859,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-seg button.on{background:#fff;color:#2D2D2D;box-shadow:0 1px 2px rgba(0,0,0,0.1);}
 /* Coloured Subcontractor / Client segment on the list pages */
 #md-type-seg button.on#md-type-sub,#ad-type-seg button.on#ad-type-sub{background:#EF9F27;color:#412402;}
-#md-type-seg button.on#md-type-client,#ad-type-seg button.on#ad-type-client{background:#185FA5;color:#fff;}
+#md-type-seg button.on#md-type-client,#ad-type-seg button.on#ad-type-client{background:#17568C;color:#fff;}
 /* ── Refined docket list (My dockets / Project dockets) — list pages only ── */
 .dl-tabs{display:flex;gap:2px;overflow-x:auto;border-bottom:1px solid rgba(0,0,0,.08);margin-bottom:10px;}
 .dl-tabs button{border:0;background:none;font-family:inherit;font-size:12.5px;color:#8a877f;padding:10px 12px;cursor:pointer;position:relative;white-space:nowrap;font-weight:600;}
@@ -920,11 +920,11 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 .sv2-anl-bar-fill{height:100%;border-radius:5px;min-width:3px;}
 .sv2-anl-chart.bars{flex-direction:column;align-items:stretch;justify-content:flex-start;}
 /* Voice input mic button (shown only where speech recognition is supported) */
-.mic-btn{font-size:11px;font-weight:600;letter-spacing:.02em;color:#185FA5;background:#fff;border:1px solid #D3E3F3;border-radius:16px;padding:5px 11px 5px 9px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px;flex-shrink:0;transition:background .15s,border-color .15s;}
+.mic-btn{font-size:11px;font-weight:600;letter-spacing:.02em;color:#17568C;background:#fff;border:1px solid #D3E3F3;border-radius:16px;padding:5px 11px 5px 9px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px;flex-shrink:0;transition:background .15s,border-color .15s;}
 .mic-btn:hover{background:#F4F9FE;border-color:#B9D6F2;}
 .mic-btn:active{transform:scale(0.96);}
 .mic-btn .mic-ico{width:13px;height:13px;display:block;}
-.mic-btn.mic-live{color:#fff;background:#E24B4A;border-color:#E24B4A;animation:micPulse 1.1s ease-in-out infinite;}
+.mic-btn.mic-live{color:#fff;background:#D24A44;border-color:#D24A44;animation:micPulse 1.1s ease-in-out infinite;}
 @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(226,75,74,.5);}50%{box-shadow:0 0 0 5px rgba(226,75,74,0);}}
 @media(prefers-reduced-motion:reduce){.mic-btn.mic-live{animation:none;}}
 /* Description suggestions dropdown (from past dockets, context-ranked) */
@@ -940,7 +940,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 #ls input#lp{padding-right:48px;}
 #ls .signin{width:100%;background:#EF9F27!important;color:#000!important;border:none!important;font-size:18px;font-weight:700;letter-spacing:0.05em;padding:20px;border-radius:11px;margin-top:10px;font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;}
 #ls .signin:hover{background:#d98e1f!important;}
-#ls .forgot{display:block;width:100%;text-align:center;background:none;border:none;color:#185FA5;font-size:14px;margin-top:16px;cursor:pointer;font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;}
+#ls .forgot{display:block;width:100%;text-align:center;background:none;border:none;color:#17568C;font-size:14px;margin-top:16px;cursor:pointer;font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-serif;}
 #ls .forgot:hover{text-decoration:underline;}
 </style>
 </head>
@@ -1025,7 +1025,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c74</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c76</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1041,7 +1041,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <button class="nb" id="n1" onclick="showTab('nd',this)"><i class="ti ti-plus" aria-hidden="true"></i> New docket</button>
       <button class="nb" id="n-contacts-sub" onclick="showTab('contacts-sub',this)"><i class="ti ti-address-book" aria-hidden="true"></i> Contacts</button>
       <button class="nb" id="n-my-workers" onclick="showTab('my-workers',this)"><i class="ti ti-users" aria-hidden="true"></i> Users</button>
-      <button class="nb" id="n-drafts" onclick="showTab('drafts',this)"><i class="ti ti-pencil" aria-hidden="true"></i> Drafts <span id="draft-count-badge"  class="hidden" style="background:#E24B4A;color:#fff;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;margin-left:4px;">0</span></button>
+      <button class="nb" id="n-drafts" onclick="showTab('drafts',this)"><i class="ti ti-pencil" aria-hidden="true"></i> Drafts <span id="draft-count-badge"  class="hidden" style="background:#D24A44;color:#fff;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;margin-left:4px;">0</span></button>
       <button class="nb hidden" id="n-ready" onclick="showTab('ready',this)"><i class="ti ti-clipboard-check" aria-hidden="true"></i> Ready to sign <span id="ready-count-badge" class="hidden" style="background:#EF9F27;color:#412402;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px;">0</span></button>
       <button class="nb" id="n2" onclick="showTab('md',this)"><i class="ti ti-files" aria-hidden="true"></i> My dockets</button>
       <button class="nb hidden" id="n3" onclick="showTab('ad',this)"><i class="ti ti-file-stack" aria-hidden="true"></i> All dockets</button>
@@ -1071,7 +1071,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             </div>
           </div>
           <!-- CLIENT — dockets going up the chain to the client -->
-          <div class="sv2-sec-head sec-client"><span class="sv2-sec-ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" style="display:block"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span id="sv2h-client">Client</span></div>
+          <div class="sv2-sec-head sec-client"><span class="sv2-sec-ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" style="display:block"><circle cx="12" cy="12" r="11" fill="#17568C"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span id="sv2h-client">Client</span></div>
           <div class="sv2-boxrow">
             <div class="sv2-box sv2-b-red" id="sv2-box-create" onclick="supKpiOpen('chargeable_ready')"><div class="sv2-bv" id="sv2b-create">0</div><div class="sv2-bl" id="sv2l-create">Create client docket</div></div>
             <div class="sv2-box sv2-b-blue" onclick="supKpiOpen('awaiting_client')"><div class="sv2-bv" id="sv2b-await">0</div><div class="sv2-bl" id="sv2l-await">Awaiting client signature</div></div>
@@ -1193,7 +1193,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <div class="admin-mobile">
           <!-- Financial mini tiles (HC admin only) -->
           <div class="fin-mini" id="admin-fin-mini">
-            <div class="mc" style="border-left:3px solid #185FA5;"><div class="mv" id="am-sub-cost" style="color:#185FA5;">$0</div><div class="ml">Sub cost</div></div>
+            <div class="mc" style="border-left:3px solid #17568C;"><div class="mv" id="am-sub-cost" style="color:#17568C;">$0</div><div class="ml">Sub cost</div></div>
             <div class="mc" style="border-left:3px solid #1D9E75;"><div class="mv" id="am-chargeable" style="color:#1D9E75;">$0</div><div class="ml">Chargeable</div></div>
             <div class="mc" style="border-left:3px solid #EF9F27;background:#FFFBF5;"><div class="mv" id="am-margin" style="color:#EF9F27;">$0</div><div class="ml" style="color:#854F0B;">Margin</div></div>
           </div>
@@ -1214,7 +1214,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           </div>
           <!-- Awaiting final approval folder (PM / Contracts Admin sign-off) -->
           <div id="admin-approval-wrap" class="hidden">
-            <p class="st" style="margin-top:4px;color:#185FA5;">✓ Awaiting final approval</p>
+            <p class="st" style="margin-top:4px;color:#17568C;">✓ Awaiting final approval</p>
             <div class="card" style="padding:0;border:0.5px solid #C9DDF1;background:#FBFCFE;margin-bottom:10px;"><div id="admin-approval-list"></div></div>
           </div>
           <!-- Recent dockets list -->
@@ -1240,8 +1240,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 
         <!-- Cost breakdown row -->
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
-          <div class="mc" style="border-left:3px solid #185FA5;">
-            <div class="mv" id="fin-sub-cost" style="color:#185FA5;">$0</div>
+          <div class="mc" style="border-left:3px solid #17568C;">
+            <div class="mv" id="fin-sub-cost" style="color:#17568C;">$0</div>
             <div class="ml">Subcontractor cost</div>
             <div id="fin-sub-cost-detail" style="font-size:10px;color:#aaa;margin-top:2px;"></div>
           </div>
@@ -1303,9 +1303,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <div class="mv" id="sp-total" style="color:#1D9E75;">0</div>
             <div class="ml">Signed dockets</div>
           </div>
-          <div class="mc" style="border-left:3px solid #185FA5;">
-            <div class="mv" id="sp-chargeable" style="color:#185FA5;">0</div>
-            <div class="ml" style="color:#185FA5;">Chargeable</div>
+          <div class="mc" style="border-left:3px solid #17568C;">
+            <div class="mv" id="sp-chargeable" style="color:#17568C;">0</div>
+            <div class="ml" style="color:#17568C;">Chargeable</div>
           </div>
           <div class="mc" style="border-left:3px solid #EF9F27;">
             <div class="mv" id="sp-pending-client" style="color:#EF9F27;">0</div>
@@ -1381,17 +1381,17 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           </div>
           <div style="text-align:right;">
             <div style="font-size:10px;color:#999;text-transform:uppercase;letter-spacing:0.04em;">Docket</div>
-            <div id="review-docket-num" style="font-size:16px;font-weight:700;color:#185FA5;">#—</div>
+            <div id="review-docket-num" style="font-size:16px;font-weight:700;color:#17568C;">#—</div>
           </div>
         </div>
         <!-- Review body -->
         <div style="padding:16px 18px;max-width:600px;margin:0 auto;">
           <!-- Status banner -->
-          <div id="review-status-banner" style="background:#E6F1FB;border-left:3px solid #185FA5;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
-            <i class="ti ti-info-circle" style="font-size:18px;color:#185FA5;" aria-hidden="true"></i>
+          <div id="review-status-banner" style="background:#E6F1FB;border-left:3px solid #17568C;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
+            <i class="ti ti-info-circle" style="font-size:18px;color:#17568C;" aria-hidden="true"></i>
             <div>
-              <p style="font-size:13px;font-weight:500;color:#0C447C;margin:0;">Review your docket</p>
-              <p style="font-size:11px;color:#185FA5;margin:0;">Check all details below then sign to submit</p>
+              <p style="font-size:13px;font-weight:500;color:#0A3A66;margin:0;">Review your docket</p>
+              <p style="font-size:11px;color:#17568C;margin:0;">Check all details below then sign to submit</p>
             </div>
           </div>
           <!-- Summary grid -->
@@ -1433,7 +1433,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <!-- On site -->
             <div id="rsm-onsite">
               <div class="sig-wrap">
-              <canvas id="review-sigc" width="100%" height="220" style="width:100%;height:220px;border:2px solid #185FA5;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas>
+              <canvas id="review-sigc" width="100%" height="220" style="width:100%;height:220px;border:2px solid #17568C;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas>
               <div id="review-sig-lock" class="sig-lock" onclick="armSig('review-sig-lock')"><span>✍️ Tap here to sign<small>pad is locked until you tap</small></span></div>
               </div>
               <div style="display:flex;gap:8px;margin-top:8px;">
@@ -1505,13 +1505,13 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           </div>
           <!-- Prepare for a worker to sign (admin / supervisor only) -->
           <div id="review-prepare-wrap" class="hidden" style="background:#F0F6FC;border:1px solid #BBD6F0;border-radius:10px;padding:12px 14px;margin-bottom:12px;">
-            <p style="font-size:13px;font-weight:600;color:#185FA5;margin:0 0 4px;">Prepare this docket for a worker to sign</p>
+            <p style="font-size:13px;font-weight:600;color:#17568C;margin:0 0 4px;">Prepare this docket for a worker to sign</p>
             <p style="font-size:12px;color:#3A6EA5;margin:0 0 10px;">It'll appear in that worker's "Ready to sign" list, all filled in, for them to get the client supervisor's signature on site.</p>
             <label style="font-size:12px;color:#444;">Which worker?</label>
             <select id="review-prepare-worker" style="width:100%;margin-bottom:8px;"><option value="">— Select worker —</option></select>
             <div id="review-prepare-err" class="err hidden" style="margin-bottom:8px;"></div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
-              <button class="btn btn-p" onclick="savePrepared()" style="background:#185FA5;border-color:#185FA5;color:#fff;font-weight:600;">✓ Send to worker's Ready to sign</button>
+              <button class="btn btn-p" onclick="savePrepared()" style="background:#17568C;border-color:#17568C;color:#fff;font-weight:600;">✓ Send to worker's Ready to sign</button>
               <button class="btn btn-s" onclick="document.getElementById('review-prepare-wrap').classList.add('hidden');">Cancel</button>
             </div>
           </div>
@@ -1519,7 +1519,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <div id="review-err" class="err hidden" style="margin-bottom:8px;"></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
             <button class="btn btn-p" onclick="submitFromReview()" style="background:#2D2D2D;border-color:#2D2D2D;color:#EF9F27;font-weight:600;font-size:14px;padding:12px 24px;">✓ Submit docket</button>
-            <button class="btn" id="review-prepare-btn" onclick="openPreparePicker()" style="color:#185FA5;border-color:#185FA5;">📋 Prepare for a worker</button>
+            <button class="btn" id="review-prepare-btn" onclick="openPreparePicker()" style="color:#17568C;border-color:#17568C;">📋 Prepare for a worker</button>
             <button class="btn" id="review-save-draft-btn" onclick="saveDraftFromReview()" style="color:#854F0B;border-color:#EF9F27;">💾 Save as draft</button>
             <button class="btn" onclick="hideReview()">← Back to edit</button>
           </div>
@@ -1529,7 +1529,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
            second dropdown here (keeps this row tiny and lifts the form higher). -->
       <div style="display:flex;align-items:baseline;gap:5px;padding:0;margin:0 2px 5px;">
         <span style="font-size:9px;color:#aaa;letter-spacing:0.05em;text-transform:uppercase;">Docket</span>
-        <span style="font-size:12px;font-weight:700;color:#185FA5;" id="nd-docket-num">#—</span>
+        <span style="font-size:12px;font-weight:700;color:#17568C;" id="nd-docket-num">#—</span>
         <span id="nd-lang-hint" style="font-size:11px;color:#aaa;"></span>
       </div>
       <!-- kept hidden so language sync code has a target for every role -->
@@ -1548,10 +1548,10 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <div id="for-worker-wrap" class="hidden" style="margin-bottom:10px;background:#F4F9FE;border:0.5px solid #C9DDF1;border-radius:10px;padding:11px 14px;">
           <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin:0;">
             <input type="checkbox" id="for-worker-toggle" onchange="toggleForWorker(this.checked)" style="width:18px;height:18px;margin:1px 0 0;flex-shrink:0;">
-            <span style="font-size:13px;color:#0C447C;font-weight:500;">Create this docket for a worker? <span style="font-size:11px;color:#5B7CA0;font-weight:400;display:block;margin-top:1px;">It lands in their app so they can get it signed on site. Leave unticked to create it as normal.</span></span>
+            <span style="font-size:13px;color:#0A3A66;font-weight:500;">Create this docket for a worker? <span style="font-size:11px;color:#5B7CA0;font-weight:400;display:block;margin-top:1px;">It lands in their app so they can get it signed on site. Leave unticked to create it as normal.</span></span>
           </label>
           <div id="for-worker-pick" class="hidden" style="margin-top:9px;">
-            <label style="font-size:12px;color:#0C447C;font-weight:500;margin:0 0 4px;display:block;">Which worker?</label>
+            <label style="font-size:12px;color:#0A3A66;font-weight:500;margin:0 0 4px;display:block;">Which worker?</label>
             <select id="d-for-worker" onchange="onForWorkerChange()" style="width:100%;"><option value="">— Select worker —</option></select>
           </div>
         </div>
@@ -1569,7 +1569,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <div><label>Start time *</label><input type="text" inputmode="numeric" id="d-start" placeholder="e.g. 7:30 or 0730" autocomplete="off" onblur="normalizeTime(this)" onchange="calcHours()"></div>
           <div><label>Finish time *</label><input type="text" inputmode="numeric" id="d-finish" placeholder="e.g. 4:00 PM or 1600" autocomplete="off" onblur="normalizeTime(this)" onchange="calcHours()"></div>
           <div><label>Break (mins) <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:6px;">optional</span></label><input type="number" id="d-break" placeholder="e.g. 30" min="0" step="5" onchange="calcHours()"></div>
-          <div><label>Hours worked</label><input type="text" id="dh" placeholder="Auto-calculated" readonly style="background:#f5f5f3;color:#185FA5;font-weight:500;"></div>
+          <div><label>Hours worked</label><input type="text" id="dh" placeholder="Auto-calculated" readonly style="background:#f5f5f3;color:#17568C;font-weight:500;"></div>
           <div>
             <label>Requested by</label>
             <input type="text" id="d-reqby" list="d-reqby-list" placeholder="Type or pick a name" autocomplete="off">
@@ -1609,9 +1609,9 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
               <div id="workers-list"></div>
               <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
                 <button type="button" class="btn" id="btn-add-worker" onclick="addWorkerRow()" style="font-size:14px;background:#EF9F27;color:#412402;border:none;font-weight:600;padding:10px 16px;">+ Add another worker</button>
-                <button type="button" class="btn hidden" id="btn-add-self" onclick="addSelfWorker()" style="font-size:14px;background:#fff;color:#185FA5;border:1px solid #185FA5;font-weight:600;padding:10px 16px;">+ Add myself</button>
+                <button type="button" class="btn hidden" id="btn-add-self" onclick="addSelfWorker()" style="font-size:14px;background:#fff;color:#17568C;border:1px solid #17568C;font-weight:600;padding:10px 16px;">+ Add myself</button>
               </div>
-              <div id="workers-total" style="text-align:right;font-size:13px;color:#185FA5;font-weight:600;margin-top:8px;"></div>
+              <div id="workers-total" style="text-align:right;font-size:13px;color:#17568C;font-weight:600;margin-top:8px;"></div>
             </div>
           </div>
 
@@ -1630,11 +1630,11 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
             <button type="button" class="btn" onclick="addMaterialRow()" style="font-size:13px;background:#EF9F27;color:#412402;border:none;font-weight:600;padding:8px 14px;">+ Add item</button>
           </div>
           <div id="materials-list"></div>
-          <div id="materials-total" class="hidden" style="text-align:right;font-size:12px;color:#185FA5;font-weight:500;margin-top:4px;"></div>
+          <div id="materials-total" class="hidden" style="text-align:right;font-size:12px;color:#17568C;font-weight:500;margin-top:4px;"></div>
           <!-- Admin-only 10% purchasing charge, shown once a material has a value -->
           <label id="nd-mat-fee-wrap" class="hidden" style="display:flex;align-items:center;gap:8px;font-size:13px;color:#633806;cursor:pointer;margin-top:10px;background:#FFFBF5;border:0.5px solid #F2D9A8;border-radius:10px;padding:11px 12px;">
             <input type="checkbox" id="nd-mat-fee" style="width:18px;height:18px;margin:0;flex-shrink:0;">
-            <span>Add <span id="nd-fee-pct">10%</span> materials purchasing charge <span style="font-size:10px;color:#185FA5;background:#E6F1FB;padding:1px 6px;border-radius:8px;margin-left:2px;">ADMIN</span></span>
+            <span>Add <span id="nd-fee-pct">10%</span> materials purchasing charge <span style="font-size:10px;color:#17568C;background:#E6F1FB;padding:1px 6px;border-radius:8px;margin-left:2px;">ADMIN</span></span>
           </label>
         </div>
 
@@ -1662,7 +1662,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
               <div><label>Rate per night ($)</label><input type="number" id="accom-rate" placeholder="e.g. 150.00" min="0" step="0.50" oninput="updAccomTotal()"></div>
             </div>
             <div><label>Location / notes</label><input type="text" id="accom-notes" placeholder="e.g. Ibis Sydney, receipts attached"></div>
-            <div id="accom-total" style="text-align:right;font-size:12px;color:#185FA5;font-weight:500;margin-top:8px;"></div>
+            <div id="accom-total" style="text-align:right;font-size:12px;color:#17568C;font-weight:500;margin-top:8px;"></div>
           </div>
         </div>
         <div class="s2">
@@ -1683,15 +1683,15 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 
         <!-- CLIENT SIGNATURE SECTION -->
         <div style="margin-top:18px;background:#E6F1FB;border:1px solid #B9D6F2;border-radius:12px;padding:16px;">
-          <p style="font-size:15px;font-weight:600;margin-bottom:12px;color:#0C447C;">👤 Client / supervisor sign-off</p>
+          <p style="font-size:15px;font-weight:600;margin-bottom:12px;color:#0A3A66;">👤 Client / supervisor sign-off</p>
 
           <div class="fg" style="margin-bottom:12px;">
             <div>
-              <label style="color:#0C447C;">Client</label>
+              <label style="color:#0A3A66;">Client</label>
               <select id="d-client" onchange="loadClientContacts()"><option value="" id="opt-sel-client">— Select client —</option></select>
             </div>
             <div>
-              <label style="color:#0C447C;">Contact / supervisor</label>
+              <label style="color:#0A3A66;">Contact / supervisor</label>
               <select id="d-contact"><option value="" id="opt-sel-contact">— Select contact —</option></select>
             </div>
           </div>
@@ -1767,7 +1767,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div class="rb"><p class="st" style="margin:0;" id="md-title">My dockets</p><div style="display:flex;gap:6px;"><button class="btn btn-s" id="md-btn-dash" onclick="showTab('dash',document.getElementById('n0'))" style="background:#EF9F27;color:#412402;border:none;font-weight:600;">← Dashboard</button><button class="btn btn-s btn-csv" onclick="expCSV(false)">↓ CSV</button><button class="btn btn-s btn-pdf" onclick="expPDF(false)">↓ PDF</button></div></div>
       <div class="sv2-seg" id="md-type-seg" style="margin-bottom:12px;">
         <button id="md-type-all" class="on" onclick="setMdType('')">All</button>
-        <button id="md-type-client" onclick="setMdType('client')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-client-t">Sent</span></button>
+        <button id="md-type-client" onclick="setMdType('client')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#17568C"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-client-t">Sent</span></button>
         <button id="md-type-sub" onclick="setMdType('sub')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span id="md-type-sub-t">Received</span></button>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
@@ -1809,7 +1809,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div id="ad-filters-sup" class="hidden" style="gap:10px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
         <div class="sv2-seg" id="ad-type-seg">
           <button id="ad-type-all" class="on" onclick="setAdType('')">All</button>
-          <button id="ad-type-client" onclick="setAdType('client')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Sent</button>
+          <button id="ad-type-client" onclick="setAdType('client')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#17568C"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Sent</button>
           <button id="ad-type-sub" onclick="setAdType('sub')"><svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-2px" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Received</button>
         </div>
         <select id="ad-sup-proj" style="max-width:200px;" onchange="renAD()"><option value="">All projects</option></select>
@@ -1821,10 +1821,10 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <div id="bulk-action-bar" class="hidden" style="background:#1a1a1a;color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:space-between;">
         <span style="font-size:13px;"><strong id="bulk-count">0</strong> dockets selected &nbsp;|&nbsp; <strong id="bulk-hrs">0h</strong> &nbsp;|&nbsp; Sub cost: <strong id="bulk-sub-cost">$0</strong> &nbsp;|&nbsp; Client charge: <strong id="bulk-cli-cost">$0</strong></span>
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
-          <button class="btn btn-s" style="background:#185FA5;color:#fff;border-color:#185FA5;font-size:12px;" onclick="bulkClientForm()">📋 Client day labour form</button>
+          <button class="btn btn-s" style="background:#17568C;color:#fff;border-color:#17568C;font-size:12px;" onclick="bulkClientForm()">📋 Client day labour form</button>
           <button class="btn btn-s" style="background:#1D9E75;color:#fff;border-color:#1D9E75;font-size:12px;" onclick="bulkCreateClientDockets()">➕ Create client dockets</button>
           <button class="btn btn-s" style="background:#EF9F27;color:#fff;border-color:#EF9F27;font-size:12px;" onclick="bulkExpPDF()">↓ PDF</button>
-          <button class="btn btn-s" style="background:#E24B4A;color:#fff;border-color:#E24B4A;font-size:12px;" onclick="bulkDelete()">🗑 Delete</button>
+          <button class="btn btn-s" style="background:#D24A44;color:#fff;border-color:#D24A44;font-size:12px;" onclick="bulkDelete()">🗑 Delete</button>
           <button class="btn btn-s" style="background:#fff;color:#1a1a1a;font-size:12px;" onclick="bulkClearSel()">✕ Clear</button>
         </div>
       </div>
@@ -1833,7 +1833,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
         <div class="cc ch"><div class="ccv" id="ach">$0</div><div class="ccl">$ Chargeable to client</div></div>
         <div class="cc ow"><div class="ccv" id="aow">$0</div><div class="ccl">🏢 Our own cost</div></div>
         <div class="cc" style="background:#EDE9FE;border:0.5px solid #C4B5FD;"><div class="ccv" id="abc" style="color:#5B21B6;">$0</div><div class="ccl" style="color:#7C3AED;">↩ Backcharge</div></div>
-        <div class="cc" style="background:#E6F1FB;border:0.5px solid #B5D4F4;"><div class="ccv" id="a-submitted" style="color:#185FA5;">0/0</div><div class="ccl" style="color:#185FA5;">✓ Submitted to client</div></div>
+        <div class="cc" style="background:#E6F1FB;border:0.5px solid #B5D4F4;"><div class="ccv" id="a-submitted" style="color:#17568C;">0/0</div><div class="ccl" style="color:#17568C;">✓ Submitted to client</div></div>
       </div>
       <div class="card" style="padding:0;">
         <div class="tw"><table>
@@ -2042,8 +2042,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
 
         <!-- Client access note -->
         <div style="display:flex;align-items:flex-start;gap:9px;background:#F4F9FE;border:0.5px solid #C9DDF1;border-radius:10px;padding:10px 12px;margin:12px 0;">
-          <span style="flex-shrink:0;margin-top:1px;"><svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
-          <span style="font-size:12px;color:#0C447C;line-height:1.5;"><strong>Client access is always free.</strong> The party above you (builder, developer, owner or larger sub who signs) gets a free dashboard to see incoming costs and sign/approve dockets — they're never billed.</span>
+          <span style="flex-shrink:0;margin-top:1px;"><svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#17568C"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+          <span style="font-size:12px;color:#0A3A66;line-height:1.5;"><strong>Client access is always free.</strong> The party above you (builder, developer, owner or larger sub who signs) gets a free dashboard to see incoming costs and sign/approve dockets — they're never billed.</span>
         </div>
 
         <div class="fg" style="margin-bottom:8px;">
@@ -2306,7 +2306,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <button class="btn btn-p" onclick="genClientFormPDF()">📄 Download PDF</button>
-        <button class="btn" style="background:#E6F1FB;color:#0C447C;border-color:#B5D4F4;" onclick="cfmSendEmail()">📧 Send via email</button>
+        <button class="btn" style="background:#E6F1FB;color:#0A3A66;border-color:#B5D4F4;" onclick="cfmSendEmail()">📧 Send via email</button>
         <button class="btn" style="background:#E1F5EE;color:#085041;border-color:#9FE1CB;" onclick="cfmSendSMS()">💬 Send via SMS</button>
       </div>
     </div>
@@ -2479,13 +2479,13 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
     </div>
 
     <!-- Send to client (chargeable Received docket, signed, not yet raised up-chain) -->
-    <div id="vd-send-client" class="hidden" style="border:1px solid #C9DDF1;border-left:4px solid #185FA5;background:linear-gradient(180deg,#F7FAFE,#EAF2FB);border-radius:12px;padding:14px 16px;margin-top:14px;">
-      <div style="font-size:14px;font-weight:700;color:#0C447C;display:flex;align-items:center;gap:8px;">
-        <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div id="vd-send-client" class="hidden" style="border:1px solid #C9DDF1;border-left:4px solid #17568C;background:linear-gradient(180deg,#F7FAFE,#EAF2FB);border-radius:12px;padding:14px 16px;margin-top:14px;">
+      <div style="font-size:14px;font-weight:700;color:#0A3A66;display:flex;align-items:center;gap:8px;">
+        <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#17568C"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Send to client
       </div>
       <p style="font-size:11.5px;color:#476381;margin:5px 0 12px;line-height:1.5;">Raises the linked <b>Sent</b> docket for the builder/client above. On the next screen you'll get their supervisor to sign it — <b>in person</b>, or by <b>sending a signing link</b>.</p>
-      <button class="btn btn-s btn-p" style="background:#185FA5;border-color:#185FA5;font-weight:600;" onclick="createClientDocket()">↑ Raise client docket →</button>
+      <button class="btn btn-s btn-p" style="background:#17568C;border-color:#17568C;font-weight:600;" onclick="createClientDocket()">↑ Raise client docket →</button>
     </div>
     <!-- Admin final decision (subcontractor docket signed & billed, awaiting sign-off) -->
     <div id="vd-approve-actions" class="hidden" style="border-top:0.5px solid rgba(0,0,0,0.08);padding-top:14px;margin-top:14px;">
@@ -2578,7 +2578,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
   <div class="sign-wrap">
     <div style="text-align:center;margin-bottom:24px;">
       <div style="font-size:32px;">📋</div>
-      <p style="font-size:20px;font-weight:600;color:#185FA5;margin-top:6px;">Day Labour Book</p>
+      <p style="font-size:20px;font-weight:600;color:#17568C;margin-top:6px;">Day Labour Book</p>
       <p style="font-size:12px;color:#888;">Day Labour Book — sign-off request</p>
     </div>
     <div id="sign-content"></div>
@@ -2742,7 +2742,7 @@ function seedTrialData(){
   if((ldL('dlb_demo_ver')||0)<DEMO_DATA_VERSION){
     const _t=new Date().toISOString().split('T')[0];
     const _now=new Date().toISOString();
-    const _sig=(d)=>'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="90"><path d="'+d+'" fill="none" stroke="#185FA5" stroke-width="3" stroke-linecap="round"/></svg>');
+    const _sig=(d)=>'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="90"><path d="'+d+'" fill="none" stroke="#17568C" stroke-width="3" stroke-linecap="round"/></svg>');
     const _sigA=_sig('M12 62 C40 8 60 8 78 52 S120 78 140 44 S190 10 228 58');
     const _sigC=_sig('M14 58 C44 16 66 66 96 40 S150 14 178 52 S208 66 226 46');
     dockets=[
@@ -2807,7 +2807,7 @@ function seedTrialData(){
   if((ldL('dlb_demo_ver')||0)<999 && !ldL('dlb_demo_extra_stamps')){
     const _dt=new Date().toISOString().split('T')[0];
     const _dn=new Date().toISOString();
-    const _sg=(p)=>'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="90"><path d="'+p+'" fill="none" stroke="#185FA5" stroke-width="3" stroke-linecap="round"/></svg>');
+    const _sg=(p)=>'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="90"><path d="'+p+'" fill="none" stroke="#17568C" stroke-width="3" stroke-linecap="round"/></svg>');
     const bcId=String(dctr).padStart(4,'0');dctr++;
     dockets.push({id:bcId,pcode:'MAR-AP',pname:'Marina Apartments',freeDocket:false,demoExtra:true,
       date:_dt,sub:'Apex Tiling',reqBy:'Site Manager',reqHow:'Verbal',siNumber:null,po:null,
@@ -2838,7 +2838,7 @@ function seedTrialData(){
   if((ldL('dlb_demo_ver')||0)<999 && !ldL('dlb_demo_allcats')){
     const _t2=new Date().toISOString().split('T')[0];
     const _ago=(n)=>{const d=new Date();d.setDate(d.getDate()-n);return d.toISOString();};
-    const _sg2=(p)=>'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="90"><path d="'+p+'" fill="none" stroke="#185FA5" stroke-width="3" stroke-linecap="round"/></svg>');
+    const _sg2=(p)=>'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="90"><path d="'+p+'" fill="none" stroke="#17568C" stroke-width="3" stroke-linecap="round"/></svg>');
     const _sig2=_sg2('M10 60 C36 18,60 74,88 42 S150 20,182 54 S214 66,230 46');
     // Seed sub pay rates so the cost position shows real $ for these dockets.
     if(!Array.isArray(rates))rates=[];
@@ -3288,7 +3288,7 @@ function docketStatus(d){
 const STATUS_META={
   rejected:{label:'⛔ Rejected',bg:'#FBD9D6',fg:'#8A1F19'},
   queried:{label:'⚠ Queried',bg:'#FBE3E1',fg:'#B23B39'},
-  awaiting_client:{label:'↑ Pending signature',bg:'#E3EEF9',fg:'#185FA5'},
+  awaiting_client:{label:'↑ Pending signature',bg:'#E3EEF9',fg:'#17568C'},
   awaiting_my_sig:{label:'✍️ Needs my signature',bg:'#FCEFD6',fg:'#96631A'},
   needs_billing:{label:'💲 Needs billing',bg:'#FCEFD6',fg:'#96631A'},
   chargeable_ready:{label:'✓ Signed · ready to send',bg:'#DCF3EB',fg:'#0F6E56'},
@@ -3309,9 +3309,9 @@ function statusBadge(d){
 function vdStatusStrip(d){
   if(!d||d.approvalStatus==='approved')return'';
   const map={
-    rejected:['⛔ Rejected','#E24B4A','#fff','#E24B4A'],
-    queried:['⚠ Queried','#E24B4A','#fff','#E24B4A'],
-    awaiting_client:['↑ Pending signature','#185FA5','#fff','#185FA5'],
+    rejected:['⛔ Rejected','#D24A44','#fff','#D24A44'],
+    queried:['⚠ Queried','#D24A44','#fff','#D24A44'],
+    awaiting_client:['↑ Pending signature','#17568C','#fff','#17568C'],
     awaiting_my_sig:['✍️ Needs my signature','#F4B13C','#4a2c02','#C7891A'],
     needs_billing:['💲 Pending bill allocation','#F4B13C','#4a2c02','#C7891A'],
     chargeable_ready:['✓ Ready to send','#1D9E75','#fff','#1D9E75'],
@@ -3359,10 +3359,10 @@ function renderQueryStatus(d){
     const re=d.resubmittedAt?' · re-submitted '+fd(d.resubmittedAt.slice(0,10)):'';
     return`<div style="display:flex;align-items:center;gap:11px;background:linear-gradient(180deg,#F7FAFD,#F1F6FB);border:0.5px solid #D6E4F2;border-radius:12px;padding:11px 14px;margin-bottom:12px;">
       <span style="flex-shrink:0;width:30px;height:30px;border-radius:50%;background:#E6F1FB;display:flex;align-items:center;justify-content:center;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#17568C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/></svg>
       </span>
       <div style="line-height:1.35;">
-        <div style="font-size:12.5px;font-weight:700;color:#0C447C;letter-spacing:.01em;">Awaiting final approval</div>
+        <div style="font-size:12.5px;font-weight:700;color:#0A3A66;letter-spacing:.01em;">Awaiting final approval</div>
         <div style="font-size:11px;color:#5B7CA0;">Pending PM / Contracts Admin sign-off${re}</div>
       </div>
     </div>${queryThreadHtml(d)}`;
@@ -3430,7 +3430,7 @@ function setBill(t){
     const b=document.getElementById(id);
     if(!b||b.disabled)return;
     if(type===t){
-      if(type==='ch'){b.style.border='2px solid #185FA5';b.style.background='#E6F1FB';b.style.color='#0C447C';b.style.fontWeight='600';}
+      if(type==='ch'){b.style.border='2px solid #17568C';b.style.background='#E6F1FB';b.style.color='#0A3A66';b.style.fontWeight='600';}
       else if(type==='ow'){b.style.border='2px solid #854F0B';b.style.background='#FAEEDA';b.style.color='#633806';b.style.fontWeight='600';}
       else if(type==='bc'){b.style.border='2px solid #5B21B6';b.style.background='#EDE9FE';b.style.color='#5B21B6';b.style.fontWeight='600';}
     } else {
@@ -3752,7 +3752,7 @@ function updM(){
   document.getElementById('fin-backcharge-detail').textContent=bcDockets.length+' dockets recoverable';
   const mEl=document.getElementById('fin-margin');
   mEl.textContent=(margin>=0?'+':'')+margin.toFixed(2);
-  mEl.style.color=margin>=0?'#085041':'#E24B4A';
+  mEl.style.color=margin>=0?'#085041':'#D24A44';
   renSignedPanel();
   if(typeof renAdminDesk==='function')renAdminDesk();
 }
@@ -3798,7 +3798,7 @@ function isUpChainDocket(d){return !!d.refSubDocketId||d.signerRole==='client'||
 // blue building = client (sent up), orange tools = subcontractor (received).
 function docketTypeIcon(d){
   return isUpChainDocket(d)
-    ? '<svg width="14" height="14" viewBox="0 0 24 24" style="vertical-align:-2px"><title>Sent docket</title><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'
+    ? '<svg width="14" height="14" viewBox="0 0 24 24" style="vertical-align:-2px"><title>Sent docket</title><circle cx="12" cy="12" r="11" fill="#17568C"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'
     : '<svg width="14" height="14" viewBox="0 0 24 24" style="vertical-align:-2px"><title>Received docket</title><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
 }
 // My dockets view toggle: '' = all, 'client' = sent up, 'sub' = received.
@@ -4098,7 +4098,7 @@ function renAD(){
       const labels={pending_signoff:'Pending your final sign-off',queried_rejected:'Queried / rejected — awaiting resolution',sup:'Supervisor outstanding items',new_received:'New — just received (last 2 days)',client_review:'Pending client review',cost_in:'Cost coming in — signed day labour',recovered:'Recovered — chargeable & backcharge (approved)',own_cost:'Own cost — not yet recovered',in_approved:'In (approved) — day labour from subs',out_approved:'Out (approved) — chargeable to client + backcharge',await_sup_sig:'Awaiting supervisor signature',await_bill:'Awaiting bill allocation',ready_client:'Create client docket — chargeable & approved',queried_sub:'Queried / rejected — subcontractor dockets',queried_client:'Queried / rejected by the client',client_admin_review:'With the client’s admin to approve'};
       let extra='';
       if(D.supU){const su=(users||[]).find(u=>u.u===D.supU);if(su)extra=' · '+esc(su.name);}
-      noteEl.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:#EAF2FB;border:0.5px solid #C9DDF1;border-radius:10px;padding:9px 14px;margin-bottom:12px;font-size:12.5px;color:#0C447C;"><span>Filtered from dashboard: <strong>${labels[D.kind]||'Dashboard filter'}</strong>${extra}</span><button onclick="adxClearDrill()" style="background:none;border:none;color:#185FA5;font-weight:600;cursor:pointer;font-size:12px;">✕ Clear</button></div>`;
+      noteEl.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:#EAF2FB;border:0.5px solid #C9DDF1;border-radius:10px;padding:9px 14px;margin-bottom:12px;font-size:12.5px;color:#0A3A66;"><span>Filtered from dashboard: <strong>${labels[D.kind]||'Dashboard filter'}</strong>${extra}</span><button onclick="adxClearDrill()" style="background:none;border:none;color:#17568C;font-weight:600;cursor:pointer;font-size:12px;">✕ Clear</button></div>`;
     }
   } else if(noteEl){noteEl.innerHTML='';}
   const chList=fl.filter(d=>d.bill==='ch');
@@ -4191,7 +4191,7 @@ function renST(){
     return`<tr><td style="font-weight:500;">${esc(s.name)}</td><td><code style="font-size:11px;background:#f5f5f3;padding:2px 5px;border-radius:4px;">${esc(s.u)}</code></td><td><span class="badge bsub">${esc(s.trade||'—')}</span></td><td>${sd.length}</td><td>${hrs.toFixed(1)}h</td><td style="font-weight:500;">${cost>0?'$'+cost.toFixed(2):'—'}</td><td style="white-space:nowrap;"><button class="btn btn-s" onclick="editS('${s.u}')" style="margin-right:4px;">Edit</button><button class="btn btn-s" onclick="adminResetPassword('${s.u}')" style="margin-right:4px;" title="Reset password">Reset PW</button><button class="btn btn-s btn-d" onclick="delS('${s.u}')">Remove</button></td></tr>
     <tr style="background:#fafaf8;"><td colspan="7" style="padding:6px 10px;font-size:11px;color:#666;border-bottom:0.5px solid rgba(0,0,0,0.06);">
       <strong style="color:#888;margin-right:6px;">Rates:</strong>${ratesSummary}
-      <a href="#" onclick="showTab('rates',document.getElementById('n8'));switchRateTab('sub');document.getElementById('rates-filter-sub').value='${s.u}';renRatesTable();return false;" style="margin-left:10px;font-size:11px;color:#185FA5;">Manage rates →</a>
+      <a href="#" onclick="showTab('rates',document.getElementById('n8'));switchRateTab('sub');document.getElementById('rates-filter-sub').value='${s.u}';renRatesTable();return false;" style="margin-left:10px;font-size:11px;color:#17568C;">Manage rates →</a>
     </td></tr>`;
   }).join('');
   if(document.getElementById('ms'))document.getElementById('ms').textContent=subs.length;
@@ -4232,7 +4232,7 @@ function renClientList(){
           <thead><tr><th style="padding:5px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);text-align:left;font-size:11px;color:#888;text-transform:uppercase;">Name</th><th style="padding:5px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);text-align:left;font-size:11px;color:#888;text-transform:uppercase;">Email</th><th style="padding:5px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);text-align:left;font-size:11px;color:#888;text-transform:uppercase;">Mobile</th><th></th></tr></thead>
           <tbody>${cli.contacts.map(con=>`<tr>
             <td style="padding:6px 6px;border-bottom:0.5px solid rgba(0,0,0,0.06);font-weight:500;">${esc(con.name)}</td>
-            <td style="padding:6px 6px;border-bottom:0.5px solid rgba(0,0,0,0.06);color:#185FA5;">${con.email?`<a href="mailto:${esc(con.email)}" style="color:#185FA5;">${esc(con.email)}</a>`:'—'}</td>
+            <td style="padding:6px 6px;border-bottom:0.5px solid rgba(0,0,0,0.06);color:#17568C;">${con.email?`<a href="mailto:${esc(con.email)}" style="color:#17568C;">${esc(con.email)}</a>`:'—'}</td>
             <td style="padding:6px 6px;border-bottom:0.5px solid rgba(0,0,0,0.06);">${con.mobile?`<a href="tel:${esc(con.mobile)}" style="color:#1a1a1a;">${esc(con.mobile)}</a>`:'—'}</td>
             <td style="padding:6px 6px;border-bottom:0.5px solid rgba(0,0,0,0.06);text-align:right;white-space:nowrap;"><button class="btn btn-s" onclick="editContact('${cli.id}','${con.id}')" style="margin-right:4px;">Edit</button><button class="btn btn-s btn-d" onclick="delContact('${cli.id}','${con.id}')">Remove</button></td>
           </tr>`).join('')}</tbody>
@@ -4328,7 +4328,7 @@ function armSig(overlayId){const o=document.getElementById(overlayId);if(o)o.sty
 function lockSig(overlayId){const o=document.getElementById(overlayId);if(o)o.style.display='flex';}
 function initSig(){
   const c=document.getElementById('sigc');if(!c)return;
-  const ctx=c.getContext('2d');ctx.strokeStyle='#185FA5';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';
+  const ctx=c.getContext('2d');ctx.strokeStyle='#17568C';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';
   let lx,ly;
   function gp(e,c){const r=c.getBoundingClientRect();const sx=c.width/r.width;const sy=c.height/r.height;if(e.touches)return{x:(e.touches[0].clientX-r.left)*sx,y:(e.touches[0].clientY-r.top)*sy};return{x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy};}
   function s(e){e.preventDefault();sigOn=true;const p=gp(e,c);lx=p.x;ly=p.y;}
@@ -4467,7 +4467,7 @@ function submitD(){
   // Show sign link if remote
   if(!sig&&signToken){
     nds.innerHTML+=`<div style="margin-top:8px;padding:8px 10px;background:rgba(255,255,255,0.6);border-radius:6px;font-size:12px;">
-      <strong>Signing link:</strong> <a href="${signLink}" style="color:#185FA5;word-break:break-all;" target="_blank">${signLink}</a>
+      <strong>Signing link:</strong> <a href="${signLink}" style="color:#17568C;word-break:break-all;" target="_blank">${signLink}</a>
       <button class="btn btn-s" style="margin-left:8px;" onclick="copyLink('${signLink}')">Copy</button>
     </div>`;
   }
@@ -4826,7 +4826,7 @@ function vD(id){
         })()}${d.bill==='bc'&&d.bcTarget?`<div style='font-size:11px;color:#5B21B6;margin-top:2px;'>${esc(d.bcTarget)}</div>`:''}
       </div>
       ${cli?`<div><span class="vdk">Client</span>${esc(cli.name)}</div>`:''}
-      ${con?`<div><span class="vdk">Contact</span>${esc(con.name)}${con.email?'<div style="font-size:11px;color:#185FA5;">'+esc(con.email)+'</div>':''}${con.mobile?'<div style="font-size:11px;color:#666;">'+esc(con.mobile)+'</div>':''}</div>`:''}
+      ${con?`<div><span class="vdk">Contact</span>${esc(con.name)}${con.email?'<div style="font-size:11px;color:#17568C;">'+esc(con.email)+'</div>':''}${con.mobile?'<div style="font-size:11px;color:#666;">'+esc(con.mobile)+'</div>':''}</div>`:''}
     </div>
     <div class="vd-sec-title">Description of work</div>
     <div class="vd-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:13px 14px;margin-bottom:10px;">
@@ -4869,17 +4869,17 @@ function vD(id){
           const nm=w.name&&w.name.trim()?esc(w.name):('Worker '+(i+1));
           const h=parseFloat(w.hours)||0;
           const line=Math.round(h*effRate*100)/100;
-          return`<tr><td style="padding:4px 6px;">${nm}</td><td style="padding:4px 6px;text-align:right;color:#888;">${h?h+'h':'—'}</td><td style="padding:4px 6px;text-align:right;">$${effRate.toFixed(2)}</td><td style="padding:4px 6px;text-align:right;color:#185FA5;font-weight:500;">$${line.toFixed(2)}</td></tr>`;
+          return`<tr><td style="padding:4px 6px;">${nm}</td><td style="padding:4px 6px;text-align:right;color:#888;">${h?h+'h':'—'}</td><td style="padding:4px 6px;text-align:right;">$${effRate.toFixed(2)}</td><td style="padding:4px 6px;text-align:right;color:#17568C;font-weight:500;">$${line.toFixed(2)}</td></tr>`;
         }).join('');
         return`<div style="grid-column:span 2;background:#FBFCFE;border:0.5px solid #D6E5F5;border-radius:10px;padding:12px;">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
-            <span style="color:#185FA5;font-size:11px;font-weight:600;letter-spacing:0.03em;">LABOUR BREAKDOWN</span>
-            <span style="font-size:10px;color:#185FA5;background:#E6F1FB;padding:1px 6px;border-radius:8px;">ADMIN</span>
+            <span style="color:#17568C;font-size:11px;font-weight:600;letter-spacing:0.03em;">LABOUR BREAKDOWN</span>
+            <span style="font-size:10px;color:#17568C;background:#E6F1FB;padding:1px 6px;border-radius:8px;">ADMIN</span>
           </div>
           <table style="width:100%;font-size:12px;border-collapse:collapse;">
             <thead><tr><th style="text-align:left;color:#888;font-size:10px;padding:3px 6px;">Worker</th><th style="text-align:right;color:#888;font-size:10px;padding:3px 6px;">Hours</th><th style="text-align:right;color:#888;font-size:10px;padding:3px 6px;">${rateLabel}</th><th style="text-align:right;color:#888;font-size:10px;padding:3px 6px;">Labour</th></tr></thead>
             <tbody>${rows}</tbody>
-            <tfoot><tr><td colspan="3" style="padding:5px 6px;font-weight:600;text-align:right;border-top:0.5px solid #D6E5F5;">Total labour (${totalH.toFixed(2).replace(/\.00$/,'')}h)</td><td style="padding:5px 6px;text-align:right;font-weight:700;color:#185FA5;border-top:0.5px solid #D6E5F5;">$${charge.toFixed(2)}</td></tr></tfoot>
+            <tfoot><tr><td colspan="3" style="padding:5px 6px;font-weight:600;text-align:right;border-top:0.5px solid #D6E5F5;">Total labour (${totalH.toFixed(2).replace(/\.00$/,'')}h)</td><td style="padding:5px 6px;text-align:right;font-weight:700;color:#17568C;border-top:0.5px solid #D6E5F5;">$${charge.toFixed(2)}</td></tr></tfoot>
           </table>
         </div>`;
       })()}
@@ -4891,18 +4891,18 @@ function vD(id){
         const fee=feeOn?Math.round(matCost*materialsFeePct()*100)/100:0;
         const matCharged=matCost+fee;
         const headTotal=isAdm?'<th style="color:#888;font-size:10px;padding:3px 6px;border-bottom:0.5px solid rgba(0,0,0,0.08);text-align:right;">Total</th>':'';
-        const rows=d.materials.map(m=>`<tr><td style="padding:4px 6px;">${esc(m.desc||'—')}</td><td style="padding:4px 6px;text-align:center;">${m.invoice?'📎':'—'}</td>${isAdm?`<td style="padding:4px 6px;text-align:right;color:#185FA5;font-weight:500;">${m.total?'$'+m.total.toFixed(2):'—'}</td>`:''}</tr>`).join('');
+        const rows=d.materials.map(m=>`<tr><td style="padding:4px 6px;">${esc(m.desc||'—')}</td><td style="padding:4px 6px;text-align:center;">${m.invoice?'📎':'—'}</td>${isAdm?`<td style="padding:4px 6px;text-align:right;color:#17568C;font-weight:500;">${m.total?'$'+m.total.toFixed(2):'—'}</td>`:''}</tr>`).join('');
         let foot='';
         if(isAdm){
           foot=`<tfoot>
             <tr><td colspan="2" style="padding:4px 6px;text-align:right;color:#888;">Materials (at cost)</td><td style="padding:4px 6px;text-align:right;">$${matCost.toFixed(2)}</td></tr>
             ${feeOn?`<tr><td colspan="2" style="padding:4px 6px;text-align:right;color:#888;">+ ${feePctLabel()} purchasing charge</td><td style="padding:4px 6px;text-align:right;">$${fee.toFixed(2)}</td></tr>`:''}
-            <tr><td colspan="2" style="padding:4px 6px;font-weight:600;text-align:right;border-top:0.5px solid rgba(0,0,0,0.1);">Materials charged</td><td style="padding:4px 6px;text-align:right;color:#185FA5;font-weight:600;border-top:0.5px solid rgba(0,0,0,0.1);">$${matCharged.toFixed(2)}</td></tr>
+            <tr><td colspan="2" style="padding:4px 6px;font-weight:600;text-align:right;border-top:0.5px solid rgba(0,0,0,0.1);">Materials charged</td><td style="padding:4px 6px;text-align:right;color:#17568C;font-weight:600;border-top:0.5px solid rgba(0,0,0,0.1);">$${matCharged.toFixed(2)}</td></tr>
           </tfoot>`;
         }
         const feeToggle=isAdm?`<label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#633806;cursor:pointer;margin-top:8px;background:#FFFBF5;border:0.5px solid #F2D9A8;border-radius:8px;padding:8px 10px;">
           <input type="checkbox" ${feeOn?'checked':''} onchange="toggleMaterialsFee('${d.id}',this.checked)" style="width:16px;height:16px;margin:0;">
-          Add ${feePctLabel()} materials purchasing charge <span style="font-size:10px;color:#185FA5;background:#E6F1FB;padding:1px 6px;border-radius:8px;">ADMIN</span>
+          Add ${feePctLabel()} materials purchasing charge <span style="font-size:10px;color:#17568C;background:#E6F1FB;padding:1px 6px;border-radius:8px;">ADMIN</span>
         </label>`:'';
         return`<div style="grid-column:span 2">
           <span style="color:#888;font-size:11px;display:block;margin-bottom:6px;">Materials</span>
@@ -4916,7 +4916,7 @@ function vD(id){
         <span style="color:#888;font-size:11px;display:block;margin-bottom:4px;">Accommodation</span>
         <div style="background:#f5f5f3;border-radius:6px;padding:8px 10px;font-size:12px;">
           ${CU&&CU.role==='admin'
-            ?`<strong>${esc(d.accommodation.type)}</strong> — ${d.accommodation.nights} night${d.accommodation.nights!==1?'s':''} × $${d.accommodation.rate.toFixed(2)} = <strong style="color:#185FA5;">$${d.accommodation.total.toFixed(2)}</strong>`
+            ?`<strong>${esc(d.accommodation.type)}</strong> — ${d.accommodation.nights} night${d.accommodation.nights!==1?'s':''} × $${d.accommodation.rate.toFixed(2)} = <strong style="color:#17568C;">$${d.accommodation.total.toFixed(2)}</strong>`
             :`<strong>${esc(d.accommodation.type)}</strong> — ${d.accommodation.nights} night${d.accommodation.nights!==1?'s':''}`}
           ${d.accommodation.notes?`<div style="color:#888;margin-top:2px;">${esc(d.accommodation.notes)}</div>`:''}
         </div></div>`:''}
@@ -4937,7 +4937,7 @@ function vD(id){
       <p style="font-size:12px;font-weight:500;color:#1a1a1a;margin-bottom:10px;">Billing type</p>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <button onclick="assignBilling('${d.id}','ch')"
-          style="flex:1;min-width:120px;padding:10px 8px;border-radius:8px;border:2px solid ${d.bill==='ch'?'#185FA5':'rgba(0,0,0,0.12)'};background:${d.bill==='ch'?'#E6F1FB':'#fff'};color:${d.bill==='ch'?'#0C447C':'#666'};font-size:13px;font-weight:${d.bill==='ch'?'600':'400'};cursor:${_canBill?'pointer':'not-allowed'};opacity:${_canBill?'1':'0.4'};" ${_canBill?'':'disabled'}>
+          style="flex:1;min-width:120px;padding:10px 8px;border-radius:8px;border:2px solid ${d.bill==='ch'?'#17568C':'rgba(0,0,0,0.12)'};background:${d.bill==='ch'?'#E6F1FB':'#fff'};color:${d.bill==='ch'?'#0A3A66':'#666'};font-size:13px;font-weight:${d.bill==='ch'?'600':'400'};cursor:${_canBill?'pointer':'not-allowed'};opacity:${_canBill?'1':'0.4'};" ${_canBill?'':'disabled'}>
           Chargeable
         </button>
         <button onclick="assignBilling('${d.id}','ow')"
@@ -4974,14 +4974,14 @@ function vD(id){
         <input type="email" id="send-link-email" value="${esc(presetEmail)}" placeholder="recipient@company.com" style="margin-bottom:8px;">
         <button class="btn btn-s btn-p" style="width:100%;" onclick="emailSignLink('${d.id}','${d.signToken}')">📧 Email signing link</button>
         <div style="margin-top:8px;">
-          <a href="${signLink}" target="_blank" style="color:#185FA5;word-break:break-all;font-size:11px;">${signLink}</a>
+          <a href="${signLink}" target="_blank" style="color:#17568C;word-break:break-all;font-size:11px;">${signLink}</a>
           <button class="btn btn-s" style="margin-top:6px;display:block;" onclick="copyLink('${signLink}')">📋 Copy link</button>
         </div>
       </div>`;
-    slb.innerHTML=`<div style="background:#E6F1FB;border-radius:8px;padding:12px 14px;font-size:13px;color:#0C447C;">
+    slb.innerHTML=`<div style="background:#E6F1FB;border-radius:8px;padding:12px 14px;font-size:13px;color:#0A3A66;">
       <strong>${isSubDocket?'Sign this subcontractor docket':'Sign on screen now'}</strong>
       <p style="margin:4px 0 8px;font-size:12px;">${isSubDocket?'This docket was sent to you by '+esc(d.sub||'the subcontractor')+' to sign. Capture your signature below, then set the billing.':'Get the client or supervisor to sign here directly.'}</p>
-      <div class="sig-wrap"><canvas id="vd-sign-canvas" style="width:100%;height:180px;border:2px solid #185FA5;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas><div id="vd-sign-lock" class="sig-lock" onclick="armSig('vd-sign-lock')"><span>✍️ Tap here to sign<small>pad is locked until you tap</small></span></div></div>
+      <div class="sig-wrap"><canvas id="vd-sign-canvas" style="width:100%;height:180px;border:2px solid #17568C;border-radius:10px;background:#fff;touch-action:none;display:block;"></canvas><div id="vd-sign-lock" class="sig-lock" onclick="armSig('vd-sign-lock')"><span>✍️ Tap here to sign<small>pad is locked until you tap</small></span></div></div>
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
         <button class="btn btn-s" onclick="clearVdSign()">Clear</button>
         <button class="btn btn-s btn-p" style="background:#1D9E75;border-color:#1D9E75;" onclick="saveVdSign('${d.id}')">✓ Save signature</button>
@@ -5085,7 +5085,7 @@ function showSignError(msg){
   document.getElementById('sign-content').innerHTML=`
     <div class="sign-card" style="text-align:center;padding:2rem;">
       <div style="font-size:40px;margin-bottom:12px;">⚠️</div>
-      <p style="font-size:15px;font-weight:500;color:#E24B4A;">${esc(msg)}</p>
+      <p style="font-size:15px;font-weight:500;color:#D24A44;">${esc(msg)}</p>
     </div>`;
 }
 
@@ -5130,7 +5130,7 @@ function showSignForm(d){
 let remoteSigHas=false,remoteSigOn=false;
 function initRemoteSig(){
   const c=document.getElementById('remote-sigc');if(!c)return;
-  const ctx=c.getContext('2d');ctx.strokeStyle='#185FA5';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';
+  const ctx=c.getContext('2d');ctx.strokeStyle='#17568C';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';
   let lx,ly;
   function gp(e,c){const r=c.getBoundingClientRect();const sx=c.width/r.width;const sy=c.height/r.height;if(e.touches)return{x:(e.touches[0].clientX-r.left)*sx,y:(e.touches[0].clientY-r.top)*sy};return{x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy};}
   function s(e){e.preventDefault();remoteSigOn=true;const p=gp(e,c);lx=p.x;ly=p.y;}
@@ -5279,8 +5279,8 @@ function dlbTextPdf(d,showCosts,filename){
 function dlbHrs(h){h=parseFloat(h)||0;return(h%1===0?String(h):h.toFixed(2).replace(/\.?0+$/,''))+'h';}
 function dlbStatusChip(d){
   if(d.sig)return{txt:'✓ SIGNED',bg:'#1D9E75'};
-  if(d.sigStatus==='sent_email')return{txt:'📧 SENT',bg:'#185FA5'};
-  if(d.sigStatus==='sent_sms')return{txt:'💬 SENT',bg:'#185FA5'};
+  if(d.sigStatus==='sent_email')return{txt:'📧 SENT',bg:'#17568C'};
+  if(d.sigStatus==='sent_sms')return{txt:'💬 SENT',bg:'#17568C'};
   return{txt:'⏳ PENDING',bg:'#a07a3c'};
 }
 function dlbEnsureStyles(){
@@ -5303,7 +5303,7 @@ function dlbEnsureStyles(){
   .dlb-doc .head .brand .mark svg{width:26px;height:30px;}
   .dlb-doc .numstrip{display:flex;align-items:center;justify-content:space-between;padding:14px 30px;background:#FAEEDA;border-bottom:2px solid #EF9F27;}
   .dlb-doc .numstrip .label{font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:#854F0B;font-weight:600;}
-  .dlb-doc .numstrip .num{font-size:26px;font-weight:700;color:#185FA5;letter-spacing:0.02em;}
+  .dlb-doc .numstrip .num{font-size:26px;font-weight:700;color:#17568C;letter-spacing:0.02em;}
   .dlb-doc .numstrip .status{color:#fff;font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;letter-spacing:0.05em;}
   .dlb-doc .body{padding:26px 30px;}
   .dlb-doc .sec-title{font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#EF9F27;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #f0e6d4;}
@@ -5313,26 +5313,26 @@ function dlbEnsureStyles(){
   .dlb-doc .row .k{flex:0 0 120px;font-size:12px;color:#9a9a93;font-weight:500;letter-spacing:0.02em;}
   .dlb-doc .row .v{flex:1;font-size:14px;color:#2D2D2D;font-weight:500;}
   .dlb-doc .row.full{grid-column:1 / -1;}
-  .dlb-doc .v .badge{display:inline-block;background:#E6F1FB;color:#185FA5;font-size:11px;font-weight:600;padding:2px 9px;border-radius:10px;margin-left:6px;letter-spacing:0.04em;}
+  .dlb-doc .v .badge{display:inline-block;background:#E6F1FB;color:#17568C;font-size:11px;font-weight:600;padding:2px 9px;border-radius:10px;margin-left:6px;letter-spacing:0.04em;}
   .dlb-doc .v .chip-bill{display:inline-block;background:#E1F5EE;color:#085041;font-size:12px;font-weight:600;padding:4px 12px;border-radius:8px;}
   .dlb-doc .tiles{display:flex;gap:12px;margin-bottom:26px;}
   .dlb-doc .tile{flex:1;border-radius:12px;padding:16px 14px;text-align:center;}
   .dlb-doc .tile .tv{font-size:24px;font-weight:700;line-height:1;}
   .dlb-doc .tile .tl{font-size:11px;letter-spacing:0.06em;text-transform:uppercase;margin-top:6px;font-weight:500;}
   .dlb-doc .tile.hours{background:#FAEEDA;} .dlb-doc .tile.hours .tv{color:#633806;} .dlb-doc .tile.hours .tl{color:#a07a3c;}
-  .dlb-doc .tile.rate{background:#E6F1FB;position:relative;} .dlb-doc .tile.rate .tv{color:#0C447C;} .dlb-doc .tile.rate .tl{color:#5a86b3;}
-  .dlb-doc .tile.rate .admin-flag{position:absolute;top:6px;right:8px;font-size:8px;background:#185FA5;color:#fff;padding:2px 6px;border-radius:8px;letter-spacing:0.05em;}
+  .dlb-doc .tile.rate{background:#E6F1FB;position:relative;} .dlb-doc .tile.rate .tv{color:#0A3A66;} .dlb-doc .tile.rate .tl{color:#5a86b3;}
+  .dlb-doc .tile.rate .admin-flag{position:absolute;top:6px;right:8px;font-size:8px;background:#17568C;color:#fff;padding:2px 6px;border-radius:8px;letter-spacing:0.05em;}
   .dlb-doc .tile.cost{background:#E1F5EE;} .dlb-doc .tile.cost .tv{color:#085041;} .dlb-doc .tile.cost .tl{color:#4c9483;}
   .dlb-doc .breakdown{text-align:right;font-size:12px;color:#9a9a93;margin:-16px 0 26px;}
-  .dlb-doc .breakdown strong{color:#185FA5;}
+  .dlb-doc .breakdown strong{color:#17568C;}
   .dlb-doc .desc-box{background:#faf9f6;border:1px solid #f0efe9;border-radius:10px;padding:14px 16px;font-size:14px;line-height:1.55;color:#3a3a36;}
   .dlb-doc table{width:100%;border-collapse:collapse;}
   .dlb-doc thead th{font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#9a9a93;text-align:left;padding:8px 10px;border-bottom:1px solid #ecece8;font-weight:600;}
   .dlb-doc tbody td{font-size:13px;padding:10px;border-bottom:1px solid #f4f4f1;color:#2D2D2D;}
   .dlb-doc tbody td.r,.dlb-doc thead th.r,.dlb-doc tfoot td.r{text-align:right;}
   .dlb-doc tfoot td{font-size:13px;padding:10px;font-weight:700;}
-  .dlb-doc tfoot td.r{color:#185FA5;}
-  .dlb-doc .wflag{font-size:10px;color:#185FA5;background:#E6F1FB;padding:1px 7px;border-radius:8px;margin-left:4px;}
+  .dlb-doc tfoot td.r{color:#17568C;}
+  .dlb-doc .wflag{font-size:10px;color:#17568C;background:#E6F1FB;padding:1px 7px;border-radius:8px;margin-left:4px;}
   .dlb-doc .inv-link{color:#1D9E75;font-size:12px;font-weight:600;}
   .dlb-doc .photos{display:flex;gap:10px;flex-wrap:wrap;}
   .dlb-doc .photo{width:150px;height:110px;border-radius:10px;border:1px solid #eee;object-fit:cover;background:#ddd;}
@@ -5465,7 +5465,7 @@ function dlbBuildSheet(d,showCosts){
   // Accommodation (cost shown to admin only)
   let accomSec='';
   if(accom){
-    accomSec=`<div class="sec"><div class="sec-title">Accommodation</div><div class="desc-box"><strong>${esc(accom.type||'')}</strong> — ${accom.nights} night${accom.nights!==1?'s':''}${showCosts?` × $${(accom.rate||0).toFixed(2)} = <strong style="color:#185FA5;">$${(accom.total||0).toFixed(2)}</strong>`:''}${accom.notes?`<div style="color:#9a9a93;margin-top:4px;">${esc(accom.notes)}</div>`:''}</div></div>`;
+    accomSec=`<div class="sec"><div class="sec-title">Accommodation</div><div class="desc-box"><strong>${esc(accom.type||'')}</strong> — ${accom.nights} night${accom.nights!==1?'s':''}${showCosts?` × $${(accom.rate||0).toFixed(2)} = <strong style="color:#17568C;">$${(accom.total||0).toFixed(2)}</strong>`:''}${accom.notes?`<div style="color:#9a9a93;margin-top:4px;">${esc(accom.notes)}</div>`:''}</div></div>`;
   }
   // Supervisor note (clarification the signer added)
   const svNoteSec=d.supervisorNote?`<div class="sec"><div class="sec-title">Supervisor Note</div><div class="desc-box">${esc(d.supervisorNote)}</div></div>`:'';
@@ -5916,7 +5916,7 @@ function changeLang(lang){
   if(hint){
     if(lang!=='en'){
       hint.textContent={'zh':'切换回英文再获取签名','es':'Cambiar a inglés antes de firmar'}[lang]||'';
-      hint.style.color='#E24B4A';
+      hint.style.color='#D24A44';
     } else {
       hint.textContent='✓ Ready for signature';
       hint.style.color='#1D9E75';
@@ -6128,7 +6128,7 @@ function renCopyAdminList(){
   wrap.innerHTML=list.map((email,i)=>`
     <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;margin-bottom:6px;">
       <span style="flex:1;font-size:13px;color:#2D2D2D;word-break:break-all;">${esc(email)}</span>
-      <button type="button" onclick="removeCopyAdmin(${i})" style="flex-shrink:0;background:none;border:none;color:#E24B4A;font-size:16px;cursor:pointer;padding:0 4px;" title="Remove">✕</button>
+      <button type="button" onclick="removeCopyAdmin(${i})" style="flex-shrink:0;background:none;border:none;color:#D24A44;font-size:16px;cursor:pointer;padding:0 4px;" title="Remove">✕</button>
     </div>`).join('');
 }
 
@@ -6653,7 +6653,7 @@ function togglePw(inputId, iconId){
   if(!inp)return;
   if(inp.type==='password'){
     inp.type='text';
-    if(icon){icon.className='ti ti-eye-off';icon.style.color='#185FA5';}
+    if(icon){icon.className='ti ti-eye-off';icon.style.color='#17568C';}
   } else {
     inp.type='password';
     if(icon){icon.className='ti ti-eye';icon.style.color='#aaa';}
@@ -7034,7 +7034,7 @@ function renSubscription(){
   const curEl=document.getElementById('sub-current');
   if(curEl)curEl.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:linear-gradient(180deg,#F7FAFD,#EAF2FB);border:0.5px solid #C9DDF1;border-radius:10px;padding:12px 14px;">
     <div><div style="font-size:12px;color:#5B7CA0;text-transform:uppercase;letter-spacing:.05em;font-weight:700;">Current plan</div>
-      <div style="font-size:16px;font-weight:800;color:#0C447C;">${cp.name} — $${cp.price}/mo <span style="font-size:12px;font-weight:500;color:#5B7CA0;">${gstTxt}</span></div></div>
+      <div style="font-size:16px;font-weight:800;color:#0A3A66;">${cp.name} — $${cp.price}/mo <span style="font-size:12px;font-weight:500;color:#5B7CA0;">${gstTxt}</span></div></div>
     <span style="font-size:11px;color:#5B7CA0;">${esc(cp.blurb)}</span>
   </div>`;
   // Plan tier cards
@@ -7194,7 +7194,7 @@ function handlePhotoUpload(e){
       img.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:8px;border:0.5px solid rgba(0,0,0,0.1);';
       const btn=document.createElement('button');
       btn.innerHTML='&times;';
-      btn.style.cssText='position:absolute;top:-4px;right:-4px;background:#E24B4A;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1;';
+      btn.style.cssText='position:absolute;top:-4px;right:-4px;background:#D24A44;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1;';
       btn.onclick=function(){
         const idx=uploadedPhotos.indexOf(dataUrl);
         if(idx>-1)uploadedPhotos.splice(idx,1);
@@ -7289,7 +7289,7 @@ function renRatesTable(){
     return`<tr>
       <td><span class="badge bi">${esc(r.projCode)}</span> ${esc(p?p.name:'')}</td>
       <td style="font-weight:500;">${esc(s?s.name:r.subU)}</td>
-      <td style="color:#185FA5;font-weight:500;">$${parseFloat(r.std).toFixed(2)}/hr</td>
+      <td style="color:#17568C;font-weight:500;">$${parseFloat(r.std).toFixed(2)}/hr</td>
       <td style="color:#888;">${r.ot?'$'+parseFloat(r.ot).toFixed(2)+'/hr':'—'}</td>
       <td>${margin}</td>
       <td style="color:#aaa;font-size:11px;">${r.updated?new Date(r.updated).toLocaleDateString('en-AU'):'—'}</td>
@@ -7423,7 +7423,7 @@ function loadDraftIntoForm(draftId){
     d.photos.forEach(p=>{
       const wrap=document.createElement('div');wrap.style.cssText='position:relative;display:inline-block;';
       const img=document.createElement('img');img.src=p;img.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:8px;border:0.5px solid rgba(0,0,0,0.1);';
-      const btn=document.createElement('button');btn.innerHTML='&times;';btn.style.cssText='position:absolute;top:-4px;right:-4px;background:#E24B4A;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;';
+      const btn=document.createElement('button');btn.innerHTML='&times;';btn.style.cssText='position:absolute;top:-4px;right:-4px;background:#D24A44;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;';
       btn.onclick=function(){const idx=uploadedPhotos.indexOf(p);if(idx>-1)uploadedPhotos.splice(idx,1);wrap.remove();};
       wrap.appendChild(img);wrap.appendChild(btn);previews.appendChild(wrap);
     });
@@ -7594,7 +7594,7 @@ function renReady(){
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
             ${d.proj?`<span class="badge bi">${esc(d.proj)}</span>`:'<span class="badge" style="background:#f5f5f3;color:#888;">No project</span>'}
             ${d.date?`<span style="font-size:12px;color:#888;">${fd(d.date)}</span>`:''}
-            <span class="badge" style="background:#EAF3FB;color:#185FA5;">${who}</span>
+            <span class="badge" style="background:#EAF3FB;color:#17568C;">${who}</span>
           </div>
           <p style="font-size:13px;color:#1a1a1a;margin-bottom:2px;">${d.desc?esc(d.desc.slice(0,80))+(d.desc.length>80?'…':''):'<span style="color:#aaa;">No description</span>'}</p>
           <p style="font-size:11px;color:#aaa;">Prepared ${savedDate}${d.hrs?' — '+d.hrs+'h':''}</p>
@@ -7673,7 +7673,7 @@ function cfmFilterDockets(){
         <strong>#${d.id}</strong> &nbsp;${projBadge(d.pcode)}&nbsp; ${fd(d.date)} &nbsp;—&nbsp; ${esc(d.sub)} &nbsp;—&nbsp; ${d.hours}h
         ${d.sig?'<span class="badge bs" style="font-size:10px;">Signed</span>':'<span class="badge bpend" style="font-size:10px;">Unsigned</span>'}
       </span>
-      <span style="color:#185FA5;font-weight:500;flex-shrink:0;">${fc(calcC(d))}</span>
+      <span style="color:#17568C;font-weight:500;flex-shrink:0;">${fc(calcC(d))}</span>
     </label>`).join('');
   cfmUpdateSummary();
 }
@@ -7814,7 +7814,7 @@ function cfmSendEmail(){
   const subject='Day Labour Form'+(proj?' — '+proj.name:'');
   const body='Please find the attached day labour form for your review and approval.'+(con?'\n\nAttention: '+con.name:'');
   const link=document.getElementById('cfm-link-box');
-  link.innerHTML=`<div style="background:#E6F1FB;border-radius:8px;padding:12px 14px;font-size:12px;color:#0C447C;margin-top:4px;">
+  link.innerHTML=`<div style="background:#E6F1FB;border-radius:8px;padding:12px 14px;font-size:12px;color:#0A3A66;margin-top:4px;">
     <p style="margin-bottom:8px;font-weight:500;">📧 Email ready</p>
     <p style="margin-bottom:8px;">First download the PDF, then open your email app to attach and send.</p>
     <a class="btn btn-s btn-p" href="mailto:${esc(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}" style="text-decoration:none;display:inline-block;margin-right:6px;">Open email app</a>
@@ -8262,7 +8262,7 @@ function createClientDocket(){
         newDocket.photos.forEach(p=>{
           const wrap=document.createElement('div');wrap.style.cssText='position:relative;display:inline-block;';
           const img=document.createElement('img');img.src=p;img.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:8px;border:0.5px solid rgba(0,0,0,0.1);';
-          const btn=document.createElement('button');btn.innerHTML='&times;';btn.style.cssText='position:absolute;top:-4px;right:-4px;background:#E24B4A;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;';
+          const btn=document.createElement('button');btn.innerHTML='&times;';btn.style.cssText='position:absolute;top:-4px;right:-4px;background:#D24A44;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;';
           btn.onclick=function(){const idx=uploadedPhotos.indexOf(p);if(idx>-1)uploadedPhotos.splice(idx,1);wrap.remove();};
           wrap.appendChild(img);wrap.appendChild(btn);previews.appendChild(wrap);
         });
@@ -8295,7 +8295,7 @@ function createClientDocket(){
       <div>
         <strong>Client docket pre-filled</strong> from sub docket <strong>#${d.id}</strong>${rateInfo}.<br>
         <span style="font-size:11px;opacity:0.85;">Review details, get client signature, then submit.</span>
-        ${(_isAdm&&!clientStd)?'<br><span style="color:#E24B4A;font-size:11px;">⚠️ No client rate set for this project — set one in the Rates tab.</span>':''}
+        ${(_isAdm&&!clientStd)?'<br><span style="color:#D24A44;font-size:11px;">⚠️ No client rate set for this project — set one in the Rates tab.</span>':''}
       </div>
     </div>`;
     nds.classList.remove('hidden');
@@ -8467,7 +8467,7 @@ async function translateFieldsToEnglish(fromLang){
   const langCodes={'zh':'zh-CN','es':'es'};
   const fromCode=langCodes[fromLang]||fromLang;
 
-  if(hint){hint.textContent='Translating...';hint.style.color='#185FA5';}
+  if(hint){hint.textContent='Translating...';hint.style.color='#17568C';}
 
   async function translateText(text){
     try{
@@ -8487,7 +8487,7 @@ async function translateFieldsToEnglish(fromLang){
     if(results[1]&&notesEl)notesEl.value=results[1];
     if(hint){hint.textContent='✓ Translated to English';hint.style.color='#1D9E75';setTimeout(()=>{if(hint)hint.textContent='';},3000);}
   } catch(err){
-    if(hint){hint.textContent='⚠️ Could not translate — please check manually';hint.style.color='#E24B4A';setTimeout(()=>{if(hint)hint.textContent='';},4000);}
+    if(hint){hint.textContent='⚠️ Could not translate — please check manually';hint.style.color='#D24A44';setTimeout(()=>{if(hint)hint.textContent='';},4000);}
   }
 }
 
@@ -8509,7 +8509,7 @@ async function translateDocketView(){
     return;
   }
   const tl={'zh':'zh-CN','es':'es'}[lang]||lang;
-  if(hint){hint.textContent='Translating…';hint.style.color='#185FA5';}
+  if(hint){hint.textContent='Translating…';hint.style.color='#17568C';}
   async function tr(text){
     if(!text)return text;
     try{
@@ -8527,10 +8527,10 @@ async function translateDocketView(){
     if(dT&&descEl)descEl.textContent=dT;
     if(nT&&notesEl)notesEl.textContent=nT;
     if((descEl&&dT===null)||(notesEl&&nT===null)){
-      if(hint){hint.textContent='⚠️ Translation unavailable — try again';hint.style.color='#E24B4A';}
+      if(hint){hint.textContent='⚠️ Translation unavailable — try again';hint.style.color='#D24A44';}
     } else if(hint){hint.textContent='✓ Translated (best-effort)';hint.style.color='#1D9E75';setTimeout(()=>{if(hint)hint.textContent='';},3000);}
   }catch(e){
-    if(hint){hint.textContent='⚠️ Could not translate';hint.style.color='#E24B4A';}
+    if(hint){hint.textContent='⚠️ Could not translate';hint.style.color='#D24A44';}
   }
 }
 
@@ -9028,7 +9028,7 @@ function renContactsSub(){
           </tr></thead>
           <tbody>${cli.contacts.map(con=>`<tr>
             <td style="padding:7px 8px;border-bottom:0.5px solid rgba(0,0,0,0.06);font-weight:500;">${esc(con.name)}</td>
-            <td style="padding:7px 8px;border-bottom:0.5px solid rgba(0,0,0,0.06);">${con.email?`<a href="mailto:${esc(con.email)}" style="color:#185FA5;">${esc(con.email)}</a>`:'—'}</td>
+            <td style="padding:7px 8px;border-bottom:0.5px solid rgba(0,0,0,0.06);">${con.email?`<a href="mailto:${esc(con.email)}" style="color:#17568C;">${esc(con.email)}</a>`:'—'}</td>
             <td style="padding:7px 8px;border-bottom:0.5px solid rgba(0,0,0,0.06);">${con.mobile?`<a href="tel:${esc(con.mobile)}" style="color:#1a1a1a;">${esc(con.mobile)}</a>`:'—'}</td>
           </tr>`).join('')}</tbody>
         </table>`}
@@ -9079,7 +9079,7 @@ function renWorkersTable(){
       <td style="min-width:280px;">
         <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;padding:5px 0;margin-bottom:4px;border-bottom:0.5px solid rgba(0,0,0,0.08);">
           <input type="checkbox" ${w.allProjects?'checked':''} onchange="toggleWorkerAllProjects('${w.u}',this.checked)">
-          <span style="font-weight:500;color:#185FA5;">All jobs</span>
+          <span style="font-weight:500;color:#17568C;">All jobs</span>
           <span style="font-size:10px;color:#888;">— no site-specific access needed</span>
         </label>
         ${w.allProjects
@@ -9221,7 +9221,7 @@ function renSubWorkers(){
       <td style="min-width:200px;">
         <div style="margin-bottom:4px;">${projBadges}</div>
         <details>
-          <summary style="font-size:11px;color:#185FA5;cursor:pointer;list-style:none;">⚙ Assign projects</summary>
+          <summary style="font-size:11px;color:#17568C;cursor:pointer;list-style:none;">⚙ Assign projects</summary>
           <div style="padding:6px 0;">${projCheckboxes}</div>
         </details>
       </td>
@@ -9498,7 +9498,7 @@ function renRecentList(elId,list,opts){
     const _t=LANGS[(CU&&localStorage.getItem('dlb_lang_'+CU.u))||'en']||LANGS.en;
     let dot='#EF9F27',badge='<span class="rdl-b" style="background:#FAEEDA;color:#633806;">'+_t.stPending+'</span>';
     if(d.sig){dot='#1D9E75';badge='<span class="rdl-b" style="background:#E1F5EE;color:#085041;">'+_t.stSigned+'</span>';}
-    else if(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms'){dot='#185FA5';badge='<span class="rdl-b" style="background:#E6F1FB;color:#0C447C;">'+_t.stSent+'</span>';}
+    else if(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms'){dot='#17568C';badge='<span class="rdl-b" style="background:#E6F1FB;color:#0A3A66;">'+_t.stSent+'</span>';}
     if(opts.money&&d.bill==='bc'){dot='#5B21B6';badge='<span class="rdl-b" style="background:#EDE9FE;color:#3C3489;">'+_t.stBackcharge+'</span>';}
     let sub=fd(d.date)+' · '+esc(d.sub)+' · '+(d.hours||0)+'h';
     if(opts.money){const c=calcC(d);if(c!=null)sub=fd(d.date)+' · '+esc(d.sub)+' · '+fc(c);}
@@ -9546,7 +9546,7 @@ function renWorkerDash(){
         pl.innerHTML=myProjects.map(p=>{
           const cli=p.clientId?clients.find(c=>c.id===p.clientId):null;
           return `<div style="display:flex;align-items:center;gap:10px;padding:12px;border-top:0.5px solid rgba(0,0,0,0.07);">
-            <span style="width:8px;height:8px;border-radius:50%;background:#185FA5;flex-shrink:0;"></span>
+            <span style="width:8px;height:8px;border-radius:50%;background:#17568C;flex-shrink:0;"></span>
             <div style="flex:1;min-width:0;">
               <div style="font-size:13px;font-weight:500;color:#2D2D2D;">${esc(p.name)}</div>
               <div style="font-size:11px;color:#aaa;">${esc(p.code)}${cli?' · '+esc(cli.name):''}</div>
@@ -9596,7 +9596,7 @@ function renAdminMobile(){
       const summary=`<div style="padding:12px 14px;border-bottom:0.5px solid #F2D9A8;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;">
           <span style="font-size:12px;color:#854F0B;font-weight:500;">Committed cost (signed, awaiting billing)</span>
-          <span style="font-size:20px;font-weight:700;color:#185FA5;">$${totalCommitted.toFixed(2)}</span>
+          <span style="font-size:20px;font-weight:700;color:#17568C;">$${totalCommitted.toFixed(2)}</span>
         </div>
         <div style="font-size:11px;color:#854F0B;margin-top:3px;">${adminPending.length} docket${adminPending.length!==1?'s':''}${oldest>0?` · oldest signed ${oldest} day${oldest!==1?'s':''} ago`:''}</div>
       </div>`;
@@ -9619,8 +9619,8 @@ function renAdminMobile(){
       const qCount=awaiting.filter(d=>d.approvalStatus==='queried').length;
       const summary=`<div style="padding:12px 14px;border-bottom:0.5px solid #C9DDF1;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;">
-          <span style="font-size:12px;color:#185FA5;font-weight:500;">Awaiting your final sign-off</span>
-          <span style="font-size:20px;font-weight:700;color:#185FA5;">$${totalAwait.toFixed(2)}</span>
+          <span style="font-size:12px;color:#17568C;font-weight:500;">Awaiting your final sign-off</span>
+          <span style="font-size:20px;font-weight:700;color:#17568C;">$${totalAwait.toFixed(2)}</span>
         </div>
         <div style="font-size:11px;color:#5A6B7B;margin-top:3px;">${awaiting.length} docket${awaiting.length!==1?'s':''}${qCount?` · ${qCount} queried`:''}</div>
       </div>`;
@@ -9790,7 +9790,7 @@ function renAdminDesk(){
           ${heroBody}
         </div>
         <div class="adx-fin-side">
-          <div class="adx-pbox tall" style="--c:#E24B4A;" onclick="adxDrill('queried_sub')">
+          <div class="adx-pbox tall" style="--c:#D24A44;" onclick="adxDrill('queried_sub')">
             <div class="bt">Queried / rejected</div>
             <div class="brow"><div class="v">${D.qRejSub.length}</div><div class="go">Open →</div></div>
             <div class="s">Sent back — awaiting the sub to resolve &amp; re-submit.</div>
@@ -9814,17 +9814,17 @@ function renAdminDesk(){
       <div class="adx-pgrid">
         ${pbox('await_sup_sig','#C7891A',D.awaitSupSig.length,'Pending supervisor signature','Received docket — awaiting our supervisor to sign on site.')}
         ${pbox('await_bill','#C7891A',D.awaitBill.length,'Pending bill allocation','Received docket — needs a chargeable / backcharge / own-cost tag.')}
-        ${pbox('ready_client','#E24B4A',D.readyClient.length,'Create client docket','Chargeable &amp; approved — raise the client docket.')}
+        ${pbox('ready_client','#D24A44',D.readyClient.length,'Create client docket','Chargeable &amp; approved — raise the client docket.')}
       </div>
     </div>`;
   // Section 3: CLIENT — up the chain
   const cliSection=`
     <div class="adx-portal cli">
-      <div class="adx-sec cli"><span class="adx-sec-ic"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span class="adx-sec-t">Sent — up the chain</span></div>
+      <div class="adx-sec cli"><span class="adx-sec-ic"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#17568C"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span class="adx-sec-t">Sent — up the chain</span></div>
       <div class="adx-pgrid">
-        ${pbox('client_review','#185FA5',D.clientReview.length,'Pending client supervisor signature','Sent up — waiting on the client\'s supervisor to sign.')}
+        ${pbox('client_review','#17568C',D.clientReview.length,'Pending client supervisor signature','Sent up — waiting on the client\'s supervisor to sign.')}
         ${pbox('client_admin_review','#5A6B7B',D.clientAdminReview.length,'Client admin review','Client signed — with their admin / PM to approve.')}
-        ${pbox('queried_client','#E24B4A',D.clientQueried.length,'Client queried / rejected','Client sent it back — needs your attention.')}
+        ${pbox('queried_client','#D24A44',D.clientQueried.length,'Client queried / rejected','Client sent it back — needs your attention.')}
       </div>
     </div>`;
   // Section 4: INVOICING — approved dockets not yet invoiced/claimed (outstanding).
@@ -9842,7 +9842,7 @@ function renAdminDesk(){
     <div class="adx-portal inv" onclick="showTab('reconcile',document.getElementById('n-reconcile'))" style="cursor:pointer;">
       <div class="adx-sec inv"><span class="adx-sec-ic"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#0F8A6A"/><path d="M8 8h8M8 12h8M8 16h5" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/></svg></span><span class="adx-sec-t">Invoicing — outstanding</span><span class="adx-sec-note">${invOutstanding?'· '+invOutstanding+' to action':'· all invoiced'}</span></div>
       <div class="adx-inv-grid">
-        <div class="adx-inv-box${invToClaimN?' hot':''}"><div class="adx-inv-l">Still to claim (money in)</div><div class="adx-inv-v" style="color:#185FA5;">${adxM(invToClaim)}</div><div class="adx-inv-s">${invToClaimN} approved docket${invToClaimN!==1?'s':''} not yet claimed to the client</div></div>
+        <div class="adx-inv-box${invToClaimN?' hot':''}"><div class="adx-inv-l">Still to claim (money in)</div><div class="adx-inv-v" style="color:#17568C;">${adxM(invToClaim)}</div><div class="adx-inv-s">${invToClaimN} approved docket${invToClaimN!==1?'s':''} not yet claimed to the client</div></div>
         <div class="adx-inv-box${invToInvoiceN?' hot':''}"><div class="adx-inv-l">Still to invoice (money out)</div><div class="adx-inv-v" style="color:#B9770E;">${adxM(invToInvoice)}</div><div class="adx-inv-s">${invToInvoiceN} approved docket${invToInvoiceN!==1?'s':''} the sub hasn't invoiced yet</div></div>
         <div class="adx-inv-go">Open invoicing →</div>
       </div>
@@ -9860,7 +9860,7 @@ function renAdminDesk(){
   const segs=[
     {label:'Chargeable',value:D.split.ch,color:'#1D9E75'},
     {label:'Backcharge',value:D.split.bc,color:'#8A1F4B'},
-    {label:'Own cost',value:D.split.ow,color:'#185FA5'},
+    {label:'Own cost',value:D.split.ow,color:'#17568C'},
     {label:'Unallocated',value:D.split.un,color:'#9a9a93'}
   ];
   const pie=`
@@ -9914,7 +9914,7 @@ function renAdminDesk(){
       </div>
       ${prows.length?`<div class="adx-pgraph">${graph}</div>
       <div class="adx-scroll"><table style="margin-top:6px;"><thead><tr><th>Project</th><th class="r">In (approved)</th><th class="r">Out (approved)</th><th class="r">Balance</th></tr></thead><tbody>
-        ${prows.map(r=>`<tr><td class="adx-nm">${esc(r.name)}</td><td class="r" style="color:#B9770E;">${adxM(r.pin)}</td><td class="r" style="color:#185FA5;">${adxM(r.pout)}</td><td class="r" style="color:${r.bal>=0?'#1D9E75':'#E24B4A'};font-weight:700;">${(r.bal>=0?'+':'−')}$${Math.round(Math.abs(r.bal)).toLocaleString('en-AU')}</td></tr>`).join('')}
+        ${prows.map(r=>`<tr><td class="adx-nm">${esc(r.name)}</td><td class="r" style="color:#B9770E;">${adxM(r.pin)}</td><td class="r" style="color:#17568C;">${adxM(r.pout)}</td><td class="r" style="color:${r.bal>=0?'#1D9E75':'#D24A44'};font-weight:700;">${(r.bal>=0?'+':'−')}$${Math.round(Math.abs(r.bal)).toLocaleString('en-AU')}</td></tr>`).join('')}
       </tbody></table></div>`:`<div class="adx-empty">No project cost in this view yet.</div>`}
     </div>`;
 
@@ -9939,8 +9939,8 @@ function adxHero(D){
   const bal=D.balance;
   const balSign=(bal>=0?'+':'−')+'$'+Math.round(Math.abs(bal)).toLocaleString('en-AU');
   const icSub='<svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
-  const icClient='<svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
-  const icBal='<svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="'+(bal>=0?'#1D9E75':'#E24B4A')+'"/><path d="M8 10h8M8 14h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>';
+  const icClient='<svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#17568C"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
+  const icBal='<svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="'+(bal>=0?'#1D9E75':'#D24A44')+'"/><path d="M8 10h8M8 14h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>';
   return `
     <div class="adx-iorow">
       <div class="adx-io in adx-clickable" onclick="adxDrill('in_approved')">
@@ -10028,7 +10028,7 @@ function buildWeeklyData(){
            {icon:'ti-arrow-back-up',text:'Queried / rejected (subcontractor)',count:qRejSub.length},
            {icon:'ti-send',text:'Chargeable & approved — client dockets to raise',count:readyClient.length},
          ]},
-        {label:'Sent — up the chain',color:'#185FA5',
+        {label:'Sent — up the chain',color:'#17568C',
          items:[
            {icon:'ti-signature',text:'Sent dockets awaiting client signature',count:clientReview.length},
            {icon:'ti-alert-triangle',text:'Client queried / rejected',count:clientQ.length},
@@ -10203,7 +10203,7 @@ function renReconcile(){
   });
   const tEl=document.getElementById('rec-totals');
   if(tEl)tEl.innerHTML=`<div class="rec-tgrid">
-    <div class="rec-tcard in"><div class="rec-tt"><svg width="16" height="16" viewBox="0 0 24 24" style="vertical-align:-3px"><circle cx="12" cy="12" r="11" fill="#185FA5"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Claims — money in</div>
+    <div class="rec-tcard in"><div class="rec-tt"><svg width="16" height="16" viewBox="0 0 24 24" style="vertical-align:-3px"><circle cx="12" cy="12" r="11" fill="#17568C"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Claims — money in</div>
       <div class="rec-trow"><span>Expected</span><b>${fc(T.inExp)}</b></div>
       <div class="rec-trow"><span>Invoiced / claimed</span><b>${fc(T.inDone)}</b></div>
       <div class="rec-trow"><span>Paid</span><b style="color:#0F6E56;">${fc(T.inPaid)}</b></div>
@@ -10236,7 +10236,7 @@ function renReconcile(){
         if(l.status==='invoiced')acts=`<button class="rec-btn paid" onclick="recSetPaid('${d.id}','${l.leg}')">✓ Mark paid</button><button class="rec-btn undo" onclick="recReset('${d.id}','${l.leg}')" title="Undo">✕</button>`;
         else acts=`<span class="rec-paid">✓ Paid</span><button class="rec-btn undo" onclick="recReset('${d.id}','${l.leg}')" title="Undo">✕</button>`;
       }
-      const stCol=l.status==='paid'?'#1D9E75':(l.status==='invoiced'?'#185FA5':'#9a958c');
+      const stCol=l.status==='paid'?'#1D9E75':(l.status==='invoiced'?'#17568C':'#9a958c');
       return `<div class="rec-leg ${l.leg}">
         <div class="rec-leg-t"><span class="rec-dot" style="background:${stCol};"></span>${esc(l.title)} <span class="rec-who">· ${esc(l.who)}</span></div>
         <div class="rec-leg-b">${body}</div>
@@ -10280,7 +10280,7 @@ function recReset(id,leg){
 // A row in the Awaiting-approval folder with Approve / Query / Override actions
 function approvalRow(d){
   const c=calcC(d);
-  const est=(c!=null)?`<span style="color:#185FA5;font-weight:600;">~$${c.toFixed(2)}</span>`:'';
+  const est=(c!=null)?`<span style="color:#17568C;font-weight:600;">~$${c.toFixed(2)}</span>`:'';
   const billLabel={ch:'Chargeable',bc:'Backcharge',ow:'Own cost'}[d.bill]||d.bill;
   const queried=d.approvalStatus==='queried'||d.approvalStatus==='rejected';
   const _qr=(d.queryReasons&&d.queryReasons.length)?d.queryReasons.join(', ')+(d.queryNote?' — ':''):'';
@@ -10288,7 +10288,7 @@ function approvalRow(d){
   return `<div style="padding:12px;border-top:0.5px solid rgba(201,221,241,0.7);">
     ${queryBanner}
     <div onclick="vD('${d.id}')" style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:8px;">
-      <span style="width:8px;height:8px;border-radius:50%;background:${queried?'#A4271F':'#185FA5'};flex-shrink:0;"></span>
+      <span style="width:8px;height:8px;border-radius:50%;background:${queried?'#A4271F':'#17568C'};flex-shrink:0;"></span>
       <div style="flex:1;min-width:0;">
         <div style="font-size:13px;font-weight:500;color:#2D2D2D;">${esc(d.pname||d.pcode||'(No project)')} — ${esc(d.sub||'')}</div>
         <div style="font-size:11px;color:#aaa;">#${d.id} · ${fd(d.date)} · ${d.hours}h · ${billLabel} · ${est}</div>
@@ -10342,10 +10342,10 @@ function renSupFolder(which,html,count){
 function sv2CreateHeroTap(){if(window._sv2CreateFirst)vD(window._sv2CreateFirst);else showTab('md',document.getElementById('n2'));}
 // Overview — % bars of my dockets by status, filterable by job + date range.
 const OV_META={
-  awaiting_my_sig:{l:'Awaiting my signature',c:'#E24B4A'},
+  awaiting_my_sig:{l:'Awaiting my signature',c:'#D24A44'},
   needs_billing:{l:'Awaiting bill allocation',c:'#C7891A'},
   chargeable_ready:{l:'Signed · chargeable',c:'#EF9F27'},
-  awaiting_client:{l:'Awaiting client signature',c:'#185FA5'},
+  awaiting_client:{l:'Awaiting client signature',c:'#17568C'},
   signed:{l:'Signed',c:'#1D9E75'},
   approved:{l:'Approved',c:'#0F6E56'},
   queried:{l:'Queried',c:'#A4271F'},
@@ -10489,7 +10489,7 @@ function renSupAnalytics(){
   const billSegs=[
     {label:_t.svLegCh||'Chargeable to client',color:'#1D9E75',value:subD.filter(d=>d.bill==='ch').length},
     {label:_t.svLegBc||'Backchargeable',color:'#EF9F27',value:subD.filter(d=>d.bill==='bc').length},
-    {label:_t.svLegOw||'Own cost',color:'#185FA5',value:subD.filter(d=>d.bill==='ow').length},
+    {label:_t.svLegOw||'Own cost',color:'#17568C',value:subD.filter(d=>d.bill==='ow').length},
     {label:_t.svLegUn||'Unallocated',color:'#9a9a93',value:subD.filter(d=>!d.bill||d.bill==='pending'||d.bill==='tbc').length}
   ];
   const cliD=scope.filter(isUp);
@@ -10721,7 +10721,7 @@ function renSupervisorDash(){
         const cnt=dockets.filter(d=>d.pcode===p.code).length;
         const dw=(_lng==='en')?('docket'+(cnt!==1?'s':'')):(_t.svDocketsWord||'dockets');
         return `<div style="display:flex;align-items:center;gap:10px;padding:12px;border-top:0.5px solid rgba(0,0,0,0.07);">
-          <span style="width:8px;height:8px;border-radius:50%;background:#185FA5;flex-shrink:0;"></span>
+          <span style="width:8px;height:8px;border-radius:50%;background:#17568C;flex-shrink:0;"></span>
           <div style="flex:1;min-width:0;">
             <div style="font-size:13px;font-weight:500;color:#2D2D2D;">${esc(p.name)}</div>
             <div style="font-size:11px;color:#aaa;">${esc(p.code)}${cli?' · '+esc(cli.name):''} · ${cnt} ${dw}</div>
@@ -10756,7 +10756,7 @@ function subReceivedRow(d){
   const needsSig=!d.sig&&!(d.sigStatus==='sent_email'||d.sigStatus==='sent_sms');
   const worker=(d.workersOnSite&&d.workersOnSite[0]&&d.workersOnSite[0].name)||d.workerName||'';
   const btn=needsSig
-    ? `<button class="btn btn-p btn-s" style="background:#185FA5;border-color:#185FA5;color:#fff;flex-shrink:0;" onclick="vD('${d.id}')">✍️ Review &amp; sign</button>`
+    ? `<button class="btn btn-p btn-s" style="background:#17568C;border-color:#17568C;color:#fff;flex-shrink:0;" onclick="vD('${d.id}')">✍️ Review &amp; sign</button>`
     : `<button class="btn btn-s" style="flex-shrink:0;" onclick="vD('${d.id}')">View</button>`;
   return `<div style="padding:11px 12px;border-top:0.5px solid rgba(201,221,241,0.7);display:flex;align-items:center;gap:10px;">
     <div style="flex:1;min-width:0;">
@@ -10780,7 +10780,7 @@ function billingChooserRow(d){
   let estLine='';
   if(CU&&CU.role==='admin'){
     const c=calcC(d);
-    if(c!=null)estLine=` · <span style="color:#185FA5;font-weight:600;">~$${c.toFixed(2)}</span>`;
+    if(c!=null)estLine=` · <span style="color:#17568C;font-weight:600;">~$${c.toFixed(2)}</span>`;
   }
   return `<div style="padding:12px;border-top:0.5px solid rgba(242,217,168,0.6);">
     <div onclick="vD('${d.id}')" style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:8px;">
@@ -10902,7 +10902,7 @@ function renInvoiceNotices(){
   const theme={
     queried:{bg:'#FBE6E6',bar:'#A4271F',fg:'#8A1F19'},
     rejected:{bg:'#FBD9D6',bar:'#8A1F19',fg:'#8A1F19'},
-    resubmitted:{bg:'#E6F1FB',bar:'#185FA5',fg:'#0C447C'}
+    resubmitted:{bg:'#E6F1FB',bar:'#17568C',fg:'#0A3A66'}
   };
   el.innerHTML=list.map(n=>{
     const t=theme[n.type]||{bg:'#E1F5EE',bar:'#1D9E75',fg:'#085041'};
@@ -11094,7 +11094,7 @@ function handleResolvePhoto(e){
         _resolvePhotos.push(durl);
         const wrap=document.createElement('div');wrap.style.cssText='position:relative;display:inline-block;';
         const im=document.createElement('img');im.src=durl;im.style.cssText='width:70px;height:70px;object-fit:cover;border-radius:8px;border:0.5px solid rgba(0,0,0,0.1);';
-        const btn=document.createElement('button');btn.innerHTML='&times;';btn.style.cssText='position:absolute;top:-4px;right:-4px;background:#E24B4A;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;';
+        const btn=document.createElement('button');btn.innerHTML='&times;';btn.style.cssText='position:absolute;top:-4px;right:-4px;background:#D24A44;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;';
         btn.onclick=function(){const i=_resolvePhotos.indexOf(durl);if(i>-1)_resolvePhotos.splice(i,1);wrap.remove();};
         wrap.appendChild(im);wrap.appendChild(btn);document.getElementById('rsv-photos').appendChild(wrap);
       };
@@ -11301,7 +11301,7 @@ function showReview(){
   if(mats.length>0){
     matWrap.classList.remove('hidden');
     matDiv.innerHTML=mats.map(m=>`<div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:0.5px solid rgba(0,0,0,0.05);">
-      <span>${esc(m.desc||'—')} ${m.invoice?'📎':''}</span><span style="color:#185FA5;font-weight:500;">${(CU&&CU.role==='admin'&&m.total)?'$'+m.total.toFixed(2):''}</span>
+      <span>${esc(m.desc||'—')} ${m.invoice?'📎':''}</span><span style="color:#17568C;font-weight:500;">${(CU&&CU.role==='admin'&&m.total)?'$'+m.total.toFixed(2):''}</span>
     </div>`).join('');
   } else {
     matWrap.classList.add('hidden');
