@@ -1056,7 +1056,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c83</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c84</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -4516,9 +4516,10 @@ function submitD(){
   const signerRole=getSignerRole();
   const signerName=window._reviewSignerName||null;
   const workersOnSite=(typeof getWorkersOnSite==='function')?getWorkersOnSite():[];
-  // Non-worker roles aren't a worker on the docket — use the first crew member's
-  // name, not the person filling it out.
-  const workerName=(CU&&CU.role==='worker')?currentWorkerName():((workersOnSite[0]&&workersOnSite[0].name)||'');
+  // Worker names are OPTIONAL — "filled out by" is just the first crew member's
+  // name (blank → shown as "Worker 1"); we don't force the logged-in worker's
+  // real name in. For a client (mirror) docket it's the supervisor raising it.
+  const workerName=_isMirror?((CU&&CU.name)||''):((workersOnSite[0]&&workersOnSite[0].name)||'');
   const _isFree=!!window._freeDocket;
   // Proxy creation: admin/supervisor can create a docket FOR a worker so it
   // lands in that worker's app to get signed on site. createdBy becomes the
@@ -4928,8 +4929,10 @@ function vD(id){
         const primaryName=d.workerName||(ws[0]&&ws[0].name)||'';
         if(!ws.length&&!primaryName)return'';
         if(ws.length<=1){
-          // Single worker docket — just show who filled it out
-          return primaryName?`<div style="grid-column:span 2"><span class="vdk">Filled out by</span><strong>${esc(primaryName)}</strong>${ws[0]&&ws[0].trade?` <span style="color:#aaa;font-weight:400;font-size:12px;">· ${esc(ws[0].trade)}</span>`:''}</div>`:'';
+          // Single worker docket — just show who filled it out. Names are optional,
+          // so a blank name shows as "Worker 1" rather than the worker's real name.
+          const disp=primaryName||'Worker 1';
+          return `<div style="grid-column:span 2"><span class="vdk">Filled out by</span><strong>${esc(disp)}</strong>${ws[0]&&ws[0].trade?` <span style="color:#aaa;font-weight:400;font-size:12px;">· ${esc(ws[0].trade)}</span>`:''}</div>`;
         }
         const totalH=ws.reduce((s,w)=>s+(parseFloat(w.hours)||0),0);
         const rows=ws.map((w,i)=>{
@@ -5318,8 +5321,8 @@ function dlbTextPdf(d,showCosts,filename){
       const totH=d.workersOnSite.reduce((s,w)=>s+(parseFloat(w.hours)||0),0);
       fields.push(['Workers on site',wlist+'\nTotal: '+totH.toFixed(2).replace(/\.00$/,'')+'h']);
     } else {
-      const pn=d.workerName||(d.workersOnSite[0]&&d.workersOnSite[0].name)||'';
-      if(pn)fields.push(['Filled out by',pn]);
+      const pn=d.workerName||(d.workersOnSite[0]&&d.workersOnSite[0].name)||'Worker 1';
+      fields.push(['Filled out by',pn]);
     }
   } else if(d.workerName){
     fields.push(['Filled out by',d.workerName]);
@@ -8304,8 +8307,11 @@ function createClientDocket(){
     clientId:d.clientId,
     contactId:d.contactId,
     refSubDocketId:d.id,
-    workersOnSite:d.workersOnSite||[],
-    workerName:d.workerName||'',
+    // Carry the crew's hours/trades/times but NOT the sub's individual worker
+    // names — the builder above shouldn't see them. "Filled out by" becomes the
+    // supervisor raising this client docket (finalised on save).
+    workersOnSite:(d.workersOnSite||[]).map(w=>({...w,name:''})),
+    workerName:(CU&&CU.name)?CU.name:'',
     // Carry the sub docket's photos, materials and accommodation across. The
     // 10% materials tick is NOT carried — the admin sets client-side charging.
     photos:(d.photos||[]).slice(),
@@ -8684,11 +8690,11 @@ function initWorkersSection(){
   list.innerHTML='';
   const sameEl=document.getElementById('workers-same-hours');
   if(sameEl)sameEl.checked=false;
-  // Only a WORKER filling out their own docket is auto-added as worker 1.
-  // Supervisors / admins / subs are usually just filling out and arranging the
-  // signature (not working themselves), so start with a blank worker row.
+  // Names are optional. A WORKER's own docket opens with a "filled out by" row
+  // that defaults to "Worker 1" (they can add their name if they want). Others
+  // start with a blank worker row (they arrange the signature, not the labour).
   if(CU&&CU.role==='worker'){
-    addWorkerRow(currentWorkerName(),'',true);
+    addWorkerRow('','',true);
   } else {
     addWorkerRow('','',false);
   }
@@ -8741,7 +8747,7 @@ function addWorkerRow(name='',hours='',isPrimary=false,start='',finish=''){
   row.style.cssText='padding:12px;border:0.5px solid rgba(0,0,0,0.12);border-radius:10px;margin-bottom:8px;background:#fff;';
   const sameOn=document.getElementById('workers-same-hours')?.checked;
   const _wl=_L();
-  const placeholderName=isPrimary?'':(_wl.wWorker+' '+(idx+1)+' '+_wl.wNameOpt);
+  const placeholderName=_wl.wWorker+' '+(idx+1)+' '+_wl.wNameOpt;
   const lblCss='font-size:11px;color:#999;font-weight:500;margin-bottom:4px;display:block;';
   // Header: worker label on the left, "✓ You" or a quiet remove ✕ on the right.
   const header=
@@ -8755,7 +8761,7 @@ function addWorkerRow(name='',hours='',isPrimary=false,start='',finish=''){
   // Name always full-width; times sit on their own tidy row underneath.
   const nameField=
     '<input type="text" class="wk-name" value="'+esc(name)+'" placeholder="'+placeholderName+'"'
-      +(isPrimary?' readonly style="background:#f5f5f3;font-weight:500;"':'')+'>';
+      +(isPrimary?' style="font-weight:500;"':'')+'>';
   const timeCols=isPrimary?''
     :('<div style="flex:1;">'
         +'<label style="'+lblCss+'">'+_wl.wStart+'</label>'
@@ -11382,8 +11388,10 @@ function showReview(){
     const names=_ws.map((w,i)=>w.name&&w.name.trim()?esc(w.name):('Worker '+(i+1))).join(', ');
     workersRow={label:'Workers on site',value:_ws.length+' — '+names+'<br><span style="color:#888;font-size:12px;">'+totalH.toFixed(2).replace(/\.00$/,'')+'h total</span>'};
   } else {
-    const pn=currentWorkerName();
-    if(pn)workersRow={label:'Filled out by',value:esc(pn)};
+    // Names are optional — show what was entered, else "Worker 1" (don't force
+    // the logged-in user's real name).
+    const pn=(_ws[0]&&_ws[0].name&&_ws[0].name.trim())?_ws[0].name:'Worker 1';
+    workersRow={label:'Filled out by',value:esc(pn)};
   }
 
   // Summary grid
