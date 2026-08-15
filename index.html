@@ -1056,7 +1056,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c80</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c81</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1104,20 +1104,20 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <!-- CLIENT — dockets going up the chain to the client -->
           <div class="sv2-sec-head sec-client"><span class="sv2-sec-ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" style="display:block"><circle cx="12" cy="12" r="11" fill="#17568C"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span id="sv2h-client">Client</span></div>
           <div class="sv2-boxrow">
-            <div class="sv2-box sv2-b-red" id="sv2-box-create" onclick="supKpiOpen('chargeable_ready')"><div class="sv2-bv" id="sv2b-create">0</div><div class="sv2-bl" id="sv2l-create">Create client docket</div></div>
-            <div class="sv2-box sv2-b-blue" onclick="supKpiOpen('awaiting_client')"><div class="sv2-bv" id="sv2b-await">0</div><div class="sv2-bl" id="sv2l-await">Awaiting client signature</div></div>
-            <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried')"><div class="sv2-bv" id="sv2b-outq">0</div><div class="sv2-bl" id="sv2l-outq">Queried by admin</div></div>
-            <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('pending_review')"><div class="sv2-bv" id="sv2b-outp">0</div><div class="sv2-bl" id="sv2l-outp">Pending admin review</div></div>
+            <div class="sv2-box sv2-b-red" id="sv2-box-create" onclick="supKpiOpen('chargeable_ready','sub')"><div class="sv2-bv" id="sv2b-create">0</div><div class="sv2-bl" id="sv2l-create">Create client docket</div></div>
+            <div class="sv2-box sv2-b-blue" onclick="supKpiOpen('awaiting_client','client')"><div class="sv2-bv" id="sv2b-await">0</div><div class="sv2-bl" id="sv2l-await">Awaiting client signature</div></div>
+            <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried','client')"><div class="sv2-bv" id="sv2b-outq">0</div><div class="sv2-bl" id="sv2l-outq">Queried by admin</div></div>
+            <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('pending_review','client')"><div class="sv2-bv" id="sv2b-outp">0</div><div class="sv2-bl" id="sv2l-outp">Pending admin review</div></div>
           </div>
           <p class="sv2-sec-note"><b>Create docket</b> raises a Sent docket to the client — from a chargeable <b>Received</b> docket you've signed. Then get it signed in person or send a link; the next boxes track it up the chain.</p>
 
           <!-- SUBCONTRACTOR — day-labour dockets received from our subcontractors -->
           <div class="sv2-sec-head sec-sub"><span class="sv2-sec-ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" style="display:block"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span id="sv2h-sub">Subcontractor</span></div>
           <div class="sv2-boxrow">
-            <div class="sv2-box sv2-b-red" onclick="supKpiOpen('awaiting_my_sig')"><div class="sv2-bv" id="sv2b-sign">0</div><div class="sv2-bl" id="sv2l-sign">Awaiting my signature</div></div>
-            <div class="sv2-box sv2-b-amber" onclick="supKpiOpen('needs_billing')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl" id="sv2l-bill">Awaiting bill allocation</div></div>
-            <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried')"><div class="sv2-bv" id="sv2b-inq">0</div><div class="sv2-bl" id="sv2l-inq">Queried by admin</div></div>
-            <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('pending_review')"><div class="sv2-bv" id="sv2b-inp">0</div><div class="sv2-bl" id="sv2l-inp">Pending admin review</div></div>
+            <div class="sv2-box sv2-b-red" onclick="supKpiOpen('awaiting_my_sig','sub')"><div class="sv2-bv" id="sv2b-sign">0</div><div class="sv2-bl" id="sv2l-sign">Awaiting my signature</div></div>
+            <div class="sv2-box sv2-b-amber" onclick="supKpiOpen('needs_billing','sub')"><div class="sv2-bv" id="sv2b-bill">0</div><div class="sv2-bl" id="sv2l-bill">Awaiting bill allocation</div></div>
+            <div class="sv2-box sv2-b-maroon" onclick="supKpiOpen('queried','sub')"><div class="sv2-bv" id="sv2b-inq">0</div><div class="sv2-bl" id="sv2l-inq">Queried by admin</div></div>
+            <div class="sv2-box sv2-b-slate" onclick="supKpiOpen('pending_review','sub')"><div class="sv2-bv" id="sv2b-inp">0</div><div class="sv2-bl" id="sv2l-inp">Pending admin review</div></div>
           </div>
 
           <!-- ANALYTICS — billing split + client approval (pie / bar, filterable) -->
@@ -3971,7 +3971,11 @@ function renMD(){
   // A supervisor's "My dockets" = only the dockets they created or signed
   // themselves; the whole-project list (incl. other staff) lives on the Project
   // dockets tab. Other roles keep their normal myD() scope.
-  const mine=(CU&&CU.role==='hc_supervisor')?myD().filter(d=>d.createdBy===CU.u||d.signedBySupervisor===CU.u):myD();
+  // Normal "My dockets" = created or signed by me. But when the user drills in from
+  // a dashboard KPI box, use the full project-inclusive scope so the drilled list
+  // matches the box count (e.g. sub dockets awaiting my signature on my projects).
+  const _kpiDrill=!!(window._mdKpi);
+  const mine=(CU&&CU.role==='hc_supervisor'&&!_kpiDrill)?myD().filter(d=>d.createdBy===CU.u||d.signedBySupervisor===CU.u):myD();
   let src=mine.slice().reverse();
   // Type view: client (sent up-chain) vs subcontractor (received).
   const tf=window._mdType||'';
@@ -3983,7 +3987,18 @@ function renMD(){
   {
     const noteEl=document.getElementById('md-kpi-note');
     if(kpi){
-      if(kpi==='pending_review')src=src.filter(d=>d.approvalStatus==='awaiting');
+      if(kpi==='pending_review'){
+        // Signed + billed + awaiting the admin's decision. On the received side a
+        // chargeable-not-yet-mirrored docket belongs to the Create queue, not here.
+        src=src.filter(d=>d.sig&&d.bill&&d.bill!=='pending'&&d.approvalStatus==='awaiting'
+          &&!(!isUpChainDocket(d)&&d.bill==='ch'&&!(dockets||[]).some(x=>x.refSubDocketId===d.id)));
+      }
+      else if(kpi==='chargeable_ready'){
+        // "Create client docket" queue: chargeable Received dockets that are signed
+        // but haven't yet had their up-chain (Sent) docket raised. Exclude any that
+        // are themselves up-chain mirrors, or that already have a linked Sent docket.
+        src=src.filter(d=>!isUpChainDocket(d)&&docketStatus(d)==='chargeable_ready'&&d.approvalStatus!=='approved'&&!(dockets||[]).some(x=>x.refSubDocketId===d.id));
+      }
       else src=src.filter(d=>docketStatus(d)===kpi);
       if(noteEl){
         const KL={chargeable_ready:'Ready to send / create client docket',awaiting_client:'Awaiting client signature',queried:'Queried by admin',pending_review:'Pending admin review',awaiting_my_sig:'Awaiting my signature',needs_billing:'Awaiting bill allocation'};
@@ -10490,13 +10505,22 @@ function renSupOverview(){
   }).join('');
 }
 // Tapping an "Up next" KPI opens My dockets filtered to that state.
-function supKpiOpen(f){
+function supKpiOpen(f,type){
   // Dashboard box drill-down uses its own granular filter (the My-dockets status
   // dropdown is simplified to approved/pending/rejected, so it can't hold these).
   window._mdKpi=f||'';
   window._mdKpiPending=true; // survive the showTab reset below
+  // Scope to Sent (client / up-chain) or Received (sub) so e.g. a "Queried" box
+  // in the Sent section doesn't also list Received queried dockets.
+  window._mdType=(type==='client'||type==='sent')?'client':(type==='sub'||type==='received')?'sub':'';
+  window._mdTab='all'; // status is decided by the KPI filter, not a tab
   const sel=document.getElementById('md-status-filter');if(sel)sel.value='';
   showTab('md',document.getElementById('n2'));
+  // Reflect the chosen type on the My-dockets Sent/Received segment.
+  [['md-type-all',''],['md-type-client','client'],['md-type-sub','sub']].forEach(([id,v])=>{
+    const b=document.getElementById(id);if(b)b.classList.toggle('on',v===(window._mdType||''));
+  });
+  if(typeof applyMdStatusFilter==='function')applyMdStatusFilter();
   if(typeof renMD==='function')renMD();
 }
 function mdClearKpi(){window._mdKpi='';}
