@@ -110,6 +110,37 @@ body{font-family:'Century Gothic','CenturyGothic','AppleGothic',Futura,sans-seri
 .rec-btn.mark{background:#17568C;color:#fff;} .rec-btn.paid{background:#1D9E75;color:#fff;}
 .rec-btn.undo{background:#fff;border-color:#ddd;color:#999;padding:6px 9px;}
 .rec-paid{font-size:12px;font-weight:700;color:#0F6E56;}
+/* ── Invoicing — two flows (money in / money out) ── */
+.inv2-sec{margin-bottom:24px;}
+.inv2-head{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
+.inv2-ic{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:800;flex-shrink:0;}
+.inv2-sec.in .inv2-ic{background:#17568C;} .inv2-sec.out .inv2-ic{background:#EF9F27;}
+.inv2-t{font-size:15px;font-weight:800;color:#2D2D2D;line-height:1.2;}
+.inv2-t small{display:block;font-size:11.5px;font-weight:500;color:#8a877f;}
+.inv2-tot{margin-left:auto;text-align:right;}
+.inv2-tot .v{font-size:19px;font-weight:800;color:#B23B34;font-variant-numeric:tabular-nums;}
+.inv2-tot .l{font-size:10px;color:#8a877f;text-transform:uppercase;letter-spacing:.04em;}
+.inv2-stages{display:flex;gap:8px;margin-bottom:11px;flex-wrap:wrap;}
+.inv2-stage{flex:1;min-width:118px;background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:11px;padding:9px 12px;}
+.inv2-stage .sl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#8a877f;}
+.inv2-stage .sv{font-size:15px;font-weight:800;margin-top:2px;color:#2D2D2D;font-variant-numeric:tabular-nums;}
+.inv2-stage.hot{border-color:#E7C99A;background:#FEFBF4;} .inv2-stage.hot .sv{color:#B9770E;}
+.inv2-row{background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:12px;padding:11px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.inv2-row .no{font-weight:800;font-size:13px;white-space:nowrap;color:#2D2D2D;}
+.inv2-row .mid{flex:1;min-width:0;}
+.inv2-row .proj{font-size:13px;font-weight:600;color:#2D2D2D;cursor:pointer;}
+.inv2-row .who{font-size:11.5px;color:#8a877f;}
+.inv2-row .amt{font-size:14.5px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums;color:#2D2D2D;}
+.inv2-row .act{display:flex;align-items:center;gap:7px;white-space:nowrap;flex-wrap:wrap;justify-content:flex-end;}
+.inv2-pill{font-size:10px;font-weight:700;border-radius:20px;padding:3px 10px;white-space:nowrap;}
+.inv2-pill.todo{background:#FCEFD6;color:#8a5a12;} .inv2-pill.wait{background:#E3EEF9;color:#17568C;} .inv2-pill.paid{background:#E1F5EE;color:#0F6E56;}
+.inv2-btn{font-family:inherit;font-size:12px;font-weight:700;border:1px solid #17568C;background:#fff;color:#17568C;border-radius:9px;padding:7px 12px;cursor:pointer;}
+.inv2-btn.g{border-color:#0F6E56;color:#0F6E56;}
+.inv2-undo{border:none;background:none;color:#b6b2aa;cursor:pointer;font-size:14px;padding:2px 4px;}
+.inv2-bctag{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:#5B21B6;background:#EDE9FE;border-radius:20px;padding:2px 7px;margin-left:5px;}
+.inv2-var{font-size:10.5px;color:#B23B34;background:#FBE3E1;border-radius:8px;padding:1px 6px;margin-left:4px;}
+.inv2-empty{font-size:12.5px;color:#9a958c;background:#fff;border:1px dashed rgba(0,0,0,.12);border-radius:12px;padding:16px;text-align:center;}
+@media(max-width:600px){.inv2-row{flex-wrap:wrap;}.inv2-row .act{width:100%;}}
 /* Subscription plan tiers */
 .sub-plans{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 @media(max-width:720px){.sub-plans{grid-template-columns:1fr;}}
@@ -1076,7 +1107,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c99</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c100</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1898,7 +1929,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
     <!-- INVOICING (admin only) -->
     <div id="t-reconcile" class="hidden">
       <div class="rb"><p class="st" style="margin:0;">Invoicing</p><button class="btn btn-s" onclick="showTab('dash',document.getElementById('n0'))" style="background:#EF9F27;color:#412402;border:none;font-weight:600;">← Dashboard</button></div>
-      <p style="font-size:12px;color:#888;margin:-8px 0 12px;">All approved day-labour dockets — money <strong>in</strong> (your claim to the client / backcharge) and money <strong>out</strong> (the sub's invoice to you) versus what's actually been invoiced. Mark each invoiced, then paid.</p>
+      <p style="font-size:12px;color:#888;margin:-8px 0 12px;">Track every approved docket from signed → invoiced → paid. <strong>Money in</strong> = dockets the client signed (invoice them, then collect). <strong>Money out</strong> = dockets we signed for subs (wait for their invoice, then pay).</p>
       <div id="rec-filters" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;align-items:center;">
         <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#9a958c;">Filter</span>
         <select id="rec-proj" onchange="renReconcile()" style="font-size:12px;padding:4px 8px;border-radius:7px;border:.5px solid rgba(0,0,0,.16);"><option value="">All projects</option></select>
@@ -1909,8 +1940,6 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <option value="">All statuses</option><option value="open">Outstanding only</option><option value="done">Fully reconciled</option>
         </select>
       </div>
-      <div id="rec-match"></div>
-      <div id="rec-totals"></div>
       <div id="rec-list"></div>
     </div>
 
@@ -10362,74 +10391,69 @@ function renReconcile(){
   if(!(CU&&CU.role==='admin'))return;
   const pf=document.getElementById('rec-proj');
   if(pf&&pf.options.length<=1){pf.innerHTML='<option value="">All projects</option>'+projects.map(p=>`<option value="${esc(p.code)}">${esc(p.name)}</option>`).join('');}
-  renRecMatch();
   const statusF=(document.getElementById('rec-status')||{}).value||'';
-  let list=recDocs();
-  if(statusF==='open')list=list.filter(d=>!recFullyDone(d));
-  else if(statusF==='done')list=list.filter(d=>recFullyDone(d));
-  // Totals across the (project/timeframe) filtered set, ignoring status filter
-  const all=recDocs();
-  const T={inExp:0,inDone:0,inPaid:0,inOut:0,outExp:0,outDone:0,outPaid:0,outOut:0,variance:0,varCount:0};
-  all.forEach(d=>{
-    const {out,inn}=recLegs(d);
-    [['in',inn],['out',out]].forEach(([k,l])=>{
-      if(!l)return;
-      const ex=l.expected||0, amt=(l.amount!=null?l.amount:ex);
-      if(k==='in'){T.inExp+=ex; if(l.status!=='none')T.inDone+=amt; if(l.status==='paid')T.inPaid+=amt; if(l.status==='none')T.inOut+=ex;}
-      else{T.outExp+=ex; if(l.status!=='none')T.outDone+=amt; if(l.status==='paid')T.outPaid+=amt; if(l.status==='none')T.outOut+=ex;}
-      if(l.status!=='none'&&l.amount!=null&&Math.abs(l.amount-ex)>0.005){T.variance+=(l.amount-ex);T.varCount++;}
-    });
-  });
-  const tEl=document.getElementById('rec-totals');
-  if(tEl)tEl.innerHTML=`<div class="rec-tgrid">
-    <div class="rec-tcard in"><div class="rec-tt"><svg width="16" height="16" viewBox="0 0 24 24" style="vertical-align:-3px"><circle cx="12" cy="12" r="11" fill="#17568C"/><path d="M12 17.5V7m0 0l-4 4m4-4l4 4" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Claims — money in</div>
-      <div class="rec-trow"><span>Expected</span><b>${fc(T.inExp)}</b></div>
-      <div class="rec-trow"><span>Invoiced / claimed</span><b>${fc(T.inDone)}</b></div>
-      <div class="rec-trow"><span>Paid</span><b style="color:#0F6E56;">${fc(T.inPaid)}</b></div>
-      <div class="rec-trow out"><span>Still to claim</span><b style="color:#B23B34;">${fc(T.inOut)}</b></div></div>
-    <div class="rec-tcard out"><div class="rec-tt"><svg width="16" height="16" viewBox="0 0 24 24" style="vertical-align:-3px"><circle cx="12" cy="12" r="11" fill="#EF9F27"/><path d="M12 6.5V17m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Sub invoices — money out</div>
-      <div class="rec-trow"><span>Expected</span><b>${fc(T.outExp)}</b></div>
-      <div class="rec-trow"><span>Received</span><b>${fc(T.outDone)}</b></div>
-      <div class="rec-trow"><span>Paid</span><b style="color:#0F6E56;">${fc(T.outPaid)}</b></div>
-      <div class="rec-trow out"><span>Not yet invoiced</span><b style="color:#B23B34;">${fc(T.outOut)}</b></div></div>
-    ${T.varCount?`<div class="rec-tcard var"><div class="rec-tt" style="color:#B23B34;">⚠ Variances</div><div style="font-size:12px;color:#8A1F19;margin-top:6px;">${T.varCount} invoice${T.varCount!==1?'s':''} differ from the approved value by a total of <b>${(T.variance>=0?'+':'−')+fc(Math.abs(T.variance)).replace('$','$')}</b>.</div></div>`:''}
-  </div>`;
+  const docs=recDocs();
+  // Two flows: each approved docket contributes its "in" leg (client claim /
+  // backcharge) to Money in, and its "out" leg (the sub's invoice) to Money out.
+  const inItems=[],outItems=[];
+  docs.forEach(d=>{const {out,inn}=recLegs(d);if(inn)inItems.push({d,l:inn});if(out)outItems.push({d,l:out});});
+  const passStatus=(l)=>statusF==='open'?l.status!=='paid':(statusF==='done'?l.status==='paid':true);
+  const varBadge=(l)=>{const ex=l.expected||0;return (l.status!=='none'&&l.amount!=null&&Math.abs(l.amount-ex)>0.005)?`<span class="inv2-var">Δ ${(l.amount-ex>=0?'+':'−')+fc(Math.abs(l.amount-ex))}</span>`:'';};
+  const claimWho=(d,l)=>{
+    if(l.title==='Backcharge')return 'Backcharge · '+esc(l.who||'other sub');
+    const c=d.clientId?clients.find(x=>x.id===d.clientId):null;return 'Client · '+esc(c?c.name:(l.who||'Client'));
+  };
+  const section=(kind,items)=>{
+    const isOut=kind==='out';
+    let s0=0,s0n=0,s1=0,s1n=0,s2=0,s2n=0;
+    items.forEach(({l})=>{const ex=l.expected||0,amt=(l.amount!=null?l.amount:ex);
+      if(l.status==='none'){s0+=ex;s0n++;}else if(l.status==='invoiced'){s1+=amt;s1n++;}else if(l.status==='paid'){s2+=amt;s2n++;}});
+    const owed=s0+s1; // not yet paid
+    const lbl=isOut?['Awaiting their invoice','To pay','Paid']:['To invoice','Awaiting payment','Paid'];
+    const rows=items.filter(({l})=>passStatus(l)).map(({d,l})=>{
+      const ex=l.expected||0,amt=(l.amount!=null?l.amount:ex),bc=(l.title==='Backcharge');
+      const proj=esc(d.pname||d.pcode||'');
+      const who=isOut?(esc(d.sub||'sub')+' · '+(d.hours||0)+'h'):claimWho(d,l);
+      let pill,act,shownAmt;
+      if(l.status==='none'){
+        shownAmt=fc(ex);
+        pill=`<span class="inv2-pill todo">${isOut?'Awaiting invoice':'To invoice'}</span>`;
+        act=`<button class="inv2-btn" onclick="recSetInvoiced('${d.id}','${l.leg}')">${isOut?'Invoice received':'Mark invoiced'}</button>`;
+      }else if(l.status==='invoiced'){
+        shownAmt=fc(amt);
+        pill=`<span class="inv2-pill wait">${isOut?'To pay':'Awaiting payment'}</span>`;
+        act=`<button class="inv2-btn g" onclick="recSetPaid('${d.id}','${l.leg}')">Mark paid</button><button class="inv2-undo" onclick="recReset('${d.id}','${l.leg}')" title="Undo">✕</button>`;
+      }else{
+        shownAmt=fc(amt);
+        pill=`<span class="inv2-pill paid">Paid</span>`;
+        act=`<button class="inv2-undo" onclick="recReset('${d.id}','${l.leg}')" title="Undo">✕</button>`;
+      }
+      return `<div class="inv2-row">
+        <span class="no">#${esc(d.id)}</span>
+        <div class="mid"><div class="proj" onclick="vD('${d.id}')">${proj}${bc?' <span class="inv2-bctag">Backcharge</span>':''}</div><div class="who">${who}${l.ref?(' · #'+esc(l.ref)):''}</div></div>
+        <span class="amt">${shownAmt} ${varBadge(l)}</span>
+        <div class="act">${pill}${act}</div>
+      </div>`;
+    }).join('');
+    const body=rows||`<div class="inv2-empty">${items.length?'Nothing matches the status filter here.':(isOut?'No sub invoices to track yet.':'No client claims to track yet.')}</div>`;
+    return `<div class="inv2-sec ${kind}">
+      <div class="inv2-head">
+        <div class="inv2-ic">${isOut?'↓':'↑'}</div>
+        <div class="inv2-t">${isOut?'Money out — sub invoices':'Money in — client claims'}<small>${isOut?'Dockets we signed for subs — wait for their invoice, then pay them.':'Dockets the client signed — invoice them, then collect payment.'}</small></div>
+        <div class="inv2-tot"><div class="v">${fc(owed)}</div><div class="l">${isOut?"we'll owe subs":'still owed to us'}</div></div>
+      </div>
+      <div class="inv2-stages">
+        <div class="inv2-stage${s0n?' hot':''}"><div class="sl">${lbl[0]}</div><div class="sv">${fc(s0)} · ${s0n}</div></div>
+        <div class="inv2-stage"><div class="sl">${lbl[1]}</div><div class="sv">${fc(s1)} · ${s1n}</div></div>
+        <div class="inv2-stage"><div class="sl">${lbl[2]}</div><div class="sv">${fc(s2)} · ${s2n}</div></div>
+      </div>
+      ${body}
+    </div>`;
+  };
   const wrap=document.getElementById('rec-list');
   if(!wrap)return;
-  if(!list.length){wrap.innerHTML='<div class="card" style="text-align:center;color:#aaa;padding:24px;">No approved dockets match these filters yet. Dockets appear here once you approve them.</div>';return;}
-  wrap.innerHTML=list.map(d=>{
-    const {out,inn}=recLegs(d);
-    const done=recFullyDone(d);
-    const billLabel={ch:'Chargeable',bc:'Backcharge',ow:'Own cost'}[d.bill]||d.bill;
-    const legHtml=(l)=>{
-      if(!l)return '';
-      const ex=l.expected||0;
-      const varBadge=(l.status!=='none'&&l.amount!=null&&Math.abs(l.amount-ex)>0.005)?`<span class="rec-var">Δ ${(l.amount-ex>=0?'+':'−')+fc(Math.abs(l.amount-ex)).replace('$','$')}</span>`:'';
-      let body,acts;
-      if(l.status==='none'){
-        body=`<span class="rec-exp">Expected ${fc(ex)}</span>`;
-        acts=`<button class="rec-btn mark" onclick="recSetInvoiced('${d.id}','${l.leg}')">Mark ${l.leg==='sub'?'invoiced':'claimed'}</button>`;
-      }else{
-        const amt=l.amount!=null?l.amount:ex;
-        body=`<span class="rec-exp">${l.ref?('#'+esc(l.ref)+' · '):''}${fc(amt)} ${varBadge}</span>`;
-        if(l.status==='invoiced')acts=`<button class="rec-btn paid" onclick="recSetPaid('${d.id}','${l.leg}')">✓ Mark paid</button><button class="rec-btn undo" onclick="recReset('${d.id}','${l.leg}')" title="Undo">✕</button>`;
-        else acts=`<span class="rec-paid">✓ Paid</span><button class="rec-btn undo" onclick="recReset('${d.id}','${l.leg}')" title="Undo">✕</button>`;
-      }
-      const stCol=l.status==='paid'?'#1D9E75':(l.status==='invoiced'?'#17568C':'#9a958c');
-      return `<div class="rec-leg ${l.leg}">
-        <div class="rec-leg-t"><span class="rec-dot" style="background:${stCol};"></span>${esc(l.title)} <span class="rec-who">· ${esc(l.who)}</span></div>
-        <div class="rec-leg-b">${body}</div>
-        <div class="rec-leg-a">${acts}</div>
-      </div>`;
-    };
-    return `<div class="rec-card${done?' done':''}">
-      <div class="rec-hd" onclick="vD('${d.id}')">
-        <div><span class="dn">#${d.id}</span> · ${esc(d.pname||d.pcode||'')} — ${esc(d.sub||'')}</div>
-        <div class="rec-hd-s">${fd(d.date)} · ${d.hours||0}h · ${billLabel}${done?' · <span style=\"color:#0F6E56;font-weight:700;\">✓ Reconciled</span>':''}</div>
-      </div>
-      <div class="rec-legs">${legHtml(out)}${legHtml(inn)}${(!out&&!inn)?'<div class="rec-leg"><div class="rec-leg-t">Own cost — nothing to claim or invoice.</div></div>':''}</div>
-    </div>`;
-  }).join('');
+  if(!docs.length){wrap.innerHTML='<div class="inv2-empty" style="margin-top:8px;">No approved dockets match these filters yet. Dockets appear here once you approve them.</div>';return;}
+  wrap.innerHTML=section('in',inItems)+section('out',outItems);
 }
 function recSetInvoiced(id,leg){
   const d=dockets.find(x=>x.id===id);if(!d)return;
