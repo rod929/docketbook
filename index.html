@@ -1107,7 +1107,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c105</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c106</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1640,7 +1640,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <div id="dsb-wrap"><label>Your company name *</label><input type="text" id="dsb" placeholder="e.g. Smith Concreting"></div>
           <div><label>Start time *</label><input type="text" inputmode="numeric" id="d-start" placeholder="e.g. 7:30 or 0730" autocomplete="off" onblur="normalizeTime(this)" onchange="calcHours()"></div>
           <div><label>Finish time *</label><input type="text" inputmode="numeric" id="d-finish" placeholder="e.g. 4:00 PM or 1600" autocomplete="off" onblur="normalizeTime(this)" onchange="calcHours()"></div>
-          <div><label>Break (mins) <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:6px;">optional</span></label><input type="number" id="d-break" placeholder="e.g. 30" min="0" step="5" onchange="calcHours()"></div>
+          <div><label>Break (mins) <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:6px;">optional</span></label><input type="number" id="d-break" placeholder="e.g. 30" min="0" step="5" onchange="calcHours()"><label style="display:flex;align-items:center;gap:7px;font-size:12px;color:#666;font-weight:400;margin-top:7px;cursor:pointer;"><input type="checkbox" id="d-break-na" onchange="toggleBreakNA(this.checked)" style="width:16px;height:16px;margin:0;"> No break / N/A</label></div>
           <div><label>Hours worked</label><input type="text" id="dh" placeholder="Auto-calculated" readonly style="background:#f5f5f3;color:#17568C;font-weight:500;"></div>
           <div>
             <label>Requested by</label>
@@ -3622,6 +3622,15 @@ function normalizeTime(el){
   calcHours();
 }
 
+// "No break / N/A" — clears + disables the break box (counts as 0, and the
+// Break line is left off the finished docket).
+function toggleBreakNA(on){
+  const b=document.getElementById('d-break');
+  if(!b)return;
+  if(on){b.value='';b.disabled=true;b.style.background='#f5f5f3';}
+  else{b.disabled=false;b.style.background='';}
+  calcHours();
+}
 function calcHours(){
   const s=parseTime(document.getElementById('d-start').value);
   const f=parseTime(document.getElementById('d-finish').value);
@@ -4913,6 +4922,7 @@ function startVoice(fieldId){
 
 function resetDF(){
   document.getElementById('dp').value='';document.getElementById('d-start').value='';document.getElementById('d-finish').value='';document.getElementById('d-break').value='';document.getElementById('dh').value='';
+  {const na=document.getElementById('d-break-na'),bk=document.getElementById('d-break');if(na)na.checked=false;if(bk){bk.disabled=false;bk.style.background='';}}
   if(typeof updPOFromProject==='function')updPOFromProject();
   document.getElementById('desc').value='';document.getElementById('dnotes').value='';
   {const svn=document.getElementById('review-supervisor-note');if(svn)svn.value='';window._reviewSupervisorNote='';}
