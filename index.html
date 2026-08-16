@@ -1107,7 +1107,7 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MiA2MCI+CiAgPHJlY3QgeD0iMCIgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNTIiIHJ4PSIyIiBmaWxsPSIjRUY5RjI3Ii8+CiAgPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIvPgogIDxyZWN0IHg9IjEwIiB5PSIxOSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzIiIHdpZHRoPSIyOCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJEMkQyRCIgb3BhY2l0eT0iMC4yOCIvPgogIDxyZWN0IHg9IjEwIiB5PSI0NSIgd2lkdGg9IjM0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjMkQyRDJEIiBvcGFjaXR5PSIwLjE0Ii8+Cjwvc3ZnPg==" alt="Day Labour Book logo" style="height:34px;object-fit:contain;" id="dlb-centre-logo">
       <div style="line-height:1.2;text-align:left;">
         <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:800;color:#2D2D2D;letter-spacing:0.05em;text-transform:uppercase;">Day Labour Book</div>
-        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c106</span></div>
+        <div style="font-family:'Nunito',Century Gothic,AppleGothic,sans-serif;font-size:8px;font-style:italic;font-weight:300;color:#EF9F27;letter-spacing:0.03em;">Built by Alerce <span id="app-ver" style="color:#c9c6c0;font-style:normal;">v2026.08.13-c107</span></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;">
@@ -1645,7 +1645,8 @@ body.role-supervisor:not(.nd-fullpage) #sup-fab-wrap{
           <div>
             <label>Requested by</label>
             <select id="d-reqby" onchange="onReqByChange()"><option value="">— Select —</option></select>
-            <input type="text" id="d-reqby-other" class="hidden" placeholder="Type the name / role" autocomplete="off" style="margin-top:8px;">
+            <input type="text" id="d-reqby-other" class="hidden" placeholder="Type the role" autocomplete="off" style="margin-top:8px;">
+            <input type="text" id="d-reqby-name" placeholder="Name (optional)" autocomplete="off" style="margin-top:8px;">
           </div>
           <div>
             <label>Method</label>
@@ -4923,6 +4924,7 @@ function startVoice(fieldId){
 function resetDF(){
   document.getElementById('dp').value='';document.getElementById('d-start').value='';document.getElementById('d-finish').value='';document.getElementById('d-break').value='';document.getElementById('dh').value='';
   {const na=document.getElementById('d-break-na'),bk=document.getElementById('d-break');if(na)na.checked=false;if(bk){bk.disabled=false;bk.style.background='';}}
+  {const rn=document.getElementById('d-reqby-name');if(rn)rn.value='';const rs=document.getElementById('d-reqby');if(rs)rs.value='';const ro=document.getElementById('d-reqby-other');if(ro)ro.classList.add('hidden');}
   if(typeof updPOFromProject==='function')updPOFromProject();
   document.getElementById('desc').value='';document.getElementById('dnotes').value='';
   {const svn=document.getElementById('review-supervisor-note');if(svn)svn.value='';window._reviewSupervisorNote='';}
@@ -7104,7 +7106,7 @@ function reqByOptionsHTML(extra){
   const all=getReqByAll();
   let html='<option value="">— Select —</option>'+all.map(s=>'<option value="'+esc(s)+'">'+esc(s)+'</option>').join('');
   if(extra&&!all.some(s=>s===extra))html+='<option value="'+esc(extra)+'">'+esc(extra)+'</option>';
-  html+='<option value="__other__">Other… (type a name)</option>';
+  html+='<option value="__other__">Other… (type a role)</option>';
   return html;
 }
 function loadReqByStaff(){
@@ -7114,6 +7116,7 @@ function loadReqByStaff(){
   sel.innerHTML=reqByOptionsHTML(cur);
   sel.value=cur;
   const oth=document.getElementById('d-reqby-other');if(oth)oth.classList.add('hidden');
+  const nm=document.getElementById('d-reqby-name');if(nm)nm.value='';
 }
 // Show the free-text box only when "Other…" is chosen.
 function onReqByChange(){
@@ -7122,17 +7125,28 @@ function onReqByChange(){
   if(sel.value==='__other__'){oth.classList.remove('hidden');oth.value='';setTimeout(()=>{try{oth.focus();}catch(e){}},40);}
   else oth.classList.add('hidden');
 }
-// The effective value (handles the Other… text box).
+// The effective value = role (dropdown or the Other… box) + optional name,
+// joined as "Role — Name" (or just whichever was filled in).
 function reqByVal(){
   const sel=document.getElementById('d-reqby');if(!sel)return null;
-  if(sel.value==='__other__'){const o=document.getElementById('d-reqby-other');return (o&&o.value.trim())||null;}
-  return (sel.value||'').trim()||null;
+  const role=sel.value==='__other__'?((document.getElementById('d-reqby-other')?.value||'').trim()):((sel.value||'').trim());
+  const name=(document.getElementById('d-reqby-name')?.value||'').trim();
+  const combined=[role,name].filter(Boolean).join(' — ');
+  return combined||null;
 }
-// Set the dropdown to a saved value (keeps a one-off value selectable).
+// Restore a saved value, splitting "Role — Name" back into the dropdown + name.
 function setReqBy(v){
   const sel=document.getElementById('d-reqby');if(!sel)return;
-  sel.innerHTML=reqByOptionsHTML(v||'');
-  sel.value=v||'';
+  let role='',name='';
+  if(v){
+    const s=String(v),i=s.indexOf(' — ');
+    const head=(i>=0?s.slice(0,i):s).trim(), tail=(i>=0?s.slice(i+3):'').trim();
+    if(getReqByAll().some(x=>x===head)){role=head;name=tail;}
+    else{role='';name=s;}   // whole value is a one-off name
+  }
+  sel.innerHTML=reqByOptionsHTML(role);
+  sel.value=role;
+  const nm=document.getElementById('d-reqby-name');if(nm)nm.value=name;
   const oth=document.getElementById('d-reqby-other');if(oth)oth.classList.add('hidden');
 }
 
